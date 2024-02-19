@@ -14,14 +14,28 @@
   --hover-color: #35e888;
   --third-color: #4ceb95;
   --selectedButton-color:#15bb62;
-  --about-me-color:#d23418;
-  --contact-color:#ed3c0d;
-  --main-color: #d22b18;
+  
   --hover-color: #e84a35;
   --third-color: #eb5c4c;
   --about-me-color:#d23418;
   --contact-color:#ed3c0d;
   --selectedButton-color:#bb4915;
+  
+  --main-color: #ff2800;
+  --bar-color: #ff26005d;
+  --hover-color: #ff8a75;
+  --third-color: #ff2800;
+  --about-me-color:#ff2800;
+  --contact-color:#ff2800;
+  --selectedButton-color:#ff8a75;
+
+  --main-color: #ff2600d2;
+  --bar-color: #ff26005d;
+  --hover-color: #ff3511;
+  --third-color: #ff2600d2;
+  --about-me-color:#ff2600d2;
+  --contact-color:#ff2600d2;
+  --selectedButton-color:#ff3511;
 }
 /* var(--main-color) */
 body {
@@ -530,7 +544,7 @@ section .container {
   width: 1px;
   height: 10px;
   transition: 0.9s;
-  background-color: var(--main-color);
+  background-color: var(--bar-color);
 }
 
 /*--------------------------------------------------------------
