@@ -1,18 +1,31 @@
 import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ScriptService } from './services/script.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements AfterViewInit, OnInit{
+  form = new FormGroup({
+    name: new FormControl(''),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    subject: new FormControl(''),
+    message: new FormControl('')
+  });
+  emailLoading=false;
+  emailSent=false;
+  emailError=false;
+  emailError2=false;
   @ViewChildren('header, about,resume,services,portfolio,contact') sections!: QueryList<ElementRef>; title = 'personal-page';
   /**
    * The reference to the 'header' element in the component's template.
    */
   @ViewChild('skills-content') skillsContent: ElementRef | undefined;
 
-  constructor(private script: ScriptService) {}
+  constructor(private http:HttpClient, private script: ScriptService) {}
   ngOnInit(): void {
     this.loadscipts();
   }
@@ -63,7 +76,30 @@ export class AppComponent implements AfterViewInit, OnInit{
       sectionElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
-
+  info() {
+    this.emailLoading = true;
+    if (this.form.controls.email.valid && this.form.controls.name.valid &&( this.form.controls.message.valid || this.form.controls.subject.valid)) {
+      this.http.post('api/info', this.form.value).subscribe(
+        response => {
+          console.log(response);
+          this.emailLoading = false;
+          this.emailSent=true;
+          this.emailError2 = false;
+          this.emailError = false;
+        },
+        error => {
+          console.log(error);
+          this.emailError2 = false;
+          this.emailError = true;
+          this.emailLoading = false;
+        }
+      );
+    } else {
+      console.log('formulario no valido')
+      this.emailError2 = true;
+      this.emailLoading = false;
+    }
+  }
   navBarClick() {
     console.log('entro');
     console.log(this.navbarMobile)

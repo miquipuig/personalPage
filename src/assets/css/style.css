@@ -1073,7 +1073,6 @@ section .container {
 }
 
 .contact .php-email-form .error-message {
-  display: none;
   background: rgba(255, 255, 255, 0.08);
   background: var(--contact-color);
   text-align: left;
@@ -1086,7 +1085,6 @@ section .container {
 }
 
 .contact .php-email-form .sent-message {
-  display: none;
   background: rgba(255, 255, 255, 0.08);
   background: var(--main-color);
   text-align: center;
@@ -1095,7 +1093,6 @@ section .container {
 }
 
 .contact .php-email-form .loading {
-  display: none;
   background: rgba(255, 255, 255, 0.08);
   text-align: center;
   padding: 15px;
@@ -1202,4 +1199,40 @@ section .container {
 
 .credits a:hover {
   color: #fff;
+}
+
+/* Animaciones */
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.fast {
+  -webkit-animation-duration: 0.4s;
+  animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.slowly {
+  -webkit-animation-duration: 1.5s;
+  animation-duration: 2s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation-name: fadeIn;
 }
