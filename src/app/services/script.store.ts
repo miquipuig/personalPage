@@ -6,6 +6,8 @@ interface Scripts {
 export const ScriptStore: Scripts[] = [
     
     {name: 'main', src: '../assets/js/main.js'},
+    {name: 'skillsAnimation', src: '../assets/js/skillsAnimation.js'},
+    {name: 'jueguito', src: '../assets/jueguito/main.js'},
 ];
 
 // <script src="assets/vendor/jquery/jquery.min.js"></script>

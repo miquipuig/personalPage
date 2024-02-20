@@ -1,0 +1,50 @@
+#jueguito {
+    width: 100%; /* Ancho del contenedor */
+    height: 100%; /* Alto del contenedor */
+    border: 3px solid #ffffff; /* Opcional: añade un borde para visualizar el área */
+    border-radius: 30px; /* Añade bordes redondeados */
+    overflow: hidden;
+}
+
+
+.jueguitoSection {
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    /* top: 140px; */
+    top: 0px;
+    bottom: 100%;
+    opacity: 0;
+    transition: ease-in-out 0.4s;
+    z-index: 200000;
+      /* z-index: 2; */
+  }
+  
+  .jueguitoSection.jueguitoSection-show {
+    /* top: 100px; */
+    top: 0px;
+    bottom: auto;
+    opacity: 1;
+    /* padding-bottom: 45px; */
+    padding: 0px;
+    
+  }
+  
+  .jueguitoSection .jueguitoContainer {
+    background: rgba(0, 0, 0, 0.9);
+    /* padding: 30px; */
+    padding: 0px;
+    width: 100vw;
+    height: 100vh;
+
+  }
+  
+  /* @media (max-width: 768px) {
+    .jueguitoSection {
+      top: 120px;
+    }
+  
+    .jueguitoSection.jueguitoSection-show {
+      top: 80px;
+    }
+  } */
