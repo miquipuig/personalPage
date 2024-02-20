@@ -19,6 +19,7 @@ export class AppComponent implements AfterViewInit, OnInit{
   emailSent=false;
   emailError=false;
   emailError2=false;
+  pageLoaded=false;
   @ViewChildren('header, about,resume,services,portfolio,contact') sections!: QueryList<ElementRef>; title = 'personal-page';
   /**
    * The reference to the 'header' element in the component's template.
@@ -34,9 +35,7 @@ export class AppComponent implements AfterViewInit, OnInit{
   navbarMobile = false;
   classHeaderTop = false;
   ngAfterViewInit() {
-    // Ahora puedes acceder a skillsContent
-
-    // Aquí puedes poner la lógica que depende de skillsContent
+   this.pageLoaded=true;
   }
   setActiveSection(section: string) {
 

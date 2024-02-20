@@ -5,9 +5,8 @@
 
   <meta charset="utf-8">
   <title>Miquel Puig - Studio</title>
-  <base href="/">
+  <!-- <base href="/"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
 
 
 
@@ -20,8 +19,11 @@
 
   <!-- Favicons -->
   <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
+  <link rel="icon" sizes="16x16" href="assets/img/favicon16.png">
+  <link rel="icon" sizes="32x32" href="assets/img/favicon32.png">
+  <link rel="icon" sizes="48x48" href="assets/img/favicon48.png">
+  <link rel="icon" sizes="64x64" href="assets/img/favicon64.png">
+  <link rel="apple-touch-icon" href="assets/img/favicon200.png">
   <!-- Google Fonts -->
   <link
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
@@ -34,8 +36,7 @@
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-<div id="background-image"></div>
+  <div id="background-image"></div>
   <!-- Template Main CSS File -->
   <!-- <link href="assets/css/style.css" rel="stylesheet"> -->
 
@@ -49,6 +50,9 @@
 </head>
 
 <body>
+  <div  id="loader-container" class="loader-container">
+    <div id="loader" class="loader"></div>
+  </div>
   <div id="background-image"></div>
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -58,7 +62,7 @@
   <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
   <app-root></app-root>
-  
+
 
   <!-- Template Main JS File -->
   <!-- <script src="assets/js/main.js"></script> -->

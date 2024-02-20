@@ -79,8 +79,13 @@
     background-repeat: no-repeat;
     background-size: cover;
     z-index: -1;
-  }
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
 
+  }
+  #background-image.loaded {
+    opacity: 1;
+  }
 
 
   @media screen and (max-aspect-ratio: 1/1) {
@@ -1287,4 +1292,44 @@
   
   .fadeIn {
     animation-name: fadeIn;
+  }
+
+  .loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .loader {
+    border: 10px solid #a9a9a9; /* Fondo claro */
+    border-top: 10px solid var(--main-color); /* Color del spinner */
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+
+    animation: spin 1.3s linear infinite;
+    position: fixed; /* O absolute */
+    /* left: 50%;
+    top: 50%; */
+    /* transform: translate(-50%, -50%); */
+    z-index: 100000; /* Asegúrate de que esté por encima de todo */
+   
+  }
+  .loader-container.hidden {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .mainPage{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
   }

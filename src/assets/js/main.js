@@ -191,6 +191,7 @@
    * Porfolio isotope and filter
    */
   window.addEventListener('load', () => {
+
     let portfolioContainer = select('.portfolio-container');
     if (portfolioContainer) {
       let portfolioIsotope = new Isotope(portfolioContainer, {
@@ -212,6 +213,8 @@
         });
       }, true);
     }
+    document.getElementById('background-image').classList.add('loaded');
+    document.getElementById('loader-container').classList.add('hidden');
 
   });
 
