@@ -8,7 +8,25 @@
   border-radius: 30px;
   /* Añade bordes redondeados */
   overflow: hidden;
+  
 }
+
+#jueguitoMarco {
+  pointer-events: none;
+  position: absolute;
+  /* background: transparent; */
+  padding: 0px;
+  width: 100vw;
+  height: 100vh;
+  /* Alto del contenedor */
+  border: 3px solid #ffffff;
+  /* Opcional: añade un borde para visualizar el área */
+  border-radius: 30px;
+  /* Añade bordes redondeados */
+  z-index: 99999;
+  /* Asegura que el marco esté encima de los otros elementos */
+}
+
 
 .jueguito-close {
 
@@ -47,6 +65,8 @@
   /* z-index: 2; */
 }
 
+
+
 .jueguitoSection.jueguitoSection-show {
   /* top: 100px; */
   top: 0px;
@@ -65,6 +85,8 @@
   height: 100vh;
 
 }
+
+
 
 /* @media (max-width: 768px) {
     .jueguitoSection {
