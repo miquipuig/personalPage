@@ -78,6 +78,11 @@ export class AppComponent implements AfterViewInit, OnInit{
     }).catch(error => console.log(error));
   }
 
+  public closeSection(){
+    this.activeSection = 'header';
+    this.classHeaderTop = false;
+  }
+
   
 
 

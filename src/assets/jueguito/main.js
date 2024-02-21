@@ -370,8 +370,8 @@
         return new v(0, 0);
     }
     invert() {
-      let e = [], o = this.m[10] * this.m[15] - this.m[14] * this.m[11], c = this.m[9] * this.m[15] - this.m[13] * this.m[11], g = this.m[9] * this.m[14] - this.m[13] * this.m[10], m = this.m[8] * this.m[15] - this.m[12] * this.m[11], P = this.m[8] * this.m[14] - this.m[12] * this.m[10], I = this.m[8] * this.m[13] - this.m[12] * this.m[9], j = this.m[6] * this.m[15] - this.m[14] * this.m[7], y = this.m[5] * this.m[15] - this.m[13] * this.m[7], X = this.m[5] * this.m[14] - this.m[13] * this.m[6], S = this.m[4] * this.m[15] - this.m[12] * this.m[7], q = this.m[4] * this.m[14] - this.m[12] * this.m[6], E = this.m[5] * this.m[15] - this.m[13] * this.m[7], K = this.m[4] * this.m[13] - this.m[12] * this.m[5], Q = this.m[6] * this.m[11] - this.m[10] * this.m[7], te = this.m[5] * this.m[11] - this.m[9] * this.m[7], k2 = this.m[5] * this.m[10] - this.m[9] * this.m[6], pe = this.m[4] * this.m[11] - this.m[8] * this.m[7], C = this.m[4] * this.m[10] - this.m[8] * this.m[6], Ae = this.m[4] * this.m[9] - this.m[8] * this.m[5];
-      e[0] = this.m[5] * o - this.m[6] * c + this.m[7] * g, e[4] = -(this.m[4] * o - this.m[6] * m + this.m[7] * P), e[8] = this.m[4] * c - this.m[5] * m + this.m[7] * I, e[12] = -(this.m[4] * g - this.m[5] * P + this.m[6] * I), e[1] = -(this.m[1] * o - this.m[2] * c + this.m[3] * g), e[5] = this.m[0] * o - this.m[2] * m + this.m[3] * P, e[9] = -(this.m[0] * c - this.m[1] * m + this.m[3] * I), e[13] = this.m[0] * g - this.m[1] * P + this.m[2] * I, e[2] = this.m[1] * j - this.m[2] * y + this.m[3] * X, e[6] = -(this.m[0] * j - this.m[2] * S + this.m[3] * q), e[10] = this.m[0] * E - this.m[1] * S + this.m[3] * K, e[14] = -(this.m[0] * X - this.m[1] * q + this.m[2] * K), e[3] = -(this.m[1] * Q - this.m[2] * te + this.m[3] * k2), e[7] = this.m[0] * Q - this.m[2] * pe + this.m[3] * C, e[11] = -(this.m[0] * te - this.m[1] * pe + this.m[3] * Ae), e[15] = this.m[0] * k2 - this.m[1] * C + this.m[2] * Ae;
+      let e = [], o = this.m[10] * this.m[15] - this.m[14] * this.m[11], c = this.m[9] * this.m[15] - this.m[13] * this.m[11], g = this.m[9] * this.m[14] - this.m[13] * this.m[10], m = this.m[8] * this.m[15] - this.m[12] * this.m[11], P = this.m[8] * this.m[14] - this.m[12] * this.m[10], I = this.m[8] * this.m[13] - this.m[12] * this.m[9], j = this.m[6] * this.m[15] - this.m[14] * this.m[7], y = this.m[5] * this.m[15] - this.m[13] * this.m[7], X = this.m[5] * this.m[14] - this.m[13] * this.m[6], S = this.m[4] * this.m[15] - this.m[12] * this.m[7], q = this.m[4] * this.m[14] - this.m[12] * this.m[6], E = this.m[5] * this.m[15] - this.m[13] * this.m[7], K = this.m[4] * this.m[13] - this.m[12] * this.m[5], Q = this.m[6] * this.m[11] - this.m[10] * this.m[7], te = this.m[5] * this.m[11] - this.m[9] * this.m[7], k = this.m[5] * this.m[10] - this.m[9] * this.m[6], pe = this.m[4] * this.m[11] - this.m[8] * this.m[7], C = this.m[4] * this.m[10] - this.m[8] * this.m[6], Ae = this.m[4] * this.m[9] - this.m[8] * this.m[5];
+      e[0] = this.m[5] * o - this.m[6] * c + this.m[7] * g, e[4] = -(this.m[4] * o - this.m[6] * m + this.m[7] * P), e[8] = this.m[4] * c - this.m[5] * m + this.m[7] * I, e[12] = -(this.m[4] * g - this.m[5] * P + this.m[6] * I), e[1] = -(this.m[1] * o - this.m[2] * c + this.m[3] * g), e[5] = this.m[0] * o - this.m[2] * m + this.m[3] * P, e[9] = -(this.m[0] * c - this.m[1] * m + this.m[3] * I), e[13] = this.m[0] * g - this.m[1] * P + this.m[2] * I, e[2] = this.m[1] * j - this.m[2] * y + this.m[3] * X, e[6] = -(this.m[0] * j - this.m[2] * S + this.m[3] * q), e[10] = this.m[0] * E - this.m[1] * S + this.m[3] * K, e[14] = -(this.m[0] * X - this.m[1] * q + this.m[2] * K), e[3] = -(this.m[1] * Q - this.m[2] * te + this.m[3] * k), e[7] = this.m[0] * Q - this.m[2] * pe + this.m[3] * C, e[11] = -(this.m[0] * te - this.m[1] * pe + this.m[3] * Ae), e[15] = this.m[0] * k - this.m[1] * C + this.m[2] * Ae;
       let $ = this.m[0] * e[0] + this.m[1] * e[4] + this.m[2] * e[8] + this.m[3] * e[12];
       for (let Te = 0; Te < 4; Te++)
         for (let ye = 0; ye < 4; ye++)
@@ -1083,7 +1083,7 @@
       ge.disconnect();
     }
     i(te, "quit");
-    function k2(l) {
+    function k(l) {
       e.loopID !== null && cancelAnimationFrame(e.loopID);
       let x = 0, R = i((L) => {
         if (e.stopped)
@@ -1097,7 +1097,7 @@
       }, "frame");
       R(0);
     }
-    i(k2, "run");
+    i(k, "run");
     function pe() {
       return "ontouchstart" in window || navigator.maxTouchPoints > 0;
     }
@@ -1374,7 +1374,7 @@
           });
         }
     });
-    return ge.observe(e.canvas), { dt: o, time: c, run: k2, canvas: e.canvas, fps: g, numFrames: m, quit: te, setFullscreen: K, isFullscreen: Q, setCursor: I, screenshot: P, getGamepads: Vt, getCursor: j, setCursorLocked: y, isCursorLocked: X, isTouchscreen: pe, mousePos: C, mouseDeltaPos: Ae, isKeyDown: Tt, isKeyPressed: st, isKeyPressedRepeat: on, isKeyReleased: Ot, isMouseDown: Te, isMousePressed: $, isMouseReleased: ye, isMouseMoved: Se, isGamepadButtonPressed: Rt, isGamepadButtonDown: Ye, isGamepadButtonReleased: an, getGamepadStick: Pe, charInputted: dt, onResize: un, onKeyDown: cn, onKeyPress: hn, onKeyPressRepeat: ln, onKeyRelease: dn, onMouseDown: Pt, onMousePress: Dt, onMouseRelease: Mt, onMouseMove: Gt, onCharInput: Bt, onTouchStart: fn, onTouchMove: ct, onTouchEnd: mn, onScroll: pn, onHide: Ft, onShow: gn, onGamepadButtonDown: It, onGamepadButtonPress: Lt, onGamepadButtonRelease: wn, onGamepadStick: ht, onGamepadConnect: bn, onGamepadDisconnect: lt, events: e.events };
+    return ge.observe(e.canvas), { dt: o, time: c, run: k, canvas: e.canvas, fps: g, numFrames: m, quit: te, setFullscreen: K, isFullscreen: Q, setCursor: I, screenshot: P, getGamepads: Vt, getCursor: j, setCursorLocked: y, isCursorLocked: X, isTouchscreen: pe, mousePos: C, mouseDeltaPos: Ae, isKeyDown: Tt, isKeyPressed: st, isKeyPressedRepeat: on, isKeyReleased: Ot, isMouseDown: Te, isMousePressed: $, isMouseReleased: ye, isMouseMoved: Se, isGamepadButtonPressed: Rt, isGamepadButtonDown: Ye, isGamepadButtonReleased: an, getGamepadStick: Pe, charInputted: dt, onResize: un, onKeyDown: cn, onKeyPress: hn, onKeyPressRepeat: ln, onKeyRelease: dn, onMouseDown: Pt, onMousePress: Dt, onMouseRelease: Mt, onMouseMove: Gt, onCharInput: Bt, onTouchStart: fn, onTouchMove: ct, onTouchEnd: mn, onScroll: pn, onHide: Ft, onShow: gn, onGamepadButtonDown: It, onGamepadButtonPress: Lt, onGamepadButtonRelease: wn, onGamepadStick: ht, onGamepadConnect: bn, onGamepadDisconnect: lt, events: e.events };
   }, "default");
   var Re = class n11 {
     static {
@@ -1565,10 +1565,10 @@
       $.reduce((ye, Se, st) => (n13.vertexAttribPointer(st, Se.size, n13.FLOAT, false, Te * 4, ye), n13.enableVertexAttribArray(st), ye + Se.size * 4), 0);
     }
     i(P, "setVertexFormat");
-    let [I, j] = nt(($) => n13.bindTexture(n13.TEXTURE_2D, $)), [y, X] = nt(($) => n13.bindBuffer(n13.ARRAY_BUFFER, $)), [S, q] = nt(($) => n13.bindBuffer(n13.ELEMENT_ARRAY_BUFFER, $)), [E, K] = nt(($) => n13.bindFramebuffer(n13.FRAMEBUFFER, $)), [Q, te] = nt(($) => n13.bindRenderbuffer(n13.RENDERBUFFER, $)), [k2, pe] = nt(({ x: $, y: Te, w: ye, h: Se }) => {
+    let [I, j] = nt(($) => n13.bindTexture(n13.TEXTURE_2D, $)), [y, X] = nt(($) => n13.bindBuffer(n13.ARRAY_BUFFER, $)), [S, q] = nt(($) => n13.bindBuffer(n13.ELEMENT_ARRAY_BUFFER, $)), [E, K] = nt(($) => n13.bindFramebuffer(n13.FRAMEBUFFER, $)), [Q, te] = nt(($) => n13.bindRenderbuffer(n13.RENDERBUFFER, $)), [k, pe] = nt(({ x: $, y: Te, w: ye, h: Se }) => {
       n13.viewport($, Te, ye, Se);
     }), [C, Ae] = nt(($) => n13.useProgram($));
-    return k2({ x: 0, y: 0, w: n13.drawingBufferWidth, h: n13.drawingBufferHeight }), { gl: n13, opts: e, onDestroy: c, destroy: g, pushTexture2D: I, popTexture2D: j, pushArrayBuffer: y, popArrayBuffer: X, pushElementArrayBuffer: S, popElementArrayBuffer: q, pushFramebuffer: E, popFramebuffer: K, pushRenderbuffer: Q, popRenderbuffer: te, pushViewport: k2, popViewport: pe, pushProgram: C, popProgram: Ae, setVertexFormat: P };
+    return k({ x: 0, y: 0, w: n13.drawingBufferWidth, h: n13.drawingBufferHeight }), { gl: n13, opts: e, onDestroy: c, destroy: g, pushTexture2D: I, popTexture2D: j, pushArrayBuffer: y, popArrayBuffer: X, pushElementArrayBuffer: S, popElementArrayBuffer: q, pushFramebuffer: E, popFramebuffer: K, pushRenderbuffer: Q, popRenderbuffer: te, pushViewport: k, popViewport: pe, pushProgram: C, popProgram: Ae, setVertexFormat: P };
   }
   i(Kn, "initGfx");
   var ve = class n12 {
@@ -1873,7 +1873,7 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
         return typeof r == "string" ? K.fromURL(r, s) : Promise.resolve(K.fromImage(r, s));
       }
       static fromImage(r, s = {}) {
-        let [u, a] = k2.packer.add(r), h = s.frames ? s.frames.map((f) => new oe(a.x + f.x * a.w, a.y + f.y * a.h, f.w * a.w, f.h * a.h)) : Tt(s.sliceX || 1, s.sliceY || 1, a.x, a.y, a.w, a.h);
+        let [u, a] = k.packer.add(r), h = s.frames ? s.frames.map((f) => new oe(a.x + f.x * a.w, a.y + f.y * a.h, f.w * a.w, f.h * a.h)) : Tt(s.sliceX || 1, s.sliceY || 1, a.x, a.y, a.w, a.h);
         return new K(u, h, s.anims, s.slice9);
       }
       static fromURL(r, s = {}) {
@@ -1904,28 +1904,28 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
       }).catch((u) => {
         console.error("Failed to load burp: ", u);
       }), { ctx: t, masterNode: r, burpSnd: s };
-    })(), k2 = { urlPrefix: "", sprites: new je(), fonts: new je(), bitmapFonts: new je(), sounds: new je(), shaders: new je(), custom: new je(), packer: new At(q, Xr, Jr), loaded: false };
+    })(), k = { urlPrefix: "", sprites: new je(), fonts: new je(), bitmapFonts: new je(), sounds: new je(), shaders: new je(), custom: new je(), packer: new At(q, Xr, Jr), loaded: false };
     function pe(t) {
-      return typeof t != "string" || jn(t) ? t : k2.urlPrefix + t;
+      return typeof t != "string" || jn(t) ? t : k.urlPrefix + t;
     }
     i(pe, "fixURL");
     let C = { events: new Ne(), objEvents: new Ne(), root: Un([]), gravity: 0, scenes: {}, logs: [], cam: { pos: null, scale: new v(1), angle: 0, shake: 0, transform: new Ue() } };
     C.root.use(An());
     function Ae(t) {
-      return k2.custom.add(null, t);
+      return k.custom.add(null, t);
     }
     i(Ae, "load");
     function $() {
-      let t = [k2.sprites, k2.sounds, k2.shaders, k2.fonts, k2.bitmapFonts, k2.custom];
+      let t = [k.sprites, k.sounds, k.shaders, k.fonts, k.bitmapFonts, k.custom];
       return t.reduce((r, s) => r + s.progress(), 0) / t.length;
     }
     i($, "loadProgress");
     function Te(t) {
-      return t !== void 0 && (k2.urlPrefix = t), k2.urlPrefix;
+      return t !== void 0 && (k.urlPrefix = t), k.urlPrefix;
     }
     i(Te, "loadRoot");
     function ye(t, r) {
-      return k2.custom.add(t, Et(r));
+      return k.custom.add(t, Et(r));
     }
     i(ye, "loadJSON");
     class Se {
@@ -1944,13 +1944,13 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     function st(t, r, s = {}) {
       let u = new FontFace(t, typeof r == "string" ? `url(${r})` : r);
-      return document.fonts.add(u), k2.fonts.add(t, u.load().catch((a) => {
+      return document.fonts.add(u), k.fonts.add(t, u.load().catch((a) => {
         throw new Error(`Failed to load font from "${r}": ${a}`);
       }).then((a) => new Se(a, s)));
     }
     i(st, "loadFont");
     function on(t, r, s, u, a = {}) {
-      return k2.bitmapFonts.add(t, St(r).then((h) => bn(Re.fromImage(q, h, a), s, u, a.chars ?? zr)));
+      return k.bitmapFonts.add(t, St(r).then((h) => bn(Re.fromImage(q, h, a), s, u, a.chars ?? zr)));
     }
     i(on, "loadBitmapFont");
     function Tt(t = 1, r = 1, s = 0, u = 0, a = 1, h = 1) {
@@ -1970,7 +1970,7 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
         let u = {};
         for (let a in r) {
           let h = r[a], f = s.frames[0], b = Xr * f.w, p = Jr * f.h, d = h.frames ? h.frames.map((A) => new oe(f.x + (h.x + A.x) / b * f.w, f.y + (h.y + A.y) / p * f.h, A.w / b * f.w, A.h / p * f.h)) : Tt(h.sliceX || 1, h.sliceY || 1, f.x + h.x / b * f.w, f.y + h.y / p * f.h, h.width / b * f.w, h.height / p * f.h), w = new K(s.tex, d, h.anims);
-          k2.sprites.addLoaded(a, w), u[a] = w;
+          k.sprites.addLoaded(a, w), u[a] = w;
         }
         return u;
       }));
@@ -1988,11 +1988,11 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     i(Rt, "createSpriteSheet");
     function Ye(t, r, s = { sliceX: 1, sliceY: 1, anims: {} }) {
-      return r = pe(r), Array.isArray(r) ? r.some((u) => typeof u == "string") ? k2.sprites.add(t, Promise.all(r.map((u) => typeof u == "string" ? St(u) : Promise.resolve(u))).then((u) => Rt(u, s))) : k2.sprites.addLoaded(t, Rt(r, s)) : typeof r == "string" ? k2.sprites.add(t, K.from(r, s)) : k2.sprites.addLoaded(t, K.fromImage(r, s));
+      return r = pe(r), Array.isArray(r) ? r.some((u) => typeof u == "string") ? k.sprites.add(t, Promise.all(r.map((u) => typeof u == "string" ? St(u) : Promise.resolve(u))).then((u) => Rt(u, s))) : k.sprites.addLoaded(t, Rt(r, s)) : typeof r == "string" ? k.sprites.add(t, K.from(r, s)) : k.sprites.addLoaded(t, K.fromImage(r, s));
     }
     i(Ye, "loadSprite");
     function an(t, r) {
-      return r = pe(r), k2.sprites.add(t, new Promise(async (s) => {
+      return r = pe(r), k.sprites.add(t, new Promise(async (s) => {
         let u = typeof r == "string" ? await Et(r) : r, a = await Promise.all(u.frames.map(St)), h = document.createElement("canvas");
         h.width = u.width, h.height = u.height * u.frames.length;
         let f = h.getContext("2d");
@@ -2007,7 +2007,7 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     function un(t, r, s) {
       r = pe(r), s = pe(s), typeof r == "string" && !s && (s = Mr(r) + ".json");
       let u = typeof s == "string" ? Et(s) : Promise.resolve(s);
-      return k2.sprites.add(t, u.then((a) => {
+      return k.sprites.add(t, u.then((a) => {
         let h = a.meta.size, f = a.frames.map((p) => new oe(p.frame.x / h.w, p.frame.y / h.h, p.frame.w / h.w, p.frame.h / h.h)), b = {};
         for (let p of a.meta.frameTags)
           p.from === p.to ? b[p.name] = p.from : b[p.name] = { from: p.from, to: p.to, speed: 10, loop: true, pingpong: p.direction === "pingpong" };
@@ -2016,17 +2016,17 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     i(un, "loadAseprite");
     function cn(t, r, s) {
-      return k2.shaders.addLoaded(t, ht(r, s));
+      return k.shaders.addLoaded(t, ht(r, s));
     }
     i(cn, "loadShader");
     function hn(t, r, s) {
       r = pe(r), s = pe(s);
       let u = i((h) => h ? Lr(h) : Promise.resolve(null), "resolveUrl"), a = Promise.all([u(r), u(s)]).then(([h, f]) => ht(h, f));
-      return k2.shaders.add(t, a);
+      return k.shaders.add(t, a);
     }
     i(hn, "loadShaderURL");
     function ln(t, r) {
-      return r = pe(r), k2.sounds.add(t, typeof r == "string" ? Q.fromURL(r) : Q.fromArrayBuffer(r));
+      return r = pe(r), k.sounds.add(t, typeof r == "string" ? Q.fromURL(r) : Q.fromArrayBuffer(r));
     }
     i(ln, "loadSound");
     function dn(t = "bean") {
@@ -2034,27 +2034,27 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     i(dn, "loadBean");
     function Pt(t) {
-      return k2.sprites.get(t);
+      return k.sprites.get(t);
     }
     i(Pt, "getSprite");
     function Dt(t) {
-      return k2.sounds.get(t);
+      return k.sounds.get(t);
     }
     i(Dt, "getSound");
     function Mt(t) {
-      return k2.fonts.get(t);
+      return k.fonts.get(t);
     }
     i(Mt, "getFont");
     function Gt(t) {
-      return k2.bitmapFonts.get(t);
+      return k.bitmapFonts.get(t);
     }
     i(Gt, "getBitmapFont");
     function Bt(t) {
-      return k2.shaders.get(t);
+      return k.shaders.get(t);
     }
     i(Bt, "getShader");
     function fn(t) {
-      return k2.custom.get(t);
+      return k.custom.get(t);
     }
     i(fn, "getAsset");
     function ct(t) {
@@ -3403,7 +3403,7 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     i(zs, "drawon");
     function Tn(t) {
-      k2.loaded ? t() : C.events.on("load", t);
+      k.loaded ? t() : C.events.on("load", t);
     }
     i(Tn, "onLoad");
     function Ks(t, r) {
@@ -3944,7 +3944,7 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     let Kt = true;
     y.run(() => {
       try {
-        k2.loaded || $() === 1 && !Kt && (k2.loaded = true, C.events.trigger("load")), !k2.loaded && n13.loadingScreen !== false || Kt ? (dt(), li(), ft()) : (re.paused || dr(), ci(), dt(), hi(), n13.debug !== false && di(), ft()), Kt && (Kt = false), C.events.trigger("frameEnd");
+        k.loaded || $() === 1 && !Kt && (k.loaded = true, C.events.trigger("load")), !k.loaded && n13.loadingScreen !== false || Kt ? (dt(), li(), ft()) : (re.paused || dr(), ci(), dt(), hi(), n13.debug !== false && di(), ft()), Kt && (Kt = false), C.events.trigger("frameEnd");
       } catch (t) {
         gi(t);
       }
@@ -3994,14 +3994,14 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
   }, "default");
 
   // src/main_temp.js
-  var k = zo({
-    global: false,
+  zo({
+    global: true,
     fullscreen: true,
     font: "sans-serif",
     // width: 320,
     // height: 240,
     scale: 1,
-    debug: false,
+    debug: true,
     background: [255, 255, 255, 0],
     root: document.getElementById("jueguito")
     // Especifica el contenedor del juego
@@ -4009,10 +4009,86 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     // height: 400, // Alto del canvas, asegúrate de que coincida con el contenedor
     // Puedes añadir aquí más configuraciones según necesites
   });
-  k.loadSprite("bean", "assets/jueguito/sprites/bean.png");
-  k.add([
-    k.pos(120, 80),
-    k.sprite("bean")
-  ]);
-  k.onClick(() => k.addKaboom(k.mousePos()));
+  var FLOOR_HEIGHT = 48;
+  var JUMP_FORCE = 800;
+  var SPEED = 480;
+  loadSprite("bean", "assets/jueguito/sprites/bean.png");
+  scene("game", () => {
+    add([
+      sprite("bean"),
+      pos(80, 40),
+      scale(3),
+      rotate(30),
+      color(0, 0, 255)
+    ]);
+    setGravity(1600);
+    const player = add([
+      // list of components
+      sprite("bean"),
+      pos(80, 40),
+      area(),
+      body()
+    ]);
+    add([
+      rect(width(), FLOOR_HEIGHT),
+      outline(4),
+      pos(0, height()),
+      anchor("botleft"),
+      area(),
+      body({ isStatic: true }),
+      color(127, 200, 255)
+    ]);
+    function jump() {
+      if (player.isGrounded()) {
+        player.jump(JUMP_FORCE);
+      }
+    }
+    onKeyPress("space", jump);
+    onClick(jump);
+    function spawnTree() {
+      add([
+        rect(48, rand(32, 96)),
+        area(),
+        outline(4),
+        pos(width(), height() - FLOOR_HEIGHT),
+        anchor("botleft"),
+        color(255, 180, 255),
+        move(LEFT, SPEED),
+        "tree"
+      ]);
+      wait(rand(0.5, 1.5), spawnTree);
+    }
+    spawnTree();
+    player.onCollide("tree", () => {
+      go("lose", score);
+      burp();
+      addKaboom(player.pos);
+    });
+    let score = 0;
+    const scoreLabel = add([
+      text(score),
+      pos(24, 24)
+    ]);
+    onUpdate(() => {
+      score++;
+      scoreLabel.text = score;
+    });
+  });
+  scene("lose", (score) => {
+    add([
+      sprite("bean"),
+      pos(width() / 2, height() / 2 - 80),
+      scale(2),
+      anchor("center")
+    ]);
+    add([
+      text(score),
+      pos(width() / 2, height() / 2 + 80),
+      scale(2),
+      anchor("center")
+    ]);
+    onKeyPress("space", () => go("game"));
+    onClick(() => go("game"));
+  });
+  go("game");
 })();

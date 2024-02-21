@@ -46,8 +46,7 @@
 <!-- ======= Contact Section ======= -->
   <app-contact *ngIf="isSectionActive('contact')"></app-contact>
 
-
-<app-jueguito *ngIf="isSectionActive('jueguito')"> </app-jueguito>
+<app-jueguito *ngIf="isSectionActive('jueguito')" (onClose)="closeSection()"></app-jueguito>
 
 <div class="credits">
   <!-- All the links in the footer should remain intact. -->
