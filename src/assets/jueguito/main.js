@@ -3993,102 +3993,1591 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     return n13.focus !== false && y.canvas.focus(), Ze;
   }, "default");
 
-  // src/main_temp.js
-  zo({
+  // src/lose.js
+  var SCALE = 2.5;
+  var gameLose = (score) => {
+    kabum.destroyAll();
+    let gooo = false;
+    kabum.add([
+      kabum.text(score, { font: "pixelFont" }),
+      kabum.pos(kabum.width() / 2, kabum.height() / 2 + 80),
+      kabum.scale(SCALE * 1.25),
+      kabum.anchor("center")
+    ]);
+    const loseMessages = [
+      "You're no pro at this, that's for sure.",
+      "Oops! Did your cat walk on the keyboard?",
+      "Maybe try again, this time with your eyes open?",
+      "Are you playing with your feet? Just asking!",
+      "Legend says you'll win... someday.",
+      "Was that really your best effort?",
+      "You're breaking records! ...for the most losses.",
+      "Is it lag, or is it just your skills?",
+      "Game Over! Or was it just a practice run?",
+      "On the bright side, you're getting really good at losing.",
+      "Press space to continue pretending you have a chance",
+      "Your dedication to finding all possible ways to lose is commendable.",
+      "Don't worry, we're all winners here. Just some are more winnery than others.",
+      "Your gaming skill is like a fine wine; it needs years to develop.",
+      "Keep calm and blame it on the game's physics.",
+      "You're not losing; you're just giving everyone else a chance to feel good.",
+      "Congratulations! You've just discovered yet another way to lose.",
+      "Winning is overrated anyway. Let's focus on participation."
+    ];
+    const middleMessage = [
+      "You're not terrible, the game is just extra hard. Yeah, let's go with that.",
+      "Congratulations on making it halfway! The rest is just a minor detail, right?",
+      "You're halfway to legend status. Now, just the other half to go!",
+      "Impressive...ish. You've mastered the art of almost getting there.",
+      "Not quite at the finish line, but at least you found the starting line!",
+      "You're walking the tightrope between success and... almost success.",
+      "You've got the appetizer down; now for the main course!",
+      "You're the king of almost-there. All hail the monarch of perpetual misses!",
+      "You've passed the tutorial with flying colors. Now, onto the real game..."
+    ];
+    const winMessages = [
+      "You're a winner! Or at least, you're not a loser.",
+      "Impressive! Your skills have finally caught up with your confidence.",
+      "You did it! You're officially the best at this game.",
+      "Congratulations! You've just won the game. Now what?",
+      "Champion status achieved! Was it skill, or did the game just take pity on you?",
+      "Look at you, winning and all! Did you finally read the instructions, or was it pure luck?",
+      "You've surpassed all expectations! Mainly because they were so low to begin with.",
+      "Masterful performance! It's almost like you knew what you were doing this time",
+      "You conquered the challenge! Should we check if someone was playing for you?"
+    ];
+    function getRandomLoseMessageAdjusted() {
+      let messages;
+      if (score > 14e3) {
+        messages = winMessages;
+        faceWin();
+      } else if (score > 7e3) {
+        messages = middleMessage;
+        faceAlmostWin();
+      } else {
+        messages = loseMessages;
+        faceLose();
+      }
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      let message = messages[randomIndex];
+      const maxLineLength = 30;
+      function splitMessageIntoLines(str, maxLength) {
+        let result = [];
+        let currentLine = "";
+        str.split(" ").forEach((word) => {
+          if ((currentLine + word).length <= maxLength) {
+            currentLine += `${word} `;
+          } else {
+            result.push(currentLine.trim());
+            currentLine = `${word} `;
+          }
+        });
+        if (currentLine.trim()) {
+          result.push(currentLine.trim());
+        }
+        return result.join("\n");
+      }
+      if (message.length > maxLineLength) {
+        message = splitMessageIntoLines(message, maxLineLength);
+      }
+      return message;
+    }
+    function addMessageInLines(message) {
+      let lines = message.split("\n");
+      lines.forEach((line, index) => {
+        kabum.add([
+          kabum.text(line, { font: "pixelFont" }),
+          kabum.scale(SCALE),
+          kabum.pos(kabum.width() / 2, kabum.height() / 2 + 50 * SCALE + SCALE * 10 * index),
+          kabum.scale(SCALE * 0.3),
+          kabum.anchor("center")
+        ]);
+      });
+    }
+    addMessageInLines(getRandomLoseMessageAdjusted());
+    function decreaseSize(index) {
+      if (index === 0) {
+        return 1;
+      } else {
+        const n13 = Math.floor(index / 2) + 3;
+        return 2 / n13;
+      }
+    }
+    function alternateEvenOddIndex(index) {
+      if (index === 0)
+        return 0;
+      let baseNumber = Math.ceil(index / 2) * 2;
+      let sign = index % 2 === 0 ? 1 : -1;
+      return baseNumber * sign;
+    }
+    function faceAlmostWin() {
+      let faces = [];
+      let face;
+      for (let i2 = 9; i2 >= 0; i2--) {
+        face = kabum.add([
+          kabum.sprite("face"),
+          kabum.pos(kabum.width() / 2 + alternateEvenOddIndex(i2) * SCALE * 25 * decreaseSize(i2 + 1) + 2 * SCALE, kabum.height() / 2),
+          kabum.scale(SCALE * decreaseSize(i2 + 1)),
+          kabum.anchor("bot"),
+          "face"
+        ]);
+        faces.push(face);
+      }
+      let vx = -1;
+      let ay = -1;
+      let vy = -1;
+      kabum.onUpdate(() => {
+        if (!gooo) {
+          faces.forEach((face2) => {
+            face2.pos.x += vx;
+          });
+        } else {
+          faces.forEach((face2) => {
+            face2.pos.y += vy;
+          });
+          vy = vy + ay;
+        }
+      });
+      let count = 0;
+      kabum.loop(0.2, () => {
+        if (kabum.randi(0, 2) === 1) {
+          let size = kabum.rand(0.5, 1);
+          let dino = kabum.add([
+            kabum.sprite("miquiDino"),
+            kabum.pos(0, kabum.height() * 9 / 10 + size * SCALE * 30),
+            kabum.scale(SCALE * size),
+            kabum.anchor("bot"),
+            kabum.move(kabum.RIGHT, kabum.randi(400, 600)),
+            "dino",
+            kabum.z(size)
+          ]);
+          dino.play("run");
+        }
+      });
+      kabum.loop(0.6, () => {
+        if (count % 2 == 1) {
+          vx *= -1;
+          faces.forEach((face2) => {
+            face2.scale.x = -face2.scale.x;
+          });
+        }
+        count++;
+      });
+    }
+    function faceWin() {
+      let aa = 0;
+      let va = 0;
+      let faceList = [];
+      let pingpong = false;
+      const face = kabum.add([
+        kabum.sprite("face"),
+        kabum.pos(kabum.width() / 2 + 5 * SCALE, kabum.height() / 2 + -SCALE * 25),
+        kabum.scale(SCALE),
+        kabum.anchor("center"),
+        kabum.rotate(5),
+        "face"
+      ]);
+      kabum.loop(0.2, () => {
+        if (kabum.randi(0, 2) === 1) {
+          let size = kabum.rand(0.5, 1);
+          let dino = kabum.add([
+            kabum.sprite("miquiDino"),
+            kabum.pos(0, kabum.height() * 9 / 10 + size * SCALE * 30),
+            kabum.scale(SCALE * size),
+            kabum.anchor("bot"),
+            kabum.move(kabum.RIGHT, kabum.randi(400, 600)),
+            "dino",
+            kabum.z(size)
+          ]);
+          dino.play("run");
+        }
+      });
+      kabum.onUpdate(() => {
+        if (pingpong) {
+          for (let i2 = 0; i2 < faceList.length; i2++) {
+            faceList[i2].pos.x += faceList[i2].getSpeed().vx;
+            faceList[i2].pos.y += faceList[i2].getSpeed().vy;
+            faceList[i2].angle += faceList[i2].getSpeed().vangle;
+          }
+        } else {
+          face.angle += va;
+          va = va + aa;
+        }
+      });
+      function speed() {
+        let vel = kabum.rand(2, 10);
+        let angle = kabum.rand(0, 360);
+        let vx = Math.cos(angle) * vel * SCALE;
+        let vy = Math.sin(angle) * vel * SCALE;
+        let speed2 = { vx, vy, vangle: kabum.rand(-1, 1) };
+        return {
+          getSpeed() {
+            return speed2;
+          },
+          setSpeed(newSpeed) {
+            speed2 = newSpeed;
+          }
+        };
+      }
+      kabum.wait(1, () => {
+        aa = 0.1;
+        va = 1;
+        kabum.wait(5, () => {
+          let boom = kabum.add([
+            kabum.sprite("boom"),
+            kabum.pos(kabum.width() / 2 + 10, kabum.height() / 2 + -SCALE * 25),
+            kabum.scale(SCALE * 2),
+            kabum.anchor("center"),
+            "boom"
+          ]);
+          boom.play("boom", {
+            loop: false
+          });
+          kabum.shake();
+          kabum.destroy(face);
+          kabum.wait(0.2, () => {
+            for (let i2 = 0; i2 < 250; i2++) {
+              let face2 = kabum.add([
+                kabum.sprite("face"),
+                kabum.pos(kabum.width() / 2, kabum.height() / 2),
+                kabum.scale(SCALE * kabum.rand(0.05, 0.5)),
+                kabum.anchor("center"),
+                "face",
+                speed(),
+                kabum.rotate(kabum.rand(0, 360))
+              ]);
+              faceList.push(face2);
+            }
+            kabum.wait(0.8, () => {
+              kabum.destroy(boom);
+            });
+            pingpong = true;
+          });
+        });
+      });
+    }
+    function faceLose() {
+      let vx = 10 * SCALE;
+      const face = kabum.add([
+        kabum.sprite("face"),
+        kabum.pos(kabum.width() / 2 + 10, kabum.height() / 2),
+        kabum.scale(SCALE),
+        kabum.anchor("bot"),
+        kabum.rotate(5),
+        "face"
+      ]);
+      let isFlipped = false;
+      let dino = kabum.add([
+        kabum.sprite("miquiDino"),
+        kabum.pos(-kabum.width() / 2, kabum.height() * 4 / 5),
+        kabum.scale(SCALE * 1),
+        kabum.anchor("top"),
+        "dino"
+      ]);
+      dino.play("run");
+      let direction = 1;
+      kabum.loop(0.7, () => {
+        isFlipped = !isFlipped;
+        face.scale.x = isFlipped ? -SCALE : SCALE;
+        direction *= -1;
+        face.angle = -direction * 10;
+        face.pos.x += direction * 20;
+      });
+      kabum.onUpdate(() => {
+        if (gooo) {
+          dino.pos.x += vx;
+        }
+      });
+    }
+    function goToGame() {
+      gooo = true;
+      kabum.wait(1.5, () => {
+        kabum.destroyAll("dino");
+        kabum.destroyAll("face");
+        kabum.go("game");
+      });
+    }
+    kabum.onKeyPress("space", () => goToGame());
+    kabum.onClick(() => goToGame());
+  };
+
+  // src/main.js
+  var kabum = zo({
     global: true,
     fullscreen: true,
     font: "sans-serif",
-    // width: 320,
-    // height: 240,
-    scale: 1,
+    scale: 0.8,
     debug: true,
     background: [255, 255, 255, 0],
-    root: document.getElementById("jueguito")
-    // Especifica el contenedor del juego
-    // width: 600, // Ancho del canvas, asegúrate de que coincida con el contenedor
-    // height: 400, // Alto del canvas, asegúrate de que coincida con el contenedor
-    // Puedes añadir aquí más configuraciones según necesites
+    root: document.getElementById("jueguito"),
+    // Especifica el contenedor del juek.go,
+    global: false
   });
-  var FLOOR_HEIGHT = 48;
-  var JUMP_FORCE = 800;
-  var SPEED = 480;
-  loadSprite("bean", "assets/jueguito/sprites/bean.png");
-  scene("game", () => {
-    add([
-      sprite("bean"),
-      pos(80, 40),
-      scale(3),
-      rotate(30),
-      color(0, 0, 255)
+  console.log(kabum.width(), kabum.height());
+  var SCALE2 = 2.5;
+  var JUMP_FORCE = 2500;
+  if (kabum.width() < 1e3) {
+    SCALE2 = 1.5;
+    JUMP_FORCE = 2100;
+  } else if (kabum.width() < 1800) {
+    SCALE2 = 2.5;
+    JUMP_FORCE = 2500;
+  } else {
+    SCALE2 = 3;
+    JUMP_FORCE = 3e3;
+  }
+  var FLOOR_HEIGHT = 4;
+  var FLOOR_HIGHT = 40 * SCALE2;
+  var FLOOR_COLLISION = 5 * SCALE2;
+  var GRAVITY = 8e3;
+  var SPEED = 10;
+  var numHorizon = 12;
+  var randn_bm = (min, max, skew = 1) => {
+    let u = 0, v2 = 0;
+    while (u === 0)
+      u = Math.random();
+    while (v2 === 0)
+      v2 = Math.random();
+    let num = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v2);
+    num = num / 10 + 0.5;
+    if (num > 1 || num < 0)
+      num = randn_bm(min, max, skew);
+    num = Math.pow(num, skew);
+    num *= max - min;
+    num += min;
+    return num;
+  };
+  function randParallax(min = 0, max = numHorizon) {
+    let num = randn_bm(-30, 70, 1);
+    while (num < 0 || num > 10) {
+      num = randn_bm(-30, 70, 1);
+    }
+    return Math.round(num);
+  }
+  kabum.loadFont("pixelFont", "fonts/Minecraft.ttf");
+  kabum.loadSpriteAtlas("sprites/miquiDino.png", {
+    "miquiDino": {
+      x: 0,
+      y: 0,
+      width: 192,
+      height: 64,
+      sliceX: 3,
+      anims: {
+        idle: 0,
+        run: { from: 1, to: 2, speed: 15, loop: true },
+        jump: 2
+      }
+    }
+  });
+  kabum.loadSpriteAtlas("sprites/mexican.png", {
+    "mexican": {
+      x: 0,
+      y: 0,
+      width: 1344,
+      height: 64,
+      sliceX: 21,
+      anims: {
+        idle: 0,
+        wait: { from: 0, to: 20, speed: 10, loop: true },
+        jump: 2
+      }
+    }
+  });
+  kabum.loadSpriteAtlas("sprites/bird.png", {
+    "bird": {
+      x: 0,
+      y: 0,
+      width: 512,
+      height: 64,
+      sliceX: 8,
+      anims: {
+        idle: 0,
+        fly: { from: 0, to: 7, speed: 10, loop: true }
+      }
+    }
+  });
+  kabum.loadSpriteAtlas("sprites/clouds.png", {
+    "cloud1": {
+      x: 4,
+      y: 13,
+      width: 54,
+      height: 30
+    }
+  });
+  kabum.loadSpriteAtlas("sprites/clouds.png", {
+    "cloud2": {
+      x: 7,
+      y: 12,
+      width: 54,
+      height: 30
+    }
+  });
+  kabum.loadSpriteAtlas("sprites/clouds.png", {
+    "cloud3": {
+      x: 60,
+      y: 11,
+      width: 65,
+      height: 20
+    }
+  });
+  kabum.loadSpriteAtlas("sprites/clouds.png", {
+    "cloud4": {
+      x: 60,
+      y: 38,
+      width: 65,
+      height: 23
+    }
+  });
+  kabum.loadSpriteAtlas("sprites/clouds.png", {
+    "cloud5": {
+      x: 60,
+      y: 66,
+      width: 65,
+      height: 23
+    }
+  });
+  kabum.loadSpriteAtlas("sprites/clouds.png", {
+    "cloud6": {
+      x: 6,
+      y: 86,
+      width: 114,
+      height: 31
+    }
+  });
+  kabum.loadSpriteAtlas("sprites/boom.png", {
+    "boom": {
+      x: 0,
+      y: 0,
+      width: 1216,
+      height: 93,
+      sliceX: 19,
+      anims: {
+        boom: { from: 0, to: 18, speed: 19 }
+      }
+    }
+  });
+  kabum.loadSpriteAtlas("sprites/miquiCactus.png", {
+    "cactus": {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 50,
+      sliceX: 4
+    }
+  });
+  kabum.loadSpriteAtlas("sprites/miquiCactus.png", {
+    "cactus2": {
+      x: 100,
+      y: 0,
+      width: 50,
+      height: 50
+    }
+  });
+  kabum.loadSprite("face", "sprites/miquiFace.png");
+  kabum.scene("game", () => {
+    kabum.destroyAll();
+    let score = 0;
+    let player;
+    let lives = 4;
+    let livesSprites = [];
+    let respawnTime = RespawnTime();
+    function showLives() {
+      for (let i2 = 0; i2 < lives - 1; i2++) {
+        const lifeSprite = kabum.add([
+          kabum.sprite("miquiDino"),
+          kabum.pos(80 + 60 * i2, 40),
+          kabum.scale(SCALE2 / 2),
+          kabum.rotate(30),
+          kabum.color(255, 255, 255),
+          kabum.z(1e3)
+        ]);
+        livesSprites.push(lifeSprite);
+      }
+    }
+    kabum.add([
+      kabum.rect(kabum.width(), FLOOR_HEIGHT),
+      // outline(4),
+      kabum.pos(0, kabum.height() - FLOOR_HIGHT),
+      kabum.anchor("botleft"),
+      kabum.area({ offset: kabum.vec2(0, FLOOR_COLLISION) }),
+      kabum.body({ isStatic: true }),
+      kabum.color(200, 200, 200),
+      "floor"
     ]);
-    setGravity(1600);
-    const player = add([
-      // list of components
-      sprite("bean"),
-      pos(80, 40),
-      area(),
-      body()
-    ]);
-    add([
-      rect(width(), FLOOR_HEIGHT),
-      outline(4),
-      pos(0, height()),
-      anchor("botleft"),
-      area(),
-      body({ isStatic: true }),
-      color(127, 200, 255)
-    ]);
+    showLives();
+    kabum.setGravity(1e3 * SCALE2);
+    const horizonColor = 130;
+    let horizonSeparation = 0;
+    const horizonM = 7;
+    for (let i2 = 1; i2 < numHorizon; i2++) {
+      horizonSeparation += horizonM * SCALE2 - i2 * horizonM * SCALE2 / numHorizon;
+      kabum.add([
+        kabum.rect(kabum.width(), FLOOR_HEIGHT / 2),
+        // outline(4),
+        kabum.pos(0, kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT - horizonSeparation),
+        kabum.anchor("botleft"),
+        kabum.color(horizonColor - i2 * horizonColor / numHorizon, horizonColor - i2 * horizonColor / numHorizon, horizonColor - i2 * horizonColor / numHorizon),
+        "horizon"
+      ]);
+    }
+    function addCloud() {
+      let cloudIndex = kabum.randi(1, 6);
+      let cloud = kabum.add([
+        kabum.sprite("cloud" + cloudIndex),
+        kabum.scale(SCALE2),
+        kabum.pos(5 * kabum.width() / 4, kabum.rand(0, kabum.height() / 2)),
+        kabum.anchor("center"),
+        "cloud",
+        speed(SPEED / 8),
+        kabum.z(0),
+        kabum.color(220, 220, 220)
+      ]);
+      clouds.push(cloud);
+      clouds.length > 10 && kabum.destroy(clouds.shift());
+    }
+    function addParallax() {
+      let frameIndex = kabum.randi(0, 5);
+      let far = randParallax(1, numHorizon);
+      let par;
+      let parallaxColor = 150;
+      let horizonSeparation2 = 0;
+      for (let i2 = 1; i2 < far; i2++) {
+        horizonSeparation2 += horizonM * SCALE2 - i2 * horizonM * SCALE2 / numHorizon;
+      }
+      if (frameIndex == 4) {
+        par = kabum.add([
+          kabum.sprite("cactus2"),
+          kabum.scale(SCALE2 - (far + 2) * SCALE2 / numHorizon),
+          kabum.pos(kabum.width(), kabum.height() - FLOOR_HIGHT - horizonSeparation2),
+          kabum.anchor("botleft"),
+          "cactus",
+          speed(SPEED - (far + 1) * SPEED / numHorizon),
+          kabum.color(parallaxColor - far * parallaxColor / numHorizon, parallaxColor - far * parallaxColor / numHorizon, parallaxColor - far * parallaxColor / numHorizon)
+        ]);
+      } else if (frameIndex < 4) {
+        par = kabum.add([
+          kabum.sprite("cactus", { frame: frameIndex }),
+          kabum.scale(SCALE2 - (far + 2) * SCALE2 / numHorizon),
+          kabum.pos(kabum.width(), kabum.height() - FLOOR_HIGHT - horizonSeparation2),
+          kabum.anchor("botleft"),
+          "cactus",
+          speed(SPEED - (far + 1) * SPEED / numHorizon),
+          kabum.color(parallaxColor - far * parallaxColor / numHorizon, parallaxColor - far * parallaxColor / numHorizon, parallaxColor - far * parallaxColor / numHorizon)
+        ]);
+      }
+      parallax.push(par);
+      parallax.length > 80 && kabum.destroy(parallax.shift());
+    }
+    addPlayer();
+    function addPlayer() {
+      player = kabum.add([
+        // list of components
+        kabum.sprite("miquiDino"),
+        kabum.pos(80, 40),
+        kabum.scale(SCALE2, SCALE2),
+        kabum.area({
+          offset: kabum.vec2(12, 3),
+          shape: new kabum.Polygon([kabum.vec2(16, 5), kabum.vec2(28, 5), kabum.vec2(25, 47), kabum.vec2(10, 47)])
+        }),
+        kabum.body(),
+        kabum.z(5e3)
+      ]);
+      onColide();
+      player.onCollide("floor", () => {
+        player.play("run");
+        kabum.setGravity(GRAVITY);
+      });
+    }
     function jump() {
       if (player.isGrounded()) {
         player.jump(JUMP_FORCE);
+        player.play("jump");
       }
     }
-    onKeyPress("space", jump);
-    onClick(jump);
-    function spawnTree() {
-      add([
-        rect(48, rand(32, 96)),
-        area(),
-        outline(4),
-        pos(width(), height() - FLOOR_HEIGHT),
-        anchor("botleft"),
-        color(255, 180, 255),
-        move(LEFT, SPEED),
-        "tree"
+    kabum.onKeyPress("space", jump);
+    kabum.onClick(jump);
+    let cacti = [];
+    let parallax = [];
+    let clouds = [];
+    let moving = true;
+    let spawn = true;
+    function addBird() {
+      let bird = kabum.add([
+        kabum.sprite("bird"),
+        kabum.scale(-SCALE2, SCALE2),
+        kabum.area({ shape: new kabum.Polygon([kabum.vec2(15, -25), kabum.vec2(15, -50), kabum.vec2(35, -50), kabum.vec2(35, -25)]) }),
+        // kabum.pos(kabum.width(), kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT + FLOOR_COLLISION - SCALE * 10 - 30 * SCALE * kabum.randi(0, 2)),
+        kabum.pos(kabum.width() * 2.5 / SCALE2, kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT + FLOOR_COLLISION - SCALE2 * 10 - 30 * SCALE2),
+        kabum.anchor("botleft"),
+        "cactus",
+        speed(SPEED * 1.3),
+        kabum.z(120)
       ]);
-      wait(rand(0.5, 1.5), spawnTree);
+      bird.play("fly");
+      cacti.push(bird);
     }
-    spawnTree();
-    player.onCollide("tree", () => {
-      go("lose", score);
-      burp();
-      addKaboom(player.pos);
+    function addCactus() {
+      let cactus;
+      let frameIndex = kabum.randi(0, 21);
+      if (frameIndex < 20) {
+        frameIndex = frameIndex % 5;
+      }
+      if (frameIndex == 4) {
+        cactus = kabum.add([
+          kabum.sprite("cactus2"),
+          kabum.scale(SCALE2, SCALE2),
+          kabum.area({ shape: new kabum.Polygon([kabum.vec2(2, 7), kabum.vec2(48, 0), kabum.vec2(46, -45), kabum.vec2(4, -45)]) }),
+          kabum.pos(kabum.width() * 2.5 / SCALE2, kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT + FLOOR_COLLISION + SCALE2 * 7),
+          kabum.anchor("botleft"),
+          // move(LEFT, SPEED),
+          "cactus",
+          speed(SPEED),
+          kabum.z(100)
+        ]);
+      } else if (frameIndex < 4) {
+        cactus = kabum.add([
+          kabum.sprite("cactus", { frame: frameIndex }),
+          kabum.scale(SCALE2, SCALE2),
+          kabum.area({ shape: new kabum.Polygon([kabum.vec2(2), kabum.vec2(23, 0), kabum.vec2(21, -45), kabum.vec2(4, -45)]) }),
+          kabum.pos(kabum.width() * 2.5 / SCALE2, kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT + FLOOR_COLLISION + SCALE2 * 7),
+          kabum.anchor("botleft"),
+          // move(LEFT, SPEED),
+          "cactus",
+          speed(SPEED),
+          kabum.z(100)
+        ]);
+      } else {
+        cactus = kabum.add([
+          // kabum.add a game object to screen  
+          kabum.sprite("mexican"),
+          // render as a kabum.sprite
+          kabum.pos(kabum.width() * 2.5 / SCALE2, kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT + FLOOR_COLLISION + SCALE2 * 7),
+          // position in world
+          kabum.scale(-SCALE2, SCALE2),
+          kabum.area({ shape: new kabum.Polygon([kabum.vec2(23, 0), kabum.vec2(36, 0), kabum.vec2(36, -45), kabum.vec2(23, -45)]) }),
+          kabum.anchor("botleft"),
+          speed(SPEED),
+          "cactus",
+          kabum.z(100)
+        ]);
+        cactus.play("wait");
+      }
+      cacti.push(cactus);
+    }
+    function speed(sp) {
+      let speed2 = sp;
+      return {
+        getSpeed() {
+          return speed2;
+        },
+        setSpeed(newSpeed) {
+          speed2 = newSpeed;
+        }
+      };
+    }
+    function spawnCactus() {
+      if (moving & spawn) {
+        addCactus();
+      }
+      kabum.wait(respawnTime.getRandom(), spawnCactus);
+      cacti.length > 5 && kabum.destroy(cacti.shift());
+    }
+    function spawnParallax() {
+      if (moving) {
+        addParallax();
+      }
+      kabum.wait(kabum.rand(0.05, 0.2), spawnParallax);
+    }
+    function spawnCloud() {
+      if (moving) {
+        addCloud();
+      }
+      kabum.wait(kabum.rand(2, 6), spawnCloud);
+    }
+    function spawnBird() {
+      if (moving && spawn && score > 3e3) {
+        addBird();
+      }
+      kabum.wait(respawnTime.getRandom() * 4, spawnBird);
+      cacti.length > 5 && kabum.destroy(cacti.shift());
+    }
+    spawnCactus();
+    spawnBird();
+    spawnParallax();
+    spawnCloud();
+    function RespawnTime() {
+      let factor = 1;
+      return {
+        setRespawnFactor(factor2) {
+          factor = factor2;
+        },
+        getRandom() {
+          let random = kabum.rand(factor, 3.5 * factor);
+          return random;
+        },
+        getFactor() {
+          return factor;
+        }
+      };
+    }
+    function updateCactiMovement() {
+      cacti.forEach((cactus) => {
+        if (moving) {
+          cactus.pos.x -= cactus.getSpeed();
+        }
+      });
+    }
+    function updateParallaxMovement() {
+      parallax.forEach((par) => {
+        if (moving) {
+          par.pos.x -= par.getSpeed();
+        }
+      });
+    }
+    function updateCloudMovement() {
+      clouds.forEach((par) => {
+        if (moving) {
+          par.pos.x -= par.getSpeed();
+        }
+      });
+    }
+    function setCactiSpeed(speed2) {
+      SPEED = speed2;
+      cacti.forEach((cactus) => {
+        cactus.setSpeed(speed2);
+      });
+    }
+    function stopCacti() {
+      moving = false;
+      spawn = false;
+    }
+    function addBoom(x, y) {
+      let boom = kabum.add([
+        kabum.sprite("boom"),
+        kabum.anchor("center"),
+        kabum.pos(x, y),
+        kabum.scale(SCALE2),
+        kabum.z(1e5),
+        "boom"
+      ]);
+      boom.play("boom", {
+        loop: false
+      });
+      kabum.setGravity(1e3 * SCALE2);
+      kabum.shake();
+      kabum.wait(1, () => {
+        kabum.destroy(boom);
+      });
+    }
+    function onColide() {
+      player.onCollide("cactus", () => {
+        lives--;
+        addBoom(player.pos.x + 34 * SCALE2, player.pos.y + 20 * SCALE2);
+        stopCacti();
+        kabum.destroy(player);
+        if (lives > 0) {
+          kabum.wait(1, () => {
+            moving = true;
+            kabum.wait(SCALE2, () => {
+              spawn = true;
+              livesSprites[lives - 1].destroy();
+              addPlayer();
+            });
+          });
+        } else {
+          kabum.wait(0.5, () => {
+            kabum.go("lose", score);
+          });
+        }
+      });
+    }
+    const scoreLabel = kabum.add([
+      kabum.text(score, { font: "pixelFont" }),
+      kabum.pos(24, 24),
+      kabum.z(1e3),
+      kabum.scale(SCALE2 / 2)
+    ]);
+    const speedLabel = kabum.add([
+      kabum.text("speed:" + SPEED, { font: "pixelFont" }),
+      kabum.pos(kabum.width() - 20, 60),
+      kabum.anchor("topright"),
+      kabum.z(1e3),
+      kabum.scale(SCALE2 / 3)
+    ]);
+    const spawnLabel = kabum.add([
+      kabum.text("Respawn: " + respawnTime, { font: "pixelFont" }),
+      kabum.pos(kabum.width() - 20, 100),
+      kabum.anchor("topright"),
+      kabum.z(1e3),
+      kabum.scale(SCALE2 / 3)
+    ]);
+    function velocityUp() {
+      setCactiSpeed(SPEED + 1.01);
+    }
+    function respawnUp() {
+      respawnTime.setRespawnFactor(respawnTime.getFactor() * 0.99);
+    }
+    kabum.onUpdate(() => {
+      updateCactiMovement();
+      updateParallaxMovement();
+      updateCloudMovement();
+      if (moving) {
+        score++;
+      }
+      scoreLabel.text = "- " + score + " -";
+      let speedtext = SPEED;
+      speedLabel.text = "Speed: " + Math.floor(SPEED - 10);
+      spawnLabel.text = "Respawn: " + Math.floor((1 - respawnTime.getFactor()) * 1e3);
+      if (score < 5e3) {
+        if (score % 500 === 0) {
+          velocityUp();
+        }
+      } else if (score === 5e3) {
+        SPEED = 10;
+      } else if (score > 5e3) {
+        if (score % 500 === 0) {
+          respawnUp();
+        }
+        if (score % 500 === 0 && SPEED < 20) {
+          velocityUp();
+        }
+      }
     });
+  });
+  kabum.scene("start", gameStart);
+  kabum.scene("lose", gameLose);
+  kabum.go("start");
+
+  // src/start.js
+  var gameStart = () => {
+    kabum.destroyAll();
+    let SCALE4 = 2.5;
+    let JUMP_FORCE3 = 2500;
+    if (kabum.width() < 1e3) {
+      SCALE4 = 2;
+      JUMP_FORCE3 = 2100;
+    } else if (kabum.width() < 1800) {
+      SCALE4 = 2.5;
+      JUMP_FORCE3 = 2500;
+    } else {
+      SCALE4 = 3;
+      JUMP_FORCE3 = 3e3;
+    }
+    const FLOOR_HEIGHT3 = 4;
+    const FLOOR_HIGHT3 = 100;
+    const FLOOR_COLLISION3 = 30;
+    const GRAVITY3 = 4e3;
+    let SPEED3 = 10;
+    let numHorizon3 = 12;
+    const horizonColor = 130;
+    let horizonSeparation = 0;
+    const horizonM = 7;
+    let parallax = [];
+    const STARTGRAVITY = 0.2;
+    const ROPELENGTH = kabum.height() / 2;
+    let swinging = true;
+    let swingingMax = 50;
+    let velocidadBalanceo = 2;
+    let positionRope = { x: kabum.width() / 2, y: 0, angle: 0, vx: 0, vy: 0, va: 0 };
+    let positionCharacter = { x: kabum.width() / 2, y: kabum.height() / 3, angle: 0, vx: 0, vy: 0, va: 0 };
+    let rope = kabum.add([
+      kabum.rect(2 * SCALE4, ROPELENGTH),
+      // outline(4),
+      kabum.pos(positionRope.x, positionRope.y),
+      kabum.anchor("top"),
+      // area({ offset: kabum.vec2(0, FLOOR_COLLISION) }),
+      // kabum.body({ isStatic: true }),
+      kabum.color(127, 127, 127),
+      "rope"
+    ]);
+    let base = kabum.add([
+      kabum.circle(10 * SCALE4),
+      kabum.pos(kabum.width() / 2, 0),
+      kabum.anchor("center"),
+      kabum.color(127, 127, 127),
+      "base"
+    ]);
+    let mainCharacter = kabum.add([kabum.sprite("miquiDino"), kabum.pos(positionRope.x - 4 * SCALE4, positionRope.y - 7 * SCALE4), kabum.scale(SCALE4), kabum.anchor("center"), kabum.z(1e3), "dino"]);
+    let t = 0;
+    kabum.onUpdate(() => {
+      updateParallaxMovement();
+      const tiempo = kabum.time() * velocidadBalanceo;
+      pendulumPositionAtAngle(tiempo);
+      mainCharacter.pos.x = positionCharacter.x;
+      mainCharacter.pos.y = positionCharacter.y;
+      mainCharacter.angle = positionCharacter.angle;
+      rope.pos.x = positionRope.x;
+      rope.pos.y = positionRope.y;
+      rope.angle = positionRope.angle;
+    });
+    function pendulumPositionAtAngle(tiempo) {
+      let x, y, a;
+      a = swingingMax * Math.sin(tiempo);
+      positionRope.angle = a;
+      if (swinging) {
+        x = ROPELENGTH * Math.sin(-positionRope.angle * (Math.PI / 180)) + kabum.width() / 2;
+        y = ROPELENGTH * Math.cos(-positionRope.angle * (Math.PI / 180));
+        positionCharacter.vx = x - positionCharacter.x;
+        positionCharacter.vy = y - positionCharacter.y;
+        positionCharacter.x = x;
+        positionCharacter.y = y;
+        positionCharacter.va = a - positionCharacter.angle;
+        positionCharacter.angle = a;
+      } else {
+        moveCharacter();
+      }
+    }
+    function moveCharacter() {
+      positionCharacter.x += positionCharacter.vx;
+      positionCharacter.y += positionCharacter.vy;
+      positionCharacter.vy += STARTGRAVITY;
+      positionCharacter.angle += positionCharacter.va;
+    }
+    kabum.add([
+      kabum.text("PRESS SPACE TO JUMP", { font: "pixelFont" }),
+      kabum.pos(kabum.width() / 2, kabum.height() / 2 + 80),
+      kabum.scale(SCALE4 / 1.8),
+      kabum.anchor("center")
+    ]);
+    const randn_bm3 = (min, max, skew = 1) => {
+      let u = 0, v2 = 0;
+      while (u === 0)
+        u = Math.random();
+      while (v2 === 0)
+        v2 = Math.random();
+      let num = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v2);
+      num = num / 10 + 0.5;
+      if (num > 1 || num < 0)
+        num = randn_bm3(min, max, skew);
+      num = Math.pow(num, skew);
+      num *= max - min;
+      num += min;
+      return num;
+    };
+    function randParallax3(min = 0, max = numHorizon3) {
+      let num = randn_bm3(-30, 70, 1);
+      while (num < 0 || num > 10) {
+        num = randn_bm3(-30, 70, 1);
+      }
+      return Math.round(num);
+    }
+    function addParallax() {
+      let frameIndex = kabum.randi(0, 5);
+      let far = randParallax3(1, numHorizon3);
+      let par;
+      let parallaxColor = 150;
+      let horizonSeparation2 = 0;
+      for (let i2 = 1; i2 < far; i2++) {
+        horizonSeparation2 += horizonM * SCALE4 - i2 * horizonM * SCALE4 / numHorizon3;
+      }
+      if (frameIndex == 4) {
+        par = kabum.add([
+          kabum.sprite("cactus2"),
+          kabum.scale(SCALE4 - (far + 2) * SCALE4 / numHorizon3),
+          kabum.pos(kabum.width(), kabum.height() - FLOOR_HIGHT3 - horizonSeparation2),
+          kabum.anchor("botleft"),
+          "cactus",
+          speed(SPEED3 - (far + 1) * SPEED3 / numHorizon3),
+          kabum.color(parallaxColor - far * parallaxColor / numHorizon3, parallaxColor - far * parallaxColor / numHorizon3, parallaxColor - far * parallaxColor / numHorizon3)
+        ]);
+      } else if (frameIndex < 4) {
+        par = kabum.add([
+          kabum.sprite("cactus", { frame: frameIndex }),
+          kabum.scale(SCALE4 - (far + 2) * SCALE4 / numHorizon3),
+          kabum.pos(kabum.width(), kabum.height() - FLOOR_HIGHT3 - horizonSeparation2),
+          kabum.anchor("botleft"),
+          "cactus",
+          speed(SPEED3 - (far + 1) * SPEED3 / numHorizon3),
+          kabum.color(parallaxColor - far * parallaxColor / numHorizon3, parallaxColor - far * parallaxColor / numHorizon3, parallaxColor - far * parallaxColor / numHorizon3)
+        ]);
+      }
+      parallax.push(par);
+      parallax.length > 1e3 && destroy(parallax.shift());
+    }
+    function spawnParallax() {
+      addParallax();
+      kabum.wait(kabum.rand(0.05, 0.2), spawnParallax);
+    }
+    spawnParallax();
+    function updateParallaxMovement() {
+      parallax.forEach((par) => {
+        par.pos.x -= par.getSpeed();
+      });
+    }
+    function speed(sp) {
+      let speed2 = sp;
+      return {
+        getSpeed() {
+          return speed2;
+        },
+        setSpeed(newSpeed) {
+          speed2 = newSpeed;
+        }
+      };
+    }
+    kabum.onKeyPress("space", () => {
+      stopSwinging();
+    });
+    kabum.onClick(() => stopSwinging());
+    function stopSwinging() {
+      swinging = false;
+      kabum.wait(1.5, () => {
+        kabum.shake();
+        kabum.wait(1, () => {
+          kabum.destroyAll("dino");
+          kabum.destroyAll("face");
+          kabum.destroyAll("rope");
+          kabum.destroyAll("base");
+          kabum.go("game");
+        });
+      });
+    }
+  };
+
+  // src/main_temp.js
+  var kabum2 = zo({
+    global: true,
+    fullscreen: true,
+    font: "sans-serif",
+    scale: 0.8,
+    debug: true,
+    background: [255, 255, 255, 0],
+    root: document.getElementById("jueguito"),
+    // Especifica el contenedor del juek.go,
+    global: false
+  });
+  console.log(kabum2.width(), kabum2.height());
+  var SCALE3 = 2.5;
+  var JUMP_FORCE2 = 2500;
+  if (kabum2.width() < 1e3) {
+    SCALE3 = 1.5;
+    JUMP_FORCE2 = 2100;
+  } else if (kabum2.width() < 1800) {
+    SCALE3 = 2.5;
+    JUMP_FORCE2 = 2500;
+  } else {
+    SCALE3 = 3;
+    JUMP_FORCE2 = 3e3;
+  }
+  var FLOOR_HEIGHT2 = 4;
+  var FLOOR_HIGHT2 = 40 * SCALE3;
+  var FLOOR_COLLISION2 = 5 * SCALE3;
+  var GRAVITY2 = 8e3;
+  var SPEED2 = 10;
+  var numHorizon2 = 12;
+  var randn_bm2 = (min, max, skew = 1) => {
+    let u = 0, v2 = 0;
+    while (u === 0)
+      u = Math.random();
+    while (v2 === 0)
+      v2 = Math.random();
+    let num = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v2);
+    num = num / 10 + 0.5;
+    if (num > 1 || num < 0)
+      num = randn_bm2(min, max, skew);
+    num = Math.pow(num, skew);
+    num *= max - min;
+    num += min;
+    return num;
+  };
+  function randParallax2(min = 0, max = numHorizon2) {
+    let num = randn_bm2(-30, 70, 1);
+    while (num < 0 || num > 10) {
+      num = randn_bm2(-30, 70, 1);
+    }
+    return Math.round(num);
+  }
+  kabum2.loadFont("pixelFont", "assets/jueguito/fonts/Minecraft.ttf");
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/miquiDino.png", {
+    "miquiDino": {
+      x: 0,
+      y: 0,
+      width: 192,
+      height: 64,
+      sliceX: 3,
+      anims: {
+        idle: 0,
+        run: { from: 1, to: 2, speed: 15, loop: true },
+        jump: 2
+      }
+    }
+  });
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/mexican.png", {
+    "mexican": {
+      x: 0,
+      y: 0,
+      width: 1344,
+      height: 64,
+      sliceX: 21,
+      anims: {
+        idle: 0,
+        wait: { from: 0, to: 20, speed: 10, loop: true },
+        jump: 2
+      }
+    }
+  });
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/bird.png", {
+    "bird": {
+      x: 0,
+      y: 0,
+      width: 512,
+      height: 64,
+      sliceX: 8,
+      anims: {
+        idle: 0,
+        fly: { from: 0, to: 7, speed: 10, loop: true }
+      }
+    }
+  });
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud1": {
+      x: 4,
+      y: 13,
+      width: 54,
+      height: 30
+    }
+  });
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud2": {
+      x: 7,
+      y: 12,
+      width: 54,
+      height: 30
+    }
+  });
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud3": {
+      x: 60,
+      y: 11,
+      width: 65,
+      height: 20
+    }
+  });
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud4": {
+      x: 60,
+      y: 38,
+      width: 65,
+      height: 23
+    }
+  });
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud5": {
+      x: 60,
+      y: 66,
+      width: 65,
+      height: 23
+    }
+  });
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud6": {
+      x: 6,
+      y: 86,
+      width: 114,
+      height: 31
+    }
+  });
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/boom.png", {
+    "boom": {
+      x: 0,
+      y: 0,
+      width: 1216,
+      height: 93,
+      sliceX: 19,
+      anims: {
+        boom: { from: 0, to: 18, speed: 19 }
+      }
+    }
+  });
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/miquiCactus.png", {
+    "cactus": {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 50,
+      sliceX: 4
+    }
+  });
+  kabum2.loadSpriteAtlas("assets/jueguito/sprites/miquiCactus.png", {
+    "cactus2": {
+      x: 100,
+      y: 0,
+      width: 50,
+      height: 50
+    }
+  });
+  kabum2.loadSprite("face", "assets/jueguito/sprites/miquiFace.png");
+  kabum2.scene("game", () => {
+    kabum2.destroyAll();
     let score = 0;
-    const scoreLabel = add([
-      text(score),
-      pos(24, 24)
+    let player;
+    let lives = 4;
+    let livesSprites = [];
+    let respawnTime = RespawnTime();
+    function showLives() {
+      for (let i2 = 0; i2 < lives - 1; i2++) {
+        const lifeSprite = kabum2.add([
+          kabum2.sprite("miquiDino"),
+          kabum2.pos(80 + 60 * i2, 40),
+          kabum2.scale(SCALE3 / 2),
+          kabum2.rotate(30),
+          kabum2.color(255, 255, 255),
+          kabum2.z(1e3)
+        ]);
+        livesSprites.push(lifeSprite);
+      }
+    }
+    kabum2.add([
+      kabum2.rect(kabum2.width(), FLOOR_HEIGHT2),
+      // outline(4),
+      kabum2.pos(0, kabum2.height() - FLOOR_HIGHT2),
+      kabum2.anchor("botleft"),
+      kabum2.area({ offset: kabum2.vec2(0, FLOOR_COLLISION2) }),
+      kabum2.body({ isStatic: true }),
+      kabum2.color(200, 200, 200),
+      "floor"
     ]);
-    onUpdate(() => {
-      score++;
-      scoreLabel.text = score;
+    showLives();
+    kabum2.setGravity(1e3 * SCALE3);
+    const horizonColor = 130;
+    let horizonSeparation = 0;
+    const horizonM = 7;
+    for (let i2 = 1; i2 < numHorizon2; i2++) {
+      horizonSeparation += horizonM * SCALE3 - i2 * horizonM * SCALE3 / numHorizon2;
+      kabum2.add([
+        kabum2.rect(kabum2.width(), FLOOR_HEIGHT2 / 2),
+        // outline(4),
+        kabum2.pos(0, kabum2.height() - FLOOR_HEIGHT2 - FLOOR_HIGHT2 - horizonSeparation),
+        kabum2.anchor("botleft"),
+        kabum2.color(horizonColor - i2 * horizonColor / numHorizon2, horizonColor - i2 * horizonColor / numHorizon2, horizonColor - i2 * horizonColor / numHorizon2),
+        "horizon"
+      ]);
+    }
+    function addCloud() {
+      let cloudIndex = kabum2.randi(1, 6);
+      let cloud = kabum2.add([
+        kabum2.sprite("cloud" + cloudIndex),
+        kabum2.scale(SCALE3),
+        kabum2.pos(5 * kabum2.width() / 4, kabum2.rand(0, kabum2.height() / 2)),
+        kabum2.anchor("center"),
+        "cloud",
+        speed(SPEED2 / 8),
+        kabum2.z(0),
+        kabum2.color(220, 220, 220)
+      ]);
+      clouds.push(cloud);
+      clouds.length > 10 && kabum2.destroy(clouds.shift());
+    }
+    function addParallax() {
+      let frameIndex = kabum2.randi(0, 5);
+      let far = randParallax2(1, numHorizon2);
+      let par;
+      let parallaxColor = 150;
+      let horizonSeparation2 = 0;
+      for (let i2 = 1; i2 < far; i2++) {
+        horizonSeparation2 += horizonM * SCALE3 - i2 * horizonM * SCALE3 / numHorizon2;
+      }
+      if (frameIndex == 4) {
+        par = kabum2.add([
+          kabum2.sprite("cactus2"),
+          kabum2.scale(SCALE3 - (far + 2) * SCALE3 / numHorizon2),
+          kabum2.pos(kabum2.width(), kabum2.height() - FLOOR_HIGHT2 - horizonSeparation2),
+          kabum2.anchor("botleft"),
+          "cactus",
+          speed(SPEED2 - (far + 1) * SPEED2 / numHorizon2),
+          kabum2.color(parallaxColor - far * parallaxColor / numHorizon2, parallaxColor - far * parallaxColor / numHorizon2, parallaxColor - far * parallaxColor / numHorizon2)
+        ]);
+      } else if (frameIndex < 4) {
+        par = kabum2.add([
+          kabum2.sprite("cactus", { frame: frameIndex }),
+          kabum2.scale(SCALE3 - (far + 2) * SCALE3 / numHorizon2),
+          kabum2.pos(kabum2.width(), kabum2.height() - FLOOR_HIGHT2 - horizonSeparation2),
+          kabum2.anchor("botleft"),
+          "cactus",
+          speed(SPEED2 - (far + 1) * SPEED2 / numHorizon2),
+          kabum2.color(parallaxColor - far * parallaxColor / numHorizon2, parallaxColor - far * parallaxColor / numHorizon2, parallaxColor - far * parallaxColor / numHorizon2)
+        ]);
+      }
+      parallax.push(par);
+      parallax.length > 80 && kabum2.destroy(parallax.shift());
+    }
+    addPlayer();
+    function addPlayer() {
+      player = kabum2.add([
+        // list of components
+        kabum2.sprite("miquiDino"),
+        kabum2.pos(80, 40),
+        kabum2.scale(SCALE3, SCALE3),
+        kabum2.area({
+          offset: kabum2.vec2(12, 3),
+          shape: new kabum2.Polygon([kabum2.vec2(16, 5), kabum2.vec2(28, 5), kabum2.vec2(25, 47), kabum2.vec2(10, 47)])
+        }),
+        kabum2.body(),
+        kabum2.z(5e3)
+      ]);
+      onColide();
+      player.onCollide("floor", () => {
+        player.play("run");
+        kabum2.setGravity(GRAVITY2);
+      });
+    }
+    function jump() {
+      if (player.isGrounded()) {
+        player.jump(JUMP_FORCE2);
+        player.play("jump");
+      }
+    }
+    kabum2.onKeyPress("space", jump);
+    kabum2.onClick(jump);
+    let cacti = [];
+    let parallax = [];
+    let clouds = [];
+    let moving = true;
+    let spawn = true;
+    function addBird() {
+      let bird = kabum2.add([
+        kabum2.sprite("bird"),
+        kabum2.scale(-SCALE3, SCALE3),
+        kabum2.area({ shape: new kabum2.Polygon([kabum2.vec2(15, -25), kabum2.vec2(15, -50), kabum2.vec2(35, -50), kabum2.vec2(35, -25)]) }),
+        // kabum.pos(kabum.width(), kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT + FLOOR_COLLISION - SCALE * 10 - 30 * SCALE * kabum.randi(0, 2)),
+        kabum2.pos(kabum2.width() * 2.5 / SCALE3, kabum2.height() - FLOOR_HEIGHT2 - FLOOR_HIGHT2 + FLOOR_COLLISION2 - SCALE3 * 10 - 30 * SCALE3),
+        kabum2.anchor("botleft"),
+        "cactus",
+        speed(SPEED2 * 1.3),
+        kabum2.z(120)
+      ]);
+      bird.play("fly");
+      cacti.push(bird);
+    }
+    function addCactus() {
+      let cactus;
+      let frameIndex = kabum2.randi(0, 21);
+      if (frameIndex < 20) {
+        frameIndex = frameIndex % 5;
+      }
+      if (frameIndex == 4) {
+        cactus = kabum2.add([
+          kabum2.sprite("cactus2"),
+          kabum2.scale(SCALE3, SCALE3),
+          kabum2.area({ shape: new kabum2.Polygon([kabum2.vec2(2, 7), kabum2.vec2(48, 0), kabum2.vec2(46, -45), kabum2.vec2(4, -45)]) }),
+          kabum2.pos(kabum2.width() * 2.5 / SCALE3, kabum2.height() - FLOOR_HEIGHT2 - FLOOR_HIGHT2 + FLOOR_COLLISION2 + SCALE3 * 7),
+          kabum2.anchor("botleft"),
+          // move(LEFT, SPEED),
+          "cactus",
+          speed(SPEED2),
+          kabum2.z(100)
+        ]);
+      } else if (frameIndex < 4) {
+        cactus = kabum2.add([
+          kabum2.sprite("cactus", { frame: frameIndex }),
+          kabum2.scale(SCALE3, SCALE3),
+          kabum2.area({ shape: new kabum2.Polygon([kabum2.vec2(2), kabum2.vec2(23, 0), kabum2.vec2(21, -45), kabum2.vec2(4, -45)]) }),
+          kabum2.pos(kabum2.width() * 2.5 / SCALE3, kabum2.height() - FLOOR_HEIGHT2 - FLOOR_HIGHT2 + FLOOR_COLLISION2 + SCALE3 * 7),
+          kabum2.anchor("botleft"),
+          // move(LEFT, SPEED),
+          "cactus",
+          speed(SPEED2),
+          kabum2.z(100)
+        ]);
+      } else {
+        cactus = kabum2.add([
+          // kabum.add a game object to screen  
+          kabum2.sprite("mexican"),
+          // render as a kabum.sprite
+          kabum2.pos(kabum2.width() * 2.5 / SCALE3, kabum2.height() - FLOOR_HEIGHT2 - FLOOR_HIGHT2 + FLOOR_COLLISION2 + SCALE3 * 7),
+          // position in world
+          kabum2.scale(-SCALE3, SCALE3),
+          kabum2.area({ shape: new kabum2.Polygon([kabum2.vec2(23, 0), kabum2.vec2(36, 0), kabum2.vec2(36, -45), kabum2.vec2(23, -45)]) }),
+          kabum2.anchor("botleft"),
+          speed(SPEED2),
+          "cactus",
+          kabum2.z(100)
+        ]);
+        cactus.play("wait");
+      }
+      cacti.push(cactus);
+    }
+    function speed(sp) {
+      let speed2 = sp;
+      return {
+        getSpeed() {
+          return speed2;
+        },
+        setSpeed(newSpeed) {
+          speed2 = newSpeed;
+        }
+      };
+    }
+    function spawnCactus() {
+      if (moving & spawn) {
+        addCactus();
+      }
+      kabum2.wait(respawnTime.getRandom(), spawnCactus);
+      cacti.length > 5 && kabum2.destroy(cacti.shift());
+    }
+    function spawnParallax() {
+      if (moving) {
+        addParallax();
+      }
+      kabum2.wait(kabum2.rand(0.05, 0.2), spawnParallax);
+    }
+    function spawnCloud() {
+      if (moving) {
+        addCloud();
+      }
+      kabum2.wait(kabum2.rand(2, 6), spawnCloud);
+    }
+    function spawnBird() {
+      if (moving && spawn && score > 3e3) {
+        addBird();
+      }
+      kabum2.wait(respawnTime.getRandom() * 4, spawnBird);
+      cacti.length > 5 && kabum2.destroy(cacti.shift());
+    }
+    spawnCactus();
+    spawnBird();
+    spawnParallax();
+    spawnCloud();
+    function RespawnTime() {
+      let factor = 1;
+      return {
+        setRespawnFactor(factor2) {
+          factor = factor2;
+        },
+        getRandom() {
+          let random = kabum2.rand(factor, 3.5 * factor);
+          return random;
+        },
+        getFactor() {
+          return factor;
+        }
+      };
+    }
+    function updateCactiMovement() {
+      cacti.forEach((cactus) => {
+        if (moving) {
+          cactus.pos.x -= cactus.getSpeed();
+        }
+      });
+    }
+    function updateParallaxMovement() {
+      parallax.forEach((par) => {
+        if (moving) {
+          par.pos.x -= par.getSpeed();
+        }
+      });
+    }
+    function updateCloudMovement() {
+      clouds.forEach((par) => {
+        if (moving) {
+          par.pos.x -= par.getSpeed();
+        }
+      });
+    }
+    function setCactiSpeed(speed2) {
+      SPEED2 = speed2;
+      cacti.forEach((cactus) => {
+        cactus.setSpeed(speed2);
+      });
+    }
+    function stopCacti() {
+      moving = false;
+      spawn = false;
+    }
+    function addBoom(x, y) {
+      let boom = kabum2.add([
+        kabum2.sprite("boom"),
+        kabum2.anchor("center"),
+        kabum2.pos(x, y),
+        kabum2.scale(SCALE3),
+        kabum2.z(1e5),
+        "boom"
+      ]);
+      boom.play("boom", {
+        loop: false
+      });
+      kabum2.setGravity(1e3 * SCALE3);
+      kabum2.shake();
+      kabum2.wait(1, () => {
+        kabum2.destroy(boom);
+      });
+    }
+    function onColide() {
+      player.onCollide("cactus", () => {
+        lives--;
+        addBoom(player.pos.x + 34 * SCALE3, player.pos.y + 20 * SCALE3);
+        stopCacti();
+        kabum2.destroy(player);
+        if (lives > 0) {
+          kabum2.wait(1, () => {
+            moving = true;
+            kabum2.wait(SCALE3, () => {
+              spawn = true;
+              livesSprites[lives - 1].destroy();
+              addPlayer();
+            });
+          });
+        } else {
+          kabum2.wait(0.5, () => {
+            kabum2.go("lose", score);
+          });
+        }
+      });
+    }
+    const scoreLabel = kabum2.add([
+      kabum2.text(score, { font: "pixelFont" }),
+      kabum2.pos(24, 24),
+      kabum2.z(1e3),
+      kabum2.scale(SCALE3 / 2)
+    ]);
+    const speedLabel = kabum2.add([
+      kabum2.text("speed:" + SPEED2, { font: "pixelFont" }),
+      kabum2.pos(kabum2.width() - 20, 60),
+      kabum2.anchor("topright"),
+      kabum2.z(1e3),
+      kabum2.scale(SCALE3 / 3)
+    ]);
+    const spawnLabel = kabum2.add([
+      kabum2.text("Respawn: " + respawnTime, { font: "pixelFont" }),
+      kabum2.pos(kabum2.width() - 20, 100),
+      kabum2.anchor("topright"),
+      kabum2.z(1e3),
+      kabum2.scale(SCALE3 / 3)
+    ]);
+    function velocityUp() {
+      setCactiSpeed(SPEED2 + 1.01);
+    }
+    function respawnUp() {
+      respawnTime.setRespawnFactor(respawnTime.getFactor() * 0.99);
+    }
+    kabum2.onUpdate(() => {
+      updateCactiMovement();
+      updateParallaxMovement();
+      updateCloudMovement();
+      if (moving) {
+        score++;
+      }
+      scoreLabel.text = "- " + score + " -";
+      let speedtext = SPEED2;
+      speedLabel.text = "Speed: " + Math.floor(SPEED2 - 10);
+      spawnLabel.text = "Respawn: " + Math.floor((1 - respawnTime.getFactor()) * 1e3);
+      if (score < 5e3) {
+        if (score % 500 === 0) {
+          velocityUp();
+        }
+      } else if (score === 5e3) {
+        SPEED2 = 10;
+      } else if (score > 5e3) {
+        if (score % 500 === 0) {
+          respawnUp();
+        }
+        if (score % 500 === 0 && SPEED2 < 20) {
+          velocityUp();
+        }
+      }
     });
   });
-  scene("lose", (score) => {
-    add([
-      sprite("bean"),
-      pos(width() / 2, height() / 2 - 80),
-      scale(2),
-      anchor("center")
-    ]);
-    add([
-      text(score),
-      pos(width() / 2, height() / 2 + 80),
-      scale(2),
-      anchor("center")
-    ]);
-    onKeyPress("space", () => go("game"));
-    onClick(() => go("game"));
-  });
-  go("game");
+  kabum2.scene("start", gameStart);
+  kabum2.scene("lose", gameLose);
+  kabum2.go("start");
 })();

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ScriptService } from './services/script.service';
 
 
@@ -17,7 +17,26 @@ export class AppComponent implements AfterViewInit, OnInit{
 
   constructor(private script: ScriptService) {}
   pageLoaded=false;
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) { 
+    if(this.activeSection != 'jueguito'){
+    if (event.key === 'ArrowRight') {
+      let currentIndex = this.sectionsList.findIndex(section => section === this.activeSection);
+      // Si se presiona la flecha derecha, obtén la siguiente sección
+      let nextSection = this.sectionsList[currentIndex + 1] || this.sectionsList[0];
+      this.setActiveSection(nextSection);
+    } else if (event.key === 'ArrowLeft') {
+      let currentIndex = this.sectionsList.findIndex(section => section === this.activeSection);
+      // Si se presiona la flecha izquierda, obtén la sección anterior
+      let nextSection = this.sectionsList[currentIndex -1] || this.sectionsList[this.sectionsList.length - 1];
+      this.setActiveSection(nextSection);
+    }else if(event.key === 'ArrowDown'){
+      this.setActiveSection('jueguito');
+    }
+  }
 
+  }
+sectionsList=['header', 'about','resume','contact'];
   ngOnInit(): void {
     this.loadscipts();
   }

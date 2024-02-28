@@ -26,6 +26,7 @@ this.closeJueguito();    }
   closeJueguito(){
     this.isSectionActive=false;
     this.onClose.emit();
+    this.ss.unloadScript('jueguito').then(console.log).catch(error => console.log(error));
   }
 
 }

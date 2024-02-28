@@ -26,6 +26,22 @@ load(...scripts: string[]) {
 }
 
 
+unloadScript(name: string) {
+  return new Promise((resolve, reject) => {
+    let scripts = document.getElementsByTagName('script');
+    for (let i = 0; i < scripts.length; i++) {
+      if (scripts[i].src.indexOf(this.scripts[name].src) !== -1) {
+        scripts[i].parentNode.removeChild(scripts[i]);
+        this.scripts[name].loaded = false;
+        resolve({ script: name, loaded: false, status: 'Unloaded' });
+        return;
+      }
+    }
+    // Si no se encuentra el script cargado, se resuelve como ya descargado
+    resolve({ script: name, loaded: false, status: 'Already Unloaded' });
+  });
+}
+
 loadScript(name: string, forceReload = false) {
   return new Promise((resolve, reject) => {
     // Si forceReload es true, carga el script independientemente de si ya está cargado
