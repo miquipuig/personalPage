@@ -8,6 +8,7 @@
         <button (click)="closeJueguito()" class="jueguito-close">
             <i class="bi bi-x"></i>
         </button>
-        <div  id="jueguito"></div>
+        
+        <div *ngIf="isSectionActive" id="jueguito"></div>
     </div>
 </div>

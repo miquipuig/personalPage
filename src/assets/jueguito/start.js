@@ -35,23 +35,6 @@ export const gameStart = () => {
     let velocidadBalanceo = 2; // Velocidad de balanceo
     //añade cuerda
 
-    // loadSpriteAtlas("assets/jueguito/sprites/miquiCactus.png", {
-    //     "cactus": {
-    //         x: 0,
-    //         y: 0,
-    //         kabum.width: 100,
-    //         kabum.height: 50,
-    //         sliceX: 4,
-    //     }
-    // });
-    // loadSpriteAtlas("assets/jueguito/sprites/miquiCactus.png", {
-    //     "cactus2": {
-    //         x: 100,
-    //         y: 0,
-    //         kabum.width: 50,
-    //         kabum.height: 50
-    //     }
-    // });
 
     let positionRope = { x: kabum.width() / 2, y: 0, angle: 0, vx: 0, vy: 0, va: 0 };
     let positionCharacter = { x: kabum.width() / 2, y: kabum.height() / 3, angle: 0, vx: 0, vy: 0, va: 0 };
@@ -197,7 +180,7 @@ export const gameStart = () => {
         }
 
         parallax.push(par); // Añadir el cactus al array de cacti
-        parallax.length > 1000 && destroy(parallax.shift());
+        parallax.length > 1000 && kabum.destroy(parallax.shift());
     }
     function spawnParallax() {
         addParallax();

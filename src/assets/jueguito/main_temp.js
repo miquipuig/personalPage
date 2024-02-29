@@ -370,8 +370,8 @@
         return new v(0, 0);
     }
     invert() {
-      let e = [], o = this.m[10] * this.m[15] - this.m[14] * this.m[11], c = this.m[9] * this.m[15] - this.m[13] * this.m[11], g = this.m[9] * this.m[14] - this.m[13] * this.m[10], m = this.m[8] * this.m[15] - this.m[12] * this.m[11], P = this.m[8] * this.m[14] - this.m[12] * this.m[10], I = this.m[8] * this.m[13] - this.m[12] * this.m[9], j = this.m[6] * this.m[15] - this.m[14] * this.m[7], y = this.m[5] * this.m[15] - this.m[13] * this.m[7], X = this.m[5] * this.m[14] - this.m[13] * this.m[6], S = this.m[4] * this.m[15] - this.m[12] * this.m[7], q = this.m[4] * this.m[14] - this.m[12] * this.m[6], E = this.m[5] * this.m[15] - this.m[13] * this.m[7], K = this.m[4] * this.m[13] - this.m[12] * this.m[5], Q = this.m[6] * this.m[11] - this.m[10] * this.m[7], te = this.m[5] * this.m[11] - this.m[9] * this.m[7], k2 = this.m[5] * this.m[10] - this.m[9] * this.m[6], pe = this.m[4] * this.m[11] - this.m[8] * this.m[7], C = this.m[4] * this.m[10] - this.m[8] * this.m[6], Ae = this.m[4] * this.m[9] - this.m[8] * this.m[5];
-      e[0] = this.m[5] * o - this.m[6] * c + this.m[7] * g, e[4] = -(this.m[4] * o - this.m[6] * m + this.m[7] * P), e[8] = this.m[4] * c - this.m[5] * m + this.m[7] * I, e[12] = -(this.m[4] * g - this.m[5] * P + this.m[6] * I), e[1] = -(this.m[1] * o - this.m[2] * c + this.m[3] * g), e[5] = this.m[0] * o - this.m[2] * m + this.m[3] * P, e[9] = -(this.m[0] * c - this.m[1] * m + this.m[3] * I), e[13] = this.m[0] * g - this.m[1] * P + this.m[2] * I, e[2] = this.m[1] * j - this.m[2] * y + this.m[3] * X, e[6] = -(this.m[0] * j - this.m[2] * S + this.m[3] * q), e[10] = this.m[0] * E - this.m[1] * S + this.m[3] * K, e[14] = -(this.m[0] * X - this.m[1] * q + this.m[2] * K), e[3] = -(this.m[1] * Q - this.m[2] * te + this.m[3] * k2), e[7] = this.m[0] * Q - this.m[2] * pe + this.m[3] * C, e[11] = -(this.m[0] * te - this.m[1] * pe + this.m[3] * Ae), e[15] = this.m[0] * k2 - this.m[1] * C + this.m[2] * Ae;
+      let e = [], o = this.m[10] * this.m[15] - this.m[14] * this.m[11], c = this.m[9] * this.m[15] - this.m[13] * this.m[11], g = this.m[9] * this.m[14] - this.m[13] * this.m[10], m = this.m[8] * this.m[15] - this.m[12] * this.m[11], P = this.m[8] * this.m[14] - this.m[12] * this.m[10], I = this.m[8] * this.m[13] - this.m[12] * this.m[9], j = this.m[6] * this.m[15] - this.m[14] * this.m[7], y = this.m[5] * this.m[15] - this.m[13] * this.m[7], X = this.m[5] * this.m[14] - this.m[13] * this.m[6], S = this.m[4] * this.m[15] - this.m[12] * this.m[7], q = this.m[4] * this.m[14] - this.m[12] * this.m[6], E = this.m[5] * this.m[15] - this.m[13] * this.m[7], K = this.m[4] * this.m[13] - this.m[12] * this.m[5], Q = this.m[6] * this.m[11] - this.m[10] * this.m[7], te = this.m[5] * this.m[11] - this.m[9] * this.m[7], k = this.m[5] * this.m[10] - this.m[9] * this.m[6], pe = this.m[4] * this.m[11] - this.m[8] * this.m[7], C = this.m[4] * this.m[10] - this.m[8] * this.m[6], Ae = this.m[4] * this.m[9] - this.m[8] * this.m[5];
+      e[0] = this.m[5] * o - this.m[6] * c + this.m[7] * g, e[4] = -(this.m[4] * o - this.m[6] * m + this.m[7] * P), e[8] = this.m[4] * c - this.m[5] * m + this.m[7] * I, e[12] = -(this.m[4] * g - this.m[5] * P + this.m[6] * I), e[1] = -(this.m[1] * o - this.m[2] * c + this.m[3] * g), e[5] = this.m[0] * o - this.m[2] * m + this.m[3] * P, e[9] = -(this.m[0] * c - this.m[1] * m + this.m[3] * I), e[13] = this.m[0] * g - this.m[1] * P + this.m[2] * I, e[2] = this.m[1] * j - this.m[2] * y + this.m[3] * X, e[6] = -(this.m[0] * j - this.m[2] * S + this.m[3] * q), e[10] = this.m[0] * E - this.m[1] * S + this.m[3] * K, e[14] = -(this.m[0] * X - this.m[1] * q + this.m[2] * K), e[3] = -(this.m[1] * Q - this.m[2] * te + this.m[3] * k), e[7] = this.m[0] * Q - this.m[2] * pe + this.m[3] * C, e[11] = -(this.m[0] * te - this.m[1] * pe + this.m[3] * Ae), e[15] = this.m[0] * k - this.m[1] * C + this.m[2] * Ae;
       let $ = this.m[0] * e[0] + this.m[1] * e[4] + this.m[2] * e[8] + this.m[3] * e[12];
       for (let Te = 0; Te < 4; Te++)
         for (let ye = 0; ye < 4; ye++)
@@ -1083,7 +1083,7 @@
       ge.disconnect();
     }
     i(te, "quit");
-    function k2(l) {
+    function k(l) {
       e.loopID !== null && cancelAnimationFrame(e.loopID);
       let x = 0, R = i((L) => {
         if (e.stopped)
@@ -1097,7 +1097,7 @@
       }, "frame");
       R(0);
     }
-    i(k2, "run");
+    i(k, "run");
     function pe() {
       return "ontouchstart" in window || navigator.maxTouchPoints > 0;
     }
@@ -1374,7 +1374,7 @@
           });
         }
     });
-    return ge.observe(e.canvas), { dt: o, time: c, run: k2, canvas: e.canvas, fps: g, numFrames: m, quit: te, setFullscreen: K, isFullscreen: Q, setCursor: I, screenshot: P, getGamepads: Vt, getCursor: j, setCursorLocked: y, isCursorLocked: X, isTouchscreen: pe, mousePos: C, mouseDeltaPos: Ae, isKeyDown: Tt, isKeyPressed: st, isKeyPressedRepeat: on, isKeyReleased: Ot, isMouseDown: Te, isMousePressed: $, isMouseReleased: ye, isMouseMoved: Se, isGamepadButtonPressed: Rt, isGamepadButtonDown: Ye, isGamepadButtonReleased: an, getGamepadStick: Pe, charInputted: dt, onResize: un, onKeyDown: cn, onKeyPress: hn, onKeyPressRepeat: ln, onKeyRelease: dn, onMouseDown: Pt, onMousePress: Dt, onMouseRelease: Mt, onMouseMove: Gt, onCharInput: Bt, onTouchStart: fn, onTouchMove: ct, onTouchEnd: mn, onScroll: pn, onHide: Ft, onShow: gn, onGamepadButtonDown: It, onGamepadButtonPress: Lt, onGamepadButtonRelease: wn, onGamepadStick: ht, onGamepadConnect: bn, onGamepadDisconnect: lt, events: e.events };
+    return ge.observe(e.canvas), { dt: o, time: c, run: k, canvas: e.canvas, fps: g, numFrames: m, quit: te, setFullscreen: K, isFullscreen: Q, setCursor: I, screenshot: P, getGamepads: Vt, getCursor: j, setCursorLocked: y, isCursorLocked: X, isTouchscreen: pe, mousePos: C, mouseDeltaPos: Ae, isKeyDown: Tt, isKeyPressed: st, isKeyPressedRepeat: on, isKeyReleased: Ot, isMouseDown: Te, isMousePressed: $, isMouseReleased: ye, isMouseMoved: Se, isGamepadButtonPressed: Rt, isGamepadButtonDown: Ye, isGamepadButtonReleased: an, getGamepadStick: Pe, charInputted: dt, onResize: un, onKeyDown: cn, onKeyPress: hn, onKeyPressRepeat: ln, onKeyRelease: dn, onMouseDown: Pt, onMousePress: Dt, onMouseRelease: Mt, onMouseMove: Gt, onCharInput: Bt, onTouchStart: fn, onTouchMove: ct, onTouchEnd: mn, onScroll: pn, onHide: Ft, onShow: gn, onGamepadButtonDown: It, onGamepadButtonPress: Lt, onGamepadButtonRelease: wn, onGamepadStick: ht, onGamepadConnect: bn, onGamepadDisconnect: lt, events: e.events };
   }, "default");
   var Re = class n11 {
     static {
@@ -1565,10 +1565,10 @@
       $.reduce((ye, Se, st) => (n13.vertexAttribPointer(st, Se.size, n13.FLOAT, false, Te * 4, ye), n13.enableVertexAttribArray(st), ye + Se.size * 4), 0);
     }
     i(P, "setVertexFormat");
-    let [I, j] = nt(($) => n13.bindTexture(n13.TEXTURE_2D, $)), [y, X] = nt(($) => n13.bindBuffer(n13.ARRAY_BUFFER, $)), [S, q] = nt(($) => n13.bindBuffer(n13.ELEMENT_ARRAY_BUFFER, $)), [E, K] = nt(($) => n13.bindFramebuffer(n13.FRAMEBUFFER, $)), [Q, te] = nt(($) => n13.bindRenderbuffer(n13.RENDERBUFFER, $)), [k2, pe] = nt(({ x: $, y: Te, w: ye, h: Se }) => {
+    let [I, j] = nt(($) => n13.bindTexture(n13.TEXTURE_2D, $)), [y, X] = nt(($) => n13.bindBuffer(n13.ARRAY_BUFFER, $)), [S, q] = nt(($) => n13.bindBuffer(n13.ELEMENT_ARRAY_BUFFER, $)), [E, K] = nt(($) => n13.bindFramebuffer(n13.FRAMEBUFFER, $)), [Q, te] = nt(($) => n13.bindRenderbuffer(n13.RENDERBUFFER, $)), [k, pe] = nt(({ x: $, y: Te, w: ye, h: Se }) => {
       n13.viewport($, Te, ye, Se);
     }), [C, Ae] = nt(($) => n13.useProgram($));
-    return k2({ x: 0, y: 0, w: n13.drawingBufferWidth, h: n13.drawingBufferHeight }), { gl: n13, opts: e, onDestroy: c, destroy: g, pushTexture2D: I, popTexture2D: j, pushArrayBuffer: y, popArrayBuffer: X, pushElementArrayBuffer: S, popElementArrayBuffer: q, pushFramebuffer: E, popFramebuffer: K, pushRenderbuffer: Q, popRenderbuffer: te, pushViewport: k2, popViewport: pe, pushProgram: C, popProgram: Ae, setVertexFormat: P };
+    return k({ x: 0, y: 0, w: n13.drawingBufferWidth, h: n13.drawingBufferHeight }), { gl: n13, opts: e, onDestroy: c, destroy: g, pushTexture2D: I, popTexture2D: j, pushArrayBuffer: y, popArrayBuffer: X, pushElementArrayBuffer: S, popElementArrayBuffer: q, pushFramebuffer: E, popFramebuffer: K, pushRenderbuffer: Q, popRenderbuffer: te, pushViewport: k, popViewport: pe, pushProgram: C, popProgram: Ae, setVertexFormat: P };
   }
   i(Kn, "initGfx");
   var ve = class n12 {
@@ -1873,7 +1873,7 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
         return typeof r == "string" ? K.fromURL(r, s) : Promise.resolve(K.fromImage(r, s));
       }
       static fromImage(r, s = {}) {
-        let [u, a] = k2.packer.add(r), h = s.frames ? s.frames.map((f) => new oe(a.x + f.x * a.w, a.y + f.y * a.h, f.w * a.w, f.h * a.h)) : Tt(s.sliceX || 1, s.sliceY || 1, a.x, a.y, a.w, a.h);
+        let [u, a] = k.packer.add(r), h = s.frames ? s.frames.map((f) => new oe(a.x + f.x * a.w, a.y + f.y * a.h, f.w * a.w, f.h * a.h)) : Tt(s.sliceX || 1, s.sliceY || 1, a.x, a.y, a.w, a.h);
         return new K(u, h, s.anims, s.slice9);
       }
       static fromURL(r, s = {}) {
@@ -1904,28 +1904,28 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
       }).catch((u) => {
         console.error("Failed to load burp: ", u);
       }), { ctx: t, masterNode: r, burpSnd: s };
-    })(), k2 = { urlPrefix: "", sprites: new je(), fonts: new je(), bitmapFonts: new je(), sounds: new je(), shaders: new je(), custom: new je(), packer: new At(q, Xr, Jr), loaded: false };
+    })(), k = { urlPrefix: "", sprites: new je(), fonts: new je(), bitmapFonts: new je(), sounds: new je(), shaders: new je(), custom: new je(), packer: new At(q, Xr, Jr), loaded: false };
     function pe(t) {
-      return typeof t != "string" || jn(t) ? t : k2.urlPrefix + t;
+      return typeof t != "string" || jn(t) ? t : k.urlPrefix + t;
     }
     i(pe, "fixURL");
     let C = { events: new Ne(), objEvents: new Ne(), root: Un([]), gravity: 0, scenes: {}, logs: [], cam: { pos: null, scale: new v(1), angle: 0, shake: 0, transform: new Ue() } };
     C.root.use(An());
     function Ae(t) {
-      return k2.custom.add(null, t);
+      return k.custom.add(null, t);
     }
     i(Ae, "load");
     function $() {
-      let t = [k2.sprites, k2.sounds, k2.shaders, k2.fonts, k2.bitmapFonts, k2.custom];
+      let t = [k.sprites, k.sounds, k.shaders, k.fonts, k.bitmapFonts, k.custom];
       return t.reduce((r, s) => r + s.progress(), 0) / t.length;
     }
     i($, "loadProgress");
     function Te(t) {
-      return t !== void 0 && (k2.urlPrefix = t), k2.urlPrefix;
+      return t !== void 0 && (k.urlPrefix = t), k.urlPrefix;
     }
     i(Te, "loadRoot");
     function ye(t, r) {
-      return k2.custom.add(t, Et(r));
+      return k.custom.add(t, Et(r));
     }
     i(ye, "loadJSON");
     class Se {
@@ -1944,13 +1944,13 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     function st(t, r, s = {}) {
       let u = new FontFace(t, typeof r == "string" ? `url(${r})` : r);
-      return document.fonts.add(u), k2.fonts.add(t, u.load().catch((a) => {
+      return document.fonts.add(u), k.fonts.add(t, u.load().catch((a) => {
         throw new Error(`Failed to load font from "${r}": ${a}`);
       }).then((a) => new Se(a, s)));
     }
     i(st, "loadFont");
     function on(t, r, s, u, a = {}) {
-      return k2.bitmapFonts.add(t, St(r).then((h) => bn(Re.fromImage(q, h, a), s, u, a.chars ?? zr)));
+      return k.bitmapFonts.add(t, St(r).then((h) => bn(Re.fromImage(q, h, a), s, u, a.chars ?? zr)));
     }
     i(on, "loadBitmapFont");
     function Tt(t = 1, r = 1, s = 0, u = 0, a = 1, h = 1) {
@@ -1970,7 +1970,7 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
         let u = {};
         for (let a in r) {
           let h = r[a], f = s.frames[0], b = Xr * f.w, p = Jr * f.h, d = h.frames ? h.frames.map((A) => new oe(f.x + (h.x + A.x) / b * f.w, f.y + (h.y + A.y) / p * f.h, A.w / b * f.w, A.h / p * f.h)) : Tt(h.sliceX || 1, h.sliceY || 1, f.x + h.x / b * f.w, f.y + h.y / p * f.h, h.width / b * f.w, h.height / p * f.h), w = new K(s.tex, d, h.anims);
-          k2.sprites.addLoaded(a, w), u[a] = w;
+          k.sprites.addLoaded(a, w), u[a] = w;
         }
         return u;
       }));
@@ -1988,11 +1988,11 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     i(Rt, "createSpriteSheet");
     function Ye(t, r, s = { sliceX: 1, sliceY: 1, anims: {} }) {
-      return r = pe(r), Array.isArray(r) ? r.some((u) => typeof u == "string") ? k2.sprites.add(t, Promise.all(r.map((u) => typeof u == "string" ? St(u) : Promise.resolve(u))).then((u) => Rt(u, s))) : k2.sprites.addLoaded(t, Rt(r, s)) : typeof r == "string" ? k2.sprites.add(t, K.from(r, s)) : k2.sprites.addLoaded(t, K.fromImage(r, s));
+      return r = pe(r), Array.isArray(r) ? r.some((u) => typeof u == "string") ? k.sprites.add(t, Promise.all(r.map((u) => typeof u == "string" ? St(u) : Promise.resolve(u))).then((u) => Rt(u, s))) : k.sprites.addLoaded(t, Rt(r, s)) : typeof r == "string" ? k.sprites.add(t, K.from(r, s)) : k.sprites.addLoaded(t, K.fromImage(r, s));
     }
     i(Ye, "loadSprite");
     function an(t, r) {
-      return r = pe(r), k2.sprites.add(t, new Promise(async (s) => {
+      return r = pe(r), k.sprites.add(t, new Promise(async (s) => {
         let u = typeof r == "string" ? await Et(r) : r, a = await Promise.all(u.frames.map(St)), h = document.createElement("canvas");
         h.width = u.width, h.height = u.height * u.frames.length;
         let f = h.getContext("2d");
@@ -2007,7 +2007,7 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     function un(t, r, s) {
       r = pe(r), s = pe(s), typeof r == "string" && !s && (s = Mr(r) + ".json");
       let u = typeof s == "string" ? Et(s) : Promise.resolve(s);
-      return k2.sprites.add(t, u.then((a) => {
+      return k.sprites.add(t, u.then((a) => {
         let h = a.meta.size, f = a.frames.map((p) => new oe(p.frame.x / h.w, p.frame.y / h.h, p.frame.w / h.w, p.frame.h / h.h)), b = {};
         for (let p of a.meta.frameTags)
           p.from === p.to ? b[p.name] = p.from : b[p.name] = { from: p.from, to: p.to, speed: 10, loop: true, pingpong: p.direction === "pingpong" };
@@ -2016,17 +2016,17 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     i(un, "loadAseprite");
     function cn(t, r, s) {
-      return k2.shaders.addLoaded(t, ht(r, s));
+      return k.shaders.addLoaded(t, ht(r, s));
     }
     i(cn, "loadShader");
     function hn(t, r, s) {
       r = pe(r), s = pe(s);
       let u = i((h) => h ? Lr(h) : Promise.resolve(null), "resolveUrl"), a = Promise.all([u(r), u(s)]).then(([h, f]) => ht(h, f));
-      return k2.shaders.add(t, a);
+      return k.shaders.add(t, a);
     }
     i(hn, "loadShaderURL");
     function ln(t, r) {
-      return r = pe(r), k2.sounds.add(t, typeof r == "string" ? Q.fromURL(r) : Q.fromArrayBuffer(r));
+      return r = pe(r), k.sounds.add(t, typeof r == "string" ? Q.fromURL(r) : Q.fromArrayBuffer(r));
     }
     i(ln, "loadSound");
     function dn(t = "bean") {
@@ -2034,27 +2034,27 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     i(dn, "loadBean");
     function Pt(t) {
-      return k2.sprites.get(t);
+      return k.sprites.get(t);
     }
     i(Pt, "getSprite");
     function Dt(t) {
-      return k2.sounds.get(t);
+      return k.sounds.get(t);
     }
     i(Dt, "getSound");
     function Mt(t) {
-      return k2.fonts.get(t);
+      return k.fonts.get(t);
     }
     i(Mt, "getFont");
     function Gt(t) {
-      return k2.bitmapFonts.get(t);
+      return k.bitmapFonts.get(t);
     }
     i(Gt, "getBitmapFont");
     function Bt(t) {
-      return k2.shaders.get(t);
+      return k.shaders.get(t);
     }
     i(Bt, "getShader");
     function fn(t) {
-      return k2.custom.get(t);
+      return k.custom.get(t);
     }
     i(fn, "getAsset");
     function ct(t) {
@@ -3403,7 +3403,7 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     }
     i(zs, "drawon");
     function Tn(t) {
-      k2.loaded ? t() : C.events.on("load", t);
+      k.loaded ? t() : C.events.on("load", t);
     }
     i(Tn, "onLoad");
     function Ks(t, r) {
@@ -3944,7 +3944,7 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     let Kt = true;
     y.run(() => {
       try {
-        k2.loaded || $() === 1 && !Kt && (k2.loaded = true, C.events.trigger("load")), !k2.loaded && n13.loadingScreen !== false || Kt ? (dt(), li(), ft()) : (re.paused || dr(), ci(), dt(), hi(), n13.debug !== false && di(), ft()), Kt && (Kt = false), C.events.trigger("frameEnd");
+        k.loaded || $() === 1 && !Kt && (k.loaded = true, C.events.trigger("load")), !k.loaded && n13.loadingScreen !== false || Kt ? (dt(), li(), ft()) : (re.paused || dr(), ci(), dt(), hi(), n13.debug !== false && di(), ft()), Kt && (Kt = false), C.events.trigger("frameEnd");
       } catch (t) {
         gi(t);
       }
@@ -3993,21 +3993,1046 @@ vec4 frag(vec2 pos, vec2 uv, vec4 color, sampler2D tex) {
     return n13.focus !== false && y.canvas.focus(), Ze;
   }, "default");
 
+  // src/start.js
+  var gameStart = () => {
+    kabum.destroyAll();
+    let SCALE3 = 2.5;
+    let JUMP_FORCE2 = 2500;
+    if (kabum.width() < 1e3) {
+      SCALE3 = 2;
+      JUMP_FORCE2 = 2100;
+    } else if (kabum.width() < 1800) {
+      SCALE3 = 2.5;
+      JUMP_FORCE2 = 2500;
+    } else {
+      SCALE3 = 3;
+      JUMP_FORCE2 = 3e3;
+    }
+    const FLOOR_HEIGHT2 = 4;
+    const FLOOR_HIGHT2 = 100;
+    const FLOOR_COLLISION2 = 30;
+    const GRAVITY2 = 4e3;
+    let SPEED2 = 10;
+    let numHorizon2 = 12;
+    const horizonColor = 130;
+    let horizonSeparation = 0;
+    const horizonM = 7;
+    let parallax = [];
+    const STARTGRAVITY = 0.2;
+    const ROPELENGTH = kabum.height() / 2;
+    let swinging = true;
+    let swingingMax = 50;
+    let velocidadBalanceo = 2;
+    let positionRope = { x: kabum.width() / 2, y: 0, angle: 0, vx: 0, vy: 0, va: 0 };
+    let positionCharacter = { x: kabum.width() / 2, y: kabum.height() / 3, angle: 0, vx: 0, vy: 0, va: 0 };
+    let rope = kabum.add([
+      kabum.rect(2 * SCALE3, ROPELENGTH),
+      // outline(4),
+      kabum.pos(positionRope.x, positionRope.y),
+      kabum.anchor("top"),
+      // area({ offset: kabum.vec2(0, FLOOR_COLLISION) }),
+      // kabum.body({ isStatic: true }),
+      kabum.color(127, 127, 127),
+      "rope"
+    ]);
+    let base = kabum.add([
+      kabum.circle(10 * SCALE3),
+      kabum.pos(kabum.width() / 2, 0),
+      kabum.anchor("center"),
+      kabum.color(127, 127, 127),
+      "base"
+    ]);
+    let mainCharacter = kabum.add([kabum.sprite("miquiDino"), kabum.pos(positionRope.x - 4 * SCALE3, positionRope.y - 7 * SCALE3), kabum.scale(SCALE3), kabum.anchor("center"), kabum.z(1e3), "dino"]);
+    let t = 0;
+    kabum.onUpdate(() => {
+      updateParallaxMovement();
+      const tiempo = kabum.time() * velocidadBalanceo;
+      pendulumPositionAtAngle(tiempo);
+      mainCharacter.pos.x = positionCharacter.x;
+      mainCharacter.pos.y = positionCharacter.y;
+      mainCharacter.angle = positionCharacter.angle;
+      rope.pos.x = positionRope.x;
+      rope.pos.y = positionRope.y;
+      rope.angle = positionRope.angle;
+    });
+    function pendulumPositionAtAngle(tiempo) {
+      let x, y, a;
+      a = swingingMax * Math.sin(tiempo);
+      positionRope.angle = a;
+      if (swinging) {
+        x = ROPELENGTH * Math.sin(-positionRope.angle * (Math.PI / 180)) + kabum.width() / 2;
+        y = ROPELENGTH * Math.cos(-positionRope.angle * (Math.PI / 180));
+        positionCharacter.vx = x - positionCharacter.x;
+        positionCharacter.vy = y - positionCharacter.y;
+        positionCharacter.x = x;
+        positionCharacter.y = y;
+        positionCharacter.va = a - positionCharacter.angle;
+        positionCharacter.angle = a;
+      } else {
+        moveCharacter();
+      }
+    }
+    function moveCharacter() {
+      positionCharacter.x += positionCharacter.vx;
+      positionCharacter.y += positionCharacter.vy;
+      positionCharacter.vy += STARTGRAVITY;
+      positionCharacter.angle += positionCharacter.va;
+    }
+    kabum.add([
+      kabum.text("PRESS SPACE TO JUMP", { font: "pixelFont" }),
+      kabum.pos(kabum.width() / 2, kabum.height() / 2 + 80),
+      kabum.scale(SCALE3 / 1.8),
+      kabum.anchor("center")
+    ]);
+    const randn_bm2 = (min, max, skew = 1) => {
+      let u = 0, v2 = 0;
+      while (u === 0)
+        u = Math.random();
+      while (v2 === 0)
+        v2 = Math.random();
+      let num = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v2);
+      num = num / 10 + 0.5;
+      if (num > 1 || num < 0)
+        num = randn_bm2(min, max, skew);
+      num = Math.pow(num, skew);
+      num *= max - min;
+      num += min;
+      return num;
+    };
+    function randParallax2(min = 0, max = numHorizon2) {
+      let num = randn_bm2(-30, 70, 1);
+      while (num < 0 || num > 10) {
+        num = randn_bm2(-30, 70, 1);
+      }
+      return Math.round(num);
+    }
+    function addParallax() {
+      let frameIndex = kabum.randi(0, 5);
+      let far = randParallax2(1, numHorizon2);
+      let par;
+      let parallaxColor = 150;
+      let horizonSeparation2 = 0;
+      for (let i2 = 1; i2 < far; i2++) {
+        horizonSeparation2 += horizonM * SCALE3 - i2 * horizonM * SCALE3 / numHorizon2;
+      }
+      if (frameIndex == 4) {
+        par = kabum.add([
+          kabum.sprite("cactus2"),
+          kabum.scale(SCALE3 - (far + 2) * SCALE3 / numHorizon2),
+          kabum.pos(kabum.width(), kabum.height() - FLOOR_HIGHT2 - horizonSeparation2),
+          kabum.anchor("botleft"),
+          "cactus",
+          speed(SPEED2 - (far + 1) * SPEED2 / numHorizon2),
+          kabum.color(parallaxColor - far * parallaxColor / numHorizon2, parallaxColor - far * parallaxColor / numHorizon2, parallaxColor - far * parallaxColor / numHorizon2)
+        ]);
+      } else if (frameIndex < 4) {
+        par = kabum.add([
+          kabum.sprite("cactus", { frame: frameIndex }),
+          kabum.scale(SCALE3 - (far + 2) * SCALE3 / numHorizon2),
+          kabum.pos(kabum.width(), kabum.height() - FLOOR_HIGHT2 - horizonSeparation2),
+          kabum.anchor("botleft"),
+          "cactus",
+          speed(SPEED2 - (far + 1) * SPEED2 / numHorizon2),
+          kabum.color(parallaxColor - far * parallaxColor / numHorizon2, parallaxColor - far * parallaxColor / numHorizon2, parallaxColor - far * parallaxColor / numHorizon2)
+        ]);
+      }
+      parallax.push(par);
+      parallax.length > 1e3 && kabum.destroy(parallax.shift());
+    }
+    function spawnParallax() {
+      addParallax();
+      kabum.wait(kabum.rand(0.05, 0.2), spawnParallax);
+    }
+    spawnParallax();
+    function updateParallaxMovement() {
+      parallax.forEach((par) => {
+        par.pos.x -= par.getSpeed();
+      });
+    }
+    function speed(sp) {
+      let speed2 = sp;
+      return {
+        getSpeed() {
+          return speed2;
+        },
+        setSpeed(newSpeed) {
+          speed2 = newSpeed;
+        }
+      };
+    }
+    kabum.onKeyPress("space", () => {
+      stopSwinging();
+    });
+    kabum.onClick(() => stopSwinging());
+    function stopSwinging() {
+      swinging = false;
+      kabum.wait(1.5, () => {
+        kabum.shake();
+        kabum.wait(1, () => {
+          kabum.destroyAll("dino");
+          kabum.destroyAll("face");
+          kabum.destroyAll("rope");
+          kabum.destroyAll("base");
+          kabum.go("game");
+        });
+      });
+    }
+  };
+
+  // src/lose.js
+  var SCALE = 2.5;
+  var gameLose = (score) => {
+    kabum.destroyAll();
+    let gooo = false;
+    kabum.add([
+      kabum.text(score, { font: "pixelFont" }),
+      kabum.pos(kabum.width() / 2, kabum.height() / 2 + 80),
+      kabum.scale(SCALE * 1.25),
+      kabum.anchor("center")
+    ]);
+    const loseMessages = [
+      "You're no pro at this, that's for sure.",
+      "Oops! Did your cat walk on the keyboard?",
+      "Maybe try again, this time with your eyes open?",
+      "Are you playing with your feet? Just asking!",
+      "Legend says you'll win... someday.",
+      "Was that really your best effort?",
+      "You're breaking records! ...for the most losses.",
+      "Is it lag, or is it just your skills?",
+      "Game Over! Or was it just a practice run?",
+      "On the bright side, you're getting really good at losing.",
+      "Press space to continue pretending you have a chance",
+      "Your dedication to finding all possible ways to lose is commendable.",
+      "Don't worry, we're all winners here. Just some are more winnery than others.",
+      "Your gaming skill is like a fine wine; it needs years to develop.",
+      "Keep calm and blame it on the game's physics.",
+      "You're not losing; you're just giving everyone else a chance to feel good.",
+      "Congratulations! You've just discovered yet another way to lose.",
+      "Winning is overrated anyway. Let's focus on participation."
+    ];
+    const middleMessage = [
+      "You're not terrible, the game is just extra hard. Yeah, let's go with that.",
+      "Congratulations on making it halfway! The rest is just a minor detail, right?",
+      "You're halfway to legend status. Now, just the other half to go!",
+      "Impressive...ish. You've mastered the art of almost getting there.",
+      "Not quite at the finish line, but at least you found the starting line!",
+      "You're walking the tightrope between success and... almost success.",
+      "You've got the appetizer down; now for the main course!",
+      "You're the king of almost-there. All hail the monarch of perpetual misses!",
+      "You've passed the tutorial with flying colors. Now, onto the real game..."
+    ];
+    const winMessages = [
+      "You're a winner! Or at least, you're not a loser.",
+      "Impressive! Your skills have finally caught up with your confidence.",
+      "You did it! You're officially the best at this game.",
+      "Congratulations! You've just won the game. Now what?",
+      "Champion status achieved! Was it skill, or did the game just take pity on you?",
+      "Look at you, winning and all! Did you finally read the instructions, or was it pure luck?",
+      "You've surpassed all expectations! Mainly because they were so low to begin with.",
+      "Masterful performance! It's almost like you knew what you were doing this time",
+      "You conquered the challenge! Should we check if someone was playing for you?"
+    ];
+    function getRandomLoseMessageAdjusted() {
+      let messages;
+      if (score > 14e3) {
+        messages = winMessages;
+        faceWin();
+      } else if (score > 7e3) {
+        messages = middleMessage;
+        faceAlmostWin();
+      } else {
+        messages = loseMessages;
+        faceLose();
+      }
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      let message = messages[randomIndex];
+      const maxLineLength = 30;
+      function splitMessageIntoLines(str, maxLength) {
+        let result = [];
+        let currentLine = "";
+        str.split(" ").forEach((word) => {
+          if ((currentLine + word).length <= maxLength) {
+            currentLine += `${word} `;
+          } else {
+            result.push(currentLine.trim());
+            currentLine = `${word} `;
+          }
+        });
+        if (currentLine.trim()) {
+          result.push(currentLine.trim());
+        }
+        return result.join("\n");
+      }
+      if (message.length > maxLineLength) {
+        message = splitMessageIntoLines(message, maxLineLength);
+      }
+      return message;
+    }
+    function addMessageInLines(message) {
+      let lines = message.split("\n");
+      lines.forEach((line, index) => {
+        kabum.add([
+          kabum.text(line, { font: "pixelFont" }),
+          kabum.scale(SCALE),
+          kabum.pos(kabum.width() / 2, kabum.height() / 2 + 50 * SCALE + SCALE * 10 * index),
+          kabum.scale(SCALE * 0.3),
+          kabum.anchor("center")
+        ]);
+      });
+    }
+    addMessageInLines(getRandomLoseMessageAdjusted());
+    function decreaseSize(index) {
+      if (index === 0) {
+        return 1;
+      } else {
+        const n13 = Math.floor(index / 2) + 3;
+        return 2 / n13;
+      }
+    }
+    function alternateEvenOddIndex(index) {
+      if (index === 0)
+        return 0;
+      let baseNumber = Math.ceil(index / 2) * 2;
+      let sign = index % 2 === 0 ? 1 : -1;
+      return baseNumber * sign;
+    }
+    function faceAlmostWin() {
+      let faces = [];
+      let face;
+      for (let i2 = 9; i2 >= 0; i2--) {
+        face = kabum.add([
+          kabum.sprite("face"),
+          kabum.pos(kabum.width() / 2 + alternateEvenOddIndex(i2) * SCALE * 25 * decreaseSize(i2 + 1) + 2 * SCALE, kabum.height() / 2),
+          kabum.scale(SCALE * decreaseSize(i2 + 1)),
+          kabum.anchor("bot"),
+          "face"
+        ]);
+        faces.push(face);
+      }
+      let vx = -1;
+      let ay = -1;
+      let vy = -1;
+      kabum.onUpdate(() => {
+        if (!gooo) {
+          faces.forEach((face2) => {
+            face2.pos.x += vx;
+          });
+        } else {
+          faces.forEach((face2) => {
+            face2.pos.y += vy;
+          });
+          vy = vy + ay;
+        }
+      });
+      let count = 0;
+      kabum.loop(0.2, () => {
+        if (kabum.randi(0, 2) === 1) {
+          let size = kabum.rand(0.5, 1);
+          let dino = kabum.add([
+            kabum.sprite("miquiDino"),
+            kabum.pos(0, kabum.height() * 9 / 10 + size * SCALE * 30),
+            kabum.scale(SCALE * size),
+            kabum.anchor("bot"),
+            kabum.move(kabum.RIGHT, kabum.randi(400, 600)),
+            "dino",
+            kabum.z(size)
+          ]);
+          dino.play("run");
+        }
+      });
+      kabum.loop(0.6, () => {
+        if (count % 2 == 1) {
+          vx *= -1;
+          faces.forEach((face2) => {
+            face2.scale.x = -face2.scale.x;
+          });
+        }
+        count++;
+      });
+    }
+    function faceWin() {
+      let aa = 0;
+      let va = 0;
+      let faceList = [];
+      let pingpong = false;
+      const face = kabum.add([
+        kabum.sprite("face"),
+        kabum.pos(kabum.width() / 2 + 5 * SCALE, kabum.height() / 2 + -SCALE * 25),
+        kabum.scale(SCALE),
+        kabum.anchor("center"),
+        kabum.rotate(5),
+        "face"
+      ]);
+      kabum.loop(0.2, () => {
+        if (kabum.randi(0, 2) === 1) {
+          let size = kabum.rand(0.5, 1);
+          let dino = kabum.add([
+            kabum.sprite("miquiDino"),
+            kabum.pos(0, kabum.height() * 9 / 10 + size * SCALE * 30),
+            kabum.scale(SCALE * size),
+            kabum.anchor("bot"),
+            kabum.move(kabum.RIGHT, kabum.randi(400, 600)),
+            "dino",
+            kabum.z(size)
+          ]);
+          dino.play("run");
+        }
+      });
+      kabum.onUpdate(() => {
+        if (pingpong) {
+          for (let i2 = 0; i2 < faceList.length; i2++) {
+            faceList[i2].pos.x += faceList[i2].getSpeed().vx;
+            faceList[i2].pos.y += faceList[i2].getSpeed().vy;
+            faceList[i2].angle += faceList[i2].getSpeed().vangle;
+          }
+        } else {
+          face.angle += va;
+          va = va + aa;
+        }
+      });
+      function speed() {
+        let vel = kabum.rand(2, 10);
+        let angle = kabum.rand(0, 360);
+        let vx = Math.cos(angle) * vel * SCALE;
+        let vy = Math.sin(angle) * vel * SCALE;
+        let speed2 = { vx, vy, vangle: kabum.rand(-1, 1) };
+        return {
+          getSpeed() {
+            return speed2;
+          },
+          setSpeed(newSpeed) {
+            speed2 = newSpeed;
+          }
+        };
+      }
+      kabum.wait(1, () => {
+        aa = 0.1;
+        va = 1;
+        kabum.wait(5, () => {
+          let boom = kabum.add([
+            kabum.sprite("boom"),
+            kabum.pos(kabum.width() / 2 + 10, kabum.height() / 2 + -SCALE * 25),
+            kabum.scale(SCALE * 2),
+            kabum.anchor("center"),
+            "boom"
+          ]);
+          boom.play("boom", {
+            loop: false
+          });
+          kabum.shake();
+          kabum.destroy(face);
+          kabum.wait(0.2, () => {
+            for (let i2 = 0; i2 < 250; i2++) {
+              let face2 = kabum.add([
+                kabum.sprite("face"),
+                kabum.pos(kabum.width() / 2, kabum.height() / 2),
+                kabum.scale(SCALE * kabum.rand(0.05, 0.5)),
+                kabum.anchor("center"),
+                "face",
+                speed(),
+                kabum.rotate(kabum.rand(0, 360))
+              ]);
+              faceList.push(face2);
+            }
+            kabum.wait(0.8, () => {
+              kabum.destroy(boom);
+            });
+            pingpong = true;
+          });
+        });
+      });
+    }
+    function faceLose() {
+      let vx = 10 * SCALE;
+      const face = kabum.add([
+        kabum.sprite("face"),
+        kabum.pos(kabum.width() / 2 + 10, kabum.height() / 2),
+        kabum.scale(SCALE),
+        kabum.anchor("bot"),
+        kabum.rotate(5),
+        "face"
+      ]);
+      let isFlipped = false;
+      let dino = kabum.add([
+        kabum.sprite("miquiDino"),
+        kabum.pos(-kabum.width() / 2, kabum.height() * 4 / 5),
+        kabum.scale(SCALE * 1),
+        kabum.anchor("top"),
+        "dino"
+      ]);
+      dino.play("run");
+      let direction = 1;
+      kabum.loop(0.7, () => {
+        isFlipped = !isFlipped;
+        face.scale.x = isFlipped ? -SCALE : SCALE;
+        direction *= -1;
+        face.angle = -direction * 10;
+        face.pos.x += direction * 20;
+      });
+      kabum.onUpdate(() => {
+        if (gooo) {
+          dino.pos.x += vx;
+        }
+      });
+    }
+    function goToGame() {
+      gooo = true;
+      kabum.wait(1.5, () => {
+        kabum.destroyAll("dino");
+        kabum.destroyAll("face");
+        kabum.go("game");
+      });
+    }
+    kabum.onKeyPress("space", () => goToGame());
+    kabum.onClick(() => goToGame());
+  };
+
   // src/main.js
-  var k = zo({
-    global: false,
+  var kabum = zo({
     fullscreen: true,
     font: "sans-serif",
-    width: 320,
-    height: 240,
-    scale: 1,
+    scale: 0.8,
     debug: false,
-    background: [0, 0, 255],
-    root: document.getElementById("jueguito")
-    // Especifica el contenedor del juego
-    // width: 600, // Ancho del canvas, asegúrate de que coincida con el contenedor
-    // height: 400, // Alto del canvas, asegúrate de que coincida con el contenedor
-    // Puedes añadir aquí más configuraciones según necesites
+    background: [255, 255, 255, 0],
+    root: document.getElementById("jueguito"),
+    // Especifica el contenedor del juek.go,
+    global: false
   });
-  k.onClick(() => k.addKaboom(k.mousePos()));
+  console.log(kabum.width(), kabum.height());
+  var SCALE2 = 2.5;
+  var JUMP_FORCE = 2500;
+  if (kabum.width() < 1e3) {
+    SCALE2 = 1.5;
+    JUMP_FORCE = 2100;
+  } else if (kabum.width() < 1800) {
+    SCALE2 = 2.5;
+    JUMP_FORCE = 2500;
+  } else {
+    SCALE2 = 3;
+    JUMP_FORCE = 3e3;
+  }
+  var FLOOR_HEIGHT = 4;
+  var FLOOR_HIGHT = 40 * SCALE2;
+  var FLOOR_COLLISION = 5 * SCALE2;
+  if (kabum.width() < 1e3) {
+    FLOOR_HIGHT = 300;
+  }
+  var GRAVITY = 8e3;
+  var SPEED = 10;
+  var numHorizon = 12;
+  var randn_bm = (min, max, skew = 1) => {
+    let u = 0, v2 = 0;
+    while (u === 0)
+      u = Math.random();
+    while (v2 === 0)
+      v2 = Math.random();
+    let num = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v2);
+    num = num / 10 + 0.5;
+    if (num > 1 || num < 0)
+      num = randn_bm(min, max, skew);
+    num = Math.pow(num, skew);
+    num *= max - min;
+    num += min;
+    return num;
+  };
+  function randParallax(min = 0, max = numHorizon) {
+    let num = randn_bm(-30, 70, 1);
+    while (num < 0 || num > 10) {
+      num = randn_bm(-30, 70, 1);
+    }
+    return Math.round(num);
+  }
+  kabum.loadFont("pixelFont", "assets/jueguito/fonts/Minecraft.ttf");
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/miquiDino.png", {
+    "miquiDino": {
+      x: 0,
+      y: 0,
+      width: 192,
+      height: 64,
+      sliceX: 3,
+      anims: {
+        idle: 0,
+        run: { from: 1, to: 2, speed: 15, loop: true },
+        jump: 2
+      }
+    }
+  });
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/mexican.png", {
+    "mexican": {
+      x: 0,
+      y: 0,
+      width: 1344,
+      height: 64,
+      sliceX: 21,
+      anims: {
+        idle: 0,
+        wait: { from: 0, to: 20, speed: 10, loop: true },
+        jump: 2
+      }
+    }
+  });
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/bird.png", {
+    "bird": {
+      x: 0,
+      y: 0,
+      width: 512,
+      height: 64,
+      sliceX: 8,
+      anims: {
+        idle: 0,
+        fly: { from: 0, to: 7, speed: 10, loop: true }
+      }
+    }
+  });
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud1": {
+      x: 4,
+      y: 13,
+      width: 54,
+      height: 30
+    }
+  });
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud2": {
+      x: 7,
+      y: 12,
+      width: 54,
+      height: 30
+    }
+  });
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud3": {
+      x: 60,
+      y: 11,
+      width: 65,
+      height: 20
+    }
+  });
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud4": {
+      x: 60,
+      y: 38,
+      width: 65,
+      height: 23
+    }
+  });
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud5": {
+      x: 60,
+      y: 66,
+      width: 65,
+      height: 23
+    }
+  });
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/clouds.png", {
+    "cloud6": {
+      x: 6,
+      y: 86,
+      width: 114,
+      height: 31
+    }
+  });
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/boom.png", {
+    "boom": {
+      x: 0,
+      y: 0,
+      width: 1216,
+      height: 93,
+      sliceX: 19,
+      anims: {
+        boom: { from: 0, to: 18, speed: 19 }
+      }
+    }
+  });
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/miquiCactus.png", {
+    "cactus": {
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 50,
+      sliceX: 4
+    }
+  });
+  kabum.loadSpriteAtlas("assets/jueguito/sprites/miquiCactus.png", {
+    "cactus2": {
+      x: 100,
+      y: 0,
+      width: 50,
+      height: 50
+    }
+  });
+  kabum.loadSprite("face", "assets/jueguito/sprites/miquiFace.png");
+  kabum.scene("game", () => {
+    kabum.destroyAll();
+    let score = 0;
+    let player;
+    let lives = 4;
+    let livesSprites = [];
+    let respawnTime = RespawnTime();
+    function showLives() {
+      for (let i2 = 0; i2 < lives - 1; i2++) {
+        const lifeSprite = kabum.add([
+          kabum.sprite("miquiDino"),
+          kabum.pos(80 + 60 * i2, 40),
+          kabum.scale(SCALE2 / 2),
+          kabum.rotate(30),
+          kabum.color(255, 255, 255),
+          kabum.z(1e3)
+        ]);
+        livesSprites.push(lifeSprite);
+      }
+    }
+    kabum.add([
+      kabum.rect(kabum.width(), FLOOR_HEIGHT),
+      // outline(4),
+      kabum.pos(0, kabum.height() - FLOOR_HIGHT),
+      kabum.anchor("botleft"),
+      kabum.area({ offset: kabum.vec2(0, FLOOR_COLLISION) }),
+      kabum.body({ isStatic: true }),
+      kabum.color(200, 200, 200),
+      "floor"
+    ]);
+    showLives();
+    kabum.setGravity(1e3 * SCALE2);
+    const horizonColor = 130;
+    let horizonSeparation = 0;
+    const horizonM = 7;
+    for (let i2 = 1; i2 < numHorizon; i2++) {
+      horizonSeparation += horizonM * SCALE2 - i2 * horizonM * SCALE2 / numHorizon;
+      kabum.add([
+        kabum.rect(kabum.width(), FLOOR_HEIGHT / 2),
+        // outline(4),
+        kabum.pos(0, kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT - horizonSeparation),
+        kabum.anchor("botleft"),
+        kabum.color(horizonColor - i2 * horizonColor / numHorizon, horizonColor - i2 * horizonColor / numHorizon, horizonColor - i2 * horizonColor / numHorizon),
+        "horizon"
+      ]);
+    }
+    function addCloud() {
+      let cloudIndex = kabum.randi(1, 6);
+      let cloud = kabum.add([
+        kabum.sprite("cloud" + cloudIndex),
+        kabum.scale(SCALE2),
+        kabum.pos(5 * kabum.width() / 4, kabum.rand(0, kabum.height() / 2)),
+        kabum.anchor("center"),
+        "cloud",
+        speed(SPEED / 8),
+        kabum.z(0),
+        kabum.color(220, 220, 220)
+      ]);
+      clouds.push(cloud);
+      clouds.length > 10 && kabum.destroy(clouds.shift());
+    }
+    function addParallax() {
+      let frameIndex = kabum.randi(0, 5);
+      let far = randParallax(1, numHorizon);
+      let par;
+      let parallaxColor = 150;
+      let horizonSeparation2 = 0;
+      for (let i2 = 1; i2 < far; i2++) {
+        horizonSeparation2 += horizonM * SCALE2 - i2 * horizonM * SCALE2 / numHorizon;
+      }
+      if (frameIndex == 4) {
+        par = kabum.add([
+          kabum.sprite("cactus2"),
+          kabum.scale(SCALE2 - (far + 2) * SCALE2 / numHorizon),
+          kabum.pos(kabum.width(), kabum.height() - FLOOR_HIGHT - horizonSeparation2),
+          kabum.anchor("botleft"),
+          "cactus",
+          speed(SPEED - (far + 1) * SPEED / numHorizon),
+          kabum.color(parallaxColor - far * parallaxColor / numHorizon, parallaxColor - far * parallaxColor / numHorizon, parallaxColor - far * parallaxColor / numHorizon)
+        ]);
+      } else if (frameIndex < 4) {
+        par = kabum.add([
+          kabum.sprite("cactus", { frame: frameIndex }),
+          kabum.scale(SCALE2 - (far + 2) * SCALE2 / numHorizon),
+          kabum.pos(kabum.width(), kabum.height() - FLOOR_HIGHT - horizonSeparation2),
+          kabum.anchor("botleft"),
+          "cactus",
+          speed(SPEED - (far + 1) * SPEED / numHorizon),
+          kabum.color(parallaxColor - far * parallaxColor / numHorizon, parallaxColor - far * parallaxColor / numHorizon, parallaxColor - far * parallaxColor / numHorizon)
+        ]);
+      }
+      parallax.push(par);
+      parallax.length > 80 && kabum.destroy(parallax.shift());
+    }
+    addPlayer();
+    function addPlayer() {
+      player = kabum.add([
+        // list of components
+        kabum.sprite("miquiDino"),
+        kabum.pos(80, 40),
+        kabum.scale(SCALE2, SCALE2),
+        kabum.area({
+          offset: kabum.vec2(12, 3),
+          shape: new kabum.Polygon([kabum.vec2(16, 5), kabum.vec2(28, 5), kabum.vec2(25, 47), kabum.vec2(10, 47)])
+        }),
+        kabum.body(),
+        kabum.z(5e3)
+      ]);
+      onColide();
+      player.onCollide("floor", () => {
+        player.play("run");
+        kabum.setGravity(GRAVITY);
+      });
+    }
+    function jump() {
+      if (player.isGrounded()) {
+        player.jump(JUMP_FORCE);
+        player.play("jump");
+      }
+    }
+    kabum.onKeyPress("space", jump);
+    kabum.onClick(jump);
+    let cacti = [];
+    let parallax = [];
+    let clouds = [];
+    let moving = true;
+    let spawn = true;
+    function addBird() {
+      let bird = kabum.add([
+        kabum.sprite("bird"),
+        kabum.scale(-SCALE2, SCALE2),
+        kabum.area({ shape: new kabum.Polygon([kabum.vec2(15, -25), kabum.vec2(15, -50), kabum.vec2(35, -50), kabum.vec2(35, -25)]) }),
+        // kabum.pos(kabum.width(), kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT + FLOOR_COLLISION - SCALE * 10 - 30 * SCALE * kabum.randi(0, 2)),
+        kabum.pos(kabum.width() * 2.5 / SCALE2, kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT + FLOOR_COLLISION - SCALE2 * 10 - 30 * SCALE2),
+        kabum.anchor("botleft"),
+        "cactus",
+        speed(SPEED * 1.3),
+        kabum.z(120)
+      ]);
+      bird.play("fly");
+      cacti.push(bird);
+    }
+    function addCactus() {
+      let cactus;
+      let frameIndex = kabum.randi(0, 21);
+      if (frameIndex < 20) {
+        frameIndex = frameIndex % 5;
+      }
+      if (frameIndex == 4) {
+        cactus = kabum.add([
+          kabum.sprite("cactus2"),
+          kabum.scale(SCALE2, SCALE2),
+          kabum.area({ shape: new kabum.Polygon([kabum.vec2(2, 7), kabum.vec2(48, 0), kabum.vec2(46, -45), kabum.vec2(4, -45)]) }),
+          kabum.pos(kabum.width() * 2.5 / SCALE2, kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT + FLOOR_COLLISION + SCALE2 * 7),
+          kabum.anchor("botleft"),
+          // move(LEFT, SPEED),
+          "cactus",
+          speed(SPEED),
+          kabum.z(100)
+        ]);
+      } else if (frameIndex < 4) {
+        cactus = kabum.add([
+          kabum.sprite("cactus", { frame: frameIndex }),
+          kabum.scale(SCALE2, SCALE2),
+          kabum.area({ shape: new kabum.Polygon([kabum.vec2(2), kabum.vec2(23, 0), kabum.vec2(21, -45), kabum.vec2(4, -45)]) }),
+          kabum.pos(kabum.width() * 2.5 / SCALE2, kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT + FLOOR_COLLISION + SCALE2 * 7),
+          kabum.anchor("botleft"),
+          // move(LEFT, SPEED),
+          "cactus",
+          speed(SPEED),
+          kabum.z(100)
+        ]);
+      } else {
+        cactus = kabum.add([
+          // kabum.add a game object to screen  
+          kabum.sprite("mexican"),
+          // render as a kabum.sprite
+          kabum.pos(kabum.width() * 2.5 / SCALE2, kabum.height() - FLOOR_HEIGHT - FLOOR_HIGHT + FLOOR_COLLISION + SCALE2 * 7),
+          // position in world
+          kabum.scale(-SCALE2, SCALE2),
+          kabum.area({ shape: new kabum.Polygon([kabum.vec2(23, 0), kabum.vec2(36, 0), kabum.vec2(36, -45), kabum.vec2(23, -45)]) }),
+          kabum.anchor("botleft"),
+          speed(SPEED),
+          "cactus",
+          kabum.z(100)
+        ]);
+        cactus.play("wait");
+      }
+      cacti.push(cactus);
+    }
+    function speed(sp) {
+      let speed2 = sp;
+      return {
+        getSpeed() {
+          return speed2;
+        },
+        setSpeed(newSpeed) {
+          speed2 = newSpeed;
+        }
+      };
+    }
+    function spawnCactus() {
+      if (moving & spawn) {
+        addCactus();
+      }
+      kabum.wait(respawnTime.getRandom(), spawnCactus);
+      cacti.length > 5 && kabum.destroy(cacti.shift());
+    }
+    function spawnParallax() {
+      if (moving) {
+        addParallax();
+      }
+      kabum.wait(kabum.rand(0.05, 0.2), spawnParallax);
+    }
+    function spawnCloud() {
+      if (moving) {
+        addCloud();
+      }
+      kabum.wait(kabum.rand(2, 6), spawnCloud);
+    }
+    function spawnBird() {
+      if (moving && spawn && score > 3e3) {
+        addBird();
+      }
+      kabum.wait(respawnTime.getRandom() * 4, spawnBird);
+      cacti.length > 5 && kabum.destroy(cacti.shift());
+    }
+    spawnCactus();
+    spawnBird();
+    spawnParallax();
+    spawnCloud();
+    function RespawnTime() {
+      let factor = 1;
+      return {
+        setRespawnFactor(factor2) {
+          factor = factor2;
+        },
+        getRandom() {
+          let random = kabum.rand(factor, 3.5 * factor);
+          return random;
+        },
+        getFactor() {
+          return factor;
+        }
+      };
+    }
+    function updateCactiMovement() {
+      cacti.forEach((cactus) => {
+        if (moving) {
+          cactus.pos.x -= cactus.getSpeed();
+        }
+      });
+    }
+    function updateParallaxMovement() {
+      parallax.forEach((par) => {
+        if (moving) {
+          par.pos.x -= par.getSpeed();
+        }
+      });
+    }
+    function updateCloudMovement() {
+      clouds.forEach((par) => {
+        if (moving) {
+          par.pos.x -= par.getSpeed();
+        }
+      });
+    }
+    function setCactiSpeed(speed2) {
+      SPEED = speed2;
+      cacti.forEach((cactus) => {
+        cactus.setSpeed(speed2);
+      });
+    }
+    function stopCacti() {
+      moving = false;
+      spawn = false;
+    }
+    function addBoom(x, y) {
+      let boom = kabum.add([
+        kabum.sprite("boom"),
+        kabum.anchor("center"),
+        kabum.pos(x, y),
+        kabum.scale(SCALE2),
+        kabum.z(1e5),
+        "boom"
+      ]);
+      boom.play("boom", {
+        loop: false
+      });
+      kabum.setGravity(1e3 * SCALE2);
+      kabum.shake();
+      kabum.wait(1, () => {
+        kabum.destroy(boom);
+      });
+    }
+    function onColide() {
+      player.onCollide("cactus", () => {
+        lives--;
+        addBoom(player.pos.x + 34 * SCALE2, player.pos.y + 20 * SCALE2);
+        stopCacti();
+        kabum.destroy(player);
+        if (lives > 0) {
+          kabum.wait(1, () => {
+            moving = true;
+            kabum.wait(SCALE2, () => {
+              spawn = true;
+              livesSprites[lives - 1].destroy();
+              addPlayer();
+            });
+          });
+        } else {
+          kabum.wait(0.5, () => {
+            kabum.go("lose", score);
+          });
+        }
+      });
+    }
+    const scoreLabel = kabum.add([
+      kabum.text(score, { font: "pixelFont" }),
+      kabum.pos(24, 24),
+      kabum.z(1e3),
+      kabum.scale(SCALE2 / 2)
+    ]);
+    const speedLabel = kabum.add([
+      kabum.text("speed:" + SPEED, { font: "pixelFont" }),
+      kabum.pos(kabum.width() - 20, 60),
+      kabum.anchor("topright"),
+      kabum.z(1e3),
+      kabum.scale(SCALE2 / 3)
+    ]);
+    const spawnLabel = kabum.add([
+      kabum.text("Respawn: " + respawnTime, { font: "pixelFont" }),
+      kabum.pos(kabum.width() - 20, 100),
+      kabum.anchor("topright"),
+      kabum.z(1e3),
+      kabum.scale(SCALE2 / 3)
+    ]);
+    function velocityUp() {
+      setCactiSpeed(SPEED + 1.01);
+    }
+    function respawnUp() {
+      respawnTime.setRespawnFactor(respawnTime.getFactor() * 0.99);
+    }
+    kabum.onUpdate(() => {
+      updateCactiMovement();
+      updateParallaxMovement();
+      updateCloudMovement();
+      if (moving) {
+        score++;
+      }
+      scoreLabel.text = "- " + score + " -";
+      let speedtext = SPEED;
+      speedLabel.text = "Speed: " + Math.floor(SPEED - 10);
+      spawnLabel.text = "Respawn: " + Math.floor((1 - respawnTime.getFactor()) * 1e3);
+      if (score < 5e3) {
+        if (score % 500 === 0) {
+          velocityUp();
+        }
+      } else if (score === 5e3) {
+        SPEED = 10;
+      } else if (score > 5e3) {
+        if (score % 500 === 0) {
+          respawnUp();
+        }
+        if (score % 500 === 0 && SPEED < 20) {
+          velocityUp();
+        }
+      }
+    });
+  });
+  kabum.scene("start", gameStart);
+  kabum.scene("lose", gameLose);
+  kabum.go("start");
 })();
