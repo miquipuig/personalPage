@@ -172,33 +172,53 @@
   /**
    * Porfolio isotope and filter
    */
-  window.addEventListener('load', () => {
 
+  function initializePortfolio() {
+    console.log('Initializing portfolio...');
+  
     let portfolioContainer = select('.portfolio-container');
     if (portfolioContainer) {
       let portfolioIsotope = new Isotope(portfolioContainer, {
         itemSelector: '.portfolio-item',
         layoutMode: 'fitRows'
       });
-
+  
       let portfolioFilters = select('#portfolio-flters li', true);
-
+  
       on('click', '#portfolio-flters li', function(e) {
         e.preventDefault();
         portfolioFilters.forEach(function(el) {
           el.classList.remove('filter-active');
         });
         this.classList.add('filter-active');
-
+  
         portfolioIsotope.arrange({
           filter: this.getAttribute('data-filter')
         });
       }, true);
     }
+  
     document.getElementById('background-image').classList.add('loaded');
     document.getElementById('loader-container').classList.add('hidden');
-
-  });
+  }
+  
+  // Flag para controlar si la inicialización ya se ha ejecutado
+  let initialized = false;
+  
+  // Función para ejecutar la inicialización si aún no se ha hecho
+  function attemptInitialization() {
+    if (!initialized) {
+      initializePortfolio();
+      initialized = true;
+    }
+  }
+  
+  // Event listener para el evento 'load'
+  window.addEventListener('load', attemptInitialization);
+  
+  // Temporizador para ejecutar después de 10 segundos, independientemente del evento 'load'
+  setTimeout(attemptInitialization, 6000);
+  
 
   /**
    * Initiate portfolio lightbox 
