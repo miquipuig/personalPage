@@ -25,6 +25,8 @@ export class AppComponent implements AfterViewInit, OnInit {
       const childRoute = this.route.firstChild;
       if (childRoute) {
         this.setActiveSection(childRoute.snapshot.url[0].path);
+      }else{
+        this.setActiveSection('/');
       }
     }); 
 
@@ -33,29 +35,31 @@ export class AppComponent implements AfterViewInit, OnInit {
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
 
-    if (this.activeSection != 'jueguito') {
+    if (this.activeSection != 'mickeyDino') {
       if (event.key === 'ArrowRight') {
         let currentIndex = this.sectionsList.findIndex(section => section === this.activeSection);
         // Si se presiona la flecha derecha, obtén la siguiente sección
         let nextSection = this.sectionsList[currentIndex + 1] || this.sectionsList[0];
-        this.setActiveSection(nextSection);
+        this.router.navigate([nextSection]);
       } else if (event.key === 'ArrowLeft') {
         let currentIndex = this.sectionsList.findIndex(section => section === this.activeSection);
         // Si se presiona la flecha izquierda, obtén la sección anterior
         let nextSection = this.sectionsList[currentIndex - 1] || this.sectionsList[this.sectionsList.length - 1];
-        this.setActiveSection(nextSection);
+        this.router.navigate([nextSection]);
       } else if (event.key === 'ArrowDown') {
-        this.setActiveSection('jueguito');
+        this.router.navigate(['mickeyDino']);
       }
     }
 
   }
-  sectionsList = ['header', 'about', 'resume', 'contact'];
+
+  
+  sectionsList = ['/', 'about', 'resume', 'contact'];
   ngOnInit(): void {
      this.loadscipts();
 
   }
-  activeSection = 'header';
+  activeSection = '';
   classBiList = true;
   navbarMobile = false;
   classHeaderTop = false;
@@ -70,16 +74,15 @@ export class AppComponent implements AfterViewInit, OnInit {
       this.classBiList = !this.classBiList;
 
     }
-    if (section != "header" && this.activeSection === "header") {
+    if (section != "/" && this.activeSection === "/") {
       this.classHeaderTop = true;
       setTimeout((a: any) => {
-        console.log("entro")
         this.activeSection = section;
         this.scrollToSection(section);
     }, 500);
 
 
-    } else if (section != "header") {
+    } else if (section != "/") {
       this.classHeaderTop = true;
       this.activeSection = section;
       this.scrollToSection(section)
@@ -99,7 +102,6 @@ export class AppComponent implements AfterViewInit, OnInit {
   scrollToSection(sectionId: string): void {
     const sectionElement = this.sections.find((el) => el.nativeElement.id === sectionId);
     if (sectionElement) {
-      console.log("esto funciona")
       sectionElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
@@ -116,7 +118,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   public closeSection() {
-    this.activeSection = 'header';
+    this.activeSection = '';
     this.classHeaderTop = false;
   }
 

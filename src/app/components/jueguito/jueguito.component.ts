@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 import { ScriptService } from 'src/app/services/script.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { ScriptService } from 'src/app/services/script.service';
   styleUrls: ['./jueguito.component.css']
 })
 export class JueguitoComponent implements OnInit {
-  @Output() onClose = new EventEmitter<void>();
+  // @Output() onClose = new EventEmitter<void>();
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Escape') {
@@ -15,7 +16,7 @@ export class JueguitoComponent implements OnInit {
     }
   }
   isSectionActive = false;
-  constructor(private ss: ScriptService) { }
+  constructor(private ss: ScriptService, private router: Router) { }
 
 
   ngOnInit() {
@@ -27,8 +28,11 @@ export class JueguitoComponent implements OnInit {
 
   closeJueguito() {
     this.isSectionActive = false;
-    this.onClose.emit();
+    // this.onClose.emit();
     this.ss.unloadScript('jueguito').then(console.log).catch(error => console.log(error));
+    //Ir a la página principal
+    this.router.navigate(['/']);
+
   }
 
 }

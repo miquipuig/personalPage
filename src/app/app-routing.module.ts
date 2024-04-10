@@ -6,6 +6,22 @@ const routes: Routes = [
   {
     path: 'contact',
     loadChildren: () => import('./components/contact/contact.module').then(m => m.ContactModule)
+  },
+  {
+    path: 'about',
+    loadChildren: () => import('./components/about/about.module').then(m => m.AboutModule)
+  },
+  {
+    path: 'portfolio',
+    loadChildren: () => import('./components/portfolio/portfolio.module').then(m => m.PortfolioModule)
+  },
+  {
+    path: 'mickeyDino',
+    loadChildren: () => import('./components/jueguito/jueguito.module').then(m => m.JueguitoModule)
+  },
+  {
+    path: 'resume',
+    loadChildren: () => import('./components/resume/resume.module').then(m => m.ResumeModule)
   }
 ];
 

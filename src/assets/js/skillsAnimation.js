@@ -38,7 +38,6 @@
   
   let skilsContent = select('.skills-content');
   if (skilsContent) {
-    console.log('skills content')
     new Waypoint({
       element: skilsContent,
       offset: '80%',
@@ -49,8 +48,6 @@
         });
       }
     })
-  }else{
-    console.log('no skills content')
   }
 
 })()
