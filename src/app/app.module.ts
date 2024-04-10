@@ -10,7 +10,6 @@ import { AboutComponent } from './components/about/about.component';
 import { ResumeComponent } from './components/resume/resume.component';
 import { ServicesComponent } from './components/services/services.component';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
-import { ContactComponent } from './components/contact/contact.component';
 import { JueguitoComponent } from './components/jueguito/jueguito.component';
 
 @NgModule({
@@ -20,7 +19,6 @@ import { JueguitoComponent } from './components/jueguito/jueguito.component';
     ResumeComponent,
     ServicesComponent,
     PortfolioComponent,
-    ContactComponent,
     JueguitoComponent
   ],
   imports: [ReactiveFormsModule, 
