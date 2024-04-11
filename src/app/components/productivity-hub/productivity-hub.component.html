@@ -1,0 +1,68 @@
+<section id="resume" class="resume" [ngClass]="{'section-show': isSectionActive}">
+
+    <div class="container ">
+
+        <div class="section-title">
+          <h2>productivity</h2>
+
+
+          <!-- <p>Pomodoro Time</p> -->
+        </div>
+
+
+        <!-- <div class="pomodoro-background">
+
+            <div class="pomodoro-overlay"></div> 
+            <div class="clock-hand" [style.transform]="getHandTransform()"></div>
+            <button (click)="startTimer()">Start Pomodoro</button> 
+      </div> -->
+
+
+      <div class="header">
+		Pure CSS Watch
+	</div>
+
+	<div class="watch-container">
+		<div class="watch-strap-top"></div>
+
+		<div class="watch">
+			<div class="watch-face">
+				<div class="watch-face-outline">
+					<div class="watch-face-outline-point point-12"></div>
+					<div class="watch-face-outline-point point-1"></div>
+					<div class="watch-face-outline-point point-2"></div>
+					<div class="watch-face-outline-point point-3"></div>
+					<div class="watch-face-outline-point point-4"></div>
+					<div class="watch-face-outline-point point-5"></div>
+					<div class="watch-face-outline-point point-6"></div>
+					<div class="watch-face-outline-point point-7"></div>
+					<div class="watch-face-outline-point point-8"></div>
+					<div class="watch-face-outline-point point-9"></div>
+					<div class="watch-face-outline-point point-10"></div>
+					<div class="watch-face-outline-point point-11"></div>
+				</div>
+
+				<div class="watch-face-date date" #dateDisplay></div>
+
+				<div class="watch-face-centre">
+					<div class="watch-face-centre-inner"></div>
+				</div>
+
+				<div class="watch-face-hands">
+					<div class="watch-face-hand hour" #hourHand></div>
+					<div class="watch-face-hand minute" #minuteHand></div>
+					<div class="watch-face-hand second" #secondHand></div>
+				</div>
+			</div>
+
+			<div class="watch-crown"></div>
+		</div>
+
+		<div class="watch-strap-bottom">James</div>
+	</div>
+
+	<div class="footer">
+		&copy; 2018 <a href="http://jgrimshaw.com">James Grimshaw</a>
+	</div>
+    </div>
+    </section>

@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'resume',
     loadChildren: () => import('./components/resume/resume.module').then(m => m.ResumeModule)
+  },
+  {
+    path: 'pomodoro',
+    loadChildren: () => import('./components/productivity-hub/productivity-hub.module').then(m => m.ProductivityHubModule)
   }
 ];
 

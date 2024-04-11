@@ -11,7 +11,7 @@ import { ServicesComponent } from './components/services/services.component';
 @NgModule({
   declarations: [
     AppComponent,
-    ServicesComponent,
+    ServicesComponent
   ],
   imports: [ReactiveFormsModule, 
     BrowserModule,
