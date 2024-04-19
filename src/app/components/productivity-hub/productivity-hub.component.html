@@ -39,20 +39,26 @@
 						</div>
 					</div>
 				</div>
-				<div class="square" style="position: relative;">
+				<div class="square" style="position: relative;" [ngClass]="{'rest': state === 'shortBreak'}">
+					
 					<div class="justify-content-center d-flex">
-						<p *ngIf="state!='resting'">Pomodoro Time</p>
-						<p *ngIf="state==='resting'">Resting Time</p>
+						<button (click)="changeState('work')" class="btn botonMenu me-1" [ngClass]="{'active': state === 'work'}"> Work Time</button>
+						<button (click)="changeState('shortBreak')" class="btn botonMenu me-1" [ngClass]="{'active': state === 'shortBreak'}"> Short Break</button>
+						<button (click)="changeState('longBreak')" class="btn botonMenu" [ngClass]="{'active': state === 'longBreak'}"> Long Break</button>
+
+			
 					</div>
 					<p class="countdown">{{timeLeft*1000 | date:'mm:ss'}}</p>
-					<p *ngIf="timerStarted" class="end-time">{{endTime | date:"shortTime" }}</p>
+					<div style="position: relative">
+						<p *ngIf="timerStarted" class="end-time">{{startTime | date:"shortTime"}} <i class="ri-arrow-right-line"></i> {{endTime | date:"shortTime" }}</p>
+
+					</div>
 					<div class="justify-content-center d-flex mt-4">
-						<button class="btn btn-primary" (click)="startTimer()">Start Timer</button>
+						<button *ngIf="!timerStarted && !isPaused" class="btn btn-light" (click)="startTimer()">  <i class="ri-play-large-line"></i> Start Timer</button>
+						<button *ngIf="!timerStarted && isPaused" class="btn btn-light" (click)="startTimer()"><i class="ri-play-large-line"></i> Resume Timer</button>
 						<!-- Opcionalmente, puedes agregar botones para pausar y reanudar -->
-						<button class="btn btn-warning" (click)="pauseTimer()" *ngIf="timerStarted && !isPaused">Pause
-							Timer</button>
-						<button class="btn btn-success" (click)="resumeTimer()" *ngIf="timerStarted && isPaused">Resume
-							Timer</button>
+						<button *ngIf="timerStarted" class="btn btn-light me-1" (click)="pauseTimer()"><i class="ri-pause-fill"></i> Pause</button>
+						<button  *ngIf="timerStarted" class="btn btn-light" (click)="nextState()"><i class="ri-skip-right-line"></i></button>
 					</div>
 
 

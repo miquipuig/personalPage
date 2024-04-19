@@ -23,7 +23,6 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   pomodoro = true;
   ngOnInit() {
-    console.log('ProductivityHubComponent');
     window.addEventListener('resize', this.updateDimensions.bind(this));
     // temporizador que se espera 0.5 segundos y setea la variable isSectionActive a true``
     setTimeout(() => {
@@ -49,27 +48,24 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.colRef.nativeElement.style.setProperty('--pomodoro-secondWide', `${secondWide}px`);
   }
   ngAfterViewInit() {
-
     this.updateDimensions();
-
   }
 
   ngOnDestroy() {
     window.removeEventListener('resize', this.updateDimensions.bind(this));
   }
 
-  restTime = 300;
+  breakTime = 300;
   totalTime = 1500;  // Total time in seconds for a full cycle
   timeLeft = 1500;   // Time left in the cycle  constructor() { }
   startTime = 0;
   endTime = 0;
-  state = 'stopped';
+  state = 'work';
   timerStarted = false;
   interval: any;
-  isPaused = true;
-  remainingTime = 0;
+  isPaused = false;
+  stopTime = 0;
 
- 
 
   getHandTransform() {
     const degreesPerSecond = 360 / this.totalTime;
@@ -102,45 +98,99 @@ export class ProductivityHubComponent implements AfterViewInit {
     // this.dateDisplay.nativeElement.innerHTML = dateString;
   }
 
-  startTimer() {
-    this.startTime = Date.now(); // Guardar el tiempo de inicio
-    this.endTime = this.startTime + this.totalTime * 1000; // Calcular el tiempo de finalización
-    this.timeLeft = this.totalTime - Math.floor((Date.now() - this.startTime) / 1000);
-    this.state = 'pomodoro'; // Cambiar el estado a 'pomodoro'
-    this.timerStarted = true; // Asegurar que el temporizador se marca como iniciado
-    this.resumeTimer(); // Llama a resumeTimer para empezar el conteo
+  startTimer(state: string = this.state) {
+    if (state === 'work') {
+      this.state = 'work';
+      if (this.isPaused) {
+        this.startTime = Date.now() - (this.stopTime - this.startTime);
+        this.timerStarted = true;
+        this.resumeTimer();
+      } else {
+        this.totalTime = 1500;
+        this.startTime = Date.now();
+        this.endTime = this.startTime + this.totalTime * 1000;
+        this.timeLeft = this.totalTime - Math.floor((Date.now() - this.startTime) / 1000);
+        this.timerStarted = true; // Asegurar que el temporizador se marca como iniciado
+        this.resumeTimer(); // Llama a resumeTimer para empezar el conteo
+      }
+    } else if (state === 'shortBreak') {
+      this.state = 'shortBreak';
+      if (this.isPaused) {
+        this.startTime = Date.now() - (this.stopTime - this.startTime);
+        this.timerStarted = true;
+        this.resumeTimer();
+      } else {
+        this.totalTime = 300;
+        this.startTime = Date.now();
+        this.endTime = this.startTime + this.totalTime * 1000;
+        this.timeLeft = this.totalTime - Math.floor((Date.now() - this.startTime) / 1000);
+        this.timerStarted = true; // Asegurar que el temporizador se marca como iniciado
+        this.resumeTimer(); // Llama a resumeTimer para empezar el conteo
+      }
+    }
   }
 
   pauseTimer() {
-    // this.startTime = Date.now(); // Guardar el tiempo de inicio
-    if (this.timerStarted && !this.isPaused) {
-      this.isPaused = true;
-      clearInterval(this.interval);
-      this.remainingTime = this.timeLeft; // Guardar el tiempo restante para cuando se reanude
-      console.log("Timer paused.");
-    }
-
+    this.stopTime = Date.now();
+    clearInterval(this.interval);
+    this.timerStarted = false;
+    this.isPaused = true;
   }
 
   resumeTimer() {
-    if (this.timerStarted && this.isPaused) {
-      this.isPaused = false;
-      this.startTime = Date.now(); // Restablecer el tiempo de inicio para el cálculo del tiempo restante
 
-      this.interval = setInterval(() => {
-        const elapsed = (Date.now() - this.startTime) / 1000;
-        if (elapsed >= this.remainingTime) {
-          this.timeLeft = 0;
-          clearInterval(this.interval);
-          this.timerStarted = false;
-          this.state = 'resting';
+    this.interval = setInterval(() => {
+      const elapsed = (Date.now() - this.startTime) / 1000;
+      if (elapsed >= this.totalTime) {
+        this.timeLeft = 0;
+        this.isPaused = false;
+        this.timerStarted = false;
+        clearInterval(this.interval);
+        if (this.state === 'work') {
+          this.startTimer('shortBreak');
         } else {
-          this.timeLeft = this.remainingTime - Math.floor(elapsed);
+          this.startTimer('work');
         }
-      }, 1000);
-      console.log("Timer resumed.");
+      } else {
+        this.endTime = this.startTime + this.totalTime * 1000;
+        this.timeLeft = this.totalTime - Math.floor(elapsed);
+      }
+    }, 1000);
+    console.log("Timer resumed.");
+  }
+
+  nextState() {
+    this.timeLeft = 0;
+    this.isPaused = false;
+    this.timerStarted = false;
+    clearInterval(this.interval);
+    if (this.state === 'work') {
+      this.startTimer('shortBreak');
+    } else {
+      this.startTimer('work');
     }
   }
 
-
+  changeState(state: string) {
+    console.log(state);
+    if (state !== this.state) {
+      this.timeLeft = 0;
+      this.isPaused = false;
+      this.timerStarted = false;
+      clearInterval(this.interval);
+    }
+    if (state === 'work') {
+      this.state = 'work';
+      this.totalTime = 1500;
+      this.timeLeft = 1500;
+    } else if (state == 'shortBreak') {
+      this.state = 'shortBreak';
+      this.totalTime = 300;
+      this.timeLeft = 300;
+    } else if (state == 'longBreak') {
+      this.state = 'longBreak';
+      this.totalTime = 900;
+      this.timeLeft = 900;
+    }
+  }
 }
