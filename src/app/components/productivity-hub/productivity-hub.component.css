@@ -1,25 +1,4 @@
-.pomodoro-background {
-    background-image: url('/assets/productivity/tomato.png');
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    position: relative;
-    background-size: contain;
-    background-repeat: no-repeat;
-    /* Evita que la imagen se repita */
 
-}
-
-.pomodoro-overlay {
-    background-image: conic-gradient(rgba(0, 0, 0, 0.5) calc(100% - var(--time-left)),
-            transparent 0);
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
 
 .clock-hand {
     width: 30%;
@@ -36,14 +15,7 @@
 
 
 
-* {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
+
 
 body {
 	background: #eee;
@@ -259,3 +231,176 @@ body {
 .footer a:hover {
 	text-decoration: underline;
 }
+
+
+.pomodoro-face-outline-point {
+	position: absolute;
+	width: var(--pomodoro-pointWide, 8px);
+	height: var(--pomodoro-pointWide, 8px);
+	background: #3f0101;
+	left: 50%;
+	top: calc(var(--pomodoro-centerHeight) - var(--pomodoro-radius));
+	border-radius: 100%;
+	/* -webkit-transform-origin: 50% 0px; */
+	transform-origin: 50% calc(var(--pomodoro-radius, 50px));
+}
+
+
+.pomodoro-background {
+    background-image: url('/assets/productivity/tomato.png');
+    width: 100%;
+    padding-top: 90%;  /* Asigna un padding-top del 100% del ancho */
+    position: relative;
+    background-size: cover;  /* Asegura que la imagen cubra completamente el espacio disponible */
+    background-repeat: no-repeat;  /* Evita que la imagen se repita */
+    /* Evita que la imagen se repita */
+}
+
+.pomodoro-face-centre {
+	position: absolute;
+	width: var(--pomodoro-centerWide);
+	height: var(--pomodoro-centerWide);
+	top: calc(var(--pomodoro-centerHeight) -  var(--pomodoro-centerWide)/2) ;
+	left: calc(50% -  var(--pomodoro-centerWide)/2) ;
+	border-radius: 100%;
+	background: #fff;
+}
+
+.pomodoro-face-centre-inner {
+	position: absolute;
+	z-index: 1;
+	width:  calc(var(--pomodoro-centerWide)*0.70);
+	height:  calc(var(--pomodoro-centerWide)*0.70);
+	top: calc(var(--pomodoro-centerWide)*0.15);
+	left: calc(var(--pomodoro-centerWide)*0.15);
+	border-radius: 100%;
+	background: #333;
+	border: 2px solid #fa9f22;
+}
+
+.pomodoro-face-outline {}
+
+.pomodoro-face-hands {}
+
+.pomodoro-face-hand {
+	position: absolute;
+}
+
+
+.watch-face-hand.hour {
+	width: 4px;
+	height: 60px;
+	top: 90px;
+	left: 148px;
+	border-radius: 10px;
+	background: #fff;
+	-webkit-transform-origin: 50% 100%;
+	transform-origin: 50% 100%;
+	-webkit-transform: rotate(306deg);
+	transform: rotate(306deg);
+}
+
+.watch-face-hand.minute {
+	width: 4px;
+	height: 120px;
+	top: 30px;
+	left: 148px;
+	border-radius: 10px;
+	background: #fff;
+	-webkit-transform-origin: 50% 100%;
+	transform-origin: 50% 100%;
+	-webkit-transform: rotate(50deg);
+	transform: rotate(50deg);
+}
+
+.pomodoro-face-hand.hour {
+	width: var(--pomodoro-handWide, 4px);
+	height:calc(var(--pomodoro-radius)/2);
+	top: calc(var(--pomodoro-centerHeight) - var(--pomodoro-radius)/2);
+	left: 50%;
+	/* border-radius: 10px; */
+	background: #fff;
+	-webkit-transform-origin:  50% calc(var(--pomodoro-radius)/2);
+	transform-origin:  50% calc(var(--pomodoro-radius)/2);
+	-webkit-transform: rotate(306deg);
+	transform: rotate(306deg);
+}
+
+.pomodoro-face-hand.minute {
+	width: var(--pomodoro-handWide, 4px);
+	height: var(--pomodoro-radius);
+	top: calc(var(--pomodoro-centerHeight) - var(--pomodoro-radius));
+	left: 50%;
+	/* border-radius: 10px; */
+	background: #fff;
+	-webkit-transform-origin: 50% var(--pomodoro-radius);
+	transform-origin:50% var(--pomodoro-radius);
+	-webkit-transform: rotate(50deg);
+	transform: rotate(50deg);
+}
+
+.pomodoro-face-hand.second {
+	width:  var(--pomodoro-secondWide, 2px);
+	height: calc(var(--pomodoro-radius)*1.2);
+	top: calc(var(--pomodoro-centerHeight) - var(--pomodoro-radius));
+	left: 50%;
+	/* border-radius: 10px; */
+	background: #fa9f22;
+	-webkit-transform-origin: 50% var(--pomodoro-radius);
+	transform-origin: 50% calc(var(--pomodoro-radius));
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+.countdown {
+	position: relative;
+	border: 0px;
+	padding: 0px;
+    font-size: 64px;         /* Tamaño grande de la fuente */
+    font-weight: bold;       /* Fuente en negrita */
+    font-family: 'Arial', sans-serif; /* Familia de fuente, con fallback a sans-serif */
+    color: #b1b1b1;             /* Color del texto, un gris oscuro para fácil lectura */
+    line-height: 1;        /* Espaciado entre líneas para mejorar la legibilidad */
+    letter-spacing: 1px;     /* Espaciado entre letras para una apariencia más distinguida */
+    text-transform: uppercase; /* Transforma el texto a mayúsculas para más impacto */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Sombra suave para destacar el texto */
+
+    /* Propiedades adicionales para centrar el texto */
+    text-align: center;      /* Centra el texto horizontalmente */
+    display: flex;           /* Usa flexbox para facilitar la alineación */
+    align-items: center;     /* Centra el contenido verticalmente dentro del contenedor */
+    justify-content: center; /* Centra el contenido horizontalmente dentro del contenedor */
+    height: 100%;            /* Asegura que el contenedor tenga altura completa para centrar verticalmente */
+}
+
+.button {
+	/* top:20px; */
+	background: var(--main-color);
+	border: 0;
+	padding: 10px 30px;
+	color: #fff;
+	transition: 0.4s;
+	border-radius: 4px;
+	z-index: 100000;
+	position: relative;
+  }
+  
+  .button:hover {
+	
+	background: var(--selectedButton-color);
+  }
+  .end-time {
+    position: absolute;
+    top: 115px; 
+    right: 30%;
+    margin: 0; /* Elimina márgenes por defecto */
+}
+
+.square {
+	position: relative;
+	background-color: rgba(255, 0, 0, 0.3); /* Rojo con 50% de transparencia */
+	border-radius: 8px;
+	/* border: 1px solid red;  */
+	padding: 20px; /* Espacio interior para visualización */
+	box-sizing: border-box; /* Asegura que el padding no afecte las dimensiones externas */
+  }

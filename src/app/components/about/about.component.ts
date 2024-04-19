@@ -14,6 +14,6 @@ export class AboutComponent implements OnInit{
     setTimeout(() => {
       this.isSectionActive = true;
     }, 50);
-    this.scriptService.load('skillsAnimation').then().catch(console.error);
+    this.scriptService.loadScript('skillsAnimation',true).then().catch(console.error);
   }
 }

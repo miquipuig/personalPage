@@ -1,68 +1,113 @@
-<section id="resume" class="resume" [ngClass]="{'section-show': isSectionActive}">
+<section id="about" class="about" [ngClass]="{'section-show': isSectionActive}">
 
-    <div class="container ">
+	<div class="about-me container ">
 
-        <div class="section-title">
-          <h2>productivity</h2>
-
-
-          <!-- <p>Pomodoro Time</p> -->
-        </div>
+		<div class="section-title">
+			<h2>productivity</h2>
 
 
-        <!-- <div class="pomodoro-background">
+			<!-- <p>Pomodoro Time</p> -->
+		</div>
 
-            <div class="pomodoro-overlay"></div> 
-            <div class="clock-hand" [style.transform]="getHandTransform()"></div>
-            <button (click)="startTimer()">Start Pomodoro</button> 
-      </div> -->
+		<div class="row">
+			<div class="col-4">
+				<div #colRef>
+					<div *ngIf="pomodoro" class="pomodoro-background">
+						<div class="pomodoro-face-outline">
+							<div class="pomodoro-face-outline-point point-12"></div>
+							<div class="pomodoro-face-outline-point point-1"></div>
+							<div class="pomodoro-face-outline-point point-2"></div>
+							<div class="pomodoro-face-outline-point point-3"></div>
+							<div class="pomodoro-face-outline-point point-4"></div>
+							<div class="pomodoro-face-outline-point point-5"></div>
+							<div class="pomodoro-face-outline-point point-6"></div>
+							<div class="pomodoro-face-outline-point point-7"></div>
+							<div class="pomodoro-face-outline-point point-8"></div>
+							<div class="pomodoro-face-outline-point point-9"></div>
+							<div class="pomodoro-face-outline-point point-10"></div>
+							<div class="pomodoro-face-outline-point point-11"></div>
+						</div>
 
+						<div class="pomodoro-face-centre">
+							<div class="pomodoro-face-centre-inner"></div>
+						</div>
 
-      <div class="header">
-		Pure CSS Watch
-	</div>
-
-	<div class="watch-container">
-		<div class="watch-strap-top"></div>
-
-		<div class="watch">
-			<div class="watch-face">
-				<div class="watch-face-outline">
-					<div class="watch-face-outline-point point-12"></div>
-					<div class="watch-face-outline-point point-1"></div>
-					<div class="watch-face-outline-point point-2"></div>
-					<div class="watch-face-outline-point point-3"></div>
-					<div class="watch-face-outline-point point-4"></div>
-					<div class="watch-face-outline-point point-5"></div>
-					<div class="watch-face-outline-point point-6"></div>
-					<div class="watch-face-outline-point point-7"></div>
-					<div class="watch-face-outline-point point-8"></div>
-					<div class="watch-face-outline-point point-9"></div>
-					<div class="watch-face-outline-point point-10"></div>
-					<div class="watch-face-outline-point point-11"></div>
+						<div class="pomodoro-face-hands">
+							<div class="pomodoro-face-hand hour" #hourHand></div>
+							<div class="pomodoro-face-hand minute" #minuteHand></div>
+							<div class="pomodoro-face-hand second" #secondHand></div>
+						</div>
+					</div>
 				</div>
+				<div class="square" style="position: relative;">
+					<div class="justify-content-center d-flex">
+						<p *ngIf="state!='resting'">Pomodoro Time</p>
+						<p *ngIf="state==='resting'">Resting Time</p>
+					</div>
+					<p class="countdown">{{timeLeft*1000 | date:'mm:ss'}}</p>
+					<p *ngIf="timerStarted" class="end-time">{{endTime | date:"shortTime" }}</p>
+					<div class="justify-content-center d-flex mt-4">
+						<button class="btn btn-primary" (click)="startTimer()">Start Timer</button>
+						<!-- Opcionalmente, puedes agregar botones para pausar y reanudar -->
+						<button class="btn btn-warning" (click)="pauseTimer()" *ngIf="timerStarted && !isPaused">Pause
+							Timer</button>
+						<button class="btn btn-success" (click)="resumeTimer()" *ngIf="timerStarted && isPaused">Resume
+							Timer</button>
+					</div>
 
-				<div class="watch-face-date date" #dateDisplay></div>
 
-				<div class="watch-face-centre">
-					<div class="watch-face-centre-inner"></div>
-				</div>
 
-				<div class="watch-face-hands">
-					<div class="watch-face-hand hour" #hourHand></div>
-					<div class="watch-face-hand minute" #minuteHand></div>
-					<div class="watch-face-hand second" #secondHand></div>
 				</div>
 			</div>
 
-			<div class="watch-crown"></div>
+			<div class="col-7">
+				<p>resto de cosas</p>
+			</div>
+
 		</div>
 
-		<div class="watch-strap-bottom">James</div>
-	</div>
 
-	<div class="footer">
+		<!-- <div class="watch-container">
+			<div class="watch-strap-top"></div>
+
+			<div class="watch">
+				<div class="watch-face">
+					<div class="watch-face-outline">
+						<div class="watch-face-outline-point point-12"></div>
+						<div class="watch-face-outline-point point-1"></div>
+						<div class="watch-face-outline-point point-2"></div>
+						<div class="watch-face-outline-point point-3"></div>
+						<div class="watch-face-outline-point point-4"></div>
+						<div class="watch-face-outline-point point-5"></div>
+						<div class="watch-face-outline-point point-6"></div>
+						<div class="watch-face-outline-point point-7"></div>
+						<div class="watch-face-outline-point point-8"></div>
+						<div class="watch-face-outline-point point-9"></div>
+						<div class="watch-face-outline-point point-10"></div>
+						<div class="watch-face-outline-point point-11"></div>
+					</div>
+
+					<div class="watch-face-date date" #dateDisplay></div>
+
+					<div class="watch-face-centre">
+						<div class="watch-face-centre-inner"></div>
+					</div>
+
+					<div class="watch-face-hands">
+						<div class="watch-face-hand hour" #hourHand></div>
+						<div class="watch-face-hand minute" #minuteHand></div>
+						<div class="watch-face-hand second" #secondHand></div>
+					</div>
+				</div>
+
+				<div class="watch-crown"></div>
+			</div>
+
+			<div class="watch-strap-bottom">James</div>
+		</div> -->
+
+		<!-- <div class="footer">
 		&copy; 2018 <a href="http://jgrimshaw.com">James Grimshaw</a>
+	</div> -->
 	</div>
-    </div>
-    </section>
+</section>
