@@ -434,23 +434,23 @@ body {
 
 .square {
 	position: relative;
-	background-color: rgba(255, 40, 0, 0.2);
-	/* Rojo con 50% de transparencia */
+	background-color: rgba(255, 255, 255, 0.2); /* Blanco con 20% de transparencia */
 	border-radius: 8px;
-	/* border: 1px solid red;  */
 	padding: 15px;
-	/* Espacio interior para visualización */
 	box-sizing: border-box;
-	/* Asegura que el padding no afecte las dimensiones externas */
+	transition: background-color 0.5s ease; /* Transición suave del color de fondo */
+}
+
+.square.work {
+	background-color: rgba(255, 40, 0, 0.3); /* Rojo con 20% de transparencia */
 }
 
 .square.rest {
-	background-color: rgba(0, 0, 255, 0.3);
-	/* Verde con 50% de transparencia */
+	background-color: rgba(0, 0, 255, 0.3); /* Azul con 30% de transparencia */
 }
+
 .square.longRest {
-	background-color: rgba(0, 255, 150, 0.3);
-	/* Verde con 50% de transparencia */
+	background-color: rgba(0, 255, 150, 0.3); /* Verde azulado con 30% de transparencia */
 }
 
 

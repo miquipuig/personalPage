@@ -1,3 +1,4 @@
+
 <section id="about" class="about" [ngClass]="{'section-show': isSectionActive}">
 
 	<div class="about-me container c_custom ">
@@ -39,8 +40,7 @@
 						</div>
 					</div>
 				</div>
-				
-				<div class="square" style="position: relative;" [ngClass]="{'rest': pomodoroState === 'shortBreak', 'longRest': pomodoroState === 'longBreak'}">
+				<div class="square" style="position: relative;" [ngClass]="{'rest': pomodoroState === 'shortBreak', 'longRest': pomodoroState === 'longBreak','work': pomodoroState === 'work' && timerStarted}">
 
 					<div class="justify-content-center d-flex">
 						<button (click)="changePomodoroState('work')" class="btn botonMenu me-1"
@@ -137,7 +137,11 @@
 			</div>
 
 			<div class="col-7">
-				<p>resto de cosas</p>
+				<!-- button new task-->
+				<button class="btn btn-light" (click)="newTask()">New Task</button>
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal">
+  Launch demo modal
+</button>
 			</div>
 
 		</div>
@@ -187,3 +191,4 @@
 	</div> -->
 	</div>
 </section>
+<app-task-modal></app-task-modal>

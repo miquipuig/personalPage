@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { timer } from 'rxjs';
+import { TaskModalComponent } from './menus/task-modal/task-modal.component';
 
 @Component({
   selector: 'app-productivity-hub',
@@ -13,6 +14,8 @@ export class ProductivityHubComponent implements AfterViewInit {
   @ViewChild('secondHand') secondHand!: ElementRef;
   @ViewChild('dateDisplay') dateDisplay!: ElementRef;
   @ViewChild('colRef') colRef!: ElementRef;
+
+  @ViewChild(TaskModalComponent) childComponent!: TaskModalComponent;
 
   isSectionActive = false;
 
@@ -275,6 +278,11 @@ tasks: Task[] = [];
 
   getPercentage() {
     return (Math.floor(this.elapsedTime / this.totalTime * 100));
+  }
+
+  newTask() {
+    
+    this.childComponent.openModal();
   }
 
 }

@@ -25,10 +25,13 @@
               "src/assets"
             ],
             "styles": [
+              
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.min.css",
               "src/styles.css",
               "node_modules/remixicon/fonts/remixicon.css"
             ],
-            "scripts": []
+            "scripts": ["./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           },
           "configurations": {
             "production": {
@@ -85,13 +88,17 @@
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               "src/favicon.ico",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "node_modules/remixicon/fonts/remixicon.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.min.css",
+              "node_modules/remixicon/fonts/remixicon.css",
+              "src/styles.css"
+
             ],
-            "scripts": ["src/assets/js/main.js"]
+            "scripts": ["src/assets/js/main.js","./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           }
         }
       }
