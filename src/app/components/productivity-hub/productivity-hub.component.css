@@ -5,15 +5,8 @@
 	left: 50%;
 	background-color: rgb(255, 255, 255);
 	position: absolute;
-	/* El origen de transformación es el inicio de la aguja */
 	transition: transform 0.5s linear;
 }
-
-
-
-
-
-
 
 body {
 	background: #eee;
@@ -337,43 +330,17 @@ body {
 }
 
 
-.watch-face-hand.hour {
-	width: 4px;
-	height: 60px;
-	top: 90px;
-	left: 148px;
-	border-radius: 10px;
-	background: #fff;
-	-webkit-transform-origin: 50% 100%;
-	transform-origin: 50% 100%;
-	-webkit-transform: rotate(306deg);
-	transform: rotate(306deg);
-}
-
-.watch-face-hand.minute {
-	width: 4px;
-	height: 120px;
-	top: 30px;
-	left: 148px;
-	border-radius: 10px;
-	background: #fff;
-	-webkit-transform-origin: 50% 100%;
-	transform-origin: 50% 100%;
-	-webkit-transform: rotate(50deg);
-	transform: rotate(50deg);
-}
 
 .pomodoro-face-hand.hour {
 	width: var(--pomodoro-handWide, 4px);
 	height: calc(var(--pomodoro-radius)/2);
 	top: calc(var(--pomodoro-centerHeight) - var(--pomodoro-radius)/2);
 	left: calc(50% - var(--pomodoro-handWide)/2);
-	/* border-radius: 10px; */
 	background: #fff;
 	-webkit-transform-origin: 50% calc(var(--pomodoro-radius)/2);
 	transform-origin: 50% calc(var(--pomodoro-radius)/2);
-	-webkit-transform: rotate(306deg);
-	transform: rotate(306deg);
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
 }
 
 .pomodoro-face-hand.minute {
@@ -385,8 +352,8 @@ body {
 	background: #fff;
 	-webkit-transform-origin: 50% var(--pomodoro-radius);
 	transform-origin: 50% var(--pomodoro-radius);
-	-webkit-transform: rotate(50deg);
-	transform: rotate(50deg);
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
 }
 
 .pomodoro-face-hand.second {
@@ -398,8 +365,8 @@ body {
 	background: #fa9f22;
 	-webkit-transform-origin: 50% var(--pomodoro-radius);
 	transform-origin: 50% calc(var(--pomodoro-radius));
-	-webkit-transform: rotate(180deg);
-	transform: rotate(180deg);
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
 }
 
 .countdown {
@@ -478,14 +445,14 @@ body {
 }
 
 .square.rest {
-	background-color: rgba(0, 0, 255, 0.2);
+	background-color: rgba(0, 0, 255, 0.3);
+	/* Verde con 50% de transparencia */
+}
+.square.longRest {
+	background-color: rgba(0, 255, 150, 0.3);
 	/* Verde con 50% de transparencia */
 }
 
-.square.bigrest {
-	background-color: rgba(0, 0, 255, 0.4);
-	/* Verde con 50% de transparencia */
-}
 
 .botonMenu {
     z-index:10;
@@ -532,4 +499,91 @@ body {
 }
 .botonMenu:active {
 	transform: translateY(2px);
+}
+
+.butoPlay {
+    z-index:10;
+    /* width: auto; */
+    margin: 0px !important;
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+	padding-bottom: 0px !important;
+	padding-left: 0px !important;
+    border: none;
+    /* height: auto; */
+    background-color: rgba(255, 255, 255, 0.0); 
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición para el fondo y el color del texto */
+    border-radius: 5px; /* O el radio que prefieras */
+
+    /* background-color: rgb(224, 9, 9); Fondo blanco con transparencia */
+
+    font-size: 1em; /* Tamaño de letra pequeño */
+    color: #ffffffaa; /* Color inicial de la letra */
+    transition: color 0.3s ease; /* Transición suave del color */
+}
+.butoPlay:hover{
+    color: #ffffff; /* Cambio de color al pasar el ratón por encima */
+    transition: background-color 0.3s ease, color 0.2s ease; /* Transición para el fondo y el color del texto */
+}
+
+.butoPlay:active {
+	transform: scale(0.95);  /* Disminuye el tamaño a 98% cuando se presiona */
+  }
+  
+
+.icono-gran {
+	font-size:45px;  /* Ajusta el tamaño a tu preferencia */
+	color: #ffffff;
+  }
+  .icono-mitja {
+	font-size:32px;  /* Ajusta el tamaño a tu preferencia */
+  }
+
+  .icono-petit {
+	font-size:22px;  /* Ajusta el tamaño a tu preferencia */
+	padding-right: 5px;
+  }
+
+
+
+  .progress {
+	background-color: #ffffffaa; /* Fondo gris para la barra de progreso */
+	height: 6px; /* Altura más fina de la barra de progreso */
+	border-radius: 3px; /* Bordes redondeados */
+  }
+  
+  .progress-bar {
+	background-color: white; /* Color blanco para la barra de progreso activa */
+  }
+
+
+
+
+  img.pomodoroComplete {
+	/* filter: grayscale(100%);  */
+  }
+  
+  img.pomodoroQuarter {
+	/*filtro verde*/
+	/* filter: hue-rotate(90deg);  */
+  }
+  
+@keyframes blink {
+	0% {opacity: 0.5;}
+	50% {opacity: 1;}
+	100% {opacity: 0.5;}
+}
+
+img.pomodoroCurrent {
+	opacity: 0.5; /* Tomates pendientes más transparentes */
+	animation: blink 1s infinite;
+}
+
+.buttonPanel {
+	padding-top: -10px !important;
+	margin-top: -10px !important;
+	padding-bottom: 0px !important;
+	margin-bottom: 0px !important;
 }

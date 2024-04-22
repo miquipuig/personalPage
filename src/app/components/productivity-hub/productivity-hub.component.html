@@ -1,6 +1,6 @@
 <section id="about" class="about" [ngClass]="{'section-show': isSectionActive}">
 
-	<div class="about-me container ">
+	<div class="about-me container c_custom ">
 
 		<div class="section-title">
 			<h2>productivity</h2>
@@ -39,27 +39,97 @@
 						</div>
 					</div>
 				</div>
-				<div class="square" style="position: relative;" [ngClass]="{'rest': state === 'shortBreak'}">
-					
+				
+				<div class="square" style="position: relative;" [ngClass]="{'rest': pomodoroState === 'shortBreak', 'longRest': pomodoroState === 'longBreak'}">
+
 					<div class="justify-content-center d-flex">
-						<button (click)="changeState('work')" class="btn botonMenu me-1" [ngClass]="{'active': state === 'work'}"> Work Time</button>
-						<button (click)="changeState('shortBreak')" class="btn botonMenu me-1" [ngClass]="{'active': state === 'shortBreak'}"> Short Break</button>
-						<button (click)="changeState('longBreak')" class="btn botonMenu" [ngClass]="{'active': state === 'longBreak'}"> Long Break</button>
+						<button (click)="changePomodoroState('work')" class="btn botonMenu me-1"
+							[ngClass]="{'active': pomodoroState === 'work'}"> Work Time</button>
+						<button (click)="changePomodoroState('shortBreak')" class="btn botonMenu me-1"
+							[ngClass]="{'active': pomodoroState === 'shortBreak'}"> Short Break</button>
+						<button (click)="changePomodoroState('longBreak')" class="btn botonMenu"
+							[ngClass]="{'active': pomodoroState === 'longBreak'}"> Long Break</button>
 
-			
+
 					</div>
-					<p class="countdown">{{timeLeft*1000 | date:'mm:ss'}}</p>
+					<p class="countdown">{{getTimeLeft()*1000 | date:'mm:ss'}}</p>
 					<div style="position: relative">
-						<p *ngIf="timerStarted" class="end-time">{{startTime | date:"shortTime"}} <i class="ri-arrow-right-line"></i> {{endTime | date:"shortTime" }}</p>
+						<p *ngIf="timerStarted" class="end-time">{{startTime | date:"shortTime"}} <i
+								class="ri-arrow-right-line"></i> {{endTime | date:"shortTime" }}</p>
 
 					</div>
-					<div class="justify-content-center d-flex mt-4">
-						<button *ngIf="!timerStarted && !isPaused" class="btn btn-light" (click)="startTimer()">  <i class="ri-play-large-line"></i> Start Timer</button>
-						<button *ngIf="!timerStarted && isPaused" class="btn btn-light" (click)="startTimer()"><i class="ri-play-large-line"></i> Resume Timer</button>
-						<!-- Opcionalmente, puedes agregar botones para pausar y reanudar -->
-						<button *ngIf="timerStarted" class="btn btn-light me-1" (click)="pauseTimer()"><i class="ri-pause-fill"></i> Pause</button>
-						<button  *ngIf="timerStarted" class="btn btn-light" (click)="nextState()"><i class="ri-skip-right-line"></i></button>
+
+					<div class="container" style="height: 30px">
+						<div class="d-flex justify-content-center align-items-center">
+						  <!-- <div *ngFor="let tomato of [].constructor(pomodoroCounter); let i = index" >
+							<img src="/assets/productivity/tomato.png" class="pomodoroComplete" width="50" height="50">
+						  </div> -->
+						  <div *ngFor="let tomato of [].constructor(pomodoroQuarterCounter); let i = index">
+							<img src="/assets/productivity/tomato.png" class="pomodoroQuarter" width="30" height="30">
+						  </div>
+						  <div *ngIf="timerStarted">
+							<img src="/assets/productivity/tomato.png" class="pomodoroCurrent" width="30" height="30">
+						  </div>
+
+						</div>
 					</div>
+					
+
+					<div class="d-flex justify-content-between align-items-center ">
+						<!-- Contenedor para el botón Back -->
+
+						<div class="flex-grow-1 d-flex justify-content-end  " style="width: 100px">
+							<button *ngIf="undoStartTime>0" class="butoPlay" (click)="undoPomodoro()"
+								style="display: flex; align-items: center;">
+								<i class="ri-arrow-go-back-fill icono-petit"></i>
+							</button>
+
+						</div>
+
+						<!-- Botones Play y Pause, uno visible a la vez, siempre centrados -->
+						<div class="mx-auto">
+							<button *ngIf="!timerStarted && !isPaused" class="butoPlay " (click)="startTimer()"
+								style="display: flex; align-items: center;">
+								<i class="ri-play-circle-fill icono-gran"></i> Start Timer
+							</button>
+							<button *ngIf="!timerStarted && isPaused" class="butoPlay " (click)="startTimer()"
+								style="display: flex; align-items: center;">
+								<i class="ri-play-circle-fill icono-gran"></i>
+							</button>
+							<button *ngIf="timerStarted" class="butoPlay " (click)="pauseTimer()"
+								style="display: flex; align-items: center;">
+								<i class="ri-pause-circle-fill icono-gran"></i>
+							</button>
+						</div>
+
+						<!-- Contenedor para el botón Skip -->
+						<div class="flex-grow-1 d-flex justify-content-start" style="width: 100px">
+							<button *ngIf="timerStarted" class="butoPlay " (click)="nextPomodoroState()"
+								style="display: flex; align-items: center;">
+								<i class="ri-skip-right-fill icono-mitja"></i>
+							</button>
+						</div>
+					</div>
+
+					<div class="container buttonPanel">
+						<!-- Barra de progreso con tiempo de inicio y fin -->
+						<div class="row align-items-center ">
+						  <div class="col-auto ">
+							<span>{{elapsedTime*1000 | date:'mm:ss'}}</span>
+						  </div>
+						  <div class="col ">
+							<div class="progress ">
+							  <div class="progress-bar bg-white" role="progressbar"  [style]="'width:'+getPercentage()+'%'" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+							</div>
+						  </div>
+						  <div class="col-auto ">
+							<span>{{getPercentage()}}%</span>
+						  </div>
+						</div>
+					  </div>
+
+
+
 
 
 

@@ -438,7 +438,7 @@ section.section-show {
   padding-bottom: 45px;
 }
 
-section .container {
+section .container.c_custom {
   background: rgba(0, 0, 0, 0.9);
   padding: 30px;
 }

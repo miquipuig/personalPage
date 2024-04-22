@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-productivity-hub',
@@ -16,8 +17,8 @@ export class ProductivityHubComponent implements AfterViewInit {
   isSectionActive = false;
 
   constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
-    this.updateClock();
-    setInterval(() => this.updateClock(), 1000);
+    this.time = new Date();
+    this.time.setHours(12, 0, 0, 0);
 
   }
 
@@ -28,6 +29,10 @@ export class ProductivityHubComponent implements AfterViewInit {
     setTimeout(() => {
       this.isSectionActive = true;
     }, 50);
+
+    this.changePomodoroState("work");
+
+    this.startClock();
 
   }
   updateDimensions() {
@@ -55,30 +60,77 @@ export class ProductivityHubComponent implements AfterViewInit {
     window.removeEventListener('resize', this.updateDimensions.bind(this));
   }
 
-  breakTime = 300;
-  totalTime = 1500;  // Total time in seconds for a full cycle
-  timeLeft = 1500;   // Time left in the cycle  constructor() { }
-  startTime = 0;
-  endTime = 0;
-  state = 'work';
+  //interficie de tarea
+tasks: Task[] = [];
+  time: Date;
+
+  interval: any; //object that will hold the interval
+  clockInterval: any; //object that will hold the interval
+  resumeTimerSync = false;
+
+
+  referenceWorkTime = 1500; // 25 minutes Work
+  referenceShortBreakTime = 300;  // 5 minutes Break
+  referenceLongBreakTime = 900; // 15 minutes Break
+  totalTime = 0;  // Total time in seconds for a full cycle
+
   timerStarted = false;
-  interval: any;
-  isPaused = false;
-  stopTime = 0;
+  isPaused = false; // Timer is paused
+
+  elapsedTime = 0;
+
+  // Time left in the cycle, only used to display the time
 
 
-  getHandTransform() {
-    const degreesPerSecond = 360 / this.totalTime;
-    const angle = this.timeLeft * degreesPerSecond;
-    return `rotate(${angle}deg)`;
+  stopTime = 0; // Time when the timer was paused, only used to display the time
+  startTime = 0; // Time when the timer was started, only used to display the time
+  endTime = 0; // Time when the timer should end , only used to display the time
+
+  pomodoroState = 'work'; // work, shortBreak, longBreak
+  pomodoroQuarterCounter = 0;  // 0, 1, 2, 3
+  pomodoroLimit = 4; // 4 pomodoros before long break
+  pomodoroCounter = 0; // Full pomodoro Cicle counter
+
+  //Undo memory
+  undoStartTime = 0;
+  undoStopTime = 0;
+  undoElapsedTime = 0;
+  undoPomodoroState: string = 'work';
+  undoPomodoroQuarterCounter = 0;
+  undoPomodoroCounter = 0;
+  undoTotalTime=0;
+  //Not used
+  // getHandTransformAAAAAAAAA() {
+  //   const degreesPerSecond = 360 / this.totalTime;
+  //   const angle = this.elapsedTime * degreesPerSecond;
+  //   return `rotate(${angle}deg)`;
+  // }
+
+  startClock() {
+
+    const interval = setInterval(() => {
+      const currentTime = new Date();
+      // Añade un segundo cada 50 milisegundos
+      this.time = new Date(this.time.getTime() + 60000);
+      //obtener los segundos
+      if (currentTime.getSeconds() > this.time.getSeconds()) {
+
+        this.time.setMilliseconds(this.time.getMilliseconds() + 250);
+      }
+      this.updateClock(this.time);
+      // Compara si la hora y minutos del tiempo simulado son iguales a la hora y minutos actuales
+      if (this.time.getHours() >= currentTime.getHours() && this.time.getMinutes() >= currentTime.getMinutes()) {
+        this.clockTimer(); // Vuelve a llamar a la función para actualizar el reloj
+        clearInterval(interval); // Detiene el intervalo una vez alcanzada la hora actual
+
+      }
+    }, 5);
   }
-
-  updateClock() {
-    const now = new Date();
-    const seconds = now.getSeconds() * 6; // 360/60
-    const minutes = now.getMinutes() * 6; // 360/60
-    const hours = (now.getHours() % 12) * 30 + minutes / 12; // 360/12
-    const dateString = now.getDate();
+  updateClock(date: Date) {
+    const seconds = date.getSeconds() * 6; // 360/60
+    const minutes = date.getMinutes() * 6; // 360/60
+    const hours = (date.getHours() % 12) * 30 + minutes / 12; // 360/12
+    const dateString = date.getDate();
 
     if (this.secondHand && this.secondHand.nativeElement) {
       this.secondHand.nativeElement.style.transform = `rotate(${seconds}deg)`;
@@ -92,105 +144,149 @@ export class ProductivityHubComponent implements AfterViewInit {
     if (this.dateDisplay && this.dateDisplay.nativeElement) {
       this.dateDisplay.nativeElement.innerHTML = dateString;
     }
-    // this.secondHand.nativeElement.style.transform = `rotate(${seconds}deg)`;
-    // this.minuteHand.nativeElement.style.transform = `rotate(${minutes}deg)`;
-    // this.hourHand.nativeElement.style.transform = `rotate(${hours}deg)`;
-    // this.dateDisplay.nativeElement.innerHTML = dateString;
   }
 
-  startTimer(state: string = this.state) {
-    if (state === 'work') {
-      this.state = 'work';
-      if (this.isPaused) {
-        this.startTime = Date.now() - (this.stopTime - this.startTime);
-        this.timerStarted = true;
-        this.resumeTimer();
-      } else {
-        this.totalTime = 1500;
-        this.startTime = Date.now();
-        this.endTime = this.startTime + this.totalTime * 1000;
-        this.timeLeft = this.totalTime - Math.floor((Date.now() - this.startTime) / 1000);
-        this.timerStarted = true; // Asegurar que el temporizador se marca como iniciado
-        this.resumeTimer(); // Llama a resumeTimer para empezar el conteo
-      }
-    } else if (state === 'shortBreak') {
-      this.state = 'shortBreak';
-      if (this.isPaused) {
-        this.startTime = Date.now() - (this.stopTime - this.startTime);
-        this.timerStarted = true;
-        this.resumeTimer();
-      } else {
-        this.totalTime = 300;
-        this.startTime = Date.now();
-        this.endTime = this.startTime + this.totalTime * 1000;
-        this.timeLeft = this.totalTime - Math.floor((Date.now() - this.startTime) / 1000);
-        this.timerStarted = true; // Asegurar que el temporizador se marca como iniciado
-        this.resumeTimer(); // Llama a resumeTimer para empezar el conteo
-      }
+  startTimer() {
+    if (!(this.isPaused && this.elapsedTime > 0)) {
+      this.startTime = Date.now();
+
     }
+
+    this.endTime = Date.now() + this.totalTime * 1000 - this.elapsedTime * 1000;
+    this.isPaused = false;
+    this.timerStarted = true;
+    this.resumeTimerSync = true;
   }
+
 
   pauseTimer() {
-    this.stopTime = Date.now();
     clearInterval(this.interval);
     this.timerStarted = false;
     this.isPaused = true;
   }
 
-  resumeTimer() {
+  clockTimer() {
+    this.clockInterval = setInterval(() => {
+      if (this.resumeTimerSync) {
+        this, this.resumeTimerSync = false;
+        this.resumeTimer();
+      }
+      this.updateClock(new Date());
+    }, 1000);
+  }
 
+  resumeTimer() {
+    const timerStart = Date.now() - this.elapsedTime * 1000;
     this.interval = setInterval(() => {
-      const elapsed = (Date.now() - this.startTime) / 1000;
-      if (elapsed >= this.totalTime) {
-        this.timeLeft = 0;
+      this.elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
+      if (this.elapsedTime >= this.totalTime) {
+        // Pomodoro finished
+        this.elapsedTime = 0;
         this.isPaused = false;
         this.timerStarted = false;
         clearInterval(this.interval);
-        if (this.state === 'work') {
-          this.startTimer('shortBreak');
-        } else {
-          this.startTimer('work');
-        }
-      } else {
-        this.endTime = this.startTime + this.totalTime * 1000;
-        this.timeLeft = this.totalTime - Math.floor(elapsed);
+        this.nextPomodoroState();
       }
     }, 1000);
-    console.log("Timer resumed.");
   }
 
-  nextState() {
-    this.timeLeft = 0;
-    this.isPaused = false;
+  nextPomodoroState() {
     this.timerStarted = false;
     clearInterval(this.interval);
-    if (this.state === 'work') {
-      this.startTimer('shortBreak');
-    } else {
-      this.startTimer('work');
+    this.undoPomodoroQuarterCounter = this.pomodoroQuarterCounter;
+    this.undoPomodoroCounter = this.pomodoroCounter;
+    if (this.pomodoroState === 'work') {
+      if (this.pomodoroQuarterCounter >= this.pomodoroLimit - 1) {
+        this.changePomodoroState('longBreak');
+      } else {
+        this.changePomodoroState('shortBreak');
+      }
+    } else if (this.pomodoroState === 'shortBreak' || this.pomodoroState === 'longBreak') {
+      if (this.pomodoroQuarterCounter >= this.pomodoroLimit - 1) {
+        this.pomodoroCounter++;
+        this.pomodoroQuarterCounter = 0;
+      } else {
+        this.pomodoroQuarterCounter++;
+      }
+      this.changePomodoroState('work');
     }
   }
 
-  changeState(state: string) {
-    console.log(state);
-    if (state !== this.state) {
-      this.timeLeft = 0;
-      this.isPaused = false;
-      this.timerStarted = false;
-      clearInterval(this.interval);
+  changePomodoroState(pomodoroState: string, undoElapsedTime: number = 0): void {
+    //carga de los tiempos de referencia
+    if (pomodoroState === 'work') {
+      this.totalTime = this.referenceWorkTime;
+    } else if (pomodoroState === 'shortBreak') {
+      this.totalTime = this.referenceShortBreakTime;
+    } else if (pomodoroState === 'longBreak') {
+      this.totalTime = this.referenceLongBreakTime;
     }
-    if (state === 'work') {
-      this.state = 'work';
-      this.totalTime = 1500;
-      this.timeLeft = 1500;
-    } else if (state == 'shortBreak') {
-      this.state = 'shortBreak';
-      this.totalTime = 300;
-      this.timeLeft = 300;
-    } else if (state == 'longBreak') {
-      this.state = 'longBreak';
-      this.totalTime = 900;
-      this.timeLeft = 900;
+
+    if (pomodoroState !== this.pomodoroState) {
+
+      // if (this.elapsedTime < this.totalTime ) {
+
+      this.undoStartTime = this.startTime;
+      this.undoStopTime = this.stopTime;
+      this.undoElapsedTime = this.elapsedTime;
+      this.undoPomodoroState = this.pomodoroState;
+
+      this.pomodoroState = pomodoroState;
+      clearInterval(this.interval);
+      if (undoElapsedTime > 0) {
+
+        this.elapsedTime = undoElapsedTime;
+      } else {
+        this.elapsedTime = 0;
+      }
+      if (!this.isPaused) {
+        this.startTimer();
+      }
     }
   }
+
+  undoPomodoro() {
+    clearInterval(this.interval);
+    if (this.undoStartTime > 0) {
+      
+      const quarterCounter = this.pomodoroQuarterCounter;
+      const counter = this.pomodoroCounter;
+
+      if(this.undoElapsedTime>= this.undoTotalTime){
+        this.undoElapsedTime=0;
+      }
+
+      this.startTime = this.undoStartTime;
+      this.stopTime = this.undoStopTime;
+
+      this.pomodoroQuarterCounter = this.undoPomodoroQuarterCounter;
+      this.pomodoroCounter = this.undoPomodoroCounter;
+      this.undoPomodoroCounter = counter;
+      this.undoTotalTime=this.totalTime;
+      this.undoPomodoroQuarterCounter = quarterCounter;
+      this.changePomodoroState(this.undoPomodoroState, this.undoElapsedTime);
+    }
+
+  }
+
+  getTimeLeft() {
+    return (this.totalTime - this.elapsedTime);
+  }
+
+  getPercentage() {
+    return (Math.floor(this.elapsedTime / this.totalTime * 100));
+  }
+
+}
+
+interface Task {
+  name: string;
+  description: string;
+  estimatedTime: number;
+  workTime: number;
+  restTime: number;
+  completed: boolean;
+  userStoryId: number;
+  pomodoroCounter: number;
+  pomodoroQuarterCounter: number;
 }
