@@ -277,7 +277,8 @@ body {
 	position: absolute;
 	width: var(--pomodoro-pointWide, 8px);
 	height: var(--pomodoro-pointWide, 8px);
-	background: #3f0101;
+	/* background: #3f0101; */
+	background: #ffffff;
 	left: calc(50% - var(--pomodoro-pointWide)/2);
 	top: calc(var(--pomodoro-centerHeight) - var(--pomodoro-radius));
 	border-radius: 100%;
@@ -297,6 +298,7 @@ body {
 	background-repeat: no-repeat;
 	/* Evita que la imagen se repita */
 	/* Evita que la imagen se repita */
+	filter: brightness(80%) contrast(90%);
 }
 
 .pomodoro-face-centre {
@@ -515,7 +517,6 @@ body {
     /* height: auto; */
     background-color: rgba(255, 255, 255, 0.0); 
     transition: background-color 0.3s ease, color 0.3s ease; /* Transición para el fondo y el color del texto */
-    border-radius: 5px; /* O el radio que prefieras */
 
     /* background-color: rgb(224, 9, 9); Fondo blanco con transparencia */
 
@@ -586,4 +587,20 @@ img.pomodoroCurrent {
 	margin-top: -10px !important;
 	padding-bottom: 0px !important;
 	margin-bottom: 0px !important;
+}
+
+.buttonCard{
+	margin: 0px !important;
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+	padding-bottom: 0px !important;
+	padding-left: 0px !important;
+    border: none;
+	background-color: rgba(255, 255, 255, 0);
+    color: #ffffffaa; /* Color inicial de la letra */
+	transition: color 0.3s ease; /* Transición suave del color */
+
+
 }

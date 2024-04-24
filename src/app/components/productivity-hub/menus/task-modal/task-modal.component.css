@@ -1,3 +1,13 @@
-.modal {
-    z-index: 100000; /* o un número más alto si es necesario */
+.modal-content {
+    background: #cdcdcdf5 !important;
+    color: black;
+}
+
+.red-input {
+    color: red !important;    /* Color de texto rojo */
+    border: 2px solid red; /* Borde de 1px sólido y rojo */
+}
+
+.red-placeholder::placeholder {
+    color: rgb(122, 0, 0) !important; /* Cambia el color del texto del placeholder a rojo */
 }

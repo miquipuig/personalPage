@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, Renderer2, ViewChild } from '@angular/core';
 import { timer } from 'rxjs';
 import { TaskModalComponent } from './menus/task-modal/task-modal.component';
 
@@ -36,13 +36,17 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.changePomodoroState("work");
 
     this.startClock();
+    this.tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
 
   }
   updateDimensions() {
     const width = this.colRef.nativeElement.offsetWidth;
+    // const centerHeight = this.colRef.nativeElement.offsetHeight / 2 + 0.15 * this.colRef.nativeElement.offsetHeight;
     const centerHeight = this.colRef.nativeElement.offsetHeight / 2 + 0.15 * this.colRef.nativeElement.offsetHeight;
+
     const radius = width * 0.23;
-    const pointWide = radius * 0.10;
+    const pointWide = radius * 0.07;
+    //  const pointWide = radius * 0.00;
     const centerWide = radius * 0.13;
     const handWide = radius * 0.05;
     const secondWide = radius * 0.03;
@@ -64,7 +68,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   //interficie de tarea
-tasks: Task[] = [];
+  tasks: Task[] = [];
   time: Date;
 
   interval: any; //object that will hold the interval
@@ -101,7 +105,7 @@ tasks: Task[] = [];
   undoPomodoroState: string = 'work';
   undoPomodoroQuarterCounter = 0;
   undoPomodoroCounter = 0;
-  undoTotalTime=0;
+  undoTotalTime = 0;
   //Not used
   // getHandTransformAAAAAAAAA() {
   //   const degreesPerSecond = 360 / this.totalTime;
@@ -251,12 +255,12 @@ tasks: Task[] = [];
   undoPomodoro() {
     clearInterval(this.interval);
     if (this.undoStartTime > 0) {
-      
+
       const quarterCounter = this.pomodoroQuarterCounter;
       const counter = this.pomodoroCounter;
 
-      if(this.undoElapsedTime>= this.undoTotalTime){
-        this.undoElapsedTime=0;
+      if (this.undoElapsedTime >= this.undoTotalTime) {
+        this.undoElapsedTime = 0;
       }
 
       this.startTime = this.undoStartTime;
@@ -265,7 +269,7 @@ tasks: Task[] = [];
       this.pomodoroQuarterCounter = this.undoPomodoroQuarterCounter;
       this.pomodoroCounter = this.undoPomodoroCounter;
       this.undoPomodoroCounter = counter;
-      this.undoTotalTime=this.totalTime;
+      this.undoTotalTime = this.totalTime;
       this.undoPomodoroQuarterCounter = quarterCounter;
       this.changePomodoroState(this.undoPomodoroState, this.undoElapsedTime);
     }
@@ -281,15 +285,30 @@ tasks: Task[] = [];
   }
 
   newTask() {
-    
+
     this.childComponent.openModal();
   }
+
+  editTask(index: number) {
+    console.log(index);
+    this.childComponent.openModal();
+  }
+  addTask(event: any, index: number) {
+    if(index === -1){
+      this.tasks.push(event);
+    }else{
+      this.tasks[index] = event;
+    }
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+  }
+
+
 
 }
 
 interface Task {
   name: string;
-  description: string;
+  detail: string;
   estimatedTime: number;
   workTime: number;
   restTime: number;

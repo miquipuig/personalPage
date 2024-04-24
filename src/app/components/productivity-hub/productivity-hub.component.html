@@ -1,4 +1,3 @@
-
 <section id="about" class="about" [ngClass]="{'section-show': isSectionActive}">
 
 	<div class="about-me container c_custom ">
@@ -40,7 +39,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="square" style="position: relative;" [ngClass]="{'rest': pomodoroState === 'shortBreak', 'longRest': pomodoroState === 'longBreak','work': pomodoroState === 'work' && timerStarted}">
+				<div class="square" style="position: relative;"
+					[ngClass]="{'rest': pomodoroState === 'shortBreak', 'longRest': pomodoroState === 'longBreak','work': pomodoroState === 'work' && timerStarted}">
 
 					<div class="justify-content-center d-flex">
 						<button (click)="changePomodoroState('work')" class="btn botonMenu me-1"
@@ -61,19 +61,21 @@
 
 					<div class="container" style="height: 30px">
 						<div class="d-flex justify-content-center align-items-center">
-						  <!-- <div *ngFor="let tomato of [].constructor(pomodoroCounter); let i = index" >
+							<!-- <div *ngFor="let tomato of [].constructor(pomodoroCounter); let i = index" >
 							<img src="/assets/productivity/tomato.png" class="pomodoroComplete" width="50" height="50">
 						  </div> -->
-						  <div *ngFor="let tomato of [].constructor(pomodoroQuarterCounter); let i = index">
-							<img src="/assets/productivity/tomato.png" class="pomodoroQuarter" width="30" height="30">
-						  </div>
-						  <div *ngIf="timerStarted">
-							<img src="/assets/productivity/tomato.png" class="pomodoroCurrent" width="30" height="30">
-						  </div>
+							<div *ngFor="let tomato of [].constructor(pomodoroQuarterCounter); let i = index">
+								<img src="/assets/productivity/tomato.png" class="pomodoroQuarter" width="30"
+									height="30">
+							</div>
+							<div *ngIf="timerStarted">
+								<img src="/assets/productivity/tomato.png" class="pomodoroCurrent" width="30"
+									height="30">
+							</div>
 
 						</div>
 					</div>
-					
+
 
 					<div class="d-flex justify-content-between align-items-center ">
 						<!-- Contenedor para el botón Back -->
@@ -114,81 +116,45 @@
 					<div class="container buttonPanel">
 						<!-- Barra de progreso con tiempo de inicio y fin -->
 						<div class="row align-items-center ">
-						  <div class="col-auto ">
-							<span>{{elapsedTime*1000 | date:'mm:ss'}}</span>
-						  </div>
-						  <div class="col ">
-							<div class="progress ">
-							  <div class="progress-bar bg-white" role="progressbar"  [style]="'width:'+getPercentage()+'%'" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+							<div class="col-auto ">
+								<span>{{elapsedTime*1000 | date:'mm:ss'}}</span>
 							</div>
-						  </div>
-						  <div class="col-auto ">
-							<span>{{getPercentage()}}%</span>
-						  </div>
+							<div class="col ">
+								<div class="progress ">
+									<div class="progress-bar bg-white" role="progressbar"
+										[style]="'width:'+getPercentage()+'%'" aria-valuenow="50" aria-valuemin="0"
+										aria-valuemax="100"></div>
+								</div>
+							</div>
+							<div class="col-auto ">
+								<span>{{getPercentage()}}%</span>
+							</div>
 						</div>
-					  </div>
-
-
-
-
-
+					</div>
 
 				</div>
 			</div>
 
-			<div class="col-7">
+			<div class="col-8">
 				<!-- button new task-->
 				<button class="btn btn-light" (click)="newTask()">New Task</button>
-				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal">
-  Launch demo modal
-</button>
-			</div>
 
-		</div>
-
-
-		<!-- <div class="watch-container">
-			<div class="watch-strap-top"></div>
-
-			<div class="watch">
-				<div class="watch-face">
-					<div class="watch-face-outline">
-						<div class="watch-face-outline-point point-12"></div>
-						<div class="watch-face-outline-point point-1"></div>
-						<div class="watch-face-outline-point point-2"></div>
-						<div class="watch-face-outline-point point-3"></div>
-						<div class="watch-face-outline-point point-4"></div>
-						<div class="watch-face-outline-point point-5"></div>
-						<div class="watch-face-outline-point point-6"></div>
-						<div class="watch-face-outline-point point-7"></div>
-						<div class="watch-face-outline-point point-8"></div>
-						<div class="watch-face-outline-point point-9"></div>
-						<div class="watch-face-outline-point point-10"></div>
-						<div class="watch-face-outline-point point-11"></div>
-					</div>
-
-					<div class="watch-face-date date" #dateDisplay></div>
-
-					<div class="watch-face-centre">
-						<div class="watch-face-centre-inner"></div>
-					</div>
-
-					<div class="watch-face-hands">
-						<div class="watch-face-hand hour" #hourHand></div>
-						<div class="watch-face-hand minute" #minuteHand></div>
-						<div class="watch-face-hand second" #secondHand></div>
+				<!-- task list -->
+				<div class="task-list mt-2">
+					<div *ngFor="let task of tasks; let i =index" class="card text-white bg-dark mt-1">
+						<div class="card-body d-flex justify-content-between p-2">
+							<div class="d-flex">
+								<p class="card-title me-0 mb-0"><b>{{task.name}}</b></p>
+								<p class="card-title me-0 mb-0" *ngIf="task.detail">:&emsp;</p>
+								<p class="card-text mb-0">{{task.detail}}</p>
+							</div>
+							<button (click)="editTask(i)" class="butoPlay"><i class="ri-edit-2-fill"></i></button>
+						</div>
 					</div>
 				</div>
-
-				<div class="watch-crown"></div>
+				
 			</div>
-
-			<div class="watch-strap-bottom">James</div>
-		</div> -->
-
-		<!-- <div class="footer">
-		&copy; 2018 <a href="http://jgrimshaw.com">James Grimshaw</a>
-	</div> -->
+		</div>
 	</div>
 </section>
-<app-task-modal></app-task-modal>
+<app-task-modal  (addTask)="addTask($event)"></app-task-modal>

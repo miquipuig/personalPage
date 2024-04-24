@@ -48,17 +48,7 @@ body {
   background: transparent;
 }
 
-/* body::before {
-    content: "";
-    position: fixed;
-    background: #040404 url("./assets/img/devMan.jpg") top right no-repeat;
-    background-size: cover;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 100vh;
-    z-index: -1;
-  } */
+
 body::before {
   content: "";
   position: fixed;
@@ -67,8 +57,8 @@ body::before {
   top: 0;
   height: 100vh;
   z-index: -1;
-  /* overflow: hidden; */
-  /* Asegura que la imagen se recorte */
+  overflow: hidden;
+
   background: #040404
 }
 
@@ -77,7 +67,6 @@ body::before {
   right: 0;
   top: 0;
   width: 100%;
-  /* Ajusta este valor para cambiar el ancho del div */
   height: 100vh;
   background-image: url('./assets/img/devMan.jpg');
   background-position: right;
@@ -373,7 +362,7 @@ h6 {
 
 .navbar-mobile {
   position: fixed;
-  /* overflow: hidden; */
+  overflow: hidden;
   top: 0;
   right: 0;
   left: 0;
@@ -421,7 +410,7 @@ h6 {
   # Sections General
   --------------------------------------------------------------*/
 section {
-  /* overflow: hidden; */
+  overflow: hidden;
   position: absolute;
   width: 100%;
   top: 140px;
@@ -1267,40 +1256,38 @@ section .container.c_custom {
 
 /* Animaciones */
 
-.animated {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
+/* .animated {
+ 
+  animation: show 1s;
+
 }
 
 .fast {
   -webkit-animation-duration: 0.4s;
   animation-duration: 0.4s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
+
 }
 
 .slowly {
   -webkit-animation-duration: 1.5s;
   animation-duration: 2s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
+
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
+  0% {
+    opacity: 0
   }
-
-  to {
-    opacity: 1;
+  100% {
+    opacity: 1
   }
 }
 
 .fadeIn {
   animation-name: fadeIn;
-}
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+} */
 
 .loader-container {
   display: flex;
@@ -1313,22 +1300,15 @@ section .container.c_custom {
 
 .loader {
   border: 10px solid #a9a9a9;
-  /* Fondo claro */
   border-top: 10px solid var(--main-color);
-  /* Color del spinner */
   border-radius: 50%;
   width: 70px;
   height: 70px;
 
   animation: spin 1.3s linear infinite;
   position: fixed;
-  /* O absolute */
-  /* left: 50%;
-    top: 50%; */
-  /* transform: translate(-50%, -50%); */
-  z-index: 100000;
-  /* Asegúrate de que esté por encima de todo */
 
+  z-index: 100000;
 }
 
 .loader-container.hidden {
@@ -1363,4 +1343,3 @@ body {
   opacity: 1 !important; /* Asegurar que no esté transparente */
   z-index: 9999 !important; /* Alta prioridad en el orden de apilamiento */
 }
-
