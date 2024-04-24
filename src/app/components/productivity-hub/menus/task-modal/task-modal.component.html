@@ -1,14 +1,20 @@
-<div #taskModal id="taskModal" class="modal fade" tabindex="-1">
+
+
+
+<div  #taskModal id="taskModal" class="modal fade" tabindex="-1">
   <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
+    <div *ngIf="modalOpened" class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">New Task</h5>
+        <h5 *ngIf="id===-1" class="modal-title">New Task</h5>
+        <h5 *ngIf="id!=-1" class="modal-title">Edit Task</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
       <div class="modal-body">
-        <p>Enter the details of your task.</p>
+        <p *ngIf="id===-1">Enter the details of your task.</p>
+        <p *ngIf="id!=-1">Edit the details of your task.</p>
+
 
           <div>
             <div class="input-group flex-nowrap">
@@ -16,6 +22,9 @@
               <input *ngIf="validateForm()" id="name" type="text" formControlName="name" type="text" class="form-control red-input red-placeholder" placeholder="This field is required" aria-label="name" aria-describedby="addon-wrapping">
             </div>
           </div>
+          <!-- <ngx-timepicker></ngx-timepicker> -->
+          <!-- <input type="text" formControlName="time"> -->
+          <ngb-timepicker formControlName="time" />
           
           <div>
             <div class="input-group mt-1">
@@ -24,9 +33,12 @@
             </div>
           </div>  
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer custom-footer">
+        <button  *ngIf="id!=-1" (click)="deleteTaskEmit()" type="button" class="btn btn-danger">Delete Task</button>
+        <div class="flex-grow-1"></div> <!-- Espaciador -->
         <button type="submit" class="btn btn-secondary">Save changes</button>
       </div>
+      
     </form>
 
     </div>

@@ -66,7 +66,6 @@ export class ProductivityHubComponent implements AfterViewInit {
   ngOnDestroy() {
     window.removeEventListener('resize', this.updateDimensions.bind(this));
   }
-
   //interficie de tarea
   tasks: Task[] = [];
   time: Date;
@@ -175,7 +174,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   clockTimer() {
     this.clockInterval = setInterval(() => {
       if (this.resumeTimerSync) {
-        this, this.resumeTimerSync = false;
+        this.resumeTimerSync = false;
         this.resumeTimer();
       }
       this.updateClock(new Date());
@@ -290,19 +289,23 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   editTask(index: number) {
-    console.log(index);
-    this.childComponent.openModal();
+    this.childComponent.editModal(index, this.tasks[index]);
   }
-  addTask(event: any, index: number) {
-    if(index === -1){
-      this.tasks.push(event);
+  addTask(event: any) {
+
+    if(event.index === -1){
+      this.tasks.push(event.task);
     }else{
-      this.tasks[index] = event;
+      this.tasks[event.index] = event.task
     }
     localStorage.setItem('tasks', JSON.stringify(this.tasks));
   }
 
-
+  deleteTask(index: number) {
+    this.tasks.splice(index, 1);
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+  }
+  
 
 }
 

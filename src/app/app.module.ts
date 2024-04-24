@@ -13,7 +13,7 @@ import { ServicesComponent } from './components/services/services.component';
     AppComponent,
     ServicesComponent
   ],
-  imports: [ReactiveFormsModule, 
+  imports: [ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,HttpClientModule,BrowserAnimationsModule
   ],

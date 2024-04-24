@@ -4,10 +4,25 @@
 }
 
 .red-input {
-    color: red !important;    /* Color de texto rojo */
-    border: 2px solid red; /* Borde de 1px sólido y rojo */
+    color: red !important;
+    /* Color de texto rojo */
+    border: 2px solid red;
+    /* Borde de 1px sólido y rojo */
 }
 
 .red-placeholder::placeholder {
-    color: rgb(122, 0, 0) !important; /* Cambia el color del texto del placeholder a rojo */
+    color: rgb(122, 0, 0) !important;
+    /* Cambia el color del texto del placeholder a rojo */
+}
+
+.custom-footer {
+    display: flex;
+    /* Activa flexbox */
+    justify-content: space-between;
+    /* Separa los elementos al máximo */
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+    /* Este div ocupa todo el espacio disponible entre los botones */
 }
