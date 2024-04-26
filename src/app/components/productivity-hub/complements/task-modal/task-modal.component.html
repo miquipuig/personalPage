@@ -24,7 +24,11 @@
           </div>
           <!-- <ngx-timepicker></ngx-timepicker> -->
           <!-- <input type="text" formControlName="time"> -->
-          <ngb-timepicker formControlName="time" />
+          <!-- <ngb-timepicker formControlName="time" /> -->
+
+          <!-- reference https://medium.com/@bohndez.dev/custom-form-control-con-control-value-accessor-en-angular-5-6-o-7-f8f4030f105d-->
+          {{ form.value | json }}
+          <app-time-picker formControlName="time" [myLabel]="'Despedida'"></app-time-picker>
           
           <div>
             <div class="input-group mt-1">

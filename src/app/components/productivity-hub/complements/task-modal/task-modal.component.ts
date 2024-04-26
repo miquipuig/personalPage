@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as bootstrap from 'bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -14,7 +14,6 @@ export class TaskModalComponent implements OnInit {
   taskModal: any;
   form: FormGroup;
   id: number;
-  time: any;
   @Output() addTask = new EventEmitter<any>();
   @Output() deleteTask = new EventEmitter<any>();
 
@@ -22,10 +21,10 @@ export class TaskModalComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.id=-1;
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      detail: [''],
-      time: [null]  // Asegúrate que el control 'time' está definido aquí
+    this.form =  new FormGroup({
+      name: new FormControl('', Validators.required),
+      detail: new FormControl(''),
+      time: new FormControl('Chao') // Asegúrate que el control 'time' está definido aquí
     });
   }
 
@@ -41,8 +40,10 @@ export class TaskModalComponent implements OnInit {
   }
 
   async openModal() {
+  
     this.modalOpened = true;
     this.form.reset();
+    this.form.get('time')?.setValue("pepito");
     this.id = -1;
     this.taskModal.show();
   }
@@ -52,6 +53,7 @@ export class TaskModalComponent implements OnInit {
     this.id = index;
     this.form.get('name')?.setValue(task.name);
     this.form.get('detail')?.setValue(task.detail);
+    this.form.get('time')?.setValue(task.time);
     this.taskModal.show();
   }
   closeModal() {

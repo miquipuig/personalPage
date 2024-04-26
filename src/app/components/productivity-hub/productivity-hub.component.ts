@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, Renderer2, ViewChild } from '@angular/core';
 import { timer } from 'rxjs';
-import { TaskModalComponent } from './menus/task-modal/task-modal.component';
+import { TaskModalComponent } from './complements/task-modal/task-modal.component';
 
 @Component({
   selector: 'app-productivity-hub',

@@ -1,0 +1,6 @@
+<label>{{ myLabel }}</label>
+<!-- <input
+  type="text"
+  (input)="onInput($event.target)"> -->
+  <input [(ngModel)]="value" type="text" (ngModelChange)="change(value)">
+<span>Number of letters: {{ counter }}</span>

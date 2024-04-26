@@ -1,0 +1,25 @@
+:host {
+    width: 200px;
+    display: block;
+    position: static;
+    font-family: sans-serif;
+  }
+  label {
+    width: 100%;
+    display: block;
+  }
+  input {
+    width: 100%;
+    height: 36px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    font-size: 18px;
+    text-indent: 5px;
+    color: #000;
+  }
+  span {
+    width: 100%;
+    color: #000;
+    display: block;
+    padding: 3px 0 0 0;
+  }
