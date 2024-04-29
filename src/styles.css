@@ -1343,3 +1343,8 @@ body {
   opacity: 1 !important; /* Asegurar que no esté transparente */
   z-index: 9999 !important; /* Alta prioridad en el orden de apilamiento */
 }
+
+.form-control:focus {
+  border-color: rgb(255, 134, 134) !important;        /* Cambia el borde a rojo */
+  box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25); /* Sombra roja ligera */
+}

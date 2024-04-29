@@ -1,6 +1,35 @@
-<label>{{ myLabel }}</label>
-<!-- <input
-  type="text"
-  (input)="onInput($event.target)"> -->
-  <input [(ngModel)]="value" type="text" (ngModelChange)="change(value)">
-<span>Number of letters: {{ counter }}</span>
+<div class="d-flex align-items-center" >
+  <!-- <label>{{ myLabel }}</label> -->
+
+  <div *ngIf="value>0" class="input-group custom-number-input" style="width: 110px">
+    <input (click)="openTimePicker()" [(ngModel)]="shortRepresentation" type="text" class="form-control"
+       readonly>
+  </div>
+
+  <button type="button" (click)="openTimePicker()" class="butoPlay ms-2 d-flex align-items-center">
+    <div *ngIf="!(value>0)" class="textTimer" >
+      Select Timer
+    </div>
+    <i class="ri-timer-line sizeplus"></i>
+  </button>
+  <div>
+
+  </div>
+  <div *ngIf="timePickerOpened" class="timePickerBox">
+    <div class="timePickerBoxHeader ">
+      <button type="button" (click)="closeTimePicker()" class=" closeTimePicker">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div class="" style="width: 80%">
+      <button type="button" class="butoPlay sizeplus" (click)="minus15minutes()"><i class="ri-indeterminate-circle-fill"></i></button>
+      <button type="button" class="butoPlay sizeplus" (click)="plus15minutes()"><i class="ri-add-circle-fill"></i></button>
+
+    </div>
+    <div class="input-group" style="width: 80%">
+      <input (input)="selectableOnChanged()" [(ngModel)]="hours" type="number" class="form-control input-hours">
+      <input (input)="selectableOnChanged()" [(ngModel)]="minutes" type="number" class="form-control input-minutes">
+    </div>
+    <p>{{representation}}</p>
+
+  </div>

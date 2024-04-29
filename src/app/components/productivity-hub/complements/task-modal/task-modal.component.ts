@@ -20,11 +20,11 @@ export class TaskModalComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder) {
-    this.id=-1;
-    this.form =  new FormGroup({
+    this.id = -1;
+    this.form = new FormGroup({
       name: new FormControl('', Validators.required),
       detail: new FormControl(''),
-      time: new FormControl('Chao') // Asegúrate que el control 'time' está definido aquí
+      time: new FormControl(0) // Asegúrate que el control 'time' está definido aquí
     });
   }
 
@@ -40,10 +40,10 @@ export class TaskModalComponent implements OnInit {
   }
 
   async openModal() {
-  
+
     this.modalOpened = true;
     this.form.reset();
-    this.form.get('time')?.setValue("pepito");
+    this.form.get('time')?.setValue(0);
     this.id = -1;
     this.taskModal.show();
   }
@@ -66,6 +66,7 @@ export class TaskModalComponent implements OnInit {
       this.addTask.emit({ task: this.form.value, index: this.id });
       this.closeModal();
     } else {
+      console.log('entrosubmit');
       this.form.markAllAsTouched();
     }
   }
@@ -73,13 +74,17 @@ export class TaskModalComponent implements OnInit {
   validateForm() {
     const nameControl = this.form.get('name');
     if (nameControl) {
-      return nameControl.touched && !(nameControl.value);
-    }
-    return false;
+      // console.log('entro1' + nameControl.touched + nameControl.valid);
+
+      if (nameControl.touched && !nameControl.valid) {
+          return true;
+      }
+     
+    } return false;
   }
 
-  deleteTaskEmit() {
-    this.deleteTask.emit(this.id);
-    this.closeModal();
+    deleteTaskEmit() {
+      this.deleteTask.emit(this.id);
+      this.closeModal();
+    }
   }
-}

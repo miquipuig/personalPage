@@ -146,7 +146,7 @@
 							<div class="d-flex">
 								<p class="card-title me-0 mb-0"><b>{{task.name}}</b></p>
 								<p class="card-title me-0 mb-0" *ngIf="task.detail">:&emsp;</p>
-								<p class="card-text mb-0">{{task.detail}}</p>
+								<p class="card-text mb-0"><small>{{task.detail}}</small></p>
 							</div>
 							<button (click)="editTask(i)" class="butoPlay"><i class="ri-edit-2-fill"></i></button>
 						</div>
