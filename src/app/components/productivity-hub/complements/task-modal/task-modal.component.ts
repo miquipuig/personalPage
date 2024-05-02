@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as bootstrap from 'bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-task-modal',
