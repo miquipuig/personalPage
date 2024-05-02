@@ -7,7 +7,6 @@
 	position: absolute;
 	transition: transform 0.5s linear;
 }
-
 body {
 	background: #eee;
 	font-family: "Helvetica Neue", sans-serif;
@@ -16,7 +15,6 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	text-rendering: optimizeLegibility;
 }
-
 /* Website Header */
 .header {
 	text-align: center;
