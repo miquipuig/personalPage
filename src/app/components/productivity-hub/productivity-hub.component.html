@@ -39,24 +39,23 @@
 						</div>
 					</div>
 				</div>
+
+				{{clock | json}} 
 				<div class="square" style="position: relative;"
-					[ngClass]="{'rest': pomodoroState === 'shortBreak', 'longRest': pomodoroState === 'longBreak','work': pomodoroState === 'work' && timerStarted}">
+					[ngClass]="{'rest': clock.pomodoroState === 'shortBreak', 'longRest': clock.pomodoroState === 'longBreak','work': clock.pomodoroState === 'work' && clock.timerStarted}">
 
 					<div class="justify-content-center d-flex">
 						<button (click)="changePomodoroState('work')" class="btn botonMenu me-1"
-							[ngClass]="{'active': pomodoroState === 'work'}"> Work Time</button>
+							[ngClass]="{'active': clock.pomodoroState === 'work'}"> Work Time</button>
 						<button (click)="changePomodoroState('shortBreak')" class="btn botonMenu me-1"
-							[ngClass]="{'active': pomodoroState === 'shortBreak'}"> Short Break</button>
+							[ngClass]="{'active': clock.pomodoroState === 'shortBreak'}"> Short Break</button>
 						<button (click)="changePomodoroState('longBreak')" class="btn botonMenu"
-							[ngClass]="{'active': pomodoroState === 'longBreak'}"> Long Break</button>
-
-
+							[ngClass]="{'active': clock.pomodoroState === 'longBreak'}"> Long Break</button>
 					</div>
 					<p class="countdown">{{getTimeLeft()*1000 | date:'mm:ss'}}</p>
 					<div style="position: relative">
-						<p *ngIf="timerStarted" class="end-time">{{startTime | date:"shortTime"}} <i
-								class="ri-arrow-right-line"></i> {{endTime | date:"shortTime" }}</p>
-
+						<p *ngIf="clock.timerStarted" class="end-time">{{clock.startTime | date:"shortTime"}} <i
+								class="ri-arrow-right-line"></i> {{clock.endTime | date:"shortTime" }}</p>
 					</div>
 
 					<div class="container" style="height: 30px">
@@ -64,11 +63,11 @@
 							<!-- <div *ngFor="let tomato of [].constructor(pomodoroCounter); let i = index" >
 							<img src="/assets/productivity/tomato.png" class="pomodoroComplete" width="50" height="50">
 						  </div> -->
-							<div *ngFor="let tomato of [].constructor(pomodoroQuarterCounter); let i = index">
+							<div *ngFor="let tomato of [].constructor(clock.pomodoroQuarterCounter); let i = index">
 								<img src="/assets/productivity/tomato.png" class="pomodoroQuarter" width="30"
 									height="30">
 							</div>
-							<div *ngIf="timerStarted">
+							<div *ngIf="clock.timerStarted">
 								<img src="/assets/productivity/tomato.png" class="pomodoroCurrent" width="30"
 									height="30">
 							</div>
@@ -81,7 +80,7 @@
 						<!-- Contenedor para el botón Back -->
 
 						<div class="flex-grow-1 d-flex justify-content-end  " style="width: 100px">
-							<button *ngIf="undoStartTime>0" class="butoPlay" (click)="undoPomodoro()"
+							<button *ngIf="clock.undoStartTime>0" class="butoPlay" (click)="undoPomodoro()"
 								style="display: flex; align-items: center;">
 								<i class="ri-arrow-go-back-fill icono-petit"></i>
 							</button>
@@ -90,15 +89,15 @@
 
 						<!-- Botones Play y Pause, uno visible a la vez, siempre centrados -->
 						<div class="mx-auto">
-							<button *ngIf="!timerStarted && !isPaused" class="butoPlay " (click)="startTimer()"
+							<button *ngIf="!clock.timerStarted && !clock.isPaused" class="butoPlay " (click)="startTimer()"
 								style="display: flex; align-items: center;">
 								<i class="ri-play-circle-fill icono-gran"></i> Start Timer
 							</button>
-							<button *ngIf="!timerStarted && isPaused" class="butoPlay " (click)="startTimer()"
+							<button *ngIf="!clock.timerStarted && clock.isPaused" class="butoPlay " (click)="startTimer()"
 								style="display: flex; align-items: center;">
 								<i class="ri-play-circle-fill icono-gran"></i>
 							</button>
-							<button *ngIf="timerStarted" class="butoPlay " (click)="pauseTimer()"
+							<button *ngIf="clock.timerStarted" class="butoPlay " (click)="pauseTimer()"
 								style="display: flex; align-items: center;">
 								<i class="ri-pause-circle-fill icono-gran"></i>
 							</button>
@@ -106,7 +105,7 @@
 
 						<!-- Contenedor para el botón Skip -->
 						<div class="flex-grow-1 d-flex justify-content-start" style="width: 100px">
-							<button *ngIf="timerStarted" class="butoPlay " (click)="nextPomodoroState()"
+							<button *ngIf="clock.timerStarted" class="butoPlay " (click)="nextPomodoroState()"
 								style="display: flex; align-items: center;">
 								<i class="ri-skip-right-fill icono-mitja"></i>
 							</button>
@@ -117,7 +116,7 @@
 						<!-- Barra de progreso con tiempo de inicio y fin -->
 						<div class="row align-items-center ">
 							<div class="col-auto ">
-								<span>{{elapsedTime*1000 | date:'mm:ss'}}</span>
+								<span>{{clock.elapsedTime*1000 | date:'mm:ss'}}</span>
 							</div>
 							<div class="col ">
 								<div class="progress ">
@@ -137,22 +136,36 @@
 
 			<div class="col-8">
 				<!-- button new task-->
-				<button class="btn btn-light" (click)="newTask()">New Task</button>
+				<button class="butoPlay" (click)="newTask()"><i class="ri-add-circle-line icono-mitja"></i></button>
 
 				<!-- task list -->
-				<div class="task-list mt-2">
-					<div *ngFor="let task of tasks; let i =index" class="card text-white bg-grey mt-1">
-						<div class="card-body d-flex justify-content-between p-2">
-							<div class="d-flex">
-								<p class="card-title me-0 mb-0"><b>{{task.name}}</b></p>
-								<p class="card-title me-0 mb-0" *ngIf="task.detail">:&emsp;</p>
-								<p class="card-text mb-0"><small>{{task.detail}}</small></p>
+				<div class="task-list">
+					<div (click)="activeTask(i)" *ngFor="let task of tasks; let i = index" class="card text-white task-card mb-1" [ngClass]="{'active': i===clock.actualTask}">
+						<div  class="card-body d-flex justify-content-between align-items-start p-2">
+							<div class="card-title me-0 mb-0">{{task.name}}
+							<div class="small-detail">{{task.detail}}</div>
+							<div class="small-detail">{{task.estimatedTime |  date:'HH:mm:ss':'GMT' }} of {{task.workTime |  date:'HH:mm:ss':'GMT'}}</div>
+						
 							</div>
-							<button (click)="editTask(i)" class="butoPlay"><i class="ri-edit-2-fill"></i></button>
+							<div class="d-flex">
+								<button (click)="editTask(i)" class="butoPlay"><i class="ri-edit-2-fill "></i></button>
+							</div>
+						</div>
+						<!-- Barra de progreso al pie de cada tarjeta -->
+						<div *ngIf="tasks[i].estimatedTime>0 && tasks[i].workTime" class="progress"
+							style="height: 3px;">
+							<div class="progress-bar bg-danger" role="progressbar"
+								style="width: {{taskTimePercentage(i)}}%"></div>
+							<div class="progress-bar bg-grey" role="progressbar"
+								style="width: {{taskTimePercentage(i) -50}}%"></div>
+								
 						</div>
 					</div>
 				</div>
-				
+
+
+
+
 			</div>
 		</div>
 	</div>

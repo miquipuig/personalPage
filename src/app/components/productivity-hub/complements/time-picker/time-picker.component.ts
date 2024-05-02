@@ -137,6 +137,8 @@ export class TimePickerComponent {
     this.value = minutes * 60 * 1000 + hours * 60 * 60 * 1000;
 
     this.representationOnChanged();
+    this.onChange(this.value);
+
     // });
 
 
@@ -149,7 +151,6 @@ export class TimePickerComponent {
     this.hours = horas.toString().padStart(1, '0');
     this.representation = `${horas.toString().padStart(1, '0')} hours and ${minutos.toString().padStart(1, '0')} minutes`
     this.shortRepresentation = `${horas.toString().padStart(1, '0')} hr ${minutos.toString().padStart(1, '0')} min`
-    // this.onChange(this.value);
   }
 
 

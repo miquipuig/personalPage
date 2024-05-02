@@ -12,8 +12,8 @@
           <p *ngIf="id===-1">Enter the details of your task.</p>
           <p *ngIf="id!=-1">Edit the details of your task.</p>
           <div class="d-flex justify-content-end">
-
-            <app-time-picker formControlName="time" [myLabel]="'Timer'"></app-time-picker>
+            <pre>{{form.value | json}}</pre>
+            <app-time-picker formControlName="estimatedTime" [myLabel]="'Timer'"></app-time-picker>
           </div>
 
           <div>

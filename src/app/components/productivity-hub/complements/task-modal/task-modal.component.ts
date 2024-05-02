@@ -24,7 +24,7 @@ export class TaskModalComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
       detail: new FormControl(''),
-      time: new FormControl(0) // Asegúrate que el control 'time' está definido aquí
+      estimatedTime: new FormControl(0) // Asegúrate que el control '' está definido aquí
     });
   }
 
@@ -43,7 +43,7 @@ export class TaskModalComponent implements OnInit {
 
     this.modalOpened = true;
     this.form.reset();
-    this.form.get('time')?.setValue(0);
+    this.form.get('estimatedTime')?.setValue(0);
     this.id = -1;
     this.taskModal.show();
   }
@@ -53,7 +53,7 @@ export class TaskModalComponent implements OnInit {
     this.id = index;
     this.form.get('name')?.setValue(task.name);
     this.form.get('detail')?.setValue(task.detail);
-    this.form.get('time')?.setValue(task.time);
+    this.form.get('estimatedTime')?.setValue(task.estimatedTime);
     this.taskModal.show();
   }
   closeModal() {
@@ -87,4 +87,16 @@ export class TaskModalComponent implements OnInit {
       this.deleteTask.emit(this.id);
       this.closeModal();
     }
+  }
+
+  interface Task {
+    name: string;
+    detail: string;
+    estimatedTime: number;
+    workTime: number;
+    restTime: number;
+    completed: boolean;
+    userStoryId: number;
+    pomodoroCounter: number;
+    pomodoroQuarterCounter: number;
   }

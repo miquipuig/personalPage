@@ -605,3 +605,26 @@ img.pomodoroCurrent {
 .bg-grey {
     background-color: rgba(255, 255, 255, 0.2); /* Cambia esto por el código de color que prefieras */
 }
+
+.task-card {
+    background-color: rgba(255, 255, 255, 0.2); /* Cambia esto por el código de color que prefieras */
+	cursor: pointer; /* Agrega esta línea para cambiar el cursor */
+
+}
+
+.task-card:hover{
+	background-color: rgba(255, 255, 255, 0.4); /* Cambia esto por el código de color que prefieras */
+}
+
+.task-card:active{
+	background-color: rgba(255, 255, 255, 0.7); /* Cambia esto por el código de color que prefieras */
+}
+
+.small-detail{
+	font-size: 0.8em;
+	color: #ffffffaa;
+}
+
+.task-card.active{
+	background-color: rgba(255, 255, 255, 0.6); /* Cambia esto por el código de color que prefieras */
+}
