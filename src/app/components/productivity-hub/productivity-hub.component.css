@@ -436,149 +436,213 @@ body {
 
 .square {
 	position: relative;
-	background-color: rgba(255, 255, 255, 0.2); /* Blanco con 20% de transparencia */
+	background-color: rgba(255, 255, 255, 0.2);
+	/* Blanco con 20% de transparencia */
 	border-radius: 8px;
 	padding: 15px;
 	box-sizing: border-box;
-	transition: background-color 0.5s ease; /* Transición suave del color de fondo */
+	transition: background-color 0.5s ease;
+	/* Transición suave del color de fondo */
 }
 
 .square.work {
-	background-color: rgba(255, 40, 0, 0.3); /* Rojo con 20% de transparencia */
+	background-color: rgba(255, 40, 0, 0.3);
+	/* Rojo con 20% de transparencia */
 }
 
 .square.rest {
-	background-color: rgba(0, 0, 255, 0.3); /* Azul con 30% de transparencia */
+	background-color: rgba(0, 0, 255, 0.3);
+	/* Azul con 30% de transparencia */
 }
 
 .square.longRest {
-	background-color: rgba(0, 255, 150, 0.3); /* Verde azulado con 30% de transparencia */
+	background-color: rgba(0, 255, 150, 0.3);
+	/* Verde azulado con 30% de transparencia */
 }
 
 
 .botonMenu {
-    z-index:10;
-    /* width: auto; */
-    padding: 0px, 0px;
-    margin: 0px;
-    border: none;
-    height: auto;
-    background-color: rgba(255, 255, 255, 0.0); 
-    transition: background-color 0.3s ease, color 0.3s ease; /* Transición para el fondo y el color del texto */
-    border-radius: 5px; /* O el radio que prefieras */
+	z-index: 10;
+	/* width: auto; */
+	padding: 0px, 0px;
+	margin: 0px;
+	border: none;
+	height: auto;
+	background-color: rgba(255, 255, 255, 0.0);
+	transition: background-color 0.3s ease, color 0.3s ease;
+	/* Transición para el fondo y el color del texto */
+	border-radius: 5px;
+	/* O el radio que prefieras */
 
-    /* background-color: rgb(224, 9, 9); Fondo blanco con transparencia */
+	/* background-color: rgb(224, 9, 9); Fondo blanco con transparencia */
 
-    font-size: 1em; /* Tamaño de letra pequeño */
-    color: #ffffff9f; /* Color inicial de la letra */
-    transition: color 0.3s ease; /* Transición suave del color */
+	font-size: 1em;
+	/* Tamaño de letra pequeño */
+	color: #ffffff9f;
+	/* Color inicial de la letra */
+	transition: color 0.3s ease;
+	/* Transición suave del color */
 }
-.botonMenu:hover{
-    color: #ffffffbe; /* Cambio de color al pasar el ratón por encima */
-    transition: background-color 0.3s ease, color 0.2s ease; /* Transición para el fondo y el color del texto */
+
+.botonMenu:hover {
+	color: #ffffffbe;
+	/* Cambio de color al pasar el ratón por encima */
+	transition: background-color 0.3s ease, color 0.2s ease;
+	/* Transición para el fondo y el color del texto */
 }
+
 .botonMenu {
-    z-index:10;
-    /* width: auto; */
-    padding: 0px, 0px;
-    margin: 0px;
-    border: none;
-    height: auto;
-    background-color: rgba(255, 255, 255, 0.0); 
-    transition: background-color 0.3s ease, color 0.3s ease; /* Transición para el fondo y el color del texto */
-    border-radius: 5px; /* O el radio que prefieras */
+	z-index: 10;
+	/* width: auto; */
+	padding: 0px, 0px;
+	margin: 0px;
+	border: none;
+	height: auto;
+	background-color: rgba(255, 255, 255, 0.0);
+	transition: background-color 0.3s ease, color 0.3s ease;
+	/* Transición para el fondo y el color del texto */
+	border-radius: 5px;
+	/* O el radio que prefieras */
 
-    /* background-color: rgb(224, 9, 9); Fondo blanco con transparencia */
+	/* background-color: rgb(224, 9, 9); Fondo blanco con transparencia */
 
-    font-size: 1em; /* Tamaño de letra pequeño */
-    color: #ffffff6f; /* Color inicial de la letra */
-    transition: color 0.3s ease; /* Transición suave del color */
+	font-size: 1em;
+	/* Tamaño de letra pequeño */
+	color: #ffffff6f;
+	/* Color inicial de la letra */
+	transition: color 0.3s ease;
+	/* Transición suave del color */
 }
+
 .botonMenu.active {
-    color: rgb(0, 0, 0); /* Cambio de color cuando está activo */
-    background-color: #ffffffaa; /* Color de fondo más leve cuando está activo */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Transición para el fondo y el color del texto */
+	color: rgb(0, 0, 0);
+	/* Cambio de color cuando está activo */
+	background-color: #ffffffaa;
+	/* Color de fondo más leve cuando está activo */
+	transition: background-color 0.3s ease, color 0.3s ease;
+	/* Transición para el fondo y el color del texto */
 }
+
 .botonMenu:active {
 	transform: translateY(2px);
 }
 
 .butoPlay {
-    z-index:10;
-    /* width: auto; */
-    margin: 0px !important;
+	z-index: 10;
+	/* width: auto; */
+	margin: 0px !important;
 	margin-top: 0px !important;
 	margin-bottom: 0px !important;
 	padding-right: 0px !important;
 	padding-left: 0px !important;
 	padding-bottom: 0px !important;
 	padding-left: 0px !important;
-    border: none;
-    /* height: auto; */
-    background-color: rgba(255, 255, 255, 0.0); 
-    transition: background-color 0.3s ease, color 0.3s ease; /* Transición para el fondo y el color del texto */
+	border: none;
+	/* height: auto; */
+	background-color: rgba(255, 255, 255, 0.0);
+	transition: background-color 0.3s ease, color 0.3s ease;
+	/* Transición para el fondo y el color del texto */
 
-    /* background-color: rgb(224, 9, 9); Fondo blanco con transparencia */
+	/* background-color: rgb(224, 9, 9); Fondo blanco con transparencia */
 
-    font-size: 1em; /* Tamaño de letra pequeño */
-    color: #ffffffaa; /* Color inicial de la letra */
-    transition: color 0.3s ease; /* Transición suave del color */
+	font-size: 1em;
+	/* Tamaño de letra pequeño */
+	color: #ffffffaa;
+	/* Color inicial de la letra */
+	transition: color 0.3s ease;
+	/* Transición suave del color */
 }
-.butoPlay:hover{
-    color: #ffffff; /* Cambio de color al pasar el ratón por encima */
-    transition: background-color 0.3s ease, color 0.2s ease; /* Transición para el fondo y el color del texto */
+
+.butoPlay:hover {
+	color: #ffffff;
+	/* Cambio de color al pasar el ratón por encima */
+	transition: background-color 0.3s ease, color 0.2s ease;
+	/* Transición para el fondo y el color del texto */
 }
 
 .butoPlay:active {
-	transform: scale(0.95);  /* Disminuye el tamaño a 98% cuando se presiona */
-  }
-  
+	transform: scale(0.95);
+	/* Disminuye el tamaño a 98% cuando se presiona */
+}
+
 
 .icono-gran {
-	font-size:45px;  /* Ajusta el tamaño a tu preferencia */
+	font-size: 45px;
+	/* Ajusta el tamaño a tu preferencia */
 	color: #ffffff;
-  }
-  .icono-mitja {
-	font-size:32px;  /* Ajusta el tamaño a tu preferencia */
-  }
+}
 
-  .icono-petit {
-	font-size:22px;  /* Ajusta el tamaño a tu preferencia */
+.icono-mitja {
+	font-size: 32px;
+	/* Ajusta el tamaño a tu preferencia */
+}
+
+.icono-petit {
+	font-size: 22px;
+	/* Ajusta el tamaño a tu preferencia */
 	padding-right: 5px;
-  }
+}
 
 
 
-  .progress {
-	background-color: #ffffffaa; /* Fondo gris para la barra de progreso */
-	height: 6px; /* Altura más fina de la barra de progreso */
-	border-radius: 3px; /* Bordes redondeados */
-  }
-  
-  .progress-bar {
-	background-color: white; /* Color blanco para la barra de progreso activa */
-  }
+.progress.play {
+	background-color: #ffffffaa;
+	/* Fondo gris para la barra de progreso */
+	height: 6px;
+	/* Altura más fina de la barra de progreso */
+	border-radius: 3px;
+	/* Bordes redondeados */
+}
+
+.progress-bar.play {
+	background-color: white;
+	/* Color blanco para la barra de progreso activa */
+}
+
+
+.progress.task {
+	background-color: #ffffffaa;
+	/* Fondo gris para la barra de progreso */
+	height: 5px;
+	border-radius: 3px;
+	/* Bordes redondeados */
+}
+
+.progress-bar.task {
+	background-color: white;
+	/* Color blanco para la barra de progreso activa */
+	/* height: 10px; */
+
+}
 
 
 
-
-  img.pomodoroComplete {
+img.pomodoroComplete {
 	/* filter: grayscale(100%);  */
-  }
-  
-  img.pomodoroQuarter {
+}
+
+img.pomodoroQuarter {
 	/*filtro verde*/
 	/* filter: hue-rotate(90deg);  */
-  }
-  
+}
+
 @keyframes blink {
-	0% {opacity: 0.5;}
-	50% {opacity: 1;}
-	100% {opacity: 0.5;}
+	0% {
+		opacity: 0.5;
+	}
+
+	50% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0.5;
+	}
 }
 
 img.pomodoroCurrent {
-	opacity: 0.5; /* Tomates pendientes más transparentes */
+	opacity: 0.5;
+	/* Tomates pendientes más transparentes */
 	animation: blink 1s infinite;
 }
 
@@ -589,7 +653,7 @@ img.pomodoroCurrent {
 	margin-bottom: 0px !important;
 }
 
-.buttonCard{
+.buttonCard {
 	margin: 0px !important;
 	margin-top: 0px !important;
 	margin-bottom: 0px !important;
@@ -597,34 +661,51 @@ img.pomodoroCurrent {
 	padding-left: 0px !important;
 	padding-bottom: 0px !important;
 	padding-left: 0px !important;
-    border: none;
+	border: none;
 	background-color: rgba(255, 255, 255, 0);
-    color: #ffffffaa; /* Color inicial de la letra */
-	transition: color 0.3s ease; /* Transición suave del color */
+	color: #ffffffaa;
+	/* Color inicial de la letra */
+	transition: color 0.3s ease;
+	/* Transición suave del color */
 }
+
 .bg-grey {
-    background-color: rgba(255, 255, 255, 0.2); /* Cambia esto por el código de color que prefieras */
+	background-color: rgba(255, 255, 255, 0.2);
+	/* Cambia esto por el código de color que prefieras */
 }
 
 .task-card {
-    background-color: rgba(255, 255, 255, 0.2); /* Cambia esto por el código de color que prefieras */
-	cursor: pointer; /* Agrega esta línea para cambiar el cursor */
+	background-color: rgba(255, 255, 255, 0.2);
+	/* Cambia esto por el código de color que prefieras */
+	cursor: pointer;
+	/* Agrega esta línea para cambiar el cursor */
 
 }
 
-.task-card:hover{
-	background-color: rgba(255, 255, 255, 0.4); /* Cambia esto por el código de color que prefieras */
+.task-card:hover {
+	background-color: rgba(255, 255, 255, 0.4);
+	/* Cambia esto por el código de color que prefieras */
 }
 
-.task-card:active{
-	background-color: rgba(255, 255, 255, 0.7); /* Cambia esto por el código de color que prefieras */
+.task-card:active {
+	background-color: rgba(255, 255, 255, 0.7);
+	/* Cambia esto por el código de color que prefieras */
 }
 
-.small-detail{
+.small-detail {
 	font-size: 0.8em;
 	color: #ffffffaa;
 }
 
-.task-card.active{
-	background-color: rgba(255, 255, 255, 0.6); /* Cambia esto por el código de color que prefieras */
+.task-card.active {
+	background-color: rgba(255, 255, 255, 0.6);
+	/* Cambia esto por el código de color que prefieras */
+}
+
+.card {
+	border-top-left-radius: 0.25rem;
+	border-top-right-radius: 0.25rem;
+	border-bottom-right-radius: 0.25rem;
+	border-bottom-left-radius: 0.25rem;
+
 }

@@ -110,6 +110,11 @@ export class TimePickerComponent {
     this.selectableOnChanged();
   }
 
+  zero() {
+    this.minutes = '0';
+    this.hours = '0';
+    this.selectableOnChanged();
+  }
 
   selectableOnChanged() {
     // this.zone.run(() => {

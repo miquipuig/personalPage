@@ -7,10 +7,12 @@ import { TaskModalComponent } from './complements/task-modal/task-modal.componen
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { TimePickerComponent } from './complements/time-picker/time-picker.component';
+import { TruncatePipe } from 'src/app/pipes/truncate.pipe';
+import { CustomTimeFormatPipe } from 'src/app/pipes/custom-time-format.pipe';
 
 
 @NgModule({
-  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent],
+  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe],
   imports: [ 
     NgbTimepickerModule,
     CommonModule,

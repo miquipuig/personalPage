@@ -15,7 +15,7 @@ import { ServicesComponent } from './components/services/services.component';
   ],
   imports: [ReactiveFormsModule,
     BrowserModule,
-    AppRoutingModule,HttpClientModule,BrowserAnimationsModule
+    AppRoutingModule, HttpClientModule, BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1335,14 +1335,9 @@ section .container.c_custom {
 }
 
 body {
-  overflow-x: hidden; /* Evita el desplazamiento horizontal */
+  overflow-x: hidden; 
 }
 
-.modal {
-
-  opacity: 1 !important; /* Asegurar que no esté transparente */
-  z-index: 9999 !important; /* Alta prioridad en el orden de apilamiento */
-}
 
 .form-control:focus {
   border-color: rgb(255, 134, 134) !important;        /* Cambia el borde a rojo */

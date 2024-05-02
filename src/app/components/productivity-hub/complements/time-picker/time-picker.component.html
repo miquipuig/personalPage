@@ -7,7 +7,7 @@
 
   <button type="button" (click)="openTimePicker()" class="butoPlay ms-2 d-flex align-items-center">
     <div *ngIf="!(value>0)" class="textTimer">
-      Select Timer
+      Exptected Time
     </div>
     <i class="ri-timer-line sizeplus"></i>
   </button>
@@ -20,15 +20,18 @@
         <i class="ri-close-line"></i>
       </button>
     </div>
-    <div class="" style="width: 80%">
+    <div class="d-flex" style="width: 80%">
       <button type="button" class="butoPlay sizeplus" (click)="minus15minutes()"><i
           class="ri-indeterminate-circle-fill"></i></button>
       <button type="button" class="butoPlay sizeplus" (click)="plus15minutes()"><i
           class="ri-add-circle-fill"></i></button>
-
+      <div class="ms-3">
+        <button type="button" class="butoPlay sizeplus" (click)="zero()"><i
+            class="ri-loop-left-line"></i></button>
+      </div>
     </div>
     <div class="input-group" style="width: 80%">
-      <input (input)="selectableOnChanged()" [(ngModel)]="hours" type="number" class="form-control input-hours">
+      <input (in¡put)="selectableOnChanged()" [(ngModel)]="hours" type="number" class="form-control input-hours">
       <input (input)="selectableOnChanged()" [(ngModel)]="minutes" type="number" class="form-control input-minutes">
     </div>
     <p>{{representation}}</p>
