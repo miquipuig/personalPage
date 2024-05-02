@@ -57,7 +57,7 @@ body::before {
   top: 0;
   height: 100vh;
   z-index: -1;
-  /* overflow: hidden; */
+  overflow: hidden;
 
   background: #040404
 }
@@ -132,7 +132,7 @@ h6 {
   display: flex;
   align-items: center;
   z-index: 10;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 #header * {
@@ -362,7 +362,7 @@ h6 {
 
 .navbar-mobile {
   position: fixed;
-  /* overflow: hidden; */
+  overflow: hidden;
   top: 0;
   right: 0;
   left: 0;
@@ -410,7 +410,7 @@ h6 {
   # Sections General
   --------------------------------------------------------------*/
 section {
-  /* overflow: hidden; */
+  overflow: hidden;
   position: absolute;
   width: 100%;
   top: 140px;
@@ -881,7 +881,7 @@ section .container.c_custom {
 .portfolio .portfolio-wrap {
   transition: 0.3s;
   position: relative;
-  /* overflow: hidden; */
+  overflow: hidden;
   z-index: 1;
   background: rgba(0, 0, 0, 0.6);
 }
@@ -1007,7 +1007,7 @@ section .container.c_custom {
   right: 0;
   top: 0;
   bottom: 0;
-  /* overflow-y: auto; */
+  overflow-y: auto;
 }
 
 .portfolio-details .container {
@@ -1256,7 +1256,7 @@ section .container.c_custom {
 
 /* Animaciones */
 
-.animated {
+/* .animated {
  
   animation: show 1s;
 
@@ -1287,16 +1287,13 @@ section .container.c_custom {
   animation-name: fadeIn;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
-}
+} */
 
 .loader-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
   opacity: 1;
   transition: opacity 1s ease-in-out;
 }
@@ -1329,15 +1326,17 @@ section .container.c_custom {
   }
 }
 
- .mainPage {
-  position: relative;
+.mainPage {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-} 
-/* .modal {
-  overflow: scroll;
-} */
+
+}
+
+body {
+  overflow-x: hidden; 
+}
 
 
 .form-control:focus {
