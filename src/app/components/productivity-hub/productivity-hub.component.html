@@ -9,8 +9,8 @@
 			<!-- <p>Pomodoro Time</p> -->
 		</div>
 
-		<div class="row">
-			<div class="col-4">
+		<div class="row d-flex justify-content-center ">
+			<div class=" col-sm-10 col-md-5 col-lg-4 col-12">
 				<div #colRef>
 					<div *ngIf="pomodoro" class="pomodoro-background">
 						<div class="pomodoro-face-outline">
@@ -134,7 +134,7 @@
 				</div>
 			</div>
 
-			<div class="col-8">
+			<div class="col-12 col-md-7 col-lg-8">
 				<!-- button new task-->
 				<div #newTaskButton> 
 					<button class="butoPlay" (click)="newTask()"><i

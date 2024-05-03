@@ -1188,7 +1188,7 @@ section .container.c_custom {
   --------------------------------------------------------------*/
 .credits {
   position: fixed;
-  right: 20px;
+  right: 0px;
   left: 0;
   bottom: 0;
   padding: 15px;
@@ -1251,10 +1251,10 @@ section .container.c_custom {
 }
 
 .loader-container {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  /* transform: translate(-50%, -50%); */
   display: flex;
   justify-content: center;
   align-items: center;
