@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output,ViewChild } from '@angular/core';
 import * as bootstrap from 'bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -10,13 +10,16 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 export class TaskModalComponent implements OnInit {
   declare bootstrap: any;
   modalOpened = false;
-  taskModal: any;
+  taskModalP: any;
   form: FormGroup;
   id: number;
+  pressLeft:number = 0;
+  pressTop:number = 0;
   @Output() addTask = new EventEmitter<any>();
   @Output() deleteTask = new EventEmitter<any>();
 
-
+  @ViewChild('taskModal') taskModal!: ElementRef;
+  @ViewChild('taskModalDialog') taskModalDialog!: ElementRef;
 
   constructor(private fb: FormBuilder) {
     this.id = -1;
@@ -31,32 +34,60 @@ export class TaskModalComponent implements OnInit {
   ngOnInit() {
     const element = document.getElementById('taskModal');
     if (element !== null) {
-      this.taskModal = bootstrap.Modal.getOrCreateInstance(element, {
+      this.taskModalP = bootstrap.Modal.getOrCreateInstance(element, {
         keyboard: true
       });
-      // this.taskModal.show();
+      // element.addEventListener('shown.bs.modal', () => {
+      //   this.onModalShown();
+      // });
     }
   }
+  // onModalShown() {
+  //   let rect = this.taskModalDialog.nativeElement.getBoundingClientRect();
+  //   console.log(rect);
+  // }
 
-  async openModal() {
+  visualEffectAddTask(left:number,top:number) {
+
+    let aproxLeft = window.innerWidth/2 - 250;
+    let aproxTop = 55;
+    let originX = left-aproxLeft;
+    let originY = top-aproxTop;
+    this.taskModal.nativeElement.style.setProperty('--modal-originX', `${originX}px`);
+    this.taskModal.nativeElement.style.setProperty('--modal-originY', `${originY}px`);
+    //print originX and originY
+    console.log('originX: ' + originX + ' originY: ' + originY);
+    // this.taskModal.nativeElement.style.setProperty('--modal-left', `${left}px`);
+    // this.taskModal.nativeElement.style.setProperty('--modal-top', `${top}px`);    
+
+  }
+
+  async openModal(left:number,top:number) {
+    this.visualEffectAddTask(left,top);
 
     this.modalOpened = true;
+    // this.onModalShown();
     this.form.reset();
     this.form.get('estimatedTime')?.setValue(0);
     this.id = -1;
-    this.taskModal.show();
+    this.taskModalP.show();
   }
 
-  async editModal(index: number, task: any) {
+  
+
+  async editModal(index: number, task: any, left:number,top:number) {
+    this.visualEffectAddTask(left,top);
     this.modalOpened = true;
+    // this.onModalShown();
+
     this.id = index;
     this.form.get('name')?.setValue(task.name);
     this.form.get('detail')?.setValue(task.detail);
     this.form.get('estimatedTime')?.setValue(task.estimatedTime);
-    this.taskModal.show();
+    this.taskModalP.show();
   }
   closeModal() {
-    this.taskModal.hide();
+    this.taskModalP.hide();
     this.modalOpened = false;
   }
 
@@ -65,7 +96,6 @@ export class TaskModalComponent implements OnInit {
       this.addTask.emit({ task: this.form.value, index: this.id });
       this.closeModal();
     } else {
-      console.log('entrosubmit');
       this.form.markAllAsTouched();
     }
   }

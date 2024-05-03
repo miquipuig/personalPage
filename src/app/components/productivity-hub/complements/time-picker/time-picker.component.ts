@@ -31,7 +31,6 @@ export class TimePickerComponent {
 
   constructor() { }
   ngOnInit() {
-    console.log(this.value);
     this.representationOnChanged();
   }
 

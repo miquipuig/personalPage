@@ -62,46 +62,7 @@ body::before {
   background: #040404
 }
 
-#background-image {
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 100%;
-  height: 100vh;
-  background-image: url('./assets/img/devMan.jpg');
-  background-position: right;
-  background-repeat: no-repeat;
-  background-size: cover;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
 
-}
-
-#background-image.loaded {
-  opacity: 1;
-}
-
-
-@media screen and (max-aspect-ratio: 1/1) {
-  #background-image {
-    right: -190px;
-    width: 160%;
-  }
-}
-
-/* @media (min-width: 1024px) {
-    body::before {
-      background-attachment: fixed;
-    }
-  } */
-
-
-/* @media screen and (max-aspect-ratio: 4/6) {
-    body::before {
-      background-position: 140% 0;
-    }
-  } */
 
 a {
   color: var(--main-color);
@@ -132,7 +93,7 @@ h6 {
   display: flex;
   align-items: center;
   z-index: 10;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 #header * {
@@ -219,7 +180,7 @@ h6 {
 /* Header Top */
 #header.header-top {
   height: 80px;
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   right: 0;
@@ -411,13 +372,13 @@ h6 {
   --------------------------------------------------------------*/
 section {
   /* overflow: hidden; */
-  position: absolute;
+  position: relative;
   width: 100%;
   top: 140px;
   bottom: 100%;
   opacity: 0;
   transition: ease-in-out 0.4s;
-  z-index: 2;
+  z-index: 1;
 }
 
 section.section-show {
@@ -1227,7 +1188,7 @@ section .container.c_custom {
   --------------------------------------------------------------*/
 .credits {
   position: fixed;
-  right: 0;
+  right: 20px;
   left: 0;
   bottom: 0;
   padding: 15px;
@@ -1329,11 +1290,55 @@ section .container.c_custom {
   }
 }
 
+#background-image {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('./assets/img/devMan.jpg');
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+
+}
+
+#background-image.loaded {
+  opacity: 1;
+}
+
+
+@media screen and (max-aspect-ratio: 1/1) {
+  #background-image {
+    right: -190px;
+    width: 160%;
+  }
+}
+
+/* @media (min-width: 1024px) {
+    body::before {
+      background-attachment: fixed;
+    }
+  } */
+
+
+/* @media screen and (max-aspect-ratio: 4/6) {
+    body::before {
+      background-position: 140% 0;
+    }
+  } */
+
  .mainPage {
-  position: relative;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 1200;
 } 
 /* .modal {
   overflow: scroll;
@@ -1343,4 +1348,24 @@ section .container.c_custom {
 .form-control:focus {
   border-color: rgb(255, 134, 134) !important;        /* Cambia el borde a rojo */
   box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25); /* Sombra roja ligera */
+}
+
+/* .modal.fade .modal-dialog {
+  animation: fadeInModal 5s forwards !important;
+  transition: transform 0.3s ease-out; 
+
+}
+
+.modal.fade.show .modal-dialog {
+  animation: fadeInModal 0.5s forwards !important
+
+}
+
+.modal.fade:not(.show) .modal-dialog {
+  animation: fadeOutModal 0.5s forwards !important
+
+} */
+
+.modal-backdrop {
+  display: none;
 }

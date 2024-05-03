@@ -27,3 +27,32 @@
     /* Este div ocupa todo el espacio disponible entre los botones */
 }
 
+
+
+
+
+/* Posicionamiento básico del modal */
+/* .modal-dialog {
+    position: fixed;
+    top: calc(25% - 225px);
+    left: calc(50% - 225px);
+    max-width: 450px;
+    width: 450px;
+} */
+
+
+
+.modal.fade .modal-dialog {
+    transition: transform 0.4s ease-out;
+    transform-origin: var(--modal-originX) var(--modal-originY);
+        /* El punto de origen de la transformación es el punto de origen del modal */
+    transform: scale(1)
+        /* Estado final, modal completamente visible */
+}
+
+.modal.fade:not(.show) .modal-dialog {
+    transform: scale(0)  
+    /*  */
+
+        /* El modal se reduce a un punto central al cerrarse */
+}

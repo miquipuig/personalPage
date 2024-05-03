@@ -1,5 +1,5 @@
 <div #taskModal id="taskModal" class="modal fade" tabindex="-1">
-  <div class="modal-dialog modal-dialog-scrollable">
+  <div #taskModalDialog class="modal-dialog modal-dialog-scrollable">
     <div *ngIf="modalOpened" class="modal-content">
       <div class="modal-header">
         <h5 *ngIf="id===-1" class="modal-title">New Task</h5>

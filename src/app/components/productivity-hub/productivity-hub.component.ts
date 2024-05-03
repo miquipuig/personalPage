@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { timer } from 'rxjs';
 import { TaskModalComponent } from './complements/task-modal/task-modal.component';
 
@@ -14,8 +14,12 @@ export class ProductivityHubComponent implements AfterViewInit {
   @ViewChild('secondHand') secondHand!: ElementRef;
   @ViewChild('dateDisplay') dateDisplay!: ElementRef;
   @ViewChild('colRef') colRef!: ElementRef;
+  @ViewChild('newTaskButton') newTaskButton!: ElementRef;
+  @ViewChildren('editTaskButton') editTaskButton!: QueryList<ElementRef>;
+
 
   @ViewChild(TaskModalComponent) childComponent!: TaskModalComponent;
+  
 
   isSectionActive = false;
 
@@ -155,7 +159,6 @@ export class ProductivityHubComponent implements AfterViewInit {
 
 
   pauseTimer() {
-    console.log('pauseTimer');
     clearInterval(this.interval);
     this.clock.timerStarted = false;
     this.clock.isPaused = true;
@@ -302,12 +305,19 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   newTask() {
+    const rect = this.newTaskButton.nativeElement.getBoundingClientRect();
 
-    this.childComponent.openModal();
+    // const top = this.newTaskButton.nativeElement.offsetTop;
+    // const left = this.newTaskButton.nativeElement.offsetLeft;
+
+    this.childComponent.openModal(rect.left, rect.top);
   }
 
   editTask(index: number) {
-    this.childComponent.editModal(index, this.tasks[index]);
+    const nativeElement= this.editTaskButton.get(index)?.nativeElement;
+
+    const rect = nativeElement.getBoundingClientRect();
+    this.childComponent.editModal(index, this.tasks[index], rect.left, rect.top);
   }
   addTask(event: any) {
     if (event.index === -1) {
@@ -361,7 +371,6 @@ export class ProductivityHubComponent implements AfterViewInit {
     if (localStorage.getItem('clock')) {
 
       let clock = JSON.parse(localStorage.getItem('clock') as string || '{}');
-      console.log(clock);
       this.clock = this.validateClock(clock);
     }
 
