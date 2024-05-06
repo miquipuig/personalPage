@@ -73,6 +73,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
   //interficie de tarea
   tasks: Task[] = [];
+  labels: Task[] = [];
   clock: Clock = {
     timerStarted: false,
     isPaused: false,
@@ -409,6 +410,7 @@ interface Task {
   name: string;
   idPosition: number;
   detail: string;
+  label: string;
   estimatedTime: number;
   elapsedTime: number;
   restTime: number;
@@ -437,4 +439,11 @@ interface Clock {
   undoTotalTime: number;
   totalTime: number;
 
+}
+
+interface Label {
+  id:number;
+  name:string;
+  color:string;
+  icon:string;
 }

@@ -2,8 +2,8 @@
   <div #taskModalDialog class="modal-dialog modal-dialog-scrollable">
     <div *ngIf="modalOpened" class="modal-content">
       <div class="modal-header">
-        <h5 *ngIf="id===-1" class="modal-title">New Task</h5>
-        <h5 *ngIf="id!=-1" class="modal-title">Edit Task</h5>
+        <h5 *ngIf="id===-1" class="modal-title"><i class="ri-pushpin-line"></i> New Task</h5>
+        <h5 *ngIf="id!=-1" class="modal-title"> <i class="ri-pushpin-line"></i> Edit Task</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -11,26 +11,54 @@
         <div class="modal-body">
           <p *ngIf="id===-1">Enter the details of your task.</p>
           <p *ngIf="id!=-1">Edit the details of your task.</p>
-          <div class="d-flex justify-content-end">
-            <pre>{{form.value | json}}</pre>
-            <app-time-picker formControlName="estimatedTime" [myLabel]="'Timer'"></app-time-picker>
+          <div class="d-flex align-items-center justify-content-left">
+            <!-- <input style="width:200px; max-height: 40px;" id="label" type="text" formControlName="label" type="text"
+              class="form-control" placeholder="Activity Type" aria-label="name" aria-describedby="addon-wrapping"
+              list="sugerencias-list">
+
+            <datalist id="sugerencias-list">
+              <option *ngFor="let sugerencia of sugerencias">{{ sugerencia }}</option>
+            </datalist> -->
+            <div style="position: relative;">
+              <input  (focusout)="onInputBlur()" style="width:200px; max-height: 40px;" type="text" class="form-control" formControlName="label"
+                [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('label')!.dirty || form.get('label')!.touched)}"
+                (input)="onSearch()" aria-label="Activity Type" placeholder="Activity Type" (focus)="showList = true" (click)="selectLabel()">
+                
+              <div  class="d-flex align-items-center justify-content-left  list-group listGroupPosition " *ngIf="showList" >
+                <div *ngFor="let item of labels " class="listGreyColor list-group-item list-group-item-action" >
+                  <a 
+                  class=" " (click)="selectOption(item)">{{ item.name}}</a> 
+                  <button class=" closeTimePicker" (click)="deleteActivity(item)">  <i class="ri-close-line"></i></button>
+∫
+                </div>
+               
+              </div>
+            </div>
+
+            <app-time-picker class="ms-2" style="width: 250px;" formControlName="estimatedTime"
+              [myLabel]="'Timer'"></app-time-picker>
           </div>
 
           <div>
-            <div class="input-group flex-nowrap">
-              <input *ngIf="!validateForm()" id="name" type="text" formControlName="name" type="text"
-                class="form-control" placeholder="I'm working on..." aria-label="name"
-                aria-describedby="addon-wrapping">
+            <div (click)="showList = false" class="input-group flex-nowrap">
+              <div class="form-floating mb-1">
+                <input [ngClass]="{'red-input': validateForm()}" id="name" type="text" formControlName="name"
+                  type="text" class="form-control" placeholder="" aria-label="name" aria-describedby="addon-wrapping">
+                <label *ngIf="!validateForm()" class="form-label grey-text" for="floatingInput">I'm Workin on...</label>
+
+                <label class="red-text" *ngIf="validateForm()" for="floatingInput">Task name needed.</label>
+              </div>
+              <!-- 
               <input *ngIf="validateForm()" id="name" type="text" formControlName="name" type="text"
-                class="form-control red-input red-placeholder" placeholder="Task name needed" aria-label="name"
-                aria-describedby="addon-wrapping">
+                class="form-control red-input " placeholder="Task name needed" aria-label="name"
+                aria-describedby="addon-wrapping"> -->
             </div>
           </div>
           <!-- reference https://medium.com/@bohndez.dev/custom-form-control-con-control-value-accessor-en-angular-5-6-o-7-f8f4030f105d-->
 
 
           <div>
-            <div class="input-group mt-1">
+            <div (click)="showList = false" class="input-group mt-1">
               <!-- <span class="input-group-text">With textarea</span> -->
               <textarea id="detail" type="text" formControlName="detail" class="form-control"
                 aria-label="With textarea " placeholder="Detail of task"></textarea>

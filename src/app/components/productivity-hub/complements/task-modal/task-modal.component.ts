@@ -1,6 +1,8 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output,ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import * as bootstrap from 'bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, startWith, map, of } from 'rxjs';
+import { TaskServicesService } from 'src/app/services/productivity-hub/task-services.service';
 
 @Component({
   selector: 'app-task-modal',
@@ -13,46 +15,114 @@ export class TaskModalComponent implements OnInit {
   taskModalP: any;
   form: FormGroup;
   id: number;
-  pressLeft:number = 0;
-  pressTop:number = 0;
+  showList = false;
+  pressLeft: number = 0;
+  pressTop: number = 0;
+  dontClose: boolean = false;
+  dontCloseTraficLight: boolean = false;
+
   @Output() addTask = new EventEmitter<any>();
   @Output() deleteTask = new EventEmitter<any>();
 
   @ViewChild('taskModal') taskModal!: ElementRef;
   @ViewChild('taskModalDialog') taskModalDialog!: ElementRef;
-
-  constructor(private fb: FormBuilder) {
+  sugerencias = ['Sugerencia 1', 'Sugerencia 2', 'Sugerencia 3'];
+  // filteredActivities: Observable<Label[]>;
+  labels: Label[] = [];
+  constructor(private taskService: TaskServicesService, private fb: FormBuilder) {
     this.id = -1;
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
       detail: new FormControl(''),
+      label: new FormControl(''),
       estimatedTime: new FormControl(0) // Asegúrate que el control '' está definido aquí
     });
+
+    // this.filteredActivities = this.form.get('label')!.valueChanges
+    // .pipe(
+    //   startWith(''),
+    //   map(value => this.filterOptions(value))
+    // );
+    this.labels = this.filterOptions(this.form.get('label')!.value || '');
+
+
   }
 
+  private filterOptions(value: string): Label[] {
+    const filterValue = value.toLowerCase();
+    const options = this.taskService.getOrderedLabelsPerName();
 
+    return options.filter(option => option.name.toLowerCase().includes(filterValue));
+  }
+  selectLabel() {
+    this.dontCloseTraficLight = true;
+    
+    this.labels = this.filterOptions('');
+    // this.filteredActivities = this.form.get('label')!.valueChanges
+    // .pipe(
+    //   startWith(''),
+    //   map(value => this.filterOptions(value))
+    // );
+
+    this.showList = true;
+  }
+
+  onSearch(): void {
+    // Logic to handle live search update
+    // this.filteredActivities = of(this.filterOptions(this.form.get('label')!.value));
+    this.labels = this.filterOptions(this.form.get('label')!.value || '');
+
+  }
+
+  selectOption(option: Label): void {
+    this.showList = false;
+    this.form.get('label')!.setValue(option.name);
+  }
+  deleteActivity(label: Label): void {
+    if(this.dontCloseTraficLight){
+      this.dontCloseTraficLight = false;
+      this.dontClose = true;
+    }
+    this.labels = this.labels.filter(option => option.id !== label.id);
+    this.taskService.deleteLabel(label.id);
+    // this.filteredActivities = this.form.get('label')!.valueChanges
+    // .pipe(
+    //   startWith(''),
+    //   map(value => this.filterOptions(value))
+    // );
+    //refresh filteredActivities
+    this.showList = true;
+
+  }
   ngOnInit() {
     const element = document.getElementById('taskModal');
     if (element !== null) {
       this.taskModalP = bootstrap.Modal.getOrCreateInstance(element, {
         keyboard: true
       });
-      // element.addEventListener('shown.bs.modal', () => {
-      //   this.onModalShown();
-      // });
     }
   }
   // onModalShown() {
   //   let rect = this.taskModalDialog.nativeElement.getBoundingClientRect();
   //   console.log(rect);
   // }
+  onInputBlur() {
+    // Retrasar el cambio de la variable `mostrarLista` por 200 milisegundos (ajustable según necesidades)
+    setTimeout(() => {
+      if (!this.dontClose) {
+        this.showList = false;
 
-  visualEffectAddTask(left:number,top:number) {
+      } else {
+        this.dontClose = false;
+      }
+    }, 300);
+  }
+  visualEffectAddTask(left: number, top: number) {
 
-    let aproxLeft = window.innerWidth/2 - 250;
+    let aproxLeft = window.innerWidth / 2 - 250;
     let aproxTop = 55;
-    let originX = left-aproxLeft;
-    let originY = top-aproxTop;
+    let originX = left - aproxLeft;
+    let originY = top - aproxTop;
     this.taskModal.nativeElement.style.setProperty('--modal-originX', `${originX}px`);
     this.taskModal.nativeElement.style.setProperty('--modal-originY', `${originY}px`);
     //print originX and originY
@@ -62,8 +132,8 @@ export class TaskModalComponent implements OnInit {
 
   }
 
-  async openModal(left:number,top:number) {
-    this.visualEffectAddTask(left,top);
+  async openModal(left: number, top: number) {
+    this.visualEffectAddTask(left, top);
 
     this.modalOpened = true;
     // this.onModalShown();
@@ -73,15 +143,16 @@ export class TaskModalComponent implements OnInit {
     this.taskModalP.show();
   }
 
-  
 
-  async editModal(index: number, task: any, left:number,top:number) {
-    this.visualEffectAddTask(left,top);
+
+  async editModal(index: number, task: any, left: number, top: number) {
+    this.visualEffectAddTask(left, top);
     this.modalOpened = true;
     // this.onModalShown();
 
     this.id = index;
     this.form.get('name')?.setValue(task.name);
+    this.form.get('label')?.setValue(task.label);
     this.form.get('detail')?.setValue(task.detail);
     this.form.get('estimatedTime')?.setValue(task.estimatedTime);
     this.taskModalP.show();
@@ -93,6 +164,7 @@ export class TaskModalComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
+      this.taskService.addLabelByName(this.form.get('label')!.value);
       this.addTask.emit({ task: this.form.value, index: this.id });
       this.closeModal();
     } else {
@@ -106,26 +178,34 @@ export class TaskModalComponent implements OnInit {
       // console.log('entro1' + nameControl.touched + nameControl.valid);
 
       if (nameControl.touched && !nameControl.valid) {
-          return true;
+        return true;
       }
-     
+
     } return false;
   }
 
-    deleteTaskEmit() {
-      this.deleteTask.emit(this.id);
-      this.closeModal();
-    }
+  deleteTaskEmit() {
+    this.deleteTask.emit(this.id);
+    this.closeModal();
   }
+}
 
-  interface Task {
-    name: string;
-    detail: string;
-    estimatedTime: number;
-    workTime: number;
-    restTime: number;
-    completed: boolean;
-    userStoryId: number;
-    pomodoroCounter: number;
-    pomodoroQuarterCounter: number;
-  }
+interface Task {
+  name: string;
+  detail: string;
+  label: string;
+  estimatedTime: number;
+  workTime: number;
+  restTime: number;
+  completed: boolean;
+  userStoryId: number;
+  pomodoroCounter: number;
+  pomodoroQuarterCounter: number;
+}
+
+interface Label {
+  id: number;
+  name: string;
+  color: string;
+  icon: string;
+}
