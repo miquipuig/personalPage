@@ -10,6 +10,16 @@
 # General
 --------------------------------------------------------------*/
 :root {
+
+  --yellow-color: rgb(255, 186, 48);
+  --blue-color: rgb(97, 108, 255);
+  --red-color: #ff2600d2;
+  --green-color: #18d26e;
+  --purple-color: #cf1eb8;
+  --orange-color: #ff8400;
+  --pink-color: #ff00e6;
+  --brown-color: #8b4513;
+
   --main-color: #18d26e;
   --hover-color: #35e888;
   --third-color: #4ceb95;
@@ -1260,6 +1270,7 @@ section .container.c_custom {
   align-items: center;
   opacity: 1;
   transition: opacity 1s ease-in-out;
+  z-index: 100000;
 }
 
 .loader {

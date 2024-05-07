@@ -743,31 +743,67 @@ img.pomodoroCurrent {
 
 .ol-red {
 	color: var(--main-color);
-	border-color: var(--main-color);
+	border-color: var(--red-color);
 }
 
 .ol-red:hover {
 	color: #fff;
-	background-color: var(--main-color);
+	background-color: var(--red-color);
 }
 
 .ol-blue {
-	color: rgb(97, 108, 255);
-	border-color: rgb(97, 108, 255);
+	color: var(--blue-color);
+	border-color: var(--blue-color);
 }
 
 .ol-blue:hover {
-	color: #fff;
-	background-color: rgb(97, 108, 255);
+	color: var(--blue-color);
+	background-color: var(--blue-color);
 }
 
 
 .ol-yellow {
-	color: rgb(255, 186, 48);
-	border-color: rgb(255, 186, 48);
+	color: var(--yellow-color);
+	border-color: var(--yellow-color);
 }
 
 .ol-yellow:hover {
 	color: #fff;
-	background-color: rgb(255, 186, 48);
+	background-color: var(--yellow-color);
+}
+
+.ol-green {
+	color: var(--green-color);
+	border-color: var(--green-color);
+}
+
+.ol-green:hover {
+	color: #fff;
+	background-color: var(--green-color);
+}
+
+.ol-purple {
+	color: var(--purple-color);
+	border-color: var(--purple-color);
+}
+.ol-purple:hover {
+	color: #fff;
+	background-color: var(--purple-color);
+}
+
+.ol-orange {
+	color: var(--orange-color);
+	border-color: var(--orange-color);
+}
+.ol-orange:hover {
+	color: #fff;
+	background-color: var(--orange-color);
+}
+.ol-brown {
+	color: var(--brwon-color);
+	border-color: var(--brwon-color);
+}
+.ol-brown:hover {
+	color: #fff;
+	background-color: var(--brwon-color);
 }

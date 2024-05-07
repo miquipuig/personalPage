@@ -46,8 +46,8 @@ export class TaskServicesService {
         try {
           if (localStorage.getItem('tasks') !== null && localStorage.getItem('tasks') !== undefined && localStorage.getItem('tasks') !== '[]') {
             this.tasks = JSON.parse(localStorage.getItem('tasks')!);
-            this.taskLoaded = true;
           }
+          this.taskLoaded = true;
           resolve(this.tasks);
         } catch (error) {
           reject([]);
@@ -86,7 +86,6 @@ export class TaskServicesService {
   }
 
   async saveTask(task: Task): Promise<any> {
-    this.taskLoaded = false;
 
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -98,8 +97,6 @@ export class TaskServicesService {
             Object.assign(foundTask, task);
           }
             localStorage.setItem('tasks', JSON.stringify(this.tasks));
-            this.taskLoaded = true;
-
           resolve(this.tasks);
         } catch (error) {
           reject(this.tasks);
@@ -148,11 +145,20 @@ export class TaskServicesService {
   getLabelById(id: number): Label {
     return this.labels.find(label => label.id === id)!;
   }
-  addLabel(label: Label): void {
+  addLabel(label: Label): Label {
     if(!(label.name === '' || label.name === null || label.name === undefined)){
+      //set de id to the label don't repeat
+      let id = 1;
+          
+          while (this.labels.find(label => label.id === id) !== undefined) {
+            id++;
+          }
+          label.id = id;
       this.labels.push(label);
-    this.saveLabels();
+      this.saveLabels();
     }
+    return label;
+
    
   }
   getOrderedLabelsPerName(): Label[] {
@@ -163,14 +169,39 @@ export class TaskServicesService {
     return this.labels.find(label => label.name === name)!;
   }
   //Add Label by Name if not exists
-  addLabelByName(name: string): void {
+  addLabelByName(name: string): any {
     if (!this.labels.find(label => label.name === name) && name !== '' && name !== null && name !== undefined) {
-      this.addLabel({ id: this.labels.length + 1, name: name, color: '#FF69B4', icon: 'fa fa-question' });
-      this.saveLabels();
+      return this.addLabel({ id: this.labels.length + 1, name: name, color: '#FF69B4', icon: 'fa fa-question' });
+    }else{
+      return this.getLabelByName(name);
     }
   }
-  deleteLabel(id: number): void {
+  deleteLabel(id: any): void {
     this.labels = this.labels.filter(label => label.id !== id);
+    //Update the tasks with the old label
+    this.tasks.forEach(task => {
+      if (task.label === id) {
+        task.label = '';
+        this.saveTask(task);
+      }
+    });
+    this.saveLabels();
+  }
+
+  saveLabel(label: Label): void {
+    if (label.id === undefined) {
+      this.addLabel(label);
+    } else {
+      this.updateLabel(label);
+    }
+    this.saveLabels();
+  }
+
+  updateLabel(label: Label): void {
+    const index = this.labels.findIndex(l => l.id === label.id);
+    if (index >= 0) {
+      this.labels[index] = label;
+    }
     this.saveLabels();
   }
 
@@ -182,11 +213,11 @@ export class TaskServicesService {
       this.labels = JSON.parse(localStorage.getItem('labels')!);
     } else {
       this.labels = [
-        { id: 1, name: 'Personal', color: '#FFD700', icon: 'fa fa-user' },
-        { id: 2, name: 'Work', color: '#FF4500', icon: 'fa fa-briefcase' },
-        { id: 3, name: 'Study', color: '#4169E1', icon: 'fa fa-book' },
-        { id: 4, name: 'Home', color: '#32CD32', icon: 'fa fa-home' },
-        { id: 5, name: 'Other', color: '#FF69B4', icon: 'fa fa-question' }
+        { id: 1, name: 'Personal', color: 'green', icon: 'ri-mail-unread-fill' },
+        { id: 2, name: 'Work', color: 'yellow', icon: 'ri-mail-unread-fill' },
+        { id: 3, name: 'Study', color: 'blue', icon: 'ri-mail-unread-fill' },
+        { id: 4, name: 'Home', color: 'purple', icon: 'ri-mail-unread-fill' },
+        { id: 5, name: 'Other', color: 'brown', icon: 'ri-mail-unread-fill' }
       ];
     }
   }

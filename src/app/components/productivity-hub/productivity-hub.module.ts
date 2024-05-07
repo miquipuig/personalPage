@@ -8,10 +8,11 @@ import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { TimePickerComponent } from './complements/time-picker/time-picker.component';
 import { TruncatePipe } from 'src/app/pipes/truncate.pipe';
 import { CustomTimeFormatPipe } from 'src/app/pipes/custom-time-format.pipe';
+import { LabelEditorComponent } from './complements/label-editor/label-editor.component';
 
 
 @NgModule({
-  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe],
+  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent],
   imports: [ 
     CommonModule,
     ProductivityHubRoutingModule,

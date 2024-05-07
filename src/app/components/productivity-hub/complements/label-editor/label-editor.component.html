@@ -1,0 +1,39 @@
+<!-- <label>{{ myLabel }}</label> -->
+
+
+<div *ngIf="editLabelOpened" class="">
+    <div class="animate__animated animate__fadeIn labelEditorBox">
+
+        <button type="button" (click)="close()" class="close">
+            <i class="ri-close-line"></i>
+        </button>
+        <div class="labelMargin ">
+            <h5 class="modal-title  mb-2"> <i class="ri-price-tag-3-line"></i> Edit Label</h5>
+            <div class="row">
+                <div class="col-6">
+                    <ul class="list-group">
+
+                        <div *ngFor="let label of labels">
+                            <li (click)="selectLabel(label)" class="list-group-item listGreyColor" [ngClass]="{'listGreyColor_active': label.id=== selectedLabel.id}"> {{label.name}}</li>
+
+                        </div>
+                    </ul>
+                </div>
+
+                <div class="col-6">
+                    <form #miForm="ngForm">
+
+                        <div class="form-floating mb-1">
+                            <input id="name" type="text" type="text" class="form-control"
+                                placeholder="" aria-label="name" aria-describedby="addon-wrapping" [(ngModel)]="selectedLabel.name" name="selectedLabel.name">
+                            <label class="form-label
+                        grey-text" for="floatingInput">Activity Name...</label>
+                        </div>
+                        <button *ngIf="!(selectedLabel.id>0)" type="button" (click)="saveLabel()" class="btn btn-danger">Add</button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>

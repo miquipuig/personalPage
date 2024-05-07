@@ -22,7 +22,7 @@ export class TaskModalComponent implements OnInit {
   pressTop: number = 0;
   dontClose: boolean = false;
   dontCloseTraficLight: boolean = false;
-  task:Task = {} as Task;
+  task: Task = {} as Task;
 
   @Output() refreshTasks = new EventEmitter<any>();
 
@@ -61,7 +61,7 @@ export class TaskModalComponent implements OnInit {
   }
   selectLabel() {
     this.dontCloseTraficLight = true;
-    
+
     this.labels = this.filterOptions('');
     // this.filteredActivities = this.form.get('label')!.valueChanges
     // .pipe(
@@ -84,7 +84,9 @@ export class TaskModalComponent implements OnInit {
     this.form.get('label')!.setValue(option.name);
   }
   deleteActivity(label: Label): void {
-    if(this.dontCloseTraficLight){
+    console.log('delete label');
+    console.log(label);
+    if (this.dontCloseTraficLight) {
       this.dontCloseTraficLight = false;
       this.dontClose = true;
     }
@@ -169,15 +171,18 @@ export class TaskModalComponent implements OnInit {
     this.id = task.id;
     this.task = task;
     this.form.get('name')?.setValue(task.name);
-    this.form.get('label')?.setValue(task.label);
+
     this.form.get('detail')?.setValue(task.detail);
     this.form.get('estimatedTime')?.setValue(task.estimatedTime);
+    if (this.taskService.getLabelById(task.label)) {
+      this.form.get('label')?.setValue(this.taskService.getLabelById(task.label).name);
+    }
     this.taskModalP.show();
   }
   closeMenus() {
     this.showList = false;
     this.timePicker.closeTimePicker();
-    
+
   }
 
   closeModal() {
@@ -187,16 +192,24 @@ export class TaskModalComponent implements OnInit {
 
   async onSubmit() {
     if (this.form.valid) {
-      if(this.id !== -1){
-        this.task = {...this.task, ...this.form.value};       
+      if (this.id !== -1) {
+        this.task = { ...this.task, ...this.form.value };
         this.closeModal();
-        this.taskService.addLabelByName(this.form.get('label')!.value);
+        
+        if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined){
+
+          this.task.label = this.taskService.addLabelByName(this.form.get('label')!.value).id;
+        }
         await this.taskService.saveTask(this.task);
 
-      }else{
+      } else {
         this.closeModal();
-        this.taskService.addLabelByName(this.form.get('label')!.value);
-        await this.taskService.addTask( this.form.value);
+        this.task = { ...this.task, ...this.form.value };
+
+        if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined){
+
+          this.task.label = this.taskService.addLabelByName(this.form.get('label')!.value).id;
+        }        await this.taskService.addTask(this.task);
       }
       this.refreshTasks.emit();
 

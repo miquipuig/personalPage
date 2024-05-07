@@ -358,8 +358,8 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.saveClock();
   }
 
-  getLabelInfo(label: string): Label {
-    return this.taskService.getLabelByName(label);
+  getLabelInfo(labelId: any): Label {
+    return this.taskService.getLabelById(labelId);
   }
 
 
