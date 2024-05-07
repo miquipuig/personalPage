@@ -90,13 +90,13 @@
     border: none;
     background: none;
     font-size: 1em;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
     color: #575757d6;
   }
   
   .closeTimePicker:hover{
     color: #000000;
-    transition: background-color 0.3s ease, color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
   
   .closeTimePicker:active{

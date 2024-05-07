@@ -1,6 +1,9 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { timer } from 'rxjs';
 import { TaskModalComponent } from './complements/task-modal/task-modal.component';
+import { TaskServicesService } from 'src/app/services/productivity-hub/task-services.service';
+import { Label } from 'src/app/services/productivity-hub/task-services.service';
+import { Task } from 'src/app/services/productivity-hub/task-services.service';
 
 @Component({
   selector: 'app-productivity-hub',
@@ -19,11 +22,11 @@ export class ProductivityHubComponent implements AfterViewInit {
 
 
   @ViewChild(TaskModalComponent) childComponent!: TaskModalComponent;
-  
+
 
   isSectionActive = false;
 
-  constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
+  constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef, public taskService: TaskServicesService) {
     this.time = new Date();
     this.time.setHours(12, 0, 0, 0);
   }
@@ -35,15 +38,22 @@ export class ProductivityHubComponent implements AfterViewInit {
     setTimeout(() => {
       this.isSectionActive = true;
     }, 50);
+    this.labels = this.taskService.getLabels();
 
-
-
+    this.loadTasks();
     this.loadClock();
     this.startClock();
     this.totalTimeAssingment(this.clock.pomodoroState);
-    this.tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-
   }
+
+  async refreshTasks() {
+    this.tasks=this.taskService.tasks;
+  }
+  async loadTasks() {
+    await this.taskService.loadTasks();
+    this.refreshTasks();
+  }
+
   updateDimensions() {
     const width = this.colRef.nativeElement.offsetWidth;
     // const centerHeight = this.colRef.nativeElement.offsetHeight / 2 + 0.15 * this.colRef.nativeElement.offsetHeight;
@@ -73,7 +83,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
   //interficie de tarea
   tasks: Task[] = [];
-  labels: Task[] = [];
+  labels: Label[] = [];
   clock: Clock = {
     timerStarted: false,
     isPaused: false,
@@ -185,7 +195,7 @@ export class ProductivityHubComponent implements AfterViewInit {
         this.taskStartTime = Date.now();
       }
     }
-    let counter=0;
+    let counter = 0;
     this.interval = setInterval(() => {
       this.clock.elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
       if (this.clock.actualTask > -1 && this.clock.pomodoroState === 'work') {
@@ -315,34 +325,21 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   editTask(index: number) {
-    const nativeElement= this.editTaskButton.get(index)?.nativeElement;
+    const nativeElement = this.editTaskButton.get(index)?.nativeElement;
 
     const rect = nativeElement.getBoundingClientRect();
     this.childComponent.editModal(index, this.tasks[index], rect.left, rect.top);
   }
-  addTask(event: any) {
-    if (event.index === -1) {
-      event.task.idPosition= this.tasks.length*100;
-      this.tasks.push(event.task);
-    } else {
-      this.tasks[event.index] = { ...this.tasks[event.index], ...event.task }
-    }
-    this.sortTasks();
-    localStorage.setItem('tasks', JSON.stringify(this.tasks));
-  }
+
   saveTask(task: Task) {
-    //pensado a futuro...
-    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+    this.taskService.saveTask(task);
   }
 
-  deleteTask(index: number) {
-    this.tasks.splice(index, 1);
-    localStorage.setItem('tasks', JSON.stringify(this.tasks));
-  }
+
 
   taskTimePercentage(index: number): number {
     if (this.tasks[index].estimatedTime > 0 && this.tasks[index].elapsedTime > 0) {
-      return this.tasks[index].elapsedTime*1000 / this.tasks[index].estimatedTime * 100;
+      return this.tasks[index].elapsedTime * 1000 / this.tasks[index].estimatedTime * 100;
     }
     return 0;
   }
@@ -360,6 +357,11 @@ export class ProductivityHubComponent implements AfterViewInit {
     }
     this.saveClock();
   }
+
+  getLabelInfo(label: string): Label {
+    return this.taskService.getLabelByName(label);
+  }
+
 
   saveClock() {
     let clock = { ...this.clock };
@@ -406,19 +408,6 @@ export class ProductivityHubComponent implements AfterViewInit {
 
 }
 
-interface Task {
-  name: string;
-  idPosition: number;
-  detail: string;
-  label: string;
-  estimatedTime: number;
-  elapsedTime: number;
-  restTime: number;
-  completed: boolean;
-  userStoryId: number;
-  pomodoroCounter: number;
-  pomodoroQuarterCounter: number;
-}
 
 interface Clock {
   timerStarted: boolean;
@@ -441,9 +430,4 @@ interface Clock {
 
 }
 
-interface Label {
-  id:number;
-  name:string;
-  color:string;
-  icon:string;
-}
+

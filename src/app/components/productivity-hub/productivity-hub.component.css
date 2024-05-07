@@ -7,6 +7,7 @@
 	position: absolute;
 	transition: transform 0.5s linear;
 }
+
 body {
 	background: #eee;
 	font-family: "Helvetica Neue", sans-serif;
@@ -15,6 +16,7 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	text-rendering: optimizeLegibility;
 }
+
 /* Website Header */
 .header {
 	text-align: center;
@@ -705,4 +707,67 @@ img.pomodoroCurrent {
 	border-top-right-radius: 0.25rem;
 	border-bottom-right-radius: 0.25rem;
 	border-bottom-left-radius: 0.25rem;
+}
+
+.outline-label {
+	display: inline-block;
+
+	color: rgb(214, 214, 214);
+	/* Color rojo de peligro */
+	font-size: 0.8rem;
+	/* Tamaño de letra estándar */
+	text-align: center;
+	vertical-align: middle;
+	user-select: none;
+	border: 1px solid rgb(214, 214, 214);
+	/* Borde rojo de peligro */
+	padding: 0px 5px;
+	/* Padding similar al de Bootstrap */
+	line-height: 1.5;
+	border-radius: 0.5rem;
+	/* Bordes redondeados */
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+		border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	/* Transiciones suaves */
+	background-color: transparent;
+	/* Fondo transparente */
+
+}
+
+
+
+.outline-label:hover {
+	color: #fff;
+	background-color: rgb(214, 214, 214);
+}
+
+.ol-red {
+	color: var(--main-color);
+	border-color: var(--main-color);
+}
+
+.ol-red:hover {
+	color: #fff;
+	background-color: var(--main-color);
+}
+
+.ol-blue {
+	color: rgb(97, 108, 255);
+	border-color: rgb(97, 108, 255);
+}
+
+.ol-blue:hover {
+	color: #fff;
+	background-color: rgb(97, 108, 255);
+}
+
+
+.ol-yellow {
+	color: rgb(255, 186, 48);
+	border-color: rgb(255, 186, 48);
+}
+
+.ol-yellow:hover {
+	color: #fff;
+	background-color: rgb(255, 186, 48);
 }

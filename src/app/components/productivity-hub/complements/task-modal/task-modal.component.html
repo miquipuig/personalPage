@@ -4,7 +4,8 @@
       <div class="modal-header">
         <h5 *ngIf="id===-1" class="modal-title"><i class="ri-pushpin-line"></i> New Task</h5>
         <h5 *ngIf="id!=-1" class="modal-title"> <i class="ri-pushpin-line"></i> Edit Task</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button  type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
       </div>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
@@ -24,12 +25,10 @@
                 [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('label')!.dirty || form.get('label')!.touched)}"
                 (input)="onSearch()" aria-label="Activity Type" placeholder="Activity Type" (focus)="showList = true" (click)="selectLabel()">
                 
-              <div  class="d-flex align-items-center justify-content-left  list-group listGroupPosition " *ngIf="showList" >
-                <div *ngFor="let item of labels " class="listGreyColor list-group-item list-group-item-action" >
-                  <a 
-                  class=" " (click)="selectOption(item)">{{ item.name}}</a> 
-                  <button class=" closeTimePicker" (click)="deleteActivity(item)">  <i class="ri-close-line"></i></button>
-∫
+              <div  style=" --animate-duration: 0.5s;"  class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left  list-group listGroupPosition " *ngIf="showList" >
+                <div (click)="selectOption(item)" *ngFor="let item of labels " class=" listGreyColor list-group-item list-group-item-action d-flex justify-content-between" style=" padding-right: 0px;" >
+                  <a >{{ item.name}}</a> 
+                  <button class="closeTimePicker" (click)="deleteActivity(item)"> <i class="ri-close-line"></i></button>
                 </div>
                
               </div>
@@ -40,7 +39,7 @@
           </div>
 
           <div>
-            <div (click)="showList = false" class="input-group flex-nowrap">
+            <div (click)="closeMenus()" class="input-group flex-nowrap">
               <div class="form-floating mb-1">
                 <input [ngClass]="{'red-input': validateForm()}" id="name" type="text" formControlName="name"
                   type="text" class="form-control" placeholder="" aria-label="name" aria-describedby="addon-wrapping">
@@ -58,7 +57,7 @@
 
 
           <div>
-            <div (click)="showList = false" class="input-group mt-1">
+            <div (click)="closeMenus()" class="input-group mt-1">
               <!-- <span class="input-group-text">With textarea</span> -->
               <textarea id="detail" type="text" formControlName="detail" class="form-control"
                 aria-label="With textarea " placeholder="Detail of task"></textarea>

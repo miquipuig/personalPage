@@ -1,13 +1,146 @@
 import { Injectable } from '@angular/core';
 
+export interface Label {
+  id: number;
+  name: string;
+  color: string;
+  icon: string;
+}
+
+
+export interface Task {
+  id: number;
+  name: string;
+  idPosition: number;
+  detail: string;
+  label: string;
+  estimatedTime: number;
+  elapsedTime: number;
+  restTime: number;
+  completed: boolean;
+  userStoryId: number;
+  pomodoroCounter: number;
+  pomodoroQuarterCounter: number;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class TaskServicesService {
 
-  constructor() {this.loadLabels() }
+  constructor() {
+    this.loadLabels();
+    this.loadTasks();
+
+  }
 
   labels: Label[] = [];
+  tasks: Task[] = [];
+  taskLoaded: boolean = false;
+
+  async loadTasks(): Promise<any> {
+    this.taskLoaded = false;
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          if (localStorage.getItem('tasks') !== null && localStorage.getItem('tasks') !== undefined && localStorage.getItem('tasks') !== '[]') {
+            this.tasks = JSON.parse(localStorage.getItem('tasks')!);
+            this.taskLoaded = true;
+          }
+          resolve(this.tasks);
+        } catch (error) {
+          reject([]);
+        }
+      }, 1000); // Simula un retraso de 1 segundo
+    });
+  }
+
+  getTaskById(id: number): Task {
+    return this.tasks.find(task => task.idPosition === id)!;
+  }
+
+  async addTask(task: Task): Promise<any> {
+    this.taskLoaded = false;
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          //iterate to get the unique id
+          let id = 1;
+          
+          while (this.tasks.find(task => task.id === id) !== undefined) {
+            id++;
+          }
+          task.id = id;
+          task.idPosition = this.tasks.length * 100;
+          this.tasks.push(task);
+          localStorage.setItem('tasks', JSON.stringify(this.tasks));
+          this.taskLoaded = true;
+          resolve(this.tasks);
+        } catch (error) {
+          reject(this.tasks);
+        }
+      }, 1000); // Simula un retraso de 1 segundo
+    });
+  }
+
+  async saveTask(task: Task): Promise<any> {
+    this.taskLoaded = false;
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          
+          const index = task.id;
+          let foundTask = this.tasks.find(t => t.id === index);
+          if (foundTask) {
+            Object.assign(foundTask, task);
+          }
+            localStorage.setItem('tasks', JSON.stringify(this.tasks));
+            this.taskLoaded = true;
+
+          resolve(this.tasks);
+        } catch (error) {
+          reject(this.tasks);
+        }
+      }, 1000); // Simula un retraso de 1 segundo
+    });
+  }
+
+  async deleteTask(id: number): Promise<any> {
+    this.taskLoaded = false;
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          this.tasks = this.tasks.filter(task => task.id !== id);
+          localStorage.setItem('tasks', JSON.stringify(this.tasks));
+          this.taskLoaded = true;
+          resolve(this.tasks);
+        } catch (error) {
+          reject(error);
+        }
+      }, 1000); // Simula un retraso de 1 segundo
+    });
+  }
+
+  async saveTasks(): Promise<any> {
+    this.taskLoaded = false;
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          localStorage.setItem('tasks', JSON.stringify(this.tasks));
+          this.taskLoaded = true;
+          
+          resolve('Tasks saved');
+        } catch (error) {
+          reject(error);
+        }
+      }, 1000); // Simula un retraso de 1 segundo
+    });
+  }
 
   getLabels(): Label[] {
     return this.labels;
@@ -16,10 +149,14 @@ export class TaskServicesService {
     return this.labels.find(label => label.id === id)!;
   }
   addLabel(label: Label): void {
-    this.labels.push(label);
+    if(!(label.name === '' || label.name === null || label.name === undefined)){
+      this.labels.push(label);
     this.saveLabels();
+    }
+   
   }
   getOrderedLabelsPerName(): Label[] {
+    return this.labels;
     return this.labels.sort((a, b) => a.name.localeCompare(b.name));
   }
   getLabelByName(name: string): Label {
@@ -27,13 +164,13 @@ export class TaskServicesService {
   }
   //Add Label by Name if not exists
   addLabelByName(name: string): void {
-    if (!this.labels.find(label => label.name === name)) {
+    if (!this.labels.find(label => label.name === name) && name !== '' && name !== null && name !== undefined) {
       this.addLabel({ id: this.labels.length + 1, name: name, color: '#FF69B4', icon: 'fa fa-question' });
       this.saveLabels();
     }
   }
   deleteLabel(id: number): void {
-    this.labels=this.labels.filter(label => label.id !== id);
+    this.labels = this.labels.filter(label => label.id !== id);
     this.saveLabels();
   }
 
@@ -41,10 +178,9 @@ export class TaskServicesService {
     localStorage.setItem('labels', JSON.stringify(this.labels));
   }
   loadLabels(): void {
-    if (localStorage.getItem('labels') !== null && localStorage.getItem('labels') !== undefined && localStorage.getItem('labels') !== '[]'  ){
-      console.log(localStorage.getItem('labels'));
+    if (localStorage.getItem('labels') !== null && localStorage.getItem('labels') !== undefined && localStorage.getItem('labels') !== '[]') {
       this.labels = JSON.parse(localStorage.getItem('labels')!);
-    }else{
+    } else {
       this.labels = [
         { id: 1, name: 'Personal', color: '#FFD700', icon: 'fa fa-user' },
         { id: 2, name: 'Work', color: '#FF4500', icon: 'fa fa-briefcase' },
@@ -54,27 +190,7 @@ export class TaskServicesService {
       ];
     }
   }
-  
 
-}
 
-interface Label {
-  id:number;
-  name:string;
-  color:string;
-  icon:string;
-}
-
-interface Task {
-  name: string;
-  detail: string;
-  label: string;
-  estimatedTime: number;
-  workTime: number;
-  restTime: number;
-  completed: boolean;
-  userStoryId: number;
-  pomodoroCounter: number;
-  pomodoroQuarterCounter: number;
 }
 

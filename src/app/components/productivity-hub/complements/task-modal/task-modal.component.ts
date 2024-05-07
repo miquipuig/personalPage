@@ -3,7 +3,9 @@ import * as bootstrap from 'bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, startWith, map, of } from 'rxjs';
 import { TaskServicesService } from 'src/app/services/productivity-hub/task-services.service';
-
+import { Time } from '@angular/common';
+import { TimePickerComponent } from '../time-picker/time-picker.component';
+import { Task } from 'src/app/services/productivity-hub/task-services.service';
 @Component({
   selector: 'app-task-modal',
   templateUrl: './task-modal.component.html',
@@ -20,12 +22,14 @@ export class TaskModalComponent implements OnInit {
   pressTop: number = 0;
   dontClose: boolean = false;
   dontCloseTraficLight: boolean = false;
+  task:Task = {} as Task;
 
-  @Output() addTask = new EventEmitter<any>();
-  @Output() deleteTask = new EventEmitter<any>();
+  @Output() refreshTasks = new EventEmitter<any>();
 
   @ViewChild('taskModal') taskModal!: ElementRef;
   @ViewChild('taskModalDialog') taskModalDialog!: ElementRef;
+  @ViewChild(TimePickerComponent) timePicker!: TimePickerComponent;
+
   sugerencias = ['Sugerencia 1', 'Sugerencia 2', 'Sugerencia 3'];
   // filteredActivities: Observable<Label[]>;
   labels: Label[] = [];
@@ -51,6 +55,7 @@ export class TaskModalComponent implements OnInit {
   private filterOptions(value: string): Label[] {
     const filterValue = value.toLowerCase();
     const options = this.taskService.getOrderedLabelsPerName();
+    console.log(options);
 
     return options.filter(option => option.name.toLowerCase().includes(filterValue));
   }
@@ -100,6 +105,9 @@ export class TaskModalComponent implements OnInit {
       this.taskModalP = bootstrap.Modal.getOrCreateInstance(element, {
         keyboard: true
       });
+      element.addEventListener('hidden.bs.modal', () => {
+        this.closeModal();
+      });
     }
   }
   // onModalShown() {
@@ -108,6 +116,15 @@ export class TaskModalComponent implements OnInit {
   // }
   onInputBlur() {
     // Retrasar el cambio de la variable `mostrarLista` por 200 milisegundos (ajustable según necesidades)
+
+
+
+
+
+
+
+
+
     setTimeout(() => {
       if (!this.dontClose) {
         this.showList = false;
@@ -148,25 +165,41 @@ export class TaskModalComponent implements OnInit {
   async editModal(index: number, task: any, left: number, top: number) {
     this.visualEffectAddTask(left, top);
     this.modalOpened = true;
-    // this.onModalShown();
 
-    this.id = index;
+    this.id = task.id;
+    this.task = task;
     this.form.get('name')?.setValue(task.name);
     this.form.get('label')?.setValue(task.label);
     this.form.get('detail')?.setValue(task.detail);
     this.form.get('estimatedTime')?.setValue(task.estimatedTime);
     this.taskModalP.show();
   }
+  closeMenus() {
+    this.showList = false;
+    this.timePicker.closeTimePicker();
+    
+  }
+
   closeModal() {
     this.taskModalP.hide();
     this.modalOpened = false;
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.form.valid) {
-      this.taskService.addLabelByName(this.form.get('label')!.value);
-      this.addTask.emit({ task: this.form.value, index: this.id });
-      this.closeModal();
+      if(this.id !== -1){
+        this.task = {...this.task, ...this.form.value};       
+        this.closeModal();
+        this.taskService.addLabelByName(this.form.get('label')!.value);
+        await this.taskService.saveTask(this.task);
+
+      }else{
+        this.closeModal();
+        this.taskService.addLabelByName(this.form.get('label')!.value);
+        await this.taskService.addTask( this.form.value);
+      }
+      this.refreshTasks.emit();
+
     } else {
       this.form.markAllAsTouched();
     }
@@ -184,24 +217,17 @@ export class TaskModalComponent implements OnInit {
     } return false;
   }
 
-  deleteTaskEmit() {
-    this.deleteTask.emit(this.id);
+  async deleteTaskEmit() {
+    console.log('delete task');
+    console.log(this.task.id);
     this.closeModal();
+
+    await this.taskService.deleteTask(this.task.id);
+    this.refreshTasks.emit();
   }
 }
 
-interface Task {
-  name: string;
-  detail: string;
-  label: string;
-  estimatedTime: number;
-  workTime: number;
-  restTime: number;
-  completed: boolean;
-  userStoryId: number;
-  pomodoroCounter: number;
-  pomodoroQuarterCounter: number;
-}
+
 
 interface Label {
   id: number;
