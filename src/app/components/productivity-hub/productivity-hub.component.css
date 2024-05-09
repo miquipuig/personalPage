@@ -712,14 +712,14 @@ img.pomodoroCurrent {
 .outline-label {
 	display: inline-block;
 
-	color: rgb(214, 214, 214);
+	color: var(--color-base);
 	/* Color rojo de peligro */
 	font-size: 0.8rem;
 	/* Tamaño de letra estándar */
 	text-align: center;
 	vertical-align: middle;
 	user-select: none;
-	border: 1px solid rgb(214, 214, 214);
+	border: 1px solid var(--color-base);
 	/* Borde rojo de peligro */
 	padding: 0px 5px;
 	/* Padding similar al de Bootstrap */
@@ -738,72 +738,5 @@ img.pomodoroCurrent {
 
 .outline-label:hover {
 	color: #fff;
-	background-color: rgb(214, 214, 214);
-}
-
-.ol-red {
-	color: var(--main-color);
-	border-color: var(--red-color);
-}
-
-.ol-red:hover {
-	color: #fff;
-	background-color: var(--red-color);
-}
-
-.ol-blue {
-	color: var(--blue-color);
-	border-color: var(--blue-color);
-}
-
-.ol-blue:hover {
-	color: var(--blue-color);
-	background-color: var(--blue-color);
-}
-
-
-.ol-yellow {
-	color: var(--yellow-color);
-	border-color: var(--yellow-color);
-}
-
-.ol-yellow:hover {
-	color: #fff;
-	background-color: var(--yellow-color);
-}
-
-.ol-green {
-	color: var(--green-color);
-	border-color: var(--green-color);
-}
-
-.ol-green:hover {
-	color: #fff;
-	background-color: var(--green-color);
-}
-
-.ol-purple {
-	color: var(--purple-color);
-	border-color: var(--purple-color);
-}
-.ol-purple:hover {
-	color: #fff;
-	background-color: var(--purple-color);
-}
-
-.ol-orange {
-	color: var(--orange-color);
-	border-color: var(--orange-color);
-}
-.ol-orange:hover {
-	color: #fff;
-	background-color: var(--orange-color);
-}
-.ol-brown {
-	color: var(--brwon-color);
-	border-color: var(--brwon-color);
-}
-.ol-brown:hover {
-	color: #fff;
-	background-color: var(--brwon-color);
+	background-color: var(--color-base);
 }

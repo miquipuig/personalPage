@@ -27,7 +27,7 @@
                 
               <div  style=" --animate-duration: 0.5s;"  class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left  list-group listGroupPosition " *ngIf="showList" >
                 <div (click)="selectOption(item)" *ngFor="let item of labels " class=" listGreyColor list-group-item list-group-item-action d-flex justify-content-between" style=" padding-right: 0px;" >
-                  <a >{{ item.name}}</a> 
+                  <a >{{ item.name | truncate:15}}</a> 
                   <button class="closeTimePicker" (click)="deleteActivity(item)"> <i class="ri-close-line"></i></button>
                 </div>
                

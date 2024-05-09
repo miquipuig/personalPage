@@ -9,11 +9,17 @@ import { TaskServicesService } from 'src/app/services/productivity-hub/task-serv
 })
 export class LabelEditorComponent {
   editLabelOpened: boolean = true;
+  pickColorOpened: boolean = false;
+  pickIconOpened: boolean = false;
+  availableColors: string[] = ['yellow',  'green', 'blue', 'red', 'purple', 'orange', 'pink', 'brown', 'grey', 'clearGrey'];
+  availableIcons: string[] = ['ri-file-list-line',"ri-home-5-line","ri-square-line", "ri-square-fill"];
   labels: Label[] = [];
   selectedLabel: Label;
   constructor(private taskService: TaskServicesService) {
     this.loadLabels();
     this.selectedLabel = {} as Label;
+    this.selectedLabel.color = 'clearGrey';
+    // this.selectedLabel.icon = 'ri-file-list-line';
   }
   loadLabels() {
     this.taskService.loadLabels();
@@ -21,8 +27,11 @@ export class LabelEditorComponent {
   }
 
   selectLabel(label: Label) {
-    this.saveLabel();
-    this.selectedLabel = label;
+    // this.saveLabel();
+    this.selectedLabel = {...label}
+    this.pickColorOpened = false;
+    this.pickIconOpened = false;
+    
   }
 
   saveLabel() {
@@ -33,8 +42,25 @@ export class LabelEditorComponent {
     this.selectedLabel = {} as Label;
   }
   close() {
-    this.saveLabel();
+    // this.saveLabel();
     this.editLabelOpened = false;
+  }
+  selectColor(color: string) {
+    this.selectedLabel.color = color;
+    this.pickColorOpened = false;
+  }
+  selectIcon(icon: string) {
+    this.selectedLabel.icon = icon;
+    this.pickIconOpened = false;
+  }
+
+  pickColor() {
+    this.pickColorOpened = !this.pickColorOpened;
+    this.pickIconOpened = false;
+  }
+  pickIcon() {
+    this.pickIconOpened = !this.pickIconOpened;
+    this.pickColorOpened = false;
   }
 
 }

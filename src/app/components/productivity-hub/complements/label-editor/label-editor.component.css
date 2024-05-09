@@ -62,3 +62,57 @@
 .labelMargin{
     margin: 10px 10px 10px 10px;
 }
+
+.color-option {
+  width: 25px;
+  height: 25px;
+  border-radius: 5px; /* Bordes levemente redondeados */
+  background-color: var(--color-base); /* Color desde variable CSS */
+  transition: filter 0.3s ease; /* Transición suave del filtro */
+
+   /* Añadir estilos para centrar contenido y color de texto */
+   display: flex; /* Usa Flexbox para el contenedor */
+   justify-content: center; /* Centra horizontalmente */
+   align-items: center; /* Centra verticalmente */
+   color: rgb(255, 255, 255); /* Color de texto blanco */
+   text-align: center; /* Asegura que el texto esté centrado si es más largo que el espacio disponible */
+}
+
+.color-option:hover {
+  filter: brightness(90%); /* Más claro al hacer hover */
+}
+
+
+
+.color-option.big {
+  margin:5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 10px; /* Bordes más redondeados */
+  font-size: 2rem;
+  /*shadow*/
+  /* border:var(--color-base) 2px solid; */
+  box-shadow: 0 0 2px rgba(0,0,0,0.6); 
+
+
+
+}
+
+.color-option.bigIcon{
+  font-size: 2rem;
+  width: 100px;
+  height: 50px;
+  padding: 3px;
+
+  margin:5px;
+  border-radius: 10px; /* Bordes más redondeados */
+  box-shadow: 0 0 2px rgba(0,0,0,0.6); 
+}
+
+.color-container {
+  margin: 5px; 
+}
+
+.card-body {
+  padding-bottom: 10px; /* Reducir según necesidad */
+}
