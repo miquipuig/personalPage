@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, NgZone } from '@angular/core';
+import { Component, forwardRef, Input, Output,EventEmitter } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 
@@ -15,6 +15,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class TimePickerComponent {
+  @Output() closeMenus = new EventEmitter<any>();
 
   @Input() myLabel: string = '';
   counter: number = 0;
@@ -64,7 +65,7 @@ export class TimePickerComponent {
   }
 
   openTimePicker() {
-    console.log(this.value);
+    this.closeMenus.emit();
     this.representationOnChanged();
     this.timePickerOpened = !this.timePickerOpened;
 

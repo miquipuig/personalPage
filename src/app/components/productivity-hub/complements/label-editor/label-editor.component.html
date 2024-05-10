@@ -1,28 +1,50 @@
 <!-- <label>{{ myLabel }}</label> -->
 
 
-<div *ngIf="editLabelOpened" class="">
-    <div class="animate__animated animate__fadeIn labelEditorBox">
+
+<button (click)="openEdit()" type="button"  class="butoPlay  d-flex align-items-center">
+    <i class="ri-price-tag-3-fill"></i>
+  </button>
+<div  *ngIf="editLabelOpened" class="animate__animated animate__fadeIn labelEditorBox">
 
         <button type="button" (click)="close()" class="close">
             <i class="ri-close-line"></i>
         </button>
-        <div class="labelMargin">
-            <h5 class="modal-title  mb-2"> <i class="ri-price-tag-3-line"></i> Edit Activity</h5>
+        <h5 class="modal-title  mb-2"> <i class="ri-price-tag-3-line"></i> Edit Activity</h5>
+
+        <div class="labelMargin d-flex flex-column justify-content-between">
             <div class="row">
+                <div>
+                    <button  [ngClass]="{'disabled': !(selectedLabel.id>=0)}" (click)="saveLabel()" type="button"
+                        class="btn btn-secondary btn-sm mb-2 d-flex align-items-center" 
+                        style="padding-top: 1px; padding-bottom: 1px; padding-left: 2px;">
+                        <i style="font-size: 1.2rem;"  class="ri-add-circle-line icono-mitja ms-1 me-1"></i>  New Activity
+                    </button>
+                </div>
+                
                 <div class="col-6">
-                    <ul class="list-group">
+						<!-- <button class="butoPlay" ><i class="ri-add-circle-line icono-mitja"></i></button> -->
+                     
+                    <ul class="list-group labelListHeight">
 
                         <div *ngFor="let label of labels">
                             <li (click)="selectLabel(label)" class="list-group-item listGreyColor"
-                                [ngClass]="{'listGreyColor_active': label.id=== selectedLabel.id}"> {{label.name |
-                                truncate:13}}</li>
+                                [ngClass]="{'listGreyColor_active': label.id=== selectedLabel.id}"> <div class="d-flex align-items-center justify-content-between">
+                                    {{label.name |
+                                        truncate:11}}                                     
+                                        <div class="color-option " style="--color-base: var(--{{label.color}}-color)">
+                                            <div class="d-flex align-items-center">
+                                                <i class="{{label.icon}}"></i>
+                                            </div>
+                                            </div>
+                                </div></li>
 
                         </div>
                     </ul>
                 </div>
 
                 <div class="col-6 d-flex flex-column ">
+
                     <form #miForm="ngForm">
 
                         <div class="form-floating mb-1">
@@ -107,13 +129,19 @@
                 </div>
 
             </div>
-            <div class="d-flex flex-column justify-content-between">
-                <div class="mt-auto align-self-end">
-                    <button *ngIf="!(selectedLabel.id>0)" (click)="saveLabel()" type="button"
-                        class="btn btn-secondary btn-sm"
-                        [ngClass]="{'disabled': (selectedLabel.name==='' || selectedLabel.name===null || selectedLabel.name===undefined )}">Add</button>
-                    <button *ngIf="(selectedLabel.id>0)" (click)="saveLabel()" type="button"
-                        class="btn btn-secondary btn-sm">Save</button>
+            <div class="d-flex flex-row justify-content-between mt-1">
+                <div>
+                    <!-- Botón Delete -->
+                    <button *ngIf="(selectedLabel.id>0)" (click)="deleteLabel()" type="button" class="btn btn-danger btn-sm"><i class="ri-delete-bin-7-line"></i> Delete</button>
+                </div>
+                <div>
+                    <!-- Botón Add, se muestra solo cuando no se ha seleccionado una etiqueta existente -->
+                    <button *ngIf="!(selectedLabel.id>0)" (click)="saveLabel()" type="button" class="btn btn-secondary btn-sm"
+                            [ngClass]="{'disabled': (selectedLabel.name==='' || selectedLabel.name===null || selectedLabel.name===undefined)}">Add</button>
+                    <!-- Botón Save, se muestra solo cuando hay una etiqueta seleccionada -->
+                    <button *ngIf="(selectedLabel.id>0)" (click)="saveLabel()" type="button" class="btn btn-secondary btn-sm">Save</button>
                 </div>
             </div>
+            
         </div>
+    </div>

@@ -17,16 +17,17 @@
   }
 
   .labelEditorBox {
-    display: flex;
     position: fixed;
     /* justify-content: center;
     align-items: center; */
+    display: flex;
     flex-direction: column;
+    height: auto;    
     width: auto;
     min-width: 400px;
-    height: auto;
+    padding:10px;
     background-color: #d9d9d9;
-    border-radius: 5px;
+    border-radius: 10px;
     border:none;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
     /* Sombra con desplazamiento a la derecha y abajo, con desenfoque y color semitransparente */
@@ -60,7 +61,10 @@
     font-weight: bold !important;
 }
 .labelMargin{
-    margin: 10px 10px 10px 10px;
+    margin: 0px 10px;
+    height: 330px;
+    /* display: flex; */
+    justify-content: space-between; /* Espaciado entre el contenido y los botones */
 }
 
 .color-option {
@@ -115,4 +119,35 @@
 
 .card-body {
   padding-bottom: 10px; /* Reducir según necesidad */
+}
+
+
+
+.labelListHeight{
+    height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.butoPlay {
+  z-index: 10;
+  /* width: auto; */
+  margin: 0px !important;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+  padding-bottom: 0px !important;
+  padding-left: 0px !important;
+  border: none;
+  background: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  color: #575757d6;
+  transition: color 0.3s ease;
+}
+
+.butoPlay:hover {
+  color: #000000;
+  /* Cambio de color al pasar el ratón por encima */
+  transition: background-color 0.3s ease, color 0.2s ease;
+  /* Transición para el fondo y el color del texto */
 }

@@ -6,6 +6,7 @@ import { TaskServicesService } from 'src/app/services/productivity-hub/task-serv
 import { Time } from '@angular/common';
 import { TimePickerComponent } from '../time-picker/time-picker.component';
 import { Task } from 'src/app/services/productivity-hub/task-services.service';
+import { LabelEditorComponent } from '../label-editor/label-editor.component';
 @Component({
   selector: 'app-task-modal',
   templateUrl: './task-modal.component.html',
@@ -23,12 +24,13 @@ export class TaskModalComponent implements OnInit {
   dontClose: boolean = false;
   dontCloseTraficLight: boolean = false;
   task: Task = {} as Task;
-
   @Output() refreshTasks = new EventEmitter<any>();
 
   @ViewChild('taskModal') taskModal!: ElementRef;
   @ViewChild('taskModalDialog') taskModalDialog!: ElementRef;
   @ViewChild(TimePickerComponent) timePicker!: TimePickerComponent;
+  @ViewChild(LabelEditorComponent) labelEditor!: LabelEditorComponent;
+
 
   sugerencias = ['Sugerencia 1', 'Sugerencia 2', 'Sugerencia 3'];
   // filteredActivities: Observable<Label[]>;
@@ -101,6 +103,13 @@ export class TaskModalComponent implements OnInit {
     this.showList = true;
 
   }
+
+  editActivity(label: Label): void {
+    this.closeMenus();
+    this.labelEditor.openEditLabel(label);
+    
+  }
+
   ngOnInit() {
     const element = document.getElementById('taskModal');
     if (element !== null) {
@@ -180,8 +189,10 @@ export class TaskModalComponent implements OnInit {
     this.taskModalP.show();
   }
   closeMenus() {
+    console.log('close menus');
     this.showList = false;
     this.timePicker.closeTimePicker();
+    this.labelEditor.close();
 
   }
 

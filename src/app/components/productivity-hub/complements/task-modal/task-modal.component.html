@@ -21,20 +21,24 @@
               <option *ngFor="let sugerencia of sugerencias">{{ sugerencia }}</option>
             </datalist> -->
             <div style="position: relative;">
-              <input  (focusout)="onInputBlur()" style="width:200px; max-height: 40px;" type="text" class="form-control" formControlName="label"
-                [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('label')!.dirty || form.get('label')!.touched)}"
-                (input)="onSearch()" aria-label="Activity Type" placeholder="Activity Type" (focus)="showList = true" (click)="selectLabel()">
-                
-              <div  style=" --animate-duration: 0.5s;"  class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left  list-group listGroupPosition " *ngIf="showList" >
-                <div (click)="selectOption(item)" *ngFor="let item of labels " class=" listGreyColor list-group-item list-group-item-action d-flex justify-content-between" style=" padding-right: 0px;" >
-                  <a >{{ item.name | truncate:15}}</a> 
-                  <button class="closeTimePicker" (click)="deleteActivity(item)"> <i class="ri-close-line"></i></button>
-                </div>
-               
+              <!-- (focusout)="onInputBlur()" -->
+              <input  style="width: 200px; max-height: 40px; padding-right: 40px;" type="text" class="form-control" formControlName="label"
+                  [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('label')!.dirty || form.get('label')!.touched)}"
+                  (input)="onSearch()" aria-label="Activity Type" placeholder="Activity Type" (focus)="closeMenus(); showList = true" (click)="selectLabel()">
+             <div class="label-button">
+              
+              <app-label-editor (closeMenus)="closeMenus()" style="position: absolute; top: 0; right: 0; height: 100%;"></app-label-editor>
+             </div>
+              
+              <div style="--animate-duration: 0.5s;" class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left list-group listGroupPosition" *ngIf="showList">
+                  <div (click)="selectOption(item)" *ngFor="let item of labels" class="listGreyColor list-group-item list-group-item-action d-flex justify-content-between" style="padding-right: 0px;">
+                      <a>{{ item.name | truncate:15}}</a>
+                      <button class="closeTimePicker" (click)="editActivity(item)"><i class="ri-edit-2-line"></i></button>
+                  </div>
               </div>
-            </div>
-            <app-label-editor  class="ms-2" style="position: relative;"></app-label-editor>
-            <app-time-picker class="ms-2" style="width: 250px;" formControlName="estimatedTime"
+          </div>
+          
+            <app-time-picker   (closeMenus)="closeMenus()" class="ms-2" style="width: 250px;" formControlName="estimatedTime"
               [myLabel]="'Timer'"></app-time-picker>
           </div>
 
@@ -57,10 +61,18 @@
 
 
           <div>
-            <div (click)="closeMenus()" class="input-group mt-1">
+
+
+            <div (click)="closeMenus()" class="input-group flex-nowrap mt-1">
               <!-- <span class="input-group-text">With textarea</span> -->
+              <div class="form-floating mb-1">
+
               <textarea id="detail" type="text" formControlName="detail" class="form-control"
-                aria-label="With textarea " placeholder="Detail of task"></textarea>
+                aria-label="With textarea " placeholder="Detail of task" style=" min-height: 80px;"></textarea>
+                <label class="form-label grey-text" for="floatingInput">Detail of task.</label>
+
+              </div>
+
             </div>
           </div>
         </div>

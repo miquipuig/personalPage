@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Label } from 'src/app/services/productivity-hub/task-services.service';
 import { TaskServicesService } from 'src/app/services/productivity-hub/task-services.service';
 
@@ -8,7 +8,11 @@ import { TaskServicesService } from 'src/app/services/productivity-hub/task-serv
   styleUrls: ['./label-editor.component.css']
 })
 export class LabelEditorComponent {
-  editLabelOpened: boolean = true;
+
+  @Output() closeMenus = new EventEmitter<any>();
+
+
+  editLabelOpened: boolean = false;
   pickColorOpened: boolean = false;
   pickIconOpened: boolean = false;
   availableColors: string[] = ['yellow',  'green', 'blue', 'red', 'purple', 'orange', 'pink', 'brown', 'grey', 'clearGrey'];
@@ -23,7 +27,7 @@ export class LabelEditorComponent {
   }
   loadLabels() {
     this.taskService.loadLabels();
-    this.labels = this.taskService.labels;
+    this.labels = this.taskService.getOrderedLabelsPerName();
   }
 
   selectLabel(label: Label) {
@@ -61,6 +65,28 @@ export class LabelEditorComponent {
   pickIcon() {
     this.pickIconOpened = !this.pickIconOpened;
     this.pickColorOpened = false;
+  }
+
+  newLabel() {
+    this.selectedLabel = {} as Label;
+    this.selectedLabel.color = 'clearGrey';
+  }
+  deleteLabel() {
+    this.taskService.deleteLabel(this.selectedLabel.id);
+    this.loadLabels();
+    this.selectedLabel = {} as Label;
+  }
+  openEditLabel(label: Label) {
+    this.closeMenus.emit();
+    this.editLabelOpened = true;
+    this.selectedLabel = {...label};
+  }
+  openEdit() {
+    console.log('aaaaa');
+
+    this.closeMenus.emit();
+    this.editLabelOpened = !this.editLabelOpened;
+    console.log('this.editLabelOpened');
   }
 
 }

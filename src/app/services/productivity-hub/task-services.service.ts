@@ -162,7 +162,6 @@ export class TaskServicesService {
    
   }
   getOrderedLabelsPerName(): Label[] {
-    return this.labels;
     return this.labels.sort((a, b) => a.name.localeCompare(b.name));
   }
   getLabelByName(name: string): Label {

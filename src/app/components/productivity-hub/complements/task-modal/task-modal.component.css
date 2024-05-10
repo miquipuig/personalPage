@@ -4,9 +4,9 @@
 }
 
 .red-input {
-    color: red !important;
+    color: var(--main-color) !important;
     /* Color de texto rojo */
-    border: 2px solid red;
+    border: 2px solid var(--main-color);
     /* Borde de 1px sólido y rojo */
 }
 
@@ -39,14 +39,6 @@
 
 
 
-/* Posicionamiento básico del modal */
-/* .modal-dialog {
-    position: fixed;
-    top: calc(25% - 225px);
-    left: calc(50% - 225px);
-    max-width: 450px;
-    width: 450px;
-} */
 
 
 
@@ -65,13 +57,17 @@
         /* El modal se reduce a un punto central al cerrarse */
 }
 
+
+
 .listGroupPosition {
     position: fixed;
     width: auto;
     max-height: 400px;
     overflow-y: auto;
-    z-index: 90000
+    z-index: 10000;
     /* Hace que la lista sea scrollable */
+    scrollbar-width: thin; /* Hace la barra de desplazamiento más delgada en Firefox */
+    /* scrollbar-color: var(--main-color) #666666; */
 }
 
 .listGreyColor {
@@ -103,3 +99,10 @@
     scale: 95%;
   }
   
+  .label-button {
+    position: absolute;
+    right: 5px;
+    top: 7px;
+    bottom: 0; /* O height: 100%; según sea necesario */
+    border: none; /* Ajusta según tu diseño */
+}
