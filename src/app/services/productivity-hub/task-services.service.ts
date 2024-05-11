@@ -212,11 +212,11 @@ export class TaskServicesService {
       this.labels = JSON.parse(localStorage.getItem('labels')!);
     } else {
       this.labels = [
-        { id: 1, name: 'Personal', color: 'green', icon: 'ri-mail-unread-fill' },
-        { id: 2, name: 'Work', color: 'yellow', icon: 'ri-mail-unread-fill' },
-        { id: 3, name: 'Study', color: 'blue', icon: 'ri-mail-unread-fill' },
-        { id: 4, name: 'Home', color: 'purple', icon: 'ri-mail-unread-fill' },
-        { id: 5, name: 'Other', color: 'brown', icon: 'ri-mail-unread-fill' }
+        { id: 1, name: 'Task Planning', color: 'blue', icon: 'ri-list-check-3' },
+        { id: 2, name: 'Work', color: 'red', icon: 'ri-macbook-line' },
+        { id: 3, name: 'Study', color: 'yellow', icon: 'ri-graduation-cap-line' },
+        { id: 4, name: 'Personal', color: 'purple', icon: 'ri-user-5-line' },
+        { id: 5, name: 'Home', color: 'orange', icon: 'ri-home-5-line' }
       ];
     }
   }

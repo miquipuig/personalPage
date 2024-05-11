@@ -15,8 +15,9 @@ export class LabelEditorComponent {
   editLabelOpened: boolean = false;
   pickColorOpened: boolean = false;
   pickIconOpened: boolean = false;
-  availableColors: string[] = ['yellow',  'green', 'blue', 'red', 'purple', 'orange', 'pink', 'brown', 'grey', 'clearGrey'];
-  availableIcons: string[] = ['ri-file-list-line',"ri-home-5-line","ri-square-line", "ri-square-fill"];
+  availableColors: string[] = ['yellow', 'green', 'blue', 'red', 'purple', 'orange', 'pink', 'brown', 'grey', 'clearGrey'];
+  availableIcons: string[] = ['ri-file-list-line', "ri-home-5-line", "ri-square-line", "ri-square-fill", 'ri-list-check-3', 'ri-macbook-line', 'ri-graduation-cap-line', 'ri-user-5-line', 'ri-home-5-line'];
+
   labels: Label[] = [];
   selectedLabel: Label;
   constructor(private taskService: TaskServicesService) {
@@ -32,14 +33,14 @@ export class LabelEditorComponent {
 
   selectLabel(label: Label) {
     // this.saveLabel();
-    this.selectedLabel = {...label}
+    this.selectedLabel = { ...label }
     this.pickColorOpened = false;
     this.pickIconOpened = false;
-    
+
   }
 
   saveLabel() {
-    if(this.selectedLabel.name !== '' && this.selectedLabel.color !== '' && this.selectedLabel.icon !== '') {
+    if (this.selectedLabel.name !== '' && this.selectedLabel.color !== '' && this.selectedLabel.icon !== '') {
       this.taskService.saveLabel(this.selectedLabel);
       this.loadLabels();
     }
@@ -79,7 +80,7 @@ export class LabelEditorComponent {
   openEditLabel(label: Label) {
     this.closeMenus.emit();
     this.editLabelOpened = true;
-    this.selectedLabel = {...label};
+    this.selectedLabel = { ...label };
   }
   openEdit() {
     console.log('aaaaa');
