@@ -38,6 +38,7 @@ export class TaskServicesService {
   labels: Label[] = [];
   tasks: Task[] = [];
   taskLoaded: boolean = false;
+  taskSaved: boolean = true;
 
   async loadTasks(): Promise<any> {
     this.taskLoaded = false;
@@ -45,7 +46,7 @@ export class TaskServicesService {
       setTimeout(() => {
         try {
           if (localStorage.getItem('tasks') !== null && localStorage.getItem('tasks') !== undefined && localStorage.getItem('tasks') !== '[]') {
-            this.tasks = JSON.parse(localStorage.getItem('tasks')!);
+            this.tasks = this.orderTasks(JSON.parse(localStorage.getItem('tasks')!));
           }
           this.taskLoaded = true;
           resolve(this.tasks);
@@ -56,19 +57,23 @@ export class TaskServicesService {
     });
   }
 
+  orderTasks(tasks: Task[]): Task[] {
+    return tasks.sort((a, b) => a.idPosition - b.idPosition);
+  }
+
   getTaskById(id: number): Task {
     return this.tasks.find(task => task.idPosition === id)!;
   }
 
   async addTask(task: Task): Promise<any> {
-    this.taskLoaded = false;
+    this.taskSaved = false;
 
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         try {
           //iterate to get the unique id
           let id = 1;
-          
+
           while (this.tasks.find(task => task.id === id) !== undefined) {
             id++;
           }
@@ -76,7 +81,7 @@ export class TaskServicesService {
           task.idPosition = this.tasks.length * 100;
           this.tasks.push(task);
           localStorage.setItem('tasks', JSON.stringify(this.tasks));
-          this.taskLoaded = true;
+          this.taskSaved = true;
           resolve(this.tasks);
         } catch (error) {
           reject(this.tasks);
@@ -86,17 +91,19 @@ export class TaskServicesService {
   }
 
   async saveTask(task: Task): Promise<any> {
-
+    this.taskSaved = false;
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         try {
-          
+
           const index = task.id;
           let foundTask = this.tasks.find(t => t.id === index);
           if (foundTask) {
             Object.assign(foundTask, task);
           }
-            localStorage.setItem('tasks', JSON.stringify(this.tasks));
+          localStorage.setItem('tasks', JSON.stringify(this.tasks));
+          this.taskSaved = true;
+
           resolve(this.tasks);
         } catch (error) {
           reject(this.tasks);
@@ -106,14 +113,14 @@ export class TaskServicesService {
   }
 
   async deleteTask(id: number): Promise<any> {
-    this.taskLoaded = false;
+    this.taskSaved = false;
 
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         try {
           this.tasks = this.tasks.filter(task => task.id !== id);
           localStorage.setItem('tasks', JSON.stringify(this.tasks));
-          this.taskLoaded = true;
+          this.taskSaved = true;
           resolve(this.tasks);
         } catch (error) {
           reject(error);
@@ -123,14 +130,14 @@ export class TaskServicesService {
   }
 
   async saveTasks(): Promise<any> {
-    this.taskLoaded = false;
+    this.taskSaved = false;
 
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         try {
           localStorage.setItem('tasks', JSON.stringify(this.tasks));
-          this.taskLoaded = true;
-          
+          this.taskSaved = true;
+
           resolve('Tasks saved');
         } catch (error) {
           reject(error);
@@ -146,20 +153,20 @@ export class TaskServicesService {
     return this.labels.find(label => label.id === id)!;
   }
   addLabel(label: Label): Label {
-    if(!(label.name === '' || label.name === null || label.name === undefined)){
+    if (!(label.name === '' || label.name === null || label.name === undefined)) {
       //set de id to the label don't repeat
       let id = 1;
-          
-          while (this.labels.find(label => label.id === id) !== undefined) {
-            id++;
-          }
-          label.id = id;
+
+      while (this.labels.find(label => label.id === id) !== undefined) {
+        id++;
+      }
+      label.id = id;
       this.labels.push(label);
       this.saveLabels();
     }
     return label;
 
-   
+
   }
   getOrderedLabelsPerName(): Label[] {
     return this.labels.sort((a, b) => a.name.localeCompare(b.name));
@@ -171,7 +178,7 @@ export class TaskServicesService {
   addLabelByName(name: string): any {
     if (!this.labels.find(label => label.name === name) && name !== '' && name !== null && name !== undefined) {
       return this.addLabel({ id: this.labels.length + 1, name: name, color: '#FF69B4', icon: 'fa fa-question' });
-    }else{
+    } else {
       return this.getLabelByName(name);
     }
   }
@@ -221,6 +228,53 @@ export class TaskServicesService {
     }
   }
 
+  async moveElement(elementId: number, superiorId: Task | undefined  , inferiorId: Task | undefined): Promise<Task[]>  {
+    let element = this.tasks.find(task => task.id === elementId)!;
+    this.tasks = this.orderTasks(this.tasks);
+    let superiorElement: Task | undefined;
+    let inferiorElement: Task | undefined;
+    let position = 0;
+    if (superiorId !== undefined) {
+      //posició del element superior
+      superiorElement = superiorId;
+      position = superiorElement.idPosition + 1;
+      let superiorIndex=this.tasks.findIndex(task => task.id === superiorId.id);
+
+      if (this.tasks[superiorIndex + 1] !== undefined ) {
+        inferiorElement = this.tasks[superiorIndex + 1];
+        if(inferiorElement.idPosition === position){
+          await this.moveElementUp(inferiorElement);
+        }
+      }
+      element.idPosition = position;
+      await this.saveTask(element);
+    } else if (inferiorId !== undefined){
+      let inferiorElement =  inferiorId;
+      position = inferiorElement.idPosition - 1;
+      if (inferiorElement.idPosition === 0) {
+        position = 0;
+        await this.moveElementUp(inferiorElement);
+      }
+      element.idPosition = position;
+      await this.saveTask(element);
+
+    }
+
+    return this.tasks;
+
+  }
+
+
+
+  async moveElementUp(element: Task): Promise<any> {
+    this.tasks = this.orderTasks(this.tasks);
+
+    if (this.tasks.find(task => task.idPosition === element.idPosition + 1) !== undefined) {
+      let nextElement = this.tasks.find(task => task.idPosition === element.idPosition + 1)!;
+      await this.moveElementUp(nextElement);
+    }
+    element.idPosition++;
+    await this.saveTask(element);
+  }
 
 }
-

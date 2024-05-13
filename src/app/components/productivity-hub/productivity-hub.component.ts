@@ -4,6 +4,7 @@ import { TaskModalComponent } from './complements/task-modal/task-modal.componen
 import { TaskServicesService } from 'src/app/services/productivity-hub/task-services.service';
 import { Label } from 'src/app/services/productivity-hub/task-services.service';
 import { Task } from 'src/app/services/productivity-hub/task-services.service';
+import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragMove, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-productivity-hub',
@@ -27,13 +28,19 @@ export class ProductivityHubComponent implements AfterViewInit {
   isSectionActive = false;
   filteredLabel = -1;
   searchInput = '';
+  dragOverIndex: number | null = null;
+  hoverIndex: number = -1;
+  labelsAnimated=true;
 
-  constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef, public taskService: TaskServicesService) {
+
+  constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2, public taskService: TaskServicesService) {
     this.time = new Date();
     this.time.setHours(12, 0, 0, 0);
   }
 
   pomodoro = true;
+  selectedTask = -1;
+
   ngOnInit() {
     window.addEventListener('resize', this.updateDimensions.bind(this));
     // temporizador que se espera 0.5 segundos y setea la variable isSectionActive a true``
@@ -49,38 +56,127 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   async refreshTasks() {
-    this.tasks=this.taskService.tasks;
+    this.labelsAnimated=true;
+    //ordenar las tareas por idPosition
+    this.tasks = [...this.taskService.tasks];
+    this.sortTasks();
   }
   async loadTasks() {
     await this.taskService.loadTasks();
+
     this.refreshTasks();
   }
 
   loadFilteredTasksByLabel(labelId: any) {
-    
-    this.tasks = this.taskService.tasks.filter(task => task.label === labelId);
+
+    this.tasks = [...this.taskService.tasks.filter(task => task.label === labelId)];
     this.filteredLabel = labelId;
   }
 
   loadUnfilteredTasksByLabel() {
-    
-    this.tasks = this.taskService.tasks;
+
+    this.tasks = [...this.taskService.tasks];
     this.filteredLabel = -1;
   }
 
   filterSearch(searchInput: string): void {
-    if (searchInput !== '') {
-      this.tasks = this.taskService.tasks.filter(task => task.name.toLowerCase().includes(searchInput.toLowerCase()));
+    if (this.filteredLabel !== -1) {
+      this.loadFilteredTasksByLabel(this.filteredLabel);
     } else {
-      console.log(this.tasks);
-      this.tasks = this.taskService.tasks;
-
+      this.tasks = [...this.taskService.tasks];
+    }
+    if (searchInput !== '') {
+      this.tasks = this.tasks.filter(task =>
+        task.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+        (task.detail && task.detail.toLowerCase().includes(searchInput.toLowerCase()))
+      );
     }
   }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+  }
+
+  onDragStarted(event: any) {
+
+    this.labelsAnimated=false;
+  }
+  onDragEnded(event: any) {
+    this.clock.actualTask = this.selectedTask;
+  }
+  // onDragMoved(event: CdkDragMove<any>, index: number) {
+  //   let currentIndex = index;
+  //   let hoveringOverIndex = this.getHoveringIndex(event.pointerPosition.y, event.source.dropContainer.element.nativeElement.children);
+
+  //   if (hoveringOverIndex !== currentIndex) {
+  //     this.hoverIndex = hoveringOverIndex;
+  //     console.log(`Current hovering index: ${this.hoverIndex}`);
+  //   }
+  // }
+
+  getHoveringIndex(pointerY: number, listElements: HTMLCollection): number {
+    let hoverIndex = -1;
+    Array.from(listElements).some((element: Element, index: number) => {
+      const bounds = element.getBoundingClientRect();
+      if (pointerY > bounds.top && pointerY < bounds.bottom) {
+        hoverIndex = index;
+        return true; // Detiene la iteración una vez que se encuentra el índice
+      }
+      return false;
+    });
+    return hoverIndex;
+  }
+
+
+   onDrop(event: CdkDragDrop<any>) {
+
+
+    if (event.previousIndex !== event.currentIndex) {
+      const element= this.tasks[event.previousIndex];
+      // moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+      let superiorPosition = undefined
+      let inferiorPosition = undefined
+      let additional=0;
+      if(event.previousIndex < event.currentIndex) {
+        superiorPosition = this.tasks[event.previousIndex - 1];
+        additional=1;
+      }
+
+      if (event.currentIndex > 0) {
+  
+        superiorPosition = this.tasks[event.currentIndex - 1 + additional];
+
+      } if (event.currentIndex  < this.tasks.length) {
+        inferiorPosition = this.tasks[event.currentIndex+additional];
+      }
+      moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+      this.moveElement(element, superiorPosition, inferiorPosition);
+    }
+  }
+
+  async moveElement(element: any, superiorPosition: any, inferiorPosition: any) {
+
+    this.tasks=[...await this.taskService.moveElement(element.id, superiorPosition, inferiorPosition)];
+    this.sortTasks();
+    // this.labelsAnimated=true;
+
+  }
+
+  dragEntered(event: CdkDragEnter<any>) {
+    console.log('drag entered', event);
+    this.dragOverIndex = event.container.data.indexOf(event.item.data);
+  }
+
+  dragExited(event: CdkDragExit<any>) {
+    console.log('drag exited', event);
+    this.dragOverIndex = null;
+  }
+
+
   clearSarch() {
     this.searchInput = '';
     this.filterSearch(this.searchInput);
-  } 
+  }
 
   updateDimensions() {
     const width = this.colRef.nativeElement.offsetWidth;
@@ -238,7 +334,7 @@ export class ProductivityHubComponent implements AfterViewInit {
         this.nextPomodoroState();
       }
       counter++;
-      if (counter % 5 === 0) {
+      if (counter % 30 === 0) {
         this.saveTask(this.tasks[this.clock.actualTask]);
       }
       this.saveClock();

@@ -9,6 +9,8 @@ import { TimePickerComponent } from './complements/time-picker/time-picker.compo
 import { TruncatePipe } from 'src/app/pipes/truncate.pipe';
 import { CustomTimeFormatPipe } from 'src/app/pipes/custom-time-format.pipe';
 import { LabelEditorComponent } from './complements/label-editor/label-editor.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 
 
 @NgModule({
@@ -18,6 +20,7 @@ import { LabelEditorComponent } from './complements/label-editor/label-editor.co
     ProductivityHubRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    DragDropModule
   ],exports: [ProductivityHubComponent]
 })
 export class ProductivityHubModule { 
