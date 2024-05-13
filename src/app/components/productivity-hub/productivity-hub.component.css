@@ -740,3 +740,81 @@ img.pomodoroCurrent {
 	color: #fff;
 	background-color: var(--color-base);
 }
+
+
+
+.outline-label2 {
+	display: inline-block;
+
+	color: var(--color-base);
+	/* Color rojo de peligro */
+	font-size: 0.8rem;
+	/* Tamaño de letra estándar */
+	text-align: center;
+	vertical-align: middle;
+	user-select: none;
+	border: 1px solid var(--color-base);
+	/* Borde rojo de peligro */
+	padding: 0px 5px;
+	/* Padding similar al de Bootstrap */
+	line-height: 1.5;
+	border-radius: 0.5rem;
+	/* Bordes redondeados */
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+		border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	/* Transiciones suaves */
+	background-color: transparent;
+	/* Fondo transparente */
+	cursor:pointer;
+
+}
+
+.outline-label2:hover .ri-close-large-line {
+    font-weight: 900;
+	filter: brightness(130%);
+	/* font-size: large; */
+}
+
+.searchDiv {
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo negro con transparencia */
+    color: white; /* Color de texto blanco */
+    border: 2px solid rgb(179, 179, 179); /* Borde de color gris */
+    border-radius: 20px; /* Bordes redondeados */
+    padding: 2px; /* Espaciado interno para que el texto no esté justo en el borde */
+    width: auto; /* Opcional: Ajusta el ancho al contenedor si lo necesitas */
+    box-sizing: border-box; /* Para incluir el padding y el borde en el ancho total */
+}
+.searchInput {
+    background-color: transparent;
+    color: white; /* Color de texto blanco */
+    border-radius: 20px; /* Bordes redondeados */
+	border:none;
+    padding: 0px 40px 0px 10px;/* Espaciado interno para que el texto no esté justo en el borde */
+    width: 200px; /* Opcional: Ajusta el ancho al contenedor si lo necesitas */
+}
+.searchInput:focus{
+	outline: none;
+	background-color: rgba(255, 255, 255, 0.1); /* Cambia ligeramente el color de fondo al enfocar */
+
+}
+
+
+.searchInput:focus + .searchIcon {
+    transform: translateX(175px); /* Ajusta este valor según el ancho de tu input */
+    transition: transform 0.5s ease;
+}
+.searchIcon {
+    position: absolute;
+    transition: transform 0.5s ease; /* Asegura una transición suave en ambos sentidos */
+}
+.closeIcon{
+	position: absolute;
+	right: 5px;
+	cursor: pointer;
+	transition: filter 0.3s ease-in-out, font-weight 0.3s ease-in-out;
+}
+
+.closeIcon:hover {
+	filter: brightness(130%);
+	font-weight: bold;
+}

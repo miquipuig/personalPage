@@ -25,6 +25,8 @@ export class ProductivityHubComponent implements AfterViewInit {
 
 
   isSectionActive = false;
+  filteredLabel = -1;
+  searchInput = '';
 
   constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef, public taskService: TaskServicesService) {
     this.time = new Date();
@@ -53,6 +55,32 @@ export class ProductivityHubComponent implements AfterViewInit {
     await this.taskService.loadTasks();
     this.refreshTasks();
   }
+
+  loadFilteredTasksByLabel(labelId: any) {
+    
+    this.tasks = this.taskService.tasks.filter(task => task.label === labelId);
+    this.filteredLabel = labelId;
+  }
+
+  loadUnfilteredTasksByLabel() {
+    
+    this.tasks = this.taskService.tasks;
+    this.filteredLabel = -1;
+  }
+
+  filterSearch(searchInput: string): void {
+    if (searchInput !== '') {
+      this.tasks = this.taskService.tasks.filter(task => task.name.toLowerCase().includes(searchInput.toLowerCase()));
+    } else {
+      console.log(this.tasks);
+      this.tasks = this.taskService.tasks;
+
+    }
+  }
+  clearSarch() {
+    this.searchInput = '';
+    this.filterSearch(this.searchInput);
+  } 
 
   updateDimensions() {
     const width = this.colRef.nativeElement.offsetWidth;
@@ -382,6 +410,8 @@ export class ProductivityHubComponent implements AfterViewInit {
   sortTasks(): void {
     this.tasks.sort((a, b) => a.idPosition - b.idPosition);
   }
+
+
 
   validateClock(clock: any): Clock {
     return {

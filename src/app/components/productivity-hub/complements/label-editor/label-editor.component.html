@@ -11,6 +11,11 @@
         <i class="ri-close-line"></i>
     </button>
     <h5 class="modal-title  mb-2"> <i class="ri-price-tag-3-line"></i> Edit Activity Label</h5>
+    <div class="mb-2">
+        <!-- <hr style="color: white; margin: 0px; width: 105%; border: 5px solid white; position: relative; left: -2%;"> -->
+        <hr class="hrCustom">
+
+    </div>
 
     <div class=" labelMargin d-flex flex-column justify-content-between">
         <div class="row ">
@@ -22,6 +27,7 @@
                     <i style="font-size: 1.2rem;" class="ri-add-circle-line icono-mitja ms-1 me-1"></i> New Activity
                 </button>
             </div>
+        
 
             <div class="col-12 col-sm-6 px-1 mb-2">
                 <!-- <button class="butoPlay" ><i class="ri-add-circle-line icono-mitja"></i></button> -->
@@ -136,7 +142,13 @@
         </div>
 
         <div class="row">    
+            <div class="mb-2 px-1">
+                <!-- <hr style="color: white; margin: 0px; width: 105%; border: 5px solid white; position: relative; left: -2%;"> -->
+                <hr class="hrCustom">
+        
+            </div>
             <div class="col-12 d-flex justify-content-between px-1">
+
                 <div >
                     <button *ngIf="(selectedLabel.id>0)" (click)="deleteLabel()" type="button"
                         class="btn btn-danger btn-sm"><i class="ri-delete-bin-7-line"></i> Delete</button>
