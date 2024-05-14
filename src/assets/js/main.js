@@ -200,6 +200,12 @@
   
     document.getElementById('background-image').classList.add('loaded');
     document.getElementById('loader-container').classList.add('hidden');
+    //espera 2 segundos para que se cargue la imagen de fondo
+    setTimeout(() => {
+      let loader = document.getElementById('loader-container');
+      loader.remove();
+    }, 5000);
+
   }
   
   // Flag para controlar si la inicialización ya se ha ejecutado

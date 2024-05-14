@@ -2,17 +2,40 @@
   <div #taskModalDialog class="modal-dialog modal-dialog-scrollable">
     <div *ngIf="modalOpened" class="modal-content">
       <div class="modal-header">
-        <h5 *ngIf="id===-1" class="modal-title"><i class="ri-pushpin-line"></i> New Task</h5>
-        <h5 *ngIf="id!=-1" class="modal-title"> <i class="ri-pushpin-line"></i> Edit Task</h5>
-        <button  type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 *ngIf="id===-1" class="modal-title"><i class="ri-pushpin-line"></i> New Element</h5>
+        <h5 *ngIf="id!=-1" class="modal-title"> <i class="ri-pushpin-line"></i> Edit Element</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
       </div>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <div class="modal-body">
-          <p *ngIf="id===-1">Enter the details of your task.</p>
-          <p *ngIf="id!=-1">Edit the details of your task.</p>
+          <div class="d-flex mb-2 align-items-center">
+            <div class="" >
+              <div *ngIf="id === -1">
+                Enter details of your
+              </div>
+              <div *ngIf="id !== -1">
+                Edit details of your
+              </div>
+            </div>
+            <div class="ms-auto" (click)="closeMenus()">
+              <select class="form-select" formControlName="elementType">
+                <option value="task">Task</option>
+                <option value="segment">Segment</option>
+                <option value="routine">Routine</option>
+              </select>
+            </div>
+            <div  class="ms-auto" style="right:20px">
+              <app-time-picker (closeMenus)="closeMenus()"  formControlName="estimatedTime" [myLabel]="'Timer'"></app-time-picker>
+
+            </div>
+          </div>
+          
+
+
           <div class="d-flex align-items-center justify-content-left">
+
             <!-- <input style="width:200px; max-height: 40px;" id="label" type="text" formControlName="label" type="text"
               class="form-control" placeholder="Activity Type" aria-label="name" aria-describedby="addon-wrapping"
               list="sugerencias-list">
@@ -20,26 +43,51 @@
             <datalist id="sugerencias-list">
               <option *ngFor="let sugerencia of sugerencias">{{ sugerencia }}</option>
             </datalist> -->
-            <div style="position: relative;">
+            <div style="position: relative;" class="mb-2 me-2">
               <!-- (focusout)="onInputBlur()" -->
-              <input  style="width: 200px; max-height: 40px; padding-right: 40px;" type="text" class="form-control" formControlName="label"
-                  [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('label')!.dirty || form.get('label')!.touched)}"
-                  (input)="onSearch()" aria-label="Activity Type" placeholder="Activity Type" (focus)="closeMenus(); showList = true" (click)="selectLabel()">
-             <div class="label-button">
-              
-              <app-label-editor (closeMenus)="closeMenus()" style="position: absolute; top: 0; right: 0; height: 100%;"></app-label-editor>
-             </div>
-              
-              <div style="--animate-duration: 0.5s;" class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left list-group listGroupPosition" *ngIf="showList">
-                  <div (click)="selectOption(item)" *ngFor="let item of labels" class="listGreyColor list-group-item list-group-item-action d-flex justify-content-between" style="padding-right: 0px;">
-                      <a>{{ item.name | truncate:15}}</a>
-                      <button class="closeTimePicker" (click)="editActivity(item)"><i class="ri-edit-2-line"></i></button>
-                  </div>
+              <input style="width: 200px; max-height: 40px; padding-right: 40px;" type="text" class="form-control"
+                formControlName="label"
+                [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('label')!.dirty || form.get('label')!.touched)}"
+                (input)="onSearch()" aria-label="Activity Type" placeholder="Activity Type"
+                (focus)="closeMenus(); showList = true" (click)="selectLabel()">
+              <div class="label-button">
+
+                <app-label-editor (closeMenus)="closeMenus()"
+                  style="position: absolute; top: 0; right: 0; height: 100%;"></app-label-editor>
               </div>
-          </div>
+
+              <div style="--animate-duration: 0.5s;"
+                class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left list-group listGroupPosition"
+                *ngIf="showList">
+                <div (click)="selectOption(item)" *ngFor="let item of labels"
+                  class="listGreyColor list-group-item list-group-item-action d-flex justify-content-between"
+                  style="padding-right: 0px;">
+                  <a>{{ item.name | truncate:15}}</a>
+                  <button class="closeTimePicker" (click)="editActivity(item)"><i class="ri-edit-2-line"></i></button>
+                </div>
+              </div>
+            </div>
+
+            <div style="position: relative;" class="mb-2 ">
+              <!-- (focusout)="onInputBlur()" -->
+              <input style="width: 200px; max-height: 40px; padding-right: 40px;" type="text" class="form-control"
+                formControlName="segmentId"
+                [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('segmentId')!.dirty || form.get('segmentId')!.touched)}"
+                (input)="onSegmentIdsearch()" aria-label="Segment Father" placeholder="Segment Father"
+                (focus)="closeMenus();   showSectionIdList = true" (click)="selectSectionId()">
+
+
+              <div style="--animate-duration: 0.5s;"
+                class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left list-group listGroupPosition"
+                *ngIf="showSectionIdList">
+                <div (click)="selectSectionIdOption(item)" *ngFor="let item of segmentIds"
+                  class="listGreyColor list-group-item list-group-item-action d-flex justify-content-between">
+                  <a>{{ item.name | truncate:15}}</a>
+                </div>
+              </div>
+            </div>
+
           
-            <app-time-picker   (closeMenus)="closeMenus()" class="ms-2" style="width: 250px;" formControlName="estimatedTime"
-              [myLabel]="'Timer'"></app-time-picker>
           </div>
 
           <div>
@@ -47,7 +95,8 @@
               <div class="form-floating mb-1">
                 <input [ngClass]="{'red-input': validateForm()}" id="name" type="text" formControlName="name"
                   type="text" class="form-control" placeholder="" aria-label="name" aria-describedby="addon-wrapping">
-                <label *ngIf="!validateForm()" class="form-label grey-text" for="floatingInput">I'm Workin on...</label>
+                <label *ngIf="!validateForm()" class="form-label grey-text" for="floatingInput">I'm Workin
+                  on...</label>
 
                 <label class="red-text" *ngIf="validateForm()" for="floatingInput">Task name needed.</label>
               </div>
@@ -62,16 +111,17 @@
 
           <div>
 
-
             <div (click)="closeMenus()" class="input-group flex-nowrap mt-1">
               <!-- <span class="input-group-text">With textarea</span> -->
               <div class="form-floating mb-1">
 
-              <textarea id="detail" type="text" formControlName="detail" class="form-control"
-                aria-label="With textarea " placeholder="Detail of task" style=" min-height: 80px;"></textarea>
+                <textarea id="detail" type="text" formControlName="detail" class="form-control"
+                  aria-label="With textarea " placeholder="Detail of task" style=" min-height: 80px;"></textarea>
                 <label class="form-label grey-text" for="floatingInput">Detail of task.</label>
 
               </div>
+    
+
 
             </div>
           </div>

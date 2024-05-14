@@ -10,10 +10,12 @@ export interface Label {
 
 export interface Task {
   id: number;
+  elementType: string;
   name: string;
   idPosition: number;
+  segmentId: number| undefined | null;
   detail: string;
-  label: string;
+  label: number | undefined | null;
   estimatedTime: number;
   elapsedTime: number;
   restTime: number;
@@ -62,12 +64,11 @@ export class TaskServicesService {
   }
 
   getTaskById(id: number): Task {
-    return this.tasks.find(task => task.idPosition === id)!;
+    return this.tasks.find(task => task.id === id)!;
   }
 
   async addTask(task: Task): Promise<any> {
     this.taskSaved = false;
-
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         try {
@@ -82,12 +83,33 @@ export class TaskServicesService {
           this.tasks.push(task);
           localStorage.setItem('tasks', JSON.stringify(this.tasks));
           this.taskSaved = true;
-          resolve(this.tasks);
+          resolve(task);
         } catch (error) {
           reject(this.tasks);
         }
       }, 1000); // Simula un retraso de 1 segundo
     });
+  }
+
+
+  async addTaskByChild(task: Task): Promise<Task> {
+    this.taskSaved = false;
+    return new Promise(async (resolve, reject) => {
+
+    const name=task.name;
+    let segment:Task;
+    if( this.tasks.find(task => task.name === name) !== undefined){
+      segment=this.tasks.find(task => task.name === name)!;
+      console.log(segment);
+      resolve(segment);
+    }else{
+      const taskE=await this.addTask(task)
+      console.log(taskE);
+      resolve(taskE);
+    }
+  });
+   
+
   }
 
   async saveTask(task: Task): Promise<any> {
@@ -187,7 +209,7 @@ export class TaskServicesService {
     //Update the tasks with the old label
     this.tasks.forEach(task => {
       if (task.label === id) {
-        task.label = '';
+        task.label = undefined;
         this.saveTask(task);
       }
     });

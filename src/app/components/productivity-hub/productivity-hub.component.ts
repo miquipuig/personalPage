@@ -27,6 +27,7 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   isSectionActive = false;
   filteredLabel = -1;
+  filteredSegment = -1;
   searchInput = '';
   dragOverIndex: number | null = null;
   hoverIndex: number = -1;
@@ -69,28 +70,48 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   loadFilteredTasksByLabel(labelId: any) {
 
-    this.tasks = [...this.taskService.tasks.filter(task => task.label === labelId)];
     this.filteredLabel = labelId;
+    this.filterSearch();
   }
 
   loadUnfilteredTasksByLabel() {
-
-    this.tasks = [...this.taskService.tasks];
     this.filteredLabel = -1;
+    this.filterSearch();
   }
 
-  filterSearch(searchInput: string): void {
+  loadFilteredTasksBySegment(segmentId: any) {
+    this.filteredSegment = segmentId;
+    this.filterSearch();
+  }
+
+  loadUnfilteredTasksBySegment() {
+    this.filteredSegment = -1;
+    this.filterSearch();
+  }
+
+
+
+  filterSearch(): void {
+
+    let tasks: Task[] = [];
+    tasks = [...this.taskService.tasks];
+
     if (this.filteredLabel !== -1) {
-      this.loadFilteredTasksByLabel(this.filteredLabel);
-    } else {
-      this.tasks = [...this.taskService.tasks];
-    }
-    if (searchInput !== '') {
-      this.tasks = this.tasks.filter(task =>
-        task.name.toLowerCase().includes(searchInput.toLowerCase()) ||
-        (task.detail && task.detail.toLowerCase().includes(searchInput.toLowerCase()))
+    tasks = tasks.filter(task => task.label === this.filteredLabel);
+    } 
+    if (this.filteredSegment !== -1) {
+      tasks = tasks.filter(task => task.segmentId === this.filteredSegment);
+    } 
+    console.log(this.searchInput)
+
+
+    if (this.searchInput !== '') {
+      tasks = tasks.filter(task =>
+        task.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+        (task.detail && task.detail.toLowerCase().includes(this.searchInput.toLowerCase()))
       );
     }
+    this.tasks = tasks;
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -175,7 +196,7 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   clearSarch() {
     this.searchInput = '';
-    this.filterSearch(this.searchInput);
+    this.filterSearch();
   }
 
   updateDimensions() {
@@ -485,6 +506,16 @@ export class ProductivityHubComponent implements AfterViewInit {
   getLabelInfo(labelId: any): Label {
     return this.taskService.getLabelById(labelId);
   }
+  getSegmentName(segmentId: any): String {
+    let segment= this.taskService.getTaskById(segmentId);
+    if(segment){
+      return segment.name;
+    }else{
+      return 'Segment not Found'
+    }
+
+  }
+
 
 
   saveClock() {

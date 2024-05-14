@@ -790,6 +790,9 @@ img.pomodoroCurrent {
 	/* Opcional: Ajusta el ancho al contenedor si lo necesitas */
 	box-sizing: border-box;
 	/* Para incluir el padding y el borde en el ancho total */
+	transition: border-color 0.3s}∫
+.searchDiv:hover{
+	border: 2px solid rgb(255, 255, 255);
 }
 
 .searchInput {
@@ -900,3 +903,20 @@ img.pomodoroCurrent {
   .cdk-drag-animating {
 	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
   }
+
+  .elementType {
+    position: relative;
+    /* display: inline-block; */
+	margin-right: 2px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo negro translúcido */
+    padding:  0px 7px;
+    border-radius: 3px; 
+    transition: background-color 0.2s ease; /* Efecto de transición para el hover */
+}
+
+.elementType:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Aclaramiento en hover */
+}
+
+/* Si quieres un efecto adicional en el texto al hacer hover */

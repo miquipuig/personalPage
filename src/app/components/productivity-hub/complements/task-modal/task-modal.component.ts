@@ -19,11 +19,14 @@ export class TaskModalComponent implements OnInit {
   form: FormGroup;
   id: number;
   showList = false;
+  showSectionIdList = false;
   pressLeft: number = 0;
   pressTop: number = 0;
   dontClose: boolean = false;
   dontCloseTraficLight: boolean = false;
   task: Task = {} as Task;
+  label: Label = {} as Label;
+  segment: Task = {} as Task;
   @Output() refreshTasks = new EventEmitter<any>();
 
   @ViewChild('taskModal') taskModal!: ElementRef;
@@ -35,32 +38,44 @@ export class TaskModalComponent implements OnInit {
   sugerencias = ['Sugerencia 1', 'Sugerencia 2', 'Sugerencia 3'];
   // filteredActivities: Observable<Label[]>;
   labels: Label[] = [];
+  segmentIds: Task[] = [];
   constructor(private taskService: TaskServicesService, private fb: FormBuilder) {
     this.id = -1;
     this.form = new FormGroup({
+      elementType: new FormControl('task', Validators.required),
       name: new FormControl('', Validators.required),
       detail: new FormControl(''),
       label: new FormControl(''),
+      segmentId: new FormControl(''),
       estimatedTime: new FormControl(0) // Asegúrate que el control '' está definido aquí
     });
 
-    // this.filteredActivities = this.form.get('label')!.valueChanges
-    // .pipe(
-    //   startWith(''),
-    //   map(value => this.filterOptions(value))
-    // );
-    this.labels = this.filterOptions(this.form.get('label')!.value || '');
 
+    this.labels = this.filterOptions(this.form.get('label')!.value || '');
+    this.segmentIds = this.filterSectionIdOptions(this.form.get('label')!.value || '');
 
   }
 
   private filterOptions(value: string): Label[] {
     const filterValue = value.toLowerCase();
     const options = this.taskService.getOrderedLabelsPerName();
-    console.log(options);
 
     return options.filter(option => option.name.toLowerCase().includes(filterValue));
   }
+
+  private filterSectionIdOptions(value: string): Task[] {
+    const filterValue = value.toLowerCase();
+    let options: Task[]
+
+    options = this.taskService.tasks.filter(task => task.elementType === 'segment').sort((a, b) => a.idPosition - b.idPosition);
+    if (this.label && this.label.id !== undefined) {
+      options = options.filter(option => option.label === this.label.id);
+    }
+    return options.filter(option => option.name.toLowerCase().includes(filterValue));
+  }
+
+
+
   selectLabel() {
     this.dontCloseTraficLight = true;
 
@@ -74,20 +89,53 @@ export class TaskModalComponent implements OnInit {
     this.showList = true;
   }
 
+  selectSectionId() {
+
+    this.segmentIds = this.filterSectionIdOptions('');
+    // this.filteredActivities = this.form.get('label')!.valueChanges
+    // .pipe(
+    //   startWith(''),
+    //   map(value => this.filterOptions(value))
+    // );
+
+    this.showSectionIdList = true;
+  }
+
   onSearch(): void {
     // Logic to handle live search update
     // this.filteredActivities = of(this.filterOptions(this.form.get('label')!.value));
     this.labels = this.filterOptions(this.form.get('label')!.value || '');
+    if (this.labels.length === 1) {
+      this.label = this.labels[0];
+    }
+
+  }
+  onSegmentIdsearch(): void {
+    this.segmentIds = this.filterSectionIdOptions(this.form.get('segmentId')!.value || '');
+    if (this.segmentIds.length === 1) {
+      if(this.segmentIds[0].name===this.form.get('segmentId')!.value){
+        this.segment = this.segmentIds[0];
+        this.label= this.taskService.getLabelById(this.segment.label!);
+        this.form.get('label')!.setValue(this.label.name);
+      }
+    }
 
   }
 
   selectOption(option: Label): void {
     this.showList = false;
     this.form.get('label')!.setValue(option.name);
+    this.label = option;
+  }
+
+  selectSectionIdOption(option: Task): void {
+    this.showSectionIdList = false;
+    this.form.get('segmentId')!.setValue(option.name);
+    this.label= this.taskService.getLabelById(option.label!);
+    this.form.get('label')!.setValue(this.label.name);
+    this.segment = option;
   }
   deleteActivity(label: Label): void {
-    console.log('delete label');
-    console.log(label);
     if (this.dontCloseTraficLight) {
       this.dontCloseTraficLight = false;
       this.dontClose = true;
@@ -107,7 +155,7 @@ export class TaskModalComponent implements OnInit {
   editActivity(label: Label): void {
     this.closeMenus();
     this.labelEditor.openEditLabel(label);
-    
+
   }
 
   ngOnInit() {
@@ -126,15 +174,6 @@ export class TaskModalComponent implements OnInit {
   //   console.log(rect);
   // }
   onInputBlur() {
-    // Retrasar el cambio de la variable `mostrarLista` por 200 milisegundos (ajustable según necesidades)
-
-
-
-
-
-
-
-
 
     setTimeout(() => {
       if (!this.dontClose) {
@@ -166,6 +205,7 @@ export class TaskModalComponent implements OnInit {
     this.modalOpened = true;
     // this.onModalShown();
     this.form.reset();
+    this.form.get('elementType')?.setValue('task');
     this.form.get('estimatedTime')?.setValue(0);
     this.id = -1;
     this.taskModalP.show();
@@ -179,48 +219,88 @@ export class TaskModalComponent implements OnInit {
 
     this.id = task.id;
     this.task = task;
+
     this.form.get('name')?.setValue(task.name);
 
     this.form.get('detail')?.setValue(task.detail);
     this.form.get('estimatedTime')?.setValue(task.estimatedTime);
     if (this.taskService.getLabelById(task.label)) {
-      this.form.get('label')?.setValue(this.taskService.getLabelById(task.label).name);
+      this.label = this.taskService.getLabelById(task.label);
+      this.form.get('label')?.setValue(this.label.name);
     }
+    if (this.taskService.getTaskById(task.segmentId)) {
+      this.segment = this.taskService.getTaskById(task.segmentId);
+      this.form.get('segmentId')?.setValue(this.segment.name);
+    } else {
+      this.form.get('segmentId')?.setValue('');
+    }
+    this.form.get('elementType')?.setValue(task.elementType);
     this.taskModalP.show();
   }
   closeMenus() {
-    console.log('close menus');
     this.showList = false;
-    this.timePicker.closeTimePicker();
-    this.labelEditor.close();
+    this.showSectionIdList = false;
+    if (this.timePicker) {
+      this.timePicker.closeTimePicker();
+    }
+    if(this.labelEditor){
+      this.labelEditor.close();
+    }
 
   }
 
   closeModal() {
+    this.closeMenus();
     this.taskModalP.hide();
     this.modalOpened = false;
+ 
   }
 
   async onSubmit() {
+    console.log(this.form.get('segmentId')!.value);
     if (this.form.valid) {
       if (this.id !== -1) {
         this.task = { ...this.task, ...this.form.value };
         this.closeModal();
-        
-        if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined){
+
+        if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined) {
 
           this.task.label = this.taskService.addLabelByName(this.form.get('label')!.value).id;
+        }
+        if (this.form.get('segmentId')!.value !== '' && this.form.get('segmentId')!.value !== null && this.form.get('segmentId')!.value !== undefined) {
+          let newSegment: any;
+          newSegment = {
+            name: this.form.get('segmentId')!.value,
+            label: this.task.label,
+            elementType: 'segment'
+
+          }
+          const segment = ((await this.taskService.addTaskByChild(newSegment)))
+          this.task.segmentId=segment.id;
+        }else{
+          this.task.segmentId=undefined;
         }
         await this.taskService.saveTask(this.task);
 
       } else {
         this.closeModal();
         this.task = { ...this.task, ...this.form.value };
-
-        if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined){
-
-          this.task.label = this.taskService.addLabelByName(this.form.get('label')!.value).id;
-        }        await this.taskService.addTask(this.task);
+        if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined) {
+          this.task.label = this.taskService.addLabelByName(this.form.get('label')!.value).id
+        }
+        if (this.form.get('segmentId')!.value !== '' && this.form.get('segmentId')!.value !== null && this.form.get('segmentId')!.value !== undefined) {
+          let newSegment: any;
+          newSegment = {
+            name: this.form.get('segmentId')!.value,
+            label: this.task.label,
+            elementType: 'segment'
+          }
+          const segment = (await this.taskService.addTaskByChild(newSegment))
+          this.task.segmentId=segment.id;
+        }else{
+          this.task.segmentId=undefined;
+        }
+        await this.taskService.addTask(this.task);
       }
       this.refreshTasks.emit();
 
