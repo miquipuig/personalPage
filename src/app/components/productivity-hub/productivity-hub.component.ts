@@ -72,7 +72,8 @@ export class ProductivityHubComponent implements AfterViewInit {
   async refreshTasks() {
     this.labelsAnimated=true;
     //ordenar las tareas por idPosition
-    this.tasks = [...this.taskService.tasks];
+    // this.tasks = [...this.taskService.tasks];
+    this.filterSearch();
     this.sortTasks();
   }
   async loadTasks() {
@@ -88,10 +89,12 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.filteredLabel = labelId;
     this.filterSearch();
   }
-  onStateChange(event: Event, task: Task) {
+  async onStateChange(event: Event, task: Task) {
     const selectedStateId = parseInt((event.target as HTMLSelectElement).value);
     task.state = selectedStateId;
-    this.taskService.saveTask(task);
+    await this.taskService.saveTask(task);
+    this.filterSearch();
+
     // this.refreshTasks();
     // Lógica adicional que quieres ejecutar al cambiar la selección
   }
@@ -152,6 +155,7 @@ export class ProductivityHubComponent implements AfterViewInit {
 
     let tasks: Task[] = [];
     tasks = [...this.taskService.tasks];
+    console.log('tasks', tasks);
 
     if (this.states.length > 0) {
       tasks = tasks.filter(task => this.states.find(state => state.id === task.state)?.visibilityTaskList);
@@ -390,40 +394,74 @@ export class ProductivityHubComponent implements AfterViewInit {
     }, 1000);
   }
   //core function
+  // resumeTimer() {
+  //   const timerStart = Date.now() - this.clock.elapsedTime * 1000;
+  //   if (this.clock.actualTask > -1) {
+  //     if (this.tasks[this.clock.actualTask].elapsedTime > 0) {
+  //       this.taskStartTime = Date.now() - this.tasks[this.clock.actualTask].elapsedTime * 1000;
+  //     } else {
+  //       this.taskStartTime = Date.now();
+  //     }
+  //   }
+  //   let counter = 0;
+  //   this.interval = setInterval(() => {
+  //     this.clock.elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
+  //     if (this.clock.actualTask > -1 && this.clock.pomodoroState === 'work') {
+  //       this.tasks[this.clock.actualTask].elapsedTime = Math.floor((Date.now() - this.taskStartTime) / 1000);
+  //     }
+  //     if (this.clock.elapsedTime >= this.clock.totalTime) {
+  //       // Pomodoro finished
+  //       this.clock.elapsedTime = 0;
+  //       this.clock.isPaused = false;
+  //       this.clock.timerStarted = false;
+  //       clearInterval(this.interval);
+  //       this.nextPomodoroState();
+  //     }
+  //     counter++;
+  //     if (counter % 30 === 0) {
+  //       this.saveTask(this.tasks[this.clock.actualTask]);
+  //     }
+  //     this.saveClock();
+  //   }, 1000);
+  // }
+
+  // startTaskElapsedTime() {
+  //   3
+  // }
+
   resumeTimer() {
     const timerStart = Date.now() - this.clock.elapsedTime * 1000;
-    if (this.clock.actualTask > -1) {
-      if (this.tasks[this.clock.actualTask].elapsedTime > 0) {
-        this.taskStartTime = Date.now() - this.tasks[this.clock.actualTask].elapsedTime * 1000;
-      } else {
-        this.taskStartTime = Date.now();
-      }
+    const actualTask = this.tasks.find(task => task.id === this.clock.actualTask);
+    
+    if (actualTask) {
+        if (actualTask.elapsedTime > 0) {
+            this.taskStartTime = Date.now() - actualTask.elapsedTime * 1000;
+        } else {
+            this.taskStartTime = Date.now();
+        }
     }
+    
     let counter = 0;
     this.interval = setInterval(() => {
-      this.clock.elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
-      if (this.clock.actualTask > -1 && this.clock.pomodoroState === 'work') {
-        this.tasks[this.clock.actualTask].elapsedTime = Math.floor((Date.now() - this.taskStartTime) / 1000);
-      }
-      if (this.clock.elapsedTime >= this.clock.totalTime) {
-        // Pomodoro finished
-        this.clock.elapsedTime = 0;
-        this.clock.isPaused = false;
-        this.clock.timerStarted = false;
-        clearInterval(this.interval);
-        this.nextPomodoroState();
-      }
-      counter++;
-      if (counter % 30 === 0) {
-        this.saveTask(this.tasks[this.clock.actualTask]);
-      }
-      this.saveClock();
+        this.clock.elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
+        if (actualTask && this.clock.pomodoroState === 'work') {
+            actualTask.elapsedTime = Math.floor((Date.now() - this.taskStartTime) / 1000);
+        }
+        if (this.clock.elapsedTime >= this.clock.totalTime) {
+            // Pomodoro finished
+            this.clock.elapsedTime = 0;
+            this.clock.isPaused = false;
+            this.clock.timerStarted = false;
+            clearInterval(this.interval);
+            this.nextPomodoroState();
+        }
+        counter++;
+        if (counter % 30 === 0 && actualTask) {
+            this.saveTask(actualTask);
+        }
+        this.saveClock();
     }, 1000);
-  }
-
-  startTaskElapsedTime() {
-    3
-  }
+}
 
   nextPomodoroState() {
     this.clock.timerStarted = false;

@@ -83,7 +83,7 @@
               <select class="form-select" formControlName="state">
                 <option value="-1" disabled selected>Select State</option>
 
-                <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                <option *ngFor="let state of states" [ngValue]="state.id">{{state.name}}</option>
               </select>
             </div>
 
@@ -126,6 +126,7 @@
             </div>
           </div>
         </div>
+
         <div class="modal-footer custom-footer">
           <button *ngIf="id!=-1" (click)="deleteTaskEmit()" type="button" class="btn btn-danger">Delete Element</button>
           <div class="flex-grow-1"></div> <!-- Espaciador -->

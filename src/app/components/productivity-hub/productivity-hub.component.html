@@ -239,10 +239,10 @@
 					<div id="my-special-list" cdkDropList (cdkDropListDropped)="onDrop($event)"
 						class="animate__animated animate__fadeIn task-list">
 
-						<div (click)="activeTask(i)" *ngFor="let task of tasks; let i = index">
+						<div (click)="activeTask(task.id)" *ngFor="let task of tasks; let i = index">
 							<div cdkDrag (cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded($event)"
 								class="task-card mb-1 card text-white"
-								[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': i === clock.actualTask}">
+								[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': task.id === clock.actualTask}">
 								<div class="card-body d-flex justify-content-between align-items-start p-2">
 									<div class="card-title me-0 mb-0">
 										<div class="d-flex align-items-start justify-content-end">
@@ -296,7 +296,7 @@
 											[(ngModel)]="task.state" class="state-select me-1"
 											aria-label=".form-select-sm example">
 											<!-- <option value="-1" selected>Stateless</option> -->
-											<option *ngFor="let state of states" [value]="state.id">{{state.name |
+											<option *ngFor="let state of states" [value]=state.id>{{state.name |
 												truncate:10}}</option>
 										</select>
 										<button #editTaskButton (click)="editTask(i); $event.stopPropagation()"
@@ -318,13 +318,13 @@
 
 					</div>
 
-					<!-- <pre>{{tasks | json}}</pre> -->
 
 
 
 
 				</div>
-				<pre>{{tasks | json}}</pre>
+				<!-- <pre>{{tasks | json}}</pre>
+				<pre>{{states | json}}</pre> -->
 			</div>
 		</div>
 	</div>

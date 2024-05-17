@@ -52,7 +52,7 @@ export class TaskModalComponent implements OnInit {
         label: new FormControl(''),
         segmentId: new FormControl(''),
         estimatedTime: new FormControl(0), // Asegúrate que el control '' está definido aquí
-        state: new FormControl('') // Asegúrate que el control '' está definido aquí
+        state: new FormControl(-1) // Asegúrate que el control '' está definido aquí
       });
 
 
@@ -274,6 +274,8 @@ closeModal() {
   if (this.form.valid) {
     if (this.id !== -1) {
       this.task = { ...this.task, ...this.form.value };
+     
+
       this.closeModal();
 
       if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined) {
