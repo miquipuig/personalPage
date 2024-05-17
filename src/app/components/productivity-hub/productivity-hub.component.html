@@ -135,23 +135,85 @@
 			</div>
 
 			<div class="col-12 col-md-7 col-lg-8">
-				<div class="d-flex justify-content-between align-items-center">
-					<div class="d-flex justify-content-between align-items-center">
-						<div #newTaskButton>
-							<button class="butoPlay" (click)="newTask()"><i
-									class="ri-add-circle-line icono-mitja"></i></button>
-						</div>
-						<div style="position: relative;"
-							class="ms-2 searchDiv d-flex justify-content-between align-items-center">
-							<input (input)="filterSearch()" class="searchInput flex-grow-1"
-								id="searchInput" type="text" [(ngModel)]="searchInput">
-							<span *ngIf="searchInput.length===0"
-								class="animate__animated animate__fadeIn searchIcon ms-1" style="position: absolute;"><i
-									class="ri-search-line"></i></span>
-							<span (click)="clearSarch()" *ngIf="searchInput.length>0"
-								class="animate__animated animate__fadeIn closeIcon"><i class="ri-close-line"></i></span>
+				<div style="position: relative; height: 30px;" class="mt-2">
+					<div class=" align-items-center text-end">
 
+						<div *ngIf="!this.taskService.taskLoaded"
+							class=" text-center d-flex align-items-center justify-content-end mb-2">
+							<div class=" d-md-block ms-2 animate__animated animate__fadeIn">Loading... </div>
+							<div class="ms-2 animate__animated animate__zoomIn">
+								<div class="spinner-border" role="status">
+								</div>
+							</div>
 						</div>
+						<div *ngIf="!this.taskService.taskSaved"
+							class="text-center d-flex align-items-center justify-content-end mb-2">
+							<div class="d-md-block ms-2 animate__animated animate__fadeIn">Saving... </div>
+							<div class="ms-2 animate__animated animate__zoomIn">
+								<div class="spinner-border" role="status">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row d-flex flex-column flex-md-row">
+					<div class="col-12 d-flex justify-content-start align-items-center">
+						<div class="d-flex justify-content-between align-items-center">
+							<div #newTaskButton>
+								<button class="butoPlay" (click)="newTask()"><i
+										class="ri-add-circle-line icono-mitja"></i></button>
+							</div>
+							<div style="position: relative;"
+								class="ms-2 searchDiv d-flex justify-content-between align-items-center">
+								<input (input)="filterSearch()" class="searchInput flex-grow-1" id="searchInput"
+									type="text" [(ngModel)]="searchInput">
+								<span *ngIf="searchInput.length===0"
+									class="animate__animated animate__fadeIn searchIcon ms-1"
+									style="position: absolute;"><i class="ri-search-line"></i></span>
+								<span (click)="clearSarch()" *ngIf="searchInput.length>0"
+									class="animate__animated animate__fadeIn closeIcon"><i
+										class="ri-close-line"></i></span>
+
+							</div>
+
+							<div style="position: relative;">
+								<div (click)="stateFilterMenu=!stateFilterMenu; $event.stopPropagation()"
+									class="states-text ms-2 ms-2 searchDiv d-flex justify-content-between align-items-center">
+									<i class=" ms-1 me-1 ri-filter-3-line"></i>
+								</div>
+
+
+								<div *ngIf="stateFilterMenu" style="--animate-duration: 0.5s;"
+									class=" animate__animated animate__fadeIn  d-flex  justify-content-left list-group filterList ">
+									<div (click)="asyncStateFilterAll()" class=" list-group-item listGreyColor">
+										<div class="form-check form-switch">
+											<input style="pointer-events: none;" [(ngModel)]="stateFilterMenuAll"
+												class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+											Select All
+										</div>
+									</div>
+
+									<div style="width: 150px;" (click)="stateFilter(state)" *ngFor="let state of states"
+										class=" list-group-item listGreyColor">
+										<div class="form-check form-switch">
+											<input style="pointer-events: none;" [(ngModel)]="state.visibilityTaskList"
+												class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+											{{state.name | truncate:10}}
+										</div>
+									</div>
+
+								</div>
+
+
+
+
+							</div>
+						</div>
+					</div>
+
+
+					<div class="col-12 d-flex justify-content-start align-items-center mb-2">
+
 						<div (click)="loadUnfilteredTasksByLabel()" *ngIf="filteredLabel>=0"
 							class="outline-label2 ms-2 "
 							style="--color-base: var(--{{getLabelInfo(filteredLabel).color}}-color)">
@@ -162,27 +224,12 @@
 						<div (click)="loadUnfilteredTasksBySegment()" *ngIf="filteredSegment>=0"
 							class="outline-label2 ms-2 ">
 							{{
-							getSegmentName(filteredSegment) }} <i class="ri-close-large-line"></i>
+							getSegmentName(filteredSegment) | truncate:12 }} <i class="ri-close-large-line"></i>
 						</div>
 					</div>
 
 
-					<div *ngIf="!this.taskService.taskLoaded" class=" text-center d-flex align-items-center mb-2">
-						<div class="ms-2 animate__animated animate__fadeIn">Loading Tasks... </div>
-						<div class="ms-2 animate__animated animate__zoomIn">
-							<div class="spinner-border" role="status">
-							</div>
-						</div>
-					</div>
-					<div *ngIf="!this.taskService.taskSaved" class=" text-center d-flex align-items-center mb-2">
-						<div class="ms-2 animate__animated animate__fadeIn">Saving Tasks... </div>
-						<div class="ms-2 animate__animated animate__zoomIn">
-							<div class="spinner-border" role="status">
-							</div>
-						</div>
-					</div>
 				</div>
-
 				<div *ngIf="tasks.length>0" style="position:relative"
 					class="animate__animated animate__fadeIn task-list">
 
@@ -193,81 +240,82 @@
 						class="animate__animated animate__fadeIn task-list">
 
 						<div (click)="activeTask(i)" *ngFor="let task of tasks; let i = index">
-
-
 							<div cdkDrag (cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded($event)"
-								class="task-card mb-1 card text-white "
+								class="task-card mb-1 card text-white"
 								[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': i === clock.actualTask}">
 								<div class="card-body d-flex justify-content-between align-items-start p-2">
-
 									<div class="card-title me-0 mb-0">
-
 										<div class="d-flex align-items-start justify-content-end">
 											<div style="width: 25px; height: 25px; margin: 0px; padding:0px"
 												cdkDragHandle>
 												<i class="ri-draggable me-1"></i>
-
 											</div>
-											<div *ngIf="task.elementType==='task'" class="me-1 elementType">
+											<div *ngIf="task.elementType==='task'" class="me-2 elementType">
 												T
 											</div>
-											<div *ngIf="task.elementType==='segment'" class="me-1 elementType">
+											<div *ngIf="task.elementType==='segment'" class="me-2 elementType">
 												S
 											</div>
 											<div>
-												<div (click)="loadFilteredTasksByLabel(task.label)"
+												<div (click)="loadFilteredTasksByLabel(task.label); $event.stopPropagation()"
 													*ngIf="getLabelInfo(task.label)" class="outline-label me-2"
 													style="--color-base: var(--{{getLabelInfo(task.label).color}}-color)">
 													<i *ngIf="getLabelInfo(task.label).icon"
-														class="{{getLabelInfo(task.label).icon}} me-1"></i>{{
-															getLabelInfo(task.label).name }}
+														class="{{getLabelInfo(task.label).icon}}"></i>
+													{{ getLabelInfo(task.label).name }}
 												</div>
 											</div>
 											<div>
-												<div (click)="loadFilteredTasksBySegment(task.segmentId)" *ngIf="task.segmentId!=null || task.segmentId!=undefined" class="outline-label me-2">
-
-													{{getSegmentName(task.segmentId)}} 
+												<div (click)="loadFilteredTasksBySegment(task.segmentId); $event.stopPropagation()"
+													*ngIf="task.segmentId!=null || task.segmentId!=undefined"
+													class="outline-label me-2">
+													{{getSegmentName(task.segmentId) | truncate:12 }}
 												</div>
 											</div>
-
-											<div>
+											<div class="me-1">
 												{{task.name | truncate:50}}
-
 											</div>
 										</div>
 										<div class="small-detail">{{task.detail | truncate:70 }}</div>
-
-										<div *ngIf="tasks[i].estimatedTime>0" class="small-detail"> <i
-												class="ri-timer-line"></i> {{task.elapsedTime*1000 |
-											customTimeFormat}} of
+										<div *ngIf="tasks[i].estimatedTime>0" class="small-detail">
+											<i class="ri-timer-line"></i> {{task.elapsedTime*1000 |
+											customTimeFormat}}
+											of
 											{{task.estimatedTime | customTimeFormat }} - {{ taskTimePercentage(i) |
-											number:'1.0-1' }}%</div>
-
+											number:'1.0-1' }}%
+										</div>
 										<div *ngIf="tasks[i].estimatedTime<1 &&tasks[i].elapsedTime >0"
-											class="small-detail"> <i class="ri-timer-line"></i>
-											{{task.elapsedTime*1000 |
+											class="small-detail">
+											<i class="ri-timer-line"></i> {{task.elapsedTime*1000 |
 											customTimeFormat}}
 										</div>
 									</div>
-
 									<div class="d-flex">
-										<button #editTaskButton (click)="editTask(i)" class="butoPlay"><i
-												class="ri-edit-2-fill "></i></button>
+										<select (click)="$event.stopPropagation()"
+											(change)="onStateChange($event, task); $event.stopPropagation()"
+											[(ngModel)]="task.state" class="state-select me-1"
+											aria-label=".form-select-sm example">
+											<!-- <option value="-1" selected>Stateless</option> -->
+											<option *ngFor="let state of states" [value]="state.id">{{state.name |
+												truncate:10}}</option>
+										</select>
+										<button #editTaskButton (click)="editTask(i); $event.stopPropagation()"
+											class="butoPlay">
+											<i class="ri-edit-2-fill"></i>
+										</button>
 									</div>
 								</div>
-
-								<div *ngIf="tasks[i].estimatedTime>0 " class="progress task">
+								<div *ngIf="tasks[i].estimatedTime>0" class="progress task">
 									<div class="progress-bar bg-danger" role="progressbar task"
-										style="width: {{taskTimePercentage(i)}}%"></div>
+										style="width: {{taskTimePercentage(i)}}%">
+									</div>
 									<div class="progress-bar bg-grey" role="progressbar task"
-										style="width: {{taskTimePercentage(i) -50}}%"></div>
-
+										style="width: {{taskTimePercentage(i) - 50}}%">
+									</div>
 								</div>
-
 							</div>
-							<!-- Barra de progreso al pie de cada tarjeta -->
-
 						</div>
+
 					</div>
 
 					<!-- <pre>{{tasks | json}}</pre> -->

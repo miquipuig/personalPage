@@ -790,8 +790,10 @@ img.pomodoroCurrent {
 	/* Opcional: Ajusta el ancho al contenedor si lo necesitas */
 	box-sizing: border-box;
 	/* Para incluir el padding y el borde en el ancho total */
-	transition: border-color 0.3s}∫
-.searchDiv:hover{
+	transition: border-color 0.3s
+}
+
+.searchDiv:hover {
 	border: 2px solid rgb(255, 255, 255);
 }
 
@@ -883,13 +885,13 @@ img.pomodoroCurrent {
 	box-sizing: border-box;
 	border-radius: 4px;
 	box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-				0 8px 10px 1px rgba(0, 0, 0, 0.14),
-				0 3px 14px 2px rgba(0, 0, 0, 0.12);
-				/* background-color: var(--red-color); */
-				background-color: #833535 !important;
-				background-color: #838383 !important;
-				z-index: 6000 !important;
-  }
+		0 8px 10px 1px rgba(0, 0, 0, 0.14),
+		0 3px 14px 2px rgba(0, 0, 0, 0.12);
+	/* background-color: var(--red-color); */
+	background-color: #833535 !important;
+	background-color: #838383 !important;
+	z-index: 6000 !important;
+}
 
 /* .cdk-drag-animating {
 	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
@@ -897,26 +899,134 @@ img.pomodoroCurrent {
 	background-color: #ff0000;
   } */
 
-  .cdk-drag-placeholder {
+.cdk-drag-placeholder {
 	opacity: 0 !important;
-  }
-  .cdk-drag-animating {
-	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  }
+}
 
-  .elementType {
-    position: relative;
-    /* display: inline-block; */
+.cdk-drag-animating {
+	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.elementType {
+	position: relative;
+	/* display: inline-block; */
 	margin-right: 2px;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo negro translúcido */
-    padding:  0px 7px;
-    border-radius: 3px; 
-    transition: background-color 0.2s ease; /* Efecto de transición para el hover */
+	color: white;
+	background-color: rgba(0, 0, 0, 0.5);
+	/* Fondo negro translúcido */
+	padding: 0px 7px;
+	border-radius: 3px;
+	transition: background-color 0.2s ease;
+	/* Efecto de transición para el hover */
 }
 
 .elementType:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* Aclaramiento en hover */
+	background-color: rgba(255, 255, 255, 0.2);
+	/* Aclaramiento en hover */
 }
 
 /* Si quieres un efecto adicional en el texto al hacer hover */
+.state-select {
+	color: rgb(200, 200, 200);
+	/* Letra blanca */
+	width: ;
+	background-color: #333;
+	/* Fondo negro */
+	border: 1px solid rgb(92, 92, 92);
+	/* Borde blanco */
+	border-radius: 5px;
+	/* Bordes redondeados */
+	padding: 0px 2px;
+	/* Espaciado interno */
+	/* font-size: 14px; */
+	outline: none;
+	/* Sin borde de enfoque */
+	/*transition color border, background and color*/
+	/* transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease; */
+	transition: color 0.2s ease, border-color 0.2s ease;
+
+}
+
+.state-select:hover {
+	/* background-color: #5c5c5c; */
+	/* background-color: #5c5c5c; */
+	color: white;
+	cursor: pointer;
+	/* Cambia el cursor a puntero */
+	border: 1px solid white;
+}
+.states-text{
+	cursor: pointer; color: grey;
+}
+.states-text:hover{
+	color:white
+}
+/* .state-select option {
+    color: white; 
+    background-color: black; 
+} */
+
+.filterList {
+	position: absolute;
+	/* Se posiciona de forma absoluta respecto al contenedor */
+	top: 35px;
+	/* Se posiciona justo debajo del contenedor */
+	left: 0;
+	/* Alinea la lista al borde izquierdo del contenedor */
+	width: auto;
+	max-height: 400px;
+	overflow-y: auto;
+	z-index: 10000;
+	scrollbar-width: thin;
+	/* Hace la barra de desplazamiento más delgada en Firefox */
+	background-color: #000000;
+	/* Fondo blanco para la lista */
+	border: 1px white solid;
+	border-end-end-radius: 20px;
+	/* Borde blanco */
+}
+
+.listGreyColor {
+	background-color: rgb(0, 0, 0);
+	color: rgb(198, 198, 198);
+	/* padding: 2px 2px 2px 2px; */
+	cursor: pointer;
+	transition: background-color 0.2s ease, color 0.2s ease;
+	border: none !important;
+}
+
+
+.listGreyColor:hover {
+	background-color: rgb(33, 33, 33);
+	color: white
+}
+
+.form-check-input:not(:checked) {
+	background-color: #686868 !important;
+	border-color: #6e1100 !important;
+	border: none;
+
+}
+
+.form-check-input:checked::before {
+	background-color: #ff0000 !important;
+}
+
+.form-check-input:checked {
+	background-color: #6e1100 !important;
+	/* border-color: white !important; */
+	border: none;
+
+}
+
+.form-switch .form-check-input:focus {
+	border-color: rgba(23, 226, 158, 0.25) !important;
+	outline: 0 !important;
+	/* background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(0,0,0,0.25)'/></svg>") !important; */
+}
+
+.form-switch .form-check-input:checked {
+	background-color: #6e100095 !important;
+	border-color: #b91c00 !important;
+	border: none;
+}

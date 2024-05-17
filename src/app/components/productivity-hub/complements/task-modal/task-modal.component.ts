@@ -6,6 +6,8 @@ import { TaskServicesService } from 'src/app/services/productivity-hub/task-serv
 import { Time } from '@angular/common';
 import { TimePickerComponent } from '../time-picker/time-picker.component';
 import { Task } from 'src/app/services/productivity-hub/task-services.service';
+import { State } from 'src/app/services/productivity-hub/task-services.service';
+
 import { LabelEditorComponent } from '../label-editor/label-editor.component';
 @Component({
   selector: 'app-task-modal',
@@ -27,6 +29,7 @@ export class TaskModalComponent implements OnInit {
   task: Task = {} as Task;
   label: Label = {} as Label;
   segment: Task = {} as Task;
+
   @Output() refreshTasks = new EventEmitter<any>();
 
   @ViewChild('taskModal') taskModal!: ElementRef;
@@ -39,36 +42,39 @@ export class TaskModalComponent implements OnInit {
   // filteredActivities: Observable<Label[]>;
   labels: Label[] = [];
   segmentIds: Task[] = [];
-  constructor(private taskService: TaskServicesService, private fb: FormBuilder) {
-    this.id = -1;
-    this.form = new FormGroup({
-      elementType: new FormControl('task', Validators.required),
-      name: new FormControl('', Validators.required),
-      detail: new FormControl(''),
-      label: new FormControl(''),
-      segmentId: new FormControl(''),
-      estimatedTime: new FormControl(0) // Asegúrate que el control '' está definido aquí
-    });
+  states: State[] = [];
+    constructor(private taskService: TaskServicesService, private fb: FormBuilder) {
+      this.id = -1;
+      this.form = new FormGroup({
+        elementType: new FormControl('task', Validators.required),
+        name: new FormControl('', Validators.required),
+        detail: new FormControl(''),
+        label: new FormControl(''),
+        segmentId: new FormControl(''),
+        estimatedTime: new FormControl(0), // Asegúrate que el control '' está definido aquí
+        state: new FormControl('') // Asegúrate que el control '' está definido aquí
+      });
 
 
-    this.labels = this.filterOptions(this.form.get('label')!.value || '');
-    this.segmentIds = this.filterSectionIdOptions(this.form.get('label')!.value || '');
-
-  }
+      this.labels = this.filterOptions(this.form.get('label')!.value || '');
+      this.segmentIds = this.filterSectionIdOptions(this.form.get('label')!.value || '');
+      this.states= this.taskService.states;
+      console.log(this.states);
+    }
 
   private filterOptions(value: string): Label[] {
-    const filterValue = value.toLowerCase();
-    const options = this.taskService.getOrderedLabelsPerName();
+      const filterValue = value.toLowerCase();
+      const options = this.taskService.getOrderedLabelsPerName();
 
-    return options.filter(option => option.name.toLowerCase().includes(filterValue));
-  }
+      return options.filter(option => option.name.toLowerCase().includes(filterValue));
+    }
 
   private filterSectionIdOptions(value: string): Task[] {
-    const filterValue = value.toLowerCase();
-    let options: Task[]
+      const filterValue = value.toLowerCase();
+      let options: Task[]
 
     options = this.taskService.tasks.filter(task => task.elementType === 'segment').sort((a, b) => a.idPosition - b.idPosition);
-    if (this.label && this.label.id !== undefined) {
+      if(this.label && this.label.id !== undefined) {
       options = options.filter(option => option.label === this.label.id);
     }
     return options.filter(option => option.name.toLowerCase().includes(filterValue));
@@ -76,259 +82,272 @@ export class TaskModalComponent implements OnInit {
 
 
 
-  selectLabel() {
-    this.dontCloseTraficLight = true;
+selectLabel() {
+  this.dontCloseTraficLight = true;
 
-    this.labels = this.filterOptions('');
-    // this.filteredActivities = this.form.get('label')!.valueChanges
-    // .pipe(
-    //   startWith(''),
-    //   map(value => this.filterOptions(value))
-    // );
+  this.labels = this.filterOptions('');
+  // this.filteredActivities = this.form.get('label')!.valueChanges
+  // .pipe(
+  //   startWith(''),
+  //   map(value => this.filterOptions(value))
+  // );
 
-    this.showList = true;
-  }
+  this.showList = true;
+}
 
-  selectSectionId() {
+selectSectionId() {
 
-    this.segmentIds = this.filterSectionIdOptions('');
-    // this.filteredActivities = this.form.get('label')!.valueChanges
-    // .pipe(
-    //   startWith(''),
-    //   map(value => this.filterOptions(value))
-    // );
+  this.segmentIds = this.filterSectionIdOptions('');
+  // this.filteredActivities = this.form.get('label')!.valueChanges
+  // .pipe(
+  //   startWith(''),
+  //   map(value => this.filterOptions(value))
+  // );
 
-    this.showSectionIdList = true;
-  }
+  this.showSectionIdList = true;
+}
 
-  onSearch(): void {
-    // Logic to handle live search update
-    // this.filteredActivities = of(this.filterOptions(this.form.get('label')!.value));
-    this.labels = this.filterOptions(this.form.get('label')!.value || '');
-    if (this.labels.length === 1) {
-      this.label = this.labels[0];
-    }
-
-  }
-  onSegmentIdsearch(): void {
-    this.segmentIds = this.filterSectionIdOptions(this.form.get('segmentId')!.value || '');
-    if (this.segmentIds.length === 1) {
-      if(this.segmentIds[0].name===this.form.get('segmentId')!.value){
-        this.segment = this.segmentIds[0];
-        this.label= this.taskService.getLabelById(this.segment.label!);
-        this.form.get('label')!.setValue(this.label.name);
-      }
-    }
+onSearch(): void {
+  // Logic to handle live search update
+  // this.filteredActivities = of(this.filterOptions(this.form.get('label')!.value));
+  this.labels = this.filterOptions(this.form.get('label')!.value || '');
+  if(this.labels.length === 1) {
+  this.label = this.labels[0];
+}
 
   }
-
-  selectOption(option: Label): void {
-    this.showList = false;
-    this.form.get('label')!.setValue(option.name);
-    this.label = option;
-  }
-
-  selectSectionIdOption(option: Task): void {
-    this.showSectionIdList = false;
-    this.form.get('segmentId')!.setValue(option.name);
-    this.label= this.taskService.getLabelById(option.label!);
+onSegmentIdsearch(): void {
+  this.segmentIds = this.filterSectionIdOptions(this.form.get('segmentId')!.value || '');
+  if(this.segmentIds.length === 1) {
+  if (this.segmentIds[0].name === this.form.get('segmentId')!.value) {
+    this.segment = this.segmentIds[0];
+    this.label = this.taskService.getLabelById(this.segment.label!);
     this.form.get('label')!.setValue(this.label.name);
-    this.segment = option;
   }
-  deleteActivity(label: Label): void {
-    if (this.dontCloseTraficLight) {
-      this.dontCloseTraficLight = false;
-      this.dontClose = true;
+}
+
+  }
+
+selectOption(option: Label): void {
+  this.showList = false;
+  this.form.get('label')!.setValue(option.name);
+  this.label = option;
+}
+
+selectSectionIdOption(option: Task): void {
+  this.showSectionIdList = false;
+  this.form.get('segmentId')!.setValue(option.name);
+  this.label = this.taskService.getLabelById(option.label!);
+  this.form.get('label')!.setValue(this.label.name);
+  this.segment = option;
+}
+deleteActivity(label: Label): void {
+  if(this.dontCloseTraficLight) {
+  this.dontCloseTraficLight = false;
+  this.dontClose = true;
+}
+this.labels = this.labels.filter(option => option.id !== label.id);
+this.taskService.deleteLabel(label.id);
+// this.filteredActivities = this.form.get('label')!.valueChanges
+// .pipe(
+//   startWith(''),
+//   map(value => this.filterOptions(value))
+// );
+//refresh filteredActivities
+this.showList = true;
+
+  }
+
+editActivity(label: Label): void {
+  this.closeMenus();
+  this.labelEditor.openEditLabel(label);
+
+}
+
+ngOnInit() {
+  const element = document.getElementById('taskModal');
+  if (element !== null) {
+    this.taskModalP = bootstrap.Modal.getOrCreateInstance(element, {
+      keyboard: true
+    });
+    element.addEventListener('hidden.bs.modal', () => {
+      this.closeModal();
+    });
+  }
+}
+// onModalShown() {
+//   let rect = this.taskModalDialog.nativeElement.getBoundingClientRect();
+//   console.log(rect);
+// }
+onInputBlur() {
+
+  setTimeout(() => {
+    if (!this.dontClose) {
+      this.showList = false;
+
+    } else {
+      this.dontClose = false;
     }
-    this.labels = this.labels.filter(option => option.id !== label.id);
-    this.taskService.deleteLabel(label.id);
-    // this.filteredActivities = this.form.get('label')!.valueChanges
-    // .pipe(
-    //   startWith(''),
-    //   map(value => this.filterOptions(value))
-    // );
-    //refresh filteredActivities
-    this.showList = true;
+  }, 300);
+}
+visualEffectAddTask(left: number, top: number) {
 
-  }
+  let aproxLeft = window.innerWidth / 2 - 250;
+  let aproxTop = 55;
+  let originX = left - aproxLeft;
+  let originY = top - aproxTop;
+  this.taskModal.nativeElement.style.setProperty('--modal-originX', `${originX}px`);
+  this.taskModal.nativeElement.style.setProperty('--modal-originY', `${originY}px`);
+  //print originX and originY
+  console.log('originX: ' + originX + ' originY: ' + originY);
+  // this.taskModal.nativeElement.style.setProperty('--modal-left', `${left}px`);
+  // this.taskModal.nativeElement.style.setProperty('--modal-top', `${top}px`);    
 
-  editActivity(label: Label): void {
-    this.closeMenus();
-    this.labelEditor.openEditLabel(label);
-
-  }
-
-  ngOnInit() {
-    const element = document.getElementById('taskModal');
-    if (element !== null) {
-      this.taskModalP = bootstrap.Modal.getOrCreateInstance(element, {
-        keyboard: true
-      });
-      element.addEventListener('hidden.bs.modal', () => {
-        this.closeModal();
-      });
-    }
-  }
-  // onModalShown() {
-  //   let rect = this.taskModalDialog.nativeElement.getBoundingClientRect();
-  //   console.log(rect);
-  // }
-  onInputBlur() {
-
-    setTimeout(() => {
-      if (!this.dontClose) {
-        this.showList = false;
-
-      } else {
-        this.dontClose = false;
-      }
-    }, 300);
-  }
-  visualEffectAddTask(left: number, top: number) {
-
-    let aproxLeft = window.innerWidth / 2 - 250;
-    let aproxTop = 55;
-    let originX = left - aproxLeft;
-    let originY = top - aproxTop;
-    this.taskModal.nativeElement.style.setProperty('--modal-originX', `${originX}px`);
-    this.taskModal.nativeElement.style.setProperty('--modal-originY', `${originY}px`);
-    //print originX and originY
-    console.log('originX: ' + originX + ' originY: ' + originY);
-    // this.taskModal.nativeElement.style.setProperty('--modal-left', `${left}px`);
-    // this.taskModal.nativeElement.style.setProperty('--modal-top', `${top}px`);    
-
-  }
+}
 
   async openModal(left: number, top: number) {
-    this.visualEffectAddTask(left, top);
+  this.visualEffectAddTask(left, top);
 
-    this.modalOpened = true;
-    // this.onModalShown();
-    this.form.reset();
-    this.form.get('elementType')?.setValue('task');
-    this.form.get('estimatedTime')?.setValue(0);
-    this.id = -1;
-    this.taskModalP.show();
-  }
+  this.modalOpened = true;
+  // this.onModalShown();
+  this.form.reset();
+  this.form.get('elementType')?.setValue('task');
+  this.form.get('estimatedTime')?.setValue(0);
+  this.form.get('state')?.setValue(-1);
+
+  this.id = -1;
+  this.taskModalP.show();
+}
 
 
 
   async editModal(index: number, task: any, left: number, top: number) {
-    this.visualEffectAddTask(left, top);
-    this.modalOpened = true;
+  this.visualEffectAddTask(left, top);
+  this.modalOpened = true;
 
-    this.id = task.id;
-    this.task = task;
+  this.id = task.id;
+  this.task = task;
 
-    this.form.get('name')?.setValue(task.name);
+  this.form.get('name')?.setValue(task.name);
 
-    this.form.get('detail')?.setValue(task.detail);
-    this.form.get('estimatedTime')?.setValue(task.estimatedTime);
-    if (this.taskService.getLabelById(task.label)) {
-      this.label = this.taskService.getLabelById(task.label);
-      this.form.get('label')?.setValue(this.label.name);
-    }
-    if (this.taskService.getTaskById(task.segmentId)) {
-      this.segment = this.taskService.getTaskById(task.segmentId);
-      this.form.get('segmentId')?.setValue(this.segment.name);
-    } else {
-      this.form.get('segmentId')?.setValue('');
-    }
-    this.form.get('elementType')?.setValue(task.elementType);
-    this.taskModalP.show();
+  this.form.get('detail')?.setValue(task.detail);
+  this.form.get('estimatedTime')?.setValue(task.estimatedTime);
+  if (this.taskService.getLabelById(task.label)) {
+    this.label = this.taskService.getLabelById(task.label);
+    this.form.get('label')?.setValue(this.label.name);
   }
-  closeMenus() {
-    this.showList = false;
-    this.showSectionIdList = false;
-    if (this.timePicker) {
-      this.timePicker.closeTimePicker();
-    }
-    if(this.labelEditor){
-      this.labelEditor.close();
-    }
-
+  if (this.taskService.getTaskById(task.segmentId)) {
+    this.segment = this.taskService.getTaskById(task.segmentId);
+    this.form.get('segmentId')?.setValue(this.segment.name);
+  } else {
+    this.form.get('segmentId')?.setValue('');
+  }
+  if (task.state) {
+    this.form.get('state')?.setValue(task.state);
+  }else {
+    this.form.get('state')?.setValue(-1);
+  }
+  this.form.get('elementType')?.setValue(task.elementType);
+  this.taskModalP.show();
+}
+closeMenus() {
+  this.showList = false;
+  this.showSectionIdList = false;
+  if (this.timePicker) {
+    this.timePicker.closeTimePicker();
+  }
+  if (this.labelEditor) {
+    this.labelEditor.close();
   }
 
-  closeModal() {
-    this.closeMenus();
-    this.taskModalP.hide();
-    this.modalOpened = false;
- 
-  }
+}
+
+closeModal() {
+  this.closeMenus();
+  this.taskModalP.hide();
+  this.modalOpened = false;
+
+}
 
   async onSubmit() {
-    console.log(this.form.get('segmentId')!.value);
-    if (this.form.valid) {
-      if (this.id !== -1) {
-        this.task = { ...this.task, ...this.form.value };
-        this.closeModal();
+  console.log(this.form.get('segmentId')!.value);
+  if (this.form.valid) {
+    if (this.id !== -1) {
+      this.task = { ...this.task, ...this.form.value };
+      this.closeModal();
 
-        if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined) {
+      if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined) {
 
-          this.task.label = this.taskService.addLabelByName(this.form.get('label')!.value).id;
-        }
-        if (this.form.get('segmentId')!.value !== '' && this.form.get('segmentId')!.value !== null && this.form.get('segmentId')!.value !== undefined) {
-          let newSegment: any;
-          newSegment = {
-            name: this.form.get('segmentId')!.value,
-            label: this.task.label,
-            elementType: 'segment'
-
-          }
-          const segment = ((await this.taskService.addTaskByChild(newSegment)))
-          this.task.segmentId=segment.id;
-        }else{
-          this.task.segmentId=undefined;
-        }
-        await this.taskService.saveTask(this.task);
-
-      } else {
-        this.closeModal();
-        this.task = { ...this.task, ...this.form.value };
-        if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined) {
-          this.task.label = this.taskService.addLabelByName(this.form.get('label')!.value).id
-        }
-        if (this.form.get('segmentId')!.value !== '' && this.form.get('segmentId')!.value !== null && this.form.get('segmentId')!.value !== undefined) {
-          let newSegment: any;
-          newSegment = {
-            name: this.form.get('segmentId')!.value,
-            label: this.task.label,
-            elementType: 'segment'
-          }
-          const segment = (await this.taskService.addTaskByChild(newSegment))
-          this.task.segmentId=segment.id;
-        }else{
-          this.task.segmentId=undefined;
-        }
-        await this.taskService.addTask(this.task);
+        this.task.label = this.taskService.addLabelByName(this.form.get('label')!.value).id;
       }
-      this.refreshTasks.emit();
+      if (this.form.get('segmentId')!.value !== '' && this.form.get('segmentId')!.value !== null && this.form.get('segmentId')!.value !== undefined) {
+        let newSegment: any;
+        newSegment = {
+          name: this.form.get('segmentId')!.value,
+          label: this.task.label,
+          elementType: 'segment'
+
+        }
+        const segment = ((await this.taskService.addTaskByChild(newSegment)))
+        this.task.segmentId = segment.id;
+      } else {
+        this.task.segmentId = undefined;
+      }
+      if(this.form.get('state')!.value <  0) {
+        this.task.state = 1
+      }
+      await this.taskService.saveTask(this.task);
 
     } else {
-      this.form.markAllAsTouched();
-    }
-  }
-
-  validateForm() {
-    const nameControl = this.form.get('name');
-    if (nameControl) {
-      // console.log('entro1' + nameControl.touched + nameControl.valid);
-
-      if (nameControl.touched && !nameControl.valid) {
-        return true;
+      this.closeModal();
+      this.task = { ...this.task, ...this.form.value };
+      if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined) {
+        this.task.label = this.taskService.addLabelByName(this.form.get('label')!.value).id
       }
+      if (this.form.get('segmentId')!.value !== '' && this.form.get('segmentId')!.value !== null && this.form.get('segmentId')!.value !== undefined) {
+        let newSegment: any;
+        newSegment = {
+          name: this.form.get('segmentId')!.value,
+          label: this.task.label,
+          elementType: 'segment'
+        }
+        const segment = (await this.taskService.addTaskByChild(newSegment))
+        this.task.segmentId = segment.id;
+      } else {
+        this.task.segmentId = undefined;
+      }
+      if(this.form.get('state')!.value < 0) {
+        this.task.state = 1
+      }
+      await this.taskService.addTask(this.task);
+    }
+    this.refreshTasks.emit();
 
-    } return false;
+  } else {
+    this.form.markAllAsTouched();
   }
+}
+
+validateForm() {
+  const nameControl = this.form.get('name');
+  if (nameControl) {
+    // console.log('entro1' + nameControl.touched + nameControl.valid);
+
+    if (nameControl.touched && !nameControl.valid) {
+      return true;
+    }
+
+  } return false;
+}
 
   async deleteTaskEmit() {
-    console.log('delete task');
-    console.log(this.task.id);
-    this.closeModal();
+  console.log('delete task');
+  console.log(this.task.id);
+  this.closeModal();
 
-    await this.taskService.deleteTask(this.task.id);
-    this.refreshTasks.emit();
-  }
+  await this.taskService.deleteTask(this.task.id);
+  this.refreshTasks.emit();
+}
 }
 
 

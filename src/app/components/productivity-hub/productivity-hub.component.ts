@@ -1,10 +1,11 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { timer } from 'rxjs';
 import { TaskModalComponent } from './complements/task-modal/task-modal.component';
 import { TaskServicesService } from 'src/app/services/productivity-hub/task-services.service';
 import { Label } from 'src/app/services/productivity-hub/task-services.service';
 import { Task } from 'src/app/services/productivity-hub/task-services.service';
 import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragMove, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { State } from 'src/app/services/productivity-hub/task-services.service';
 
 @Component({
   selector: 'app-productivity-hub',
@@ -32,11 +33,21 @@ export class ProductivityHubComponent implements AfterViewInit {
   dragOverIndex: number | null = null;
   hoverIndex: number = -1;
   labelsAnimated=true;
+  stateFilterMenu=false
+  stateFilterMenuAll=false
+  states: State[] = [];
 
 
   constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2, public taskService: TaskServicesService) {
     this.time = new Date();
     this.time.setHours(12, 0, 0, 0);
+  }
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const clickedInside = (event.target as HTMLElement).closest('.filterList');
+    if (!clickedInside) {
+      this.stateFilterMenu = false;
+    }
   }
 
   pomodoro = true;
@@ -50,7 +61,9 @@ export class ProductivityHubComponent implements AfterViewInit {
     }, 50);
     this.labels = this.taskService.getLabels();
 
+    this.loadStates();  
     this.loadTasks();
+
     this.loadClock();
     this.startClock();
     this.totalTimeAssingment(this.clock.pomodoroState);
@@ -67,11 +80,20 @@ export class ProductivityHubComponent implements AfterViewInit {
 
     this.refreshTasks();
   }
-
+  async loadStates() {
+     this.states = this.taskService.states;
+  }
   loadFilteredTasksByLabel(labelId: any) {
 
     this.filteredLabel = labelId;
     this.filterSearch();
+  }
+  onStateChange(event: Event, task: Task) {
+    const selectedStateId = parseInt((event.target as HTMLSelectElement).value);
+    task.state = selectedStateId;
+    this.taskService.saveTask(task);
+    // this.refreshTasks();
+    // Lógica adicional que quieres ejecutar al cambiar la selección
   }
 
   loadUnfilteredTasksByLabel() {
@@ -89,6 +111,41 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.filterSearch();
   }
 
+  async stateFilter(state: State) {
+
+    state.visibilityTaskList = !state.visibilityTaskList;
+    this.checkStateAllFilter();
+
+   this.states= await (this.taskService.saveState(state));
+
+   this.filterSearch();
+  }
+
+  asyncStateFilterAll() {
+    //si todos los estados estan visibles, se ocultan
+
+    if (this.states.every(state => state.visibilityTaskList)) {
+      this.states.forEach(state => {
+        state.visibilityTaskList = false;
+      });
+    } else {
+      this.states.forEach(state => {
+        state.visibilityTaskList = true;
+      });
+    }
+    this.checkStateAllFilter();
+
+    this.filterSearch();
+  }
+
+  checkStateAllFilter() {
+    //si todos los estados estan visibles, se ocultan
+    if (this.states.every(state => state.visibilityTaskList)) {
+      this.stateFilterMenuAll = true;
+    } else {
+      this.stateFilterMenuAll = false;
+    }
+  }
 
 
   filterSearch(): void {
@@ -96,21 +153,23 @@ export class ProductivityHubComponent implements AfterViewInit {
     let tasks: Task[] = [];
     tasks = [...this.taskService.tasks];
 
+    if (this.states.length > 0) {
+      tasks = tasks.filter(task => this.states.find(state => state.id === task.state)?.visibilityTaskList);
+    }
+
     if (this.filteredLabel !== -1) {
     tasks = tasks.filter(task => task.label === this.filteredLabel);
     } 
     if (this.filteredSegment !== -1) {
-      tasks = tasks.filter(task => task.segmentId === this.filteredSegment);
-    } 
-    console.log(this.searchInput)
-
-
+      tasks = tasks.filter(task => task.segmentId === this.filteredSegment || task.id === this.filteredSegment);
+    }
     if (this.searchInput !== '') {
       tasks = tasks.filter(task =>
         task.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
         (task.detail && task.detail.toLowerCase().includes(this.searchInput.toLowerCase()))
       );
     }
+
     this.tasks = tasks;
   }
 
@@ -506,7 +565,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   getLabelInfo(labelId: any): Label {
     return this.taskService.getLabelById(labelId);
   }
-  getSegmentName(segmentId: any): String {
+  getSegmentName(segmentId: any): string {
     let segment= this.taskService.getTaskById(segmentId);
     if(segment){
       return segment.name;

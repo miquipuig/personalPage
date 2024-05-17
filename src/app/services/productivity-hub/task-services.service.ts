@@ -23,6 +23,16 @@ export interface Task {
   userStoryId: number;
   pomodoroCounter: number;
   pomodoroQuarterCounter: number;
+  state: number;
+}
+
+export interface State{
+  id: number;
+  name: string;
+  visibilityTaskList: boolean;
+  visibilityKanban: boolean;
+  idPosition: number;
+  activityId: number | undefined | null;
 }
 
 
@@ -34,11 +44,13 @@ export class TaskServicesService {
   constructor() {
     this.loadLabels();
     this.loadTasks();
+    this.loadStates();
 
   }
 
   labels: Label[] = [];
   tasks: Task[] = [];
+  states: State[] = [];
   taskLoaded: boolean = false;
   taskSaved: boolean = true;
 
@@ -57,6 +69,19 @@ export class TaskServicesService {
         }
       }, 1000); // Simula un retraso de 1 segundo
     });
+  }
+
+  loadStates(): void {
+    if (localStorage.getItem('states') !== null && localStorage.getItem('states') !== undefined && localStorage.getItem('states') !== '[]') {
+      this.states = JSON.parse(localStorage.getItem('states')!);
+    } else {
+      this.states = [
+        { id: 1, name: 'To Do', visibilityTaskList: true, visibilityKanban: true, idPosition: 100, activityId:undefined },
+        { id: 2, name: 'Doing', visibilityTaskList: true, visibilityKanban: true, idPosition: 200, activityId:undefined},
+        { id: 3, name: 'Done', visibilityTaskList: false, visibilityKanban: true, idPosition: 300, activityId:undefined }
+      ];
+      this.saveStates();
+    }
   }
 
   orderTasks(tasks: Task[]): Task[] {
@@ -150,6 +175,67 @@ export class TaskServicesService {
       }, 1000); // Simula un retraso de 1 segundo
     });
   }
+  async saveStates(): Promise<any> {
+    this.taskLoaded = false;
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          localStorage.setItem('states', JSON.stringify(this.states));
+          this.taskLoaded = true;
+
+          resolve('States saved');
+        } catch (error) {
+          reject(error);
+        }
+      }, 1000); // Simula un retraso de 1 segundo
+    });
+  }
+
+  async addState(state: State): Promise<any> {
+    this.taskLoaded = false;
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          let id = 1;
+
+          while (this.states.find(state => state.id === id) !== undefined) {
+            id++;
+          }
+          state.id = id;
+          state.idPosition = this.states.length * 100;
+          this.states.push(state);
+          localStorage.setItem('states', JSON.stringify(this.states));
+          this.taskLoaded = true;
+          resolve(state);
+        } catch (error) {
+          reject(this.states);
+        }
+      }, 1000); // Simula un retraso de 1 segundo
+    });
+  }
+  async saveState(state: State): Promise<State[]> {
+    this.taskLoaded = false;
+
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          const index = state.id;
+          let foundState = this.states.find(s => s.id === index);
+          if (foundState) {
+            Object.assign(foundState, state);
+          }
+          localStorage.setItem('states', JSON.stringify(this.states));
+          this.taskLoaded = true;
+
+          resolve(this.states);
+        } catch (error) {
+          reject(this.states);
+        }
+      }, 1000); // Simula un retraso de 1 segundo
+    });
+  }
 
   async saveTasks(): Promise<any> {
     this.taskSaved = false;
@@ -224,6 +310,8 @@ export class TaskServicesService {
     }
     this.saveLabels();
   }
+
+
 
   updateLabel(label: Label): void {
     const index = this.labels.findIndex(l => l.id === label.id);
