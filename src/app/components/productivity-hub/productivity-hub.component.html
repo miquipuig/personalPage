@@ -204,9 +204,17 @@
 
 								</div>
 
+						
 
 
 
+
+							</div>
+							<div class="ms-2 elementTypeButton" (click)="filteredAllTasks=!filteredAllTasks;  filterSearch()" [ngClass]="{'active': !filteredAllTasks}">
+								T
+							</div>
+							<div class="elementTypeButton" (click)="filteredAllSegments=!filteredAllSegments;  filterSearch()" [ngClass]="{'active': !filteredAllSegments}">
+								S
 							</div>
 						</div>
 					</div>
@@ -250,10 +258,10 @@
 												cdkDragHandle>
 												<i class="ri-draggable me-1"></i>
 											</div>
-											<div *ngIf="task.elementType==='task'" class="me-2 elementType">
+											<div (click)="filteredAllSegments=true; filterSearch()" *ngIf="task.elementType==='task'" class="me-2 elementType"  >
 												T
 											</div>
-											<div *ngIf="task.elementType==='segment'" class="me-2 elementType">
+											<div (click)="filteredAllTasks=true; filterSearch()"  *ngIf="task.elementType==='segment'" class="me-2 elementType" >
 												S
 											</div>
 											<div>
@@ -323,8 +331,8 @@
 
 
 				</div>
-				<!-- <pre>{{tasks | json}}</pre>
-				<pre>{{states | json}}</pre> -->
+				<pre>{{tasks | json}}</pre>
+				<pre>{{states | json}}</pre>
 			</div>
 		</div>
 	</div>

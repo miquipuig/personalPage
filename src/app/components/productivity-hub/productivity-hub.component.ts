@@ -29,6 +29,8 @@ export class ProductivityHubComponent implements AfterViewInit {
   isSectionActive = false;
   filteredLabel = -1;
   filteredSegment = -1;
+  filteredAllTasks=false;
+  filteredAllSegments=false;
   searchInput = '';
   dragOverIndex: number | null = null;
   hoverIndex: number = -1;
@@ -36,6 +38,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   stateFilterMenu=false
   stateFilterMenuAll=false
   states: State[] = [];
+  
 
 
   constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2, public taskService: TaskServicesService) {
@@ -152,13 +155,29 @@ export class ProductivityHubComponent implements AfterViewInit {
 
 
   filterSearch(): void {
-
+    console.log('filterSearch');
+    
     let tasks: Task[] = [];
     tasks = [...this.taskService.tasks];
-    console.log('tasks', tasks);
-
+    console.log(tasks);
     if (this.states.length > 0) {
+      console.log('entro');
       tasks = tasks.filter(task => this.states.find(state => state.id === task.state)?.visibilityTaskList);
+    }
+    if(this.filteredAllSegments || this.filteredAllTasks){
+      console.log('paso2');
+      console.log('filteredAllSegments:',this.filteredAllSegments);
+      console.log( 'filteredAllTasks:',this.filteredAllTasks);
+      tasks = tasks.filter(task => {
+
+        if(this.filteredAllSegments && task.elementType == 'segment'){
+          return false;
+        }
+        if(this.filteredAllTasks && task.elementType == 'task'){
+          return false;
+        }
+        return true;
+      });
     }
 
     if (this.filteredLabel !== -1) {
@@ -483,7 +502,7 @@ export class ProductivityHubComponent implements AfterViewInit {
       }
       this.changePomodoroState('work');
     }
-    this.saveClock()
+    this.saveClock();
 
   }
 

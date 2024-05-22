@@ -59,7 +59,6 @@ export class TaskModalComponent implements OnInit {
       this.labels = this.filterOptions(this.form.get('label')!.value || '');
       this.segmentIds = this.filterSectionIdOptions(this.form.get('label')!.value || '');
       this.states= this.taskService.states;
-      console.log(this.states);
     }
 
   private filterOptions(value: string): Label[] {
@@ -270,7 +269,6 @@ closeModal() {
 }
 
   async onSubmit() {
-  console.log(this.form.get('segmentId')!.value);
   if (this.form.valid) {
     if (this.id !== -1) {
       this.task = { ...this.task, ...this.form.value };

@@ -917,6 +917,8 @@ img.pomodoroCurrent {
 	padding: 0px 7px;
 	border-radius: 3px;
 	transition: background-color 0.2s ease;
+	cursor: pointer;
+
 	/* Efecto de transición para el hover */
 }
 
@@ -925,6 +927,33 @@ img.pomodoroCurrent {
 	/* Aclaramiento en hover */
 }
 
+.elementTypeButton{
+	position: relative;
+	background-color: #000000;
+	margin-right: 2px;
+	padding: 0px 7px;
+	border-radius: 3px;
+	border: 1px solid rgb(179, 179, 179);
+	color: white;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.elementTypeButton:hover{
+	background-color: rgb(77, 77, 77);
+	color: white;
+}
+
+.elementTypeButton.active{
+
+	background-color: rgb(179, 179, 179);
+	color: black;
+}
+.elementTypeButton.active:hover{
+
+	background-color: rgb(255, 255, 255);
+	color: black;
+}
 /* Si quieres un efecto adicional en el texto al hacer hover */
 .state-select {
 	color: rgb(200, 200, 200);
