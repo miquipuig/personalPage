@@ -21,6 +21,8 @@ export class ProductivityHubComponent implements AfterViewInit {
   @ViewChild('colRef') colRef!: ElementRef;
   @ViewChild('newTaskButton') newTaskButton!: ElementRef;
   @ViewChildren('editTaskButton') editTaskButton!: QueryList<ElementRef>;
+  @ViewChildren('editTaskButtonChild') editTaskButtonChild!: QueryList<ElementRef>;
+
 
 
   @ViewChild(TaskModalComponent) childComponent!: TaskModalComponent;
@@ -109,8 +111,6 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   async refreshTasks() {
     this.labelsAnimated = true;
-    //ordenar las tareas por idPosition
-    // this.tasks = [...this.taskService.tasks];
     this.filterSearch();
   }
   async loadTasks() {
@@ -187,10 +187,12 @@ export class ProductivityHubComponent implements AfterViewInit {
     }
   }
   getTasksBySegment(segmentId: number): Task[] {
-    return this.taskService.tasks.filter(task => task.segmentId === segmentId).sort((a, b) => a.idPosition - b.idPosition);;
+    console.log('segmentId:', segmentId);
+    return [...this.taskService.tasks.filter(task => task.segmentId === segmentId).sort((a, b) => a.idPosition - b.idPosition)];
   }
 
   filterSearch(): void {
+    console.log('filterSearch');
 
     let tasks: Task[] = [];
     tasks = [...this.taskService.tasks];
@@ -198,17 +200,20 @@ export class ProductivityHubComponent implements AfterViewInit {
     if (this.states.length > 0) {
       tasks = tasks.filter(task => this.states.find(state => state.id === task.state)?.visibilityTaskList);
     }
-    console.log(tasks);
-
 
     if (this.orderedView) {
+      console.log('ordered view');
       this.filteredAllSegments = false;
-      //filtrar todos los segmentos y solo las tareas que no tengan asignado un segmento
+      
       if (!this.filteredAllTasks) {
         tasks = tasks.filter(task => task.elementType === 'task' && (task.segmentId === undefined || task.segmentId === null || task.segmentId <= 0) || task.elementType === 'segment');
       } else {
         tasks = tasks.filter(task => task.elementType === 'segment');
       }
+       tasks.forEach(segment => {
+        segment.tasks = this.getTasksBySegment(segment.id);
+      });
+
     } else {
 
 
@@ -242,7 +247,7 @@ export class ProductivityHubComponent implements AfterViewInit {
         );
       }
     }
-
+    console.log('Assignation:', tasks);
     this.tasks = tasks;
   }
 
@@ -284,9 +289,8 @@ export class ProductivityHubComponent implements AfterViewInit {
   onDrop(event: CdkDragDrop<any>, segmentFatherId?: number | undefined) {
     let taskList: Task[] = [];
     if (segmentFatherId) {
-      console.log('segmentFatherId', segmentFatherId);
-      taskList=this.getTasksBySegment(segmentFatherId);
-    }else{
+      taskList = this.tasks.find(task => task.id === segmentFatherId)?.tasks || [];
+    } else {
       taskList = this.tasks;
     }
 
@@ -302,12 +306,12 @@ export class ProductivityHubComponent implements AfterViewInit {
       }
 
       if (event.currentIndex > 0) {
-
         superiorPosition = taskList[event.currentIndex - 1 + additional];
 
       } if (event.currentIndex < this.tasks.length) {
         inferiorPosition = taskList[event.currentIndex + additional];
       }
+      console.log('moveItemInArray -superior:', superiorPosition?.idPosition, ' inferior:', inferiorPosition?.idPosition);
       moveItemInArray(taskList, event.previousIndex, event.currentIndex);
       this.moveElement(element, superiorPosition, inferiorPosition);
     }
@@ -316,7 +320,7 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   async moveElement(element: any, superiorPosition: any, inferiorPosition: any) {
 
-    this.tasks = [...await this.taskService.moveElement(element.id, superiorPosition, inferiorPosition)];
+    await this.taskService.moveElement(element.id, superiorPosition, inferiorPosition);
     this.filterSearch();
     // this.labelsAnimated=true;
 
@@ -367,6 +371,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
   //interficie de tarea
   tasks: Task[] = [];
+  childTasks: SegmentTasks[] = [];
   labels: Label[] = [];
   clock: Clock = {
     timerStarted: false,
@@ -660,6 +665,12 @@ export class ProductivityHubComponent implements AfterViewInit {
     const rect = nativeElement.getBoundingClientRect();
     this.childComponent.editModal(index, this.tasks[index], rect.left, rect.top);
   }
+  editChild(index: number) {
+    const nativeElement = this.editTaskButtonChild.get(index)?.nativeElement;
+
+    const rect = nativeElement.getBoundingClientRect();
+    this.childComponent.editModal(index, this.tasks[index], rect.left, rect.top);
+  }
 
   saveTask(task: Task) {
     this.taskService.saveTask(task);
@@ -767,6 +778,11 @@ interface Clock {
   undoTotalTime: number;
   totalTime: number;
 
+}
+
+interface SegmentTasks {
+  segmentId: number;
+  tasks: Task[];
 }
 
 

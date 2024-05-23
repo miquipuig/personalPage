@@ -330,7 +330,7 @@
 								</div>
 							</div>
 							<div  *ngIf="orderedView && task.elementType==='segment'"  cdkDropList class="example-list" (cdkDropListDropped)="onDrop($event,task.id)" class="ms-4">
-								<div  *ngFor="let childTask of getTasksBySegment(task.id); let i = index" cdkDrag (cdkDragStarted)="onDragStarted($event)"
+								<div  *ngFor="let childTask of task.tasks; let i = index" cdkDrag (cdkDragStarted)="onDragStarted($event)"
 								(cdkDragEnded)="onDragEnded($event)">
 									<div (click)="activeTask(childTask.id)" class="task-card mb-1 card text-white"
 										[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': childTask.id === clock.actualTask}">
@@ -374,7 +374,7 @@
 														{{state.name |
 														truncate:10}}</option>
 												</select>
-												<button #editTaskButton (click)="editTask(i); $event.stopPropagation()"
+												<button #editTaskButtonChild (click)="editTask(i); $event.stopPropagation()"
 													class="butoPlay">
 													<i class="ri-edit-2-fill"></i>
 												</button>
@@ -396,7 +396,7 @@
 				</div>
 
 				<pre>{{tasks | json}}</pre>
-				<pre>{{states | json}}</pre>
+				<!-- <pre>{{states | json}}</pre> -->
 			</div>
 		</div>
 	</div>

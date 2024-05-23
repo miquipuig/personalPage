@@ -13,7 +13,7 @@ export interface Task {
   elementType: string;
   name: string;
   idPosition: number;
-  segmentId: number| undefined | null;
+  segmentId: number | undefined | null;
   detail: string;
   label: number | undefined | null;
   estimatedTime: number;
@@ -24,9 +24,10 @@ export interface Task {
   pomodoroCounter: number;
   pomodoroQuarterCounter: number;
   state: number;
+  tasks: Task[];
 }
 
-export interface State{
+export interface State {
   id: number;
   name: string;
   visibilityTaskList: boolean;
@@ -60,6 +61,7 @@ export class TaskServicesService {
       setTimeout(() => {
         try {
           if (localStorage.getItem('tasks') !== null && localStorage.getItem('tasks') !== undefined && localStorage.getItem('tasks') !== '[]') {
+            console.log('tasks', JSON.parse(localStorage.getItem('tasks')!));
             this.tasks = this.orderTasks(JSON.parse(localStorage.getItem('tasks')!));
           }
           this.taskLoaded = true;
@@ -76,9 +78,9 @@ export class TaskServicesService {
       this.states = JSON.parse(localStorage.getItem('states')!);
     } else {
       this.states = [
-        { id: 1, name: 'To Do', visibilityTaskList: true, visibilityKanban: true, idPosition: 100, activityId:undefined },
-        { id: 2, name: 'Doing', visibilityTaskList: true, visibilityKanban: true, idPosition: 200, activityId:undefined},
-        { id: 3, name: 'Done', visibilityTaskList: false, visibilityKanban: true, idPosition: 300, activityId:undefined }
+        { id: 1, name: 'To Do', visibilityTaskList: true, visibilityKanban: true, idPosition: 100, activityId: undefined },
+        { id: 2, name: 'Doing', visibilityTaskList: true, visibilityKanban: true, idPosition: 200, activityId: undefined },
+        { id: 3, name: 'Done', visibilityTaskList: false, visibilityKanban: true, idPosition: 300, activityId: undefined }
       ];
       this.saveStates();
     }
@@ -121,19 +123,19 @@ export class TaskServicesService {
     this.taskSaved = false;
     return new Promise(async (resolve, reject) => {
 
-    const name=task.name;
-    let segment:Task;
-    if( this.tasks.find(task => task.name === name) !== undefined){
-      segment=this.tasks.find(task => task.name === name)!;
-      console.log(segment);
-      resolve(segment);
-    }else{
-      const taskE=await this.addTask(task)
-      console.log(taskE);
-      resolve(taskE);
-    }
-  });
-   
+      const name = task.name;
+      let segment: Task;
+      if (this.tasks.find(task => task.name === name) !== undefined) {
+        segment = this.tasks.find(task => task.name === name)!;
+        console.log(segment);
+        resolve(segment);
+      } else {
+        const taskE = await this.addTask(task)
+        console.log(taskE);
+        resolve(taskE);
+      }
+    });
+
 
   }
 
@@ -145,15 +147,17 @@ export class TaskServicesService {
 
           const index = task.id;
           let foundTask = this.tasks.find(t => t.id === index);
+          let copyTask: Task = JSON.parse(JSON.stringify(task));
+
           if (foundTask) {
-            Object.assign(foundTask, task);
+            Object.assign(foundTask, copyTask);
+            localStorage.setItem('tasks', JSON.stringify(this.tasks));
           }
-          localStorage.setItem('tasks', JSON.stringify(this.tasks));
           this.taskSaved = true;
 
-          resolve(this.tasks);
+          resolve(copyTask);
         } catch (error) {
-          reject(this.tasks);
+          reject(task);
         }
       }, 1000); // Simula un retraso de 1 segundo
     });
@@ -338,9 +342,9 @@ export class TaskServicesService {
     }
   }
 
-  async moveElement(elementId: number, superiorId: Task | undefined  , inferiorId: Task | undefined): Promise<Task[]>  {
-    let element = this.tasks.find(task => task.id === elementId)!;
-    this.tasks = this.orderTasks(this.tasks);
+  async moveElement(elementId: number, superiorId: Task | undefined, inferiorId: Task | undefined): Promise<Task[]> {
+    let element = { ...this.tasks.find(task => task.id === elementId)! };
+    let tasks = [...this.orderTasks(this.tasks)];
     let superiorElement: Task | undefined;
     let inferiorElement: Task | undefined;
     let position = 0;
@@ -348,43 +352,42 @@ export class TaskServicesService {
       //posició del element superior
       superiorElement = superiorId;
       position = superiorElement.idPosition + 1;
-      let superiorIndex=this.tasks.findIndex(task => task.id === superiorId.id);
+      let superiorIndex = tasks.findIndex(task => task.id === superiorId.id);
 
-      if (this.tasks[superiorIndex + 1] !== undefined ) {
-        inferiorElement = this.tasks[superiorIndex + 1];
-        if(inferiorElement.idPosition === position){
-          await this.moveElementUp(inferiorElement);
+      if (tasks[superiorIndex + 1] !== undefined) {
+        inferiorElement = tasks[superiorIndex + 1];
+        if (inferiorElement.idPosition === position) {
+          await this.moveElementUp(inferiorElement, tasks);
         }
       }
       element.idPosition = position;
-      await this.saveTask(element);
-    } else if (inferiorId !== undefined){
-      let inferiorElement =  inferiorId;
+      await this.saveTask({ ...element });
+    } else if (inferiorId !== undefined) {
+      let inferiorElement = inferiorId;
       position = inferiorElement.idPosition - 1;
       if (inferiorElement.idPosition === 0) {
         position = 0;
-        await this.moveElementUp(inferiorElement);
+        await this.moveElementUp(inferiorElement, tasks);
       }
       element.idPosition = position;
       await this.saveTask(element);
 
     }
-
-    return this.tasks;
+    console.log(tasks);
+    return tasks;
 
   }
 
 
 
-  async moveElementUp(element: Task): Promise<any> {
-    this.tasks = this.orderTasks(this.tasks);
-
+  async moveElementUp(element: Task, tasks: Task[]): Promise<any> {
+    tasks = this.orderTasks(tasks);
     if (this.tasks.find(task => task.idPosition === element.idPosition + 1) !== undefined) {
-      let nextElement = this.tasks.find(task => task.idPosition === element.idPosition + 1)!;
-      await this.moveElementUp(nextElement);
+      let nextElement = tasks.find(task => task.idPosition === element.idPosition + 1)!;
+      await this.moveElementUp(nextElement, tasks);
     }
     element.idPosition++;
-    await this.saveTask(element);
+    await this.saveTask({ ...element });
   }
 
 }
