@@ -29,17 +29,51 @@ export class ProductivityHubComponent implements AfterViewInit {
   isSectionActive = false;
   filteredLabel = -1;
   filteredSegment = -1;
-  filteredAllTasks=false;
-  filteredAllSegments=false;
+  filteredAllTasks = false;
+  filteredAllSegments = false;
+  orderedView = true;
   searchInput = '';
   dragOverIndex: number | null = null;
   hoverIndex: number = -1;
-  labelsAnimated=true;
-  stateFilterMenu=false
-  stateFilterMenuAll=false
+  labelsAnimated = true;
+  stateFilterMenu = false
+  stateFilterMenuAll = false
   states: State[] = [];
-  
+  dropListDisabled = false;
 
+  items = [
+    { name: 'No', disabled: true },
+    { name: 'Role' },
+    { name: ' Creation Time' },
+    { name: 'Completion Time' },
+    {
+      name: 'Process1',
+    },
+    {
+      name: 'Process2',
+    },
+    {
+      name: 'Process3',
+    },
+    {
+      name: 'Process4',
+    },
+    {
+      name: 'Process5',
+    },
+    {
+      name: 'Process6',
+    },
+    {
+      name: 'Process7',
+    },
+  ];
+  childs = [
+    { name: 'No', disabled: true },
+    { name: 'Role' },
+    { name: ' Creation Time' },
+    { name: 'Completion Time' }
+  ];
 
   constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2, public taskService: TaskServicesService) {
     this.time = new Date();
@@ -53,6 +87,7 @@ export class ProductivityHubComponent implements AfterViewInit {
     }
   }
 
+
   pomodoro = true;
   selectedTask = -1;
 
@@ -64,7 +99,7 @@ export class ProductivityHubComponent implements AfterViewInit {
     }, 50);
     this.labels = this.taskService.getLabels();
 
-    this.loadStates();  
+    this.loadStates();
     this.loadTasks();
 
     this.loadClock();
@@ -73,11 +108,10 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   async refreshTasks() {
-    this.labelsAnimated=true;
+    this.labelsAnimated = true;
     //ordenar las tareas por idPosition
     // this.tasks = [...this.taskService.tasks];
     this.filterSearch();
-    this.sortTasks();
   }
   async loadTasks() {
     await this.taskService.loadTasks();
@@ -85,7 +119,7 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.refreshTasks();
   }
   async loadStates() {
-     this.states = this.taskService.states;
+    this.states = this.taskService.states;
   }
   loadFilteredTasksByLabel(labelId: any) {
 
@@ -122,9 +156,9 @@ export class ProductivityHubComponent implements AfterViewInit {
     state.visibilityTaskList = !state.visibilityTaskList;
     this.checkStateAllFilter();
 
-   this.states= await (this.taskService.saveState(state));
+    this.states = await (this.taskService.saveState(state));
 
-   this.filterSearch();
+    this.filterSearch();
   }
 
   asyncStateFilterAll() {
@@ -152,45 +186,61 @@ export class ProductivityHubComponent implements AfterViewInit {
       this.stateFilterMenuAll = false;
     }
   }
-
+  getTasksBySegment(segmentId: number): Task[] {
+    return this.taskService.tasks.filter(task => task.segmentId === segmentId).sort((a, b) => a.idPosition - b.idPosition);;
+  }
 
   filterSearch(): void {
-    console.log('filterSearch');
-    
+
     let tasks: Task[] = [];
     tasks = [...this.taskService.tasks];
-    console.log(tasks);
+    tasks = tasks.sort((a, b) => a.idPosition - b.idPosition);
     if (this.states.length > 0) {
-      console.log('entro');
       tasks = tasks.filter(task => this.states.find(state => state.id === task.state)?.visibilityTaskList);
     }
-    if(this.filteredAllSegments || this.filteredAllTasks){
-      console.log('paso2');
-      console.log('filteredAllSegments:',this.filteredAllSegments);
-      console.log( 'filteredAllTasks:',this.filteredAllTasks);
-      tasks = tasks.filter(task => {
+    console.log(tasks);
 
-        if(this.filteredAllSegments && task.elementType == 'segment'){
-          return false;
-        }
-        if(this.filteredAllTasks && task.elementType == 'task'){
-          return false;
-        }
-        return true;
-      });
-    }
 
-    if (this.filteredLabel !== -1) {
-    tasks = tasks.filter(task => task.label === this.filteredLabel);
-    } 
-    if (this.filteredSegment !== -1) {
-      tasks = tasks.filter(task => task.segmentId === this.filteredSegment || task.id === this.filteredSegment);
-    }
-    if (this.searchInput !== '') {
-      tasks = tasks.filter(task =>
-        task.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-        (task.detail && task.detail.toLowerCase().includes(this.searchInput.toLowerCase()))
-      );
+    if (this.orderedView) {
+      this.filteredAllSegments = false;
+      //filtrar todos los segmentos y solo las tareas que no tengan asignado un segmento
+      if (!this.filteredAllTasks) {
+        tasks = tasks.filter(task => task.elementType === 'task' && (task.segmentId === undefined || task.segmentId === null || task.segmentId <= 0) || task.elementType === 'segment');
+      } else {
+        tasks = tasks.filter(task => task.elementType === 'segment');
+      }
+    } else {
+
+
+
+      if (this.filteredAllSegments || this.filteredAllTasks) {
+        console.log('paso2');
+        console.log('filteredAllSegments:', this.filteredAllSegments);
+        console.log('filteredAllTasks:', this.filteredAllTasks);
+        tasks = tasks.filter(task => {
+
+          if (this.filteredAllSegments && task.elementType == 'segment') {
+            return false;
+          }
+          if (this.filteredAllTasks && task.elementType == 'task') {
+            return false;
+          }
+          return true;
+        });
+      }
+
+      if (this.filteredLabel !== -1) {
+        tasks = tasks.filter(task => task.label === this.filteredLabel);
+      }
+      if (this.filteredSegment !== -1) {
+        tasks = tasks.filter(task => task.segmentId === this.filteredSegment || task.id === this.filteredSegment);
+      }
+      if (this.searchInput !== '') {
+        tasks = tasks.filter(task =>
+          task.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
+          (task.detail && task.detail.toLowerCase().includes(this.searchInput.toLowerCase()))
+        );
+      }
     }
 
     this.tasks = tasks;
@@ -202,7 +252,7 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   onDragStarted(event: any) {
 
-    this.labelsAnimated=false;
+    this.labelsAnimated = false;
   }
   onDragEnded(event: any) {
     this.clock.actualTask = this.selectedTask;
@@ -231,36 +281,43 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
 
-   onDrop(event: CdkDragDrop<any>) {
-
+  onDrop(event: CdkDragDrop<any>, segmentFatherId?: number | undefined) {
+    let taskList: Task[] = [];
+    if (segmentFatherId) {
+      console.log('segmentFatherId', segmentFatherId);
+      taskList=this.getTasksBySegment(segmentFatherId);
+    }else{
+      taskList = this.tasks;
+    }
 
     if (event.previousIndex !== event.currentIndex) {
-      const element= this.tasks[event.previousIndex];
+      const element = taskList[event.previousIndex];
       // moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
       let superiorPosition = undefined
       let inferiorPosition = undefined
-      let additional=0;
-      if(event.previousIndex < event.currentIndex) {
-        superiorPosition = this.tasks[event.previousIndex - 1];
-        additional=1;
+      let additional = 0;
+      if (event.previousIndex < event.currentIndex) {
+        superiorPosition = taskList[event.previousIndex - 1];
+        additional = 1;
       }
 
       if (event.currentIndex > 0) {
-  
-        superiorPosition = this.tasks[event.currentIndex - 1 + additional];
 
-      } if (event.currentIndex  < this.tasks.length) {
-        inferiorPosition = this.tasks[event.currentIndex+additional];
+        superiorPosition = taskList[event.currentIndex - 1 + additional];
+
+      } if (event.currentIndex < this.tasks.length) {
+        inferiorPosition = taskList[event.currentIndex + additional];
       }
-      moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+      moveItemInArray(taskList, event.previousIndex, event.currentIndex);
       this.moveElement(element, superiorPosition, inferiorPosition);
     }
   }
 
+
   async moveElement(element: any, superiorPosition: any, inferiorPosition: any) {
 
-    this.tasks=[...await this.taskService.moveElement(element.id, superiorPosition, inferiorPosition)];
-    this.sortTasks();
+    this.tasks = [...await this.taskService.moveElement(element.id, superiorPosition, inferiorPosition)];
+    this.filterSearch();
     // this.labelsAnimated=true;
 
   }
@@ -337,6 +394,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   resumeTimerSync = false;
 
   taskStartTime = 0;
+  segmentStartTime = 0;
   referenceWorkTime = 1500; // 25 minutes Work
   referenceShortBreakTime = 300;  // 5 minutes Break
   referenceLongBreakTime = 900; // 15 minutes Break
@@ -450,37 +508,48 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   resumeTimer() {
     const timerStart = Date.now() - this.clock.elapsedTime * 1000;
-    const actualTask = this.tasks.find(task => task.id === this.clock.actualTask);
-    
+    const actualTask = this.taskService.tasks.find(task => task.id === this.clock.actualTask);
+    let segment: Task | undefined;
     if (actualTask) {
-        if (actualTask.elapsedTime > 0) {
-            this.taskStartTime = Date.now() - actualTask.elapsedTime * 1000;
+      if (actualTask.elapsedTime > 0) {
+        this.taskStartTime = Date.now() - actualTask.elapsedTime * 1000;
+      } else {
+        this.taskStartTime = Date.now();
+      }
+      if (actualTask.segmentId) {
+        segment = this.taskService.getTaskById(actualTask.segmentId);
+        if (segment.elapsedTime > 0) {
+          this.segmentStartTime = Date.now() - segment.elapsedTime * 1000;
         } else {
-            this.taskStartTime = Date.now();
+          this.segmentStartTime = Date.now();
         }
+      }
     }
-    
+
     let counter = 0;
     this.interval = setInterval(() => {
-        this.clock.elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
-        if (actualTask && this.clock.pomodoroState === 'work') {
-            actualTask.elapsedTime = Math.floor((Date.now() - this.taskStartTime) / 1000);
-        }
-        if (this.clock.elapsedTime >= this.clock.totalTime) {
-            // Pomodoro finished
-            this.clock.elapsedTime = 0;
-            this.clock.isPaused = false;
-            this.clock.timerStarted = false;
-            clearInterval(this.interval);
-            this.nextPomodoroState();
-        }
-        counter++;
-        if (counter % 30 === 0 && actualTask) {
-            this.saveTask(actualTask);
-        }
-        this.saveClock();
+      this.clock.elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
+      if (actualTask && this.clock.pomodoroState === 'work') {
+        actualTask.elapsedTime = Math.floor((Date.now() - this.taskStartTime) / 1000);
+      }
+      if (segment && this.clock.pomodoroState === 'work') {
+        segment.elapsedTime = Math.floor((Date.now() - this.segmentStartTime) / 1000);
+      }
+      if (this.clock.elapsedTime >= this.clock.totalTime) {
+        // Pomodoro finished
+        this.clock.elapsedTime = 0;
+        this.clock.isPaused = false;
+        this.clock.timerStarted = false;
+        clearInterval(this.interval);
+        this.nextPomodoroState();
+      }
+      counter++;
+      if (counter % 30 === 0 && actualTask) {
+        this.saveTask(actualTask);
+      }
+      this.saveClock();
     }, 1000);
-}
+  }
 
   nextPomodoroState() {
     this.clock.timerStarted = false;
@@ -598,9 +667,10 @@ export class ProductivityHubComponent implements AfterViewInit {
 
 
 
-  taskTimePercentage(index: number): number {
-    if (this.tasks[index].estimatedTime > 0 && this.tasks[index].elapsedTime > 0) {
-      return this.tasks[index].elapsedTime * 1000 / this.tasks[index].estimatedTime * 100;
+  taskTimePercentage(id: number): number {
+    const task = this.tasks.find(task => task.id === id);
+    if (task && task.estimatedTime > 0 && task.elapsedTime > 0) {
+      return task.elapsedTime * 1000 / task.estimatedTime * 100;
     }
     return 0;
   }
@@ -623,10 +693,10 @@ export class ProductivityHubComponent implements AfterViewInit {
     return this.taskService.getLabelById(labelId);
   }
   getSegmentName(segmentId: any): string {
-    let segment= this.taskService.getTaskById(segmentId);
-    if(segment){
+    let segment = this.taskService.getTaskById(segmentId);
+    if (segment) {
       return segment.name;
-    }else{
+    } else {
       return 'Segment not Found'
     }
 
@@ -648,10 +718,6 @@ export class ProductivityHubComponent implements AfterViewInit {
       this.clock = this.validateClock(clock);
     }
 
-  }
-
-  sortTasks(): void {
-    this.tasks.sort((a, b) => a.idPosition - b.idPosition);
   }
 
 

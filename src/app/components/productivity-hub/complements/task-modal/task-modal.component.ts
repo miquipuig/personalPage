@@ -9,6 +9,7 @@ import { Task } from 'src/app/services/productivity-hub/task-services.service';
 import { State } from 'src/app/services/productivity-hub/task-services.service';
 
 import { LabelEditorComponent } from '../label-editor/label-editor.component';
+import { state } from '@angular/animations';
 @Component({
   selector: 'app-task-modal',
   templateUrl: './task-modal.component.html',
@@ -285,10 +286,13 @@ closeModal() {
         newSegment = {
           name: this.form.get('segmentId')!.value,
           label: this.task.label,
-          elementType: 'segment'
+          elementType: 'segment',
+          state: 1,
+          estimatedTime: 0
 
         }
         const segment = ((await this.taskService.addTaskByChild(newSegment)))
+        console.log(segment);
         this.task.segmentId = segment.id;
       } else {
         this.task.segmentId = undefined;
@@ -309,7 +313,9 @@ closeModal() {
         newSegment = {
           name: this.form.get('segmentId')!.value,
           label: this.task.label,
-          elementType: 'segment'
+          elementType: 'segment',
+          state: 1,
+          estimatedTime: 0
         }
         const segment = (await this.taskService.addTaskByChild(newSegment))
         this.task.segmentId = segment.id;
