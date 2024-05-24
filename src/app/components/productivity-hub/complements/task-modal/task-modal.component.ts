@@ -198,10 +198,6 @@ visualEffectAddTask(left: number, top: number) {
   let originY = top - aproxTop;
   this.taskModal.nativeElement.style.setProperty('--modal-originX', `${originX}px`);
   this.taskModal.nativeElement.style.setProperty('--modal-originY', `${originY}px`);
-  //print originX and originY
-  console.log('originX: ' + originX + ' originY: ' + originY);
-  // this.taskModal.nativeElement.style.setProperty('--modal-left', `${left}px`);
-  // this.taskModal.nativeElement.style.setProperty('--modal-top', `${top}px`);    
 
 }
 

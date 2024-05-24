@@ -12,36 +12,7 @@
 		<div class="row d-flex justify-content-center ">
 			<div class=" col-sm-10 col-md-5 col-lg-4 col-12">
 				<app-clock></app-clock>
-				<div #colRef>
-					<div *ngIf="pomodoro" class="pomodoro-background">
-						<div class="pomodoro-face-outline">
-							<div class="pomodoro-face-outline-point point-12"></div>
-							<div class="pomodoro-face-outline-point point-1"></div>
-							<div class="pomodoro-face-outline-point point-2"></div>
-							<div class="pomodoro-face-outline-point point-3"></div>
-							<div class="pomodoro-face-outline-point point-4"></div>
-							<div class="pomodoro-face-outline-point point-5"></div>
-							<div class="pomodoro-face-outline-point point-6"></div>
-							<div class="pomodoro-face-outline-point point-7"></div>
-							<div class="pomodoro-face-outline-point point-8"></div>
-							<div class="pomodoro-face-outline-point point-9"></div>
-							<div class="pomodoro-face-outline-point point-10"></div>
-							<div class="pomodoro-face-outline-point point-11"></div>
-						</div>
 
-						<div class="pomodoro-face-centre">
-							<div class="pomodoro-face-centre-inner"></div>
-						</div>
-
-						<div class="pomodoro-face-hands">
-							<div class="pomodoro-face-hand hour" #hourHand></div>
-							<div class="pomodoro-face-hand minute" #minuteHand></div>
-							<div class="pomodoro-face-hand second" #secondHand></div>
-						</div>
-					</div>
-				</div>
-
-				<!-- {{clock | json}} -->
 				<div class="square" style="position: relative;"
 					[ngClass]="{'rest': clock.pomodoroState === 'shortBreak', 'longRest': clock.pomodoroState === 'longBreak','work': clock.pomodoroState === 'work' && clock.timerStarted}">
 
@@ -139,7 +110,7 @@
 				<div style="position: relative; height: 30px;" class="mt-2">
 					<div class=" align-items-center text-end">
 
-						<div *ngIf="!this.taskService.taskLoaded"
+						<div *ngIf="!this.tks.taskLoaded"
 							class=" text-center d-flex align-items-center justify-content-end mb-2">
 							<div class=" d-md-block ms-2 animate__animated animate__fadeIn">Loading... </div>
 							<div class="ms-2 animate__animated animate__zoomIn">
@@ -147,7 +118,7 @@
 								</div>
 							</div>
 						</div>
-						<div *ngIf="!this.taskService.taskSaved"
+						<div *ngIf="!this.tks.taskSaved"
 							class="text-center d-flex align-items-center justify-content-end mb-2">
 							<div class="d-md-block ms-2 animate__animated animate__fadeIn">Saving... </div>
 							<div class="ms-2 animate__animated animate__zoomIn">
@@ -248,10 +219,10 @@
 
 
 				</div>
-				<div *ngIf="tasks.length>0" style="position:relative">
+				<div *ngIf="tks.filteredTasks.length>0" style="position:relative">
 					<div class="animate__animated animate__fadeIn task-list " cdkDropList
 						(cdkDropListDropped)="onDrop($event)">
-						<div  *ngFor="let task of tasks; let i = index" cdkDrag (cdkDragStarted)="onDragStarted($event)"
+						<div  *ngFor="let task of tks.filteredTasks; let i = index" cdkDrag (cdkDragStarted)="onDragStarted($event)"
 						(cdkDragEnded)="onDragEnded($event)">
 							<div (click)="activeTask(task.id);$event.stopPropagation()" class="task-card mb-1 card text-white"
 							[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': task.id === clock.actualTask}">
@@ -321,7 +292,7 @@
 										</button>
 									</div>
 								</div>
-								<div *ngIf="tasks[i].estimatedTime>0" class="progress task">
+								<div *ngIf="tks.filteredTasks[i].estimatedTime>0" class="progress task">
 									<div class="progress-bar bg-danger" role="progressbar task"
 										style="width: {{taskTimePercentage(task.id)}}%">
 									</div>
@@ -396,7 +367,7 @@
 					</div>
 				</div>
 
-				<pre>{{tasks | json}}</pre>
+				<pre>{{tks.filteredTasks | json}}</pre>
 				<!-- <pre>{{states | json}}</pre> -->
 			</div>
 		</div>

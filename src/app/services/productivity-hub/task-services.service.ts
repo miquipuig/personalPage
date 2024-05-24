@@ -51,6 +51,7 @@ export class TaskServicesService {
 
   labels: Label[] = [];
   tasks: Task[] = [];
+  filteredTasks: Task[] = [];
   states: State[] = [];
   taskLoaded: boolean = false;
   taskSaved: boolean = true;
@@ -61,7 +62,6 @@ export class TaskServicesService {
       setTimeout(() => {
         try {
           if (localStorage.getItem('tasks') !== null && localStorage.getItem('tasks') !== undefined && localStorage.getItem('tasks') !== '[]') {
-            console.log('tasks', JSON.parse(localStorage.getItem('tasks')!));
             this.tasks = this.orderTasks(JSON.parse(localStorage.getItem('tasks')!));
           }
           this.taskLoaded = true;
@@ -373,7 +373,6 @@ export class TaskServicesService {
       await this.saveTask(element);
 
     }
-    console.log(tasks);
     return tasks;
 
   }

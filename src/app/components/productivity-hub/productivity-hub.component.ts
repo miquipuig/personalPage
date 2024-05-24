@@ -8,18 +8,14 @@ import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragMove, moveItemInArray, t
 import { State } from 'src/app/services/productivity-hub/task-services.service';
 import { LocalService } from 'src/app/services/productivity-hub/local.service';
 import {Clock} from 'src/app/services/productivity-hub/local.service';
+import { ClockComponent } from './clock/clock.component';
 @Component({
   selector: 'app-productivity-hub',
   templateUrl: './productivity-hub.component.html',
   styleUrls: ['./productivity-hub.component.css']
 })
-export class ProductivityHubComponent implements AfterViewInit {
+export class ProductivityHubComponent  implements AfterViewInit{
 
-  @ViewChild('hourHand') hourHand!: ElementRef;
-  @ViewChild('minuteHand') minuteHand!: ElementRef;
-  @ViewChild('secondHand') secondHand!: ElementRef;
-  @ViewChild('dateDisplay') dateDisplay!: ElementRef;
-  @ViewChild('colRef') colRef!: ElementRef;
   @ViewChild('newTaskButton') newTaskButton!: ElementRef;
   @ViewChildren('editTaskButton') editTaskButton!: QueryList<ElementRef>;
   @ViewChildren('editTaskButtonChild') editTaskButtonChild!: QueryList<ElementRef>;
@@ -27,6 +23,8 @@ export class ProductivityHubComponent implements AfterViewInit {
 
 
   @ViewChild(TaskModalComponent) childComponent!: TaskModalComponent;
+  @ViewChild(ClockComponent) clockComponent!: ClockComponent;
+
 
 
   isSectionActive = false;
@@ -44,43 +42,8 @@ export class ProductivityHubComponent implements AfterViewInit {
   states: State[] = [];
   dropListDisabled = false;
 
-  items = [
-    { name: 'No', disabled: true },
-    { name: 'Role' },
-    { name: ' Creation Time' },
-    { name: 'Completion Time' },
-    {
-      name: 'Process1',
-    },
-    {
-      name: 'Process2',
-    },
-    {
-      name: 'Process3',
-    },
-    {
-      name: 'Process4',
-    },
-    {
-      name: 'Process5',
-    },
-    {
-      name: 'Process6',
-    },
-    {
-      name: 'Process7',
-    },
-  ];
-  childs = [
-    { name: 'No', disabled: true },
-    { name: 'Role' },
-    { name: ' Creation Time' },
-    { name: 'Completion Time' }
-  ];
+  constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2, public tks: TaskServicesService, public local: LocalService) {
 
-  constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2, public taskService: TaskServicesService, public local: LocalService) {
-    this.time = new Date();
-    this.time.setHours(12, 0, 0, 0);
   }
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent): void {
@@ -95,19 +58,19 @@ export class ProductivityHubComponent implements AfterViewInit {
   selectedTask = -1;
 
   ngOnInit() {
-    window.addEventListener('resize', this.updateDimensions.bind(this));
     // temporizador que se espera 0.5 segundos y setea la variable isSectionActive a true``
     setTimeout(() => {
       this.isSectionActive = true;
     }, 50);
-    this.labels = this.taskService.getLabels();
+    this.tks.labels = this.tks.getLabels();
 
     this.loadStates();
     this.loadTasks();
-
     this.loadClock();
-    this.startClock();
     this.totalTimeAssingment(this.clock.pomodoroState);
+  }
+  ngAfterViewInit() {
+    this.clockTimer();
   }
 
   async refreshTasks() {
@@ -115,12 +78,12 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.filterSearch();
   }
   async loadTasks() {
-    await this.taskService.loadTasks();
+    await this.tks.loadTasks();
 
     this.refreshTasks();
   }
   async loadStates() {
-    this.states = this.taskService.states;
+    this.states = this.tks.states;
   }
   loadFilteredTasksByLabel(labelId: any) {
 
@@ -130,7 +93,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   async onStateChange(event: Event, task: Task) {
     const selectedStateId = parseInt((event.target as HTMLSelectElement).value);
     task.state = selectedStateId;
-    await this.taskService.saveTask(task);
+    await this.tks.saveTask(task);
     this.filterSearch();
 
     // this.refreshTasks();
@@ -157,7 +120,7 @@ export class ProductivityHubComponent implements AfterViewInit {
     state.visibilityTaskList = !state.visibilityTaskList;
     this.checkStateAllFilter();
 
-    this.states = await (this.taskService.saveState(state));
+    this.states = await (this.tks.saveState(state));
 
     this.filterSearch();
   }
@@ -188,22 +151,19 @@ export class ProductivityHubComponent implements AfterViewInit {
     }
   }
   getTasksBySegment(segmentId: number): Task[] {
-    console.log('segmentId:', segmentId);
-    return [...this.taskService.tasks.filter(task => task.segmentId === segmentId).sort((a, b) => a.idPosition - b.idPosition)];
+    return [...this.tks.tasks.filter(task => task.segmentId === segmentId).sort((a, b) => a.idPosition - b.idPosition)];
   }
 
   filterSearch(): void {
-    console.log('filterSearch');
 
     let tasks: Task[] = [];
-    tasks = [...this.taskService.tasks];
+    tasks = [...this.tks.tasks];
     tasks = tasks.sort((a, b) => a.idPosition - b.idPosition);
     if (this.states.length > 0) {
       tasks = tasks.filter(task => this.states.find(state => state.id === task.state)?.visibilityTaskList);
     }
 
     if (this.orderedView) {
-      console.log('ordered view');
       this.filteredAllSegments = false;
 
       if (!this.filteredAllTasks) {
@@ -220,9 +180,7 @@ export class ProductivityHubComponent implements AfterViewInit {
 
 
       if (this.filteredAllSegments || this.filteredAllTasks) {
-        console.log('paso2');
-        console.log('filteredAllSegments:', this.filteredAllSegments);
-        console.log('filteredAllTasks:', this.filteredAllTasks);
+
         tasks = tasks.filter(task => {
 
           if (this.filteredAllSegments && task.elementType == 'segment') {
@@ -248,12 +206,11 @@ export class ProductivityHubComponent implements AfterViewInit {
         );
       }
     }
-    console.log('Assignation:', tasks);
-    this.tasks = tasks;
+     this.tks.filteredTasks = tasks;
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+    moveItemInArray( this.tks.filteredTasks, event.previousIndex, event.currentIndex);
   }
 
   onDragStarted(event: any) {
@@ -263,15 +220,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   onDragEnded(event: any) {
     this.clock.actualTask = this.selectedTask;
   }
-  // onDragMoved(event: CdkDragMove<any>, index: number) {
-  //   let currentIndex = index;
-  //   let hoveringOverIndex = this.getHoveringIndex(event.pointerPosition.y, event.source.dropContainer.element.nativeElement.children);
 
-  //   if (hoveringOverIndex !== currentIndex) {
-  //     this.hoverIndex = hoveringOverIndex;
-  //     console.log(`Current hovering index: ${this.hoverIndex}`);
-  //   }
-  // }
 
   getHoveringIndex(pointerY: number, listElements: HTMLCollection): number {
     let hoverIndex = -1;
@@ -290,14 +239,14 @@ export class ProductivityHubComponent implements AfterViewInit {
   onDrop(event: CdkDragDrop<any>, segmentFatherId?: number | undefined) {
     let taskList: Task[] = [];
     if (segmentFatherId) {
-      taskList = this.tasks.find(task => task.id === segmentFatherId)?.tasks || [];
+      taskList =  this.tks.filteredTasks.find(task => task.id === segmentFatherId)?.tasks || [];
     } else {
-      taskList = this.tasks;
+      taskList =  this.tks.filteredTasks;
     }
 
     if (event.previousIndex !== event.currentIndex) {
       const element = taskList[event.previousIndex];
-      // moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+      // moveItemInArray( this.tks.filteredTasks, event.previousIndex, event.currentIndex);
       let superiorPosition = undefined
       let inferiorPosition = undefined
       let additional = 0;
@@ -309,10 +258,9 @@ export class ProductivityHubComponent implements AfterViewInit {
       if (event.currentIndex > 0) {
         superiorPosition = taskList[event.currentIndex - 1 + additional];
 
-      } if (event.currentIndex < this.tasks.length) {
+      } if (event.currentIndex <  this.tks.filteredTasks.length) {
         inferiorPosition = taskList[event.currentIndex + additional];
       }
-      console.log('moveItemInArray -superior:', superiorPosition?.idPosition, ' inferior:', inferiorPosition?.idPosition);
       moveItemInArray(taskList, event.previousIndex, event.currentIndex);
       this.moveElement(element, superiorPosition, inferiorPosition);
     }
@@ -321,19 +269,17 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   async moveElement(element: any, superiorPosition: any, inferiorPosition: any) {
 
-    await this.taskService.moveElement(element.id, superiorPosition, inferiorPosition);
+    await this.tks.moveElement(element.id, superiorPosition, inferiorPosition);
     this.filterSearch();
     // this.labelsAnimated=true;
 
   }
 
   dragEntered(event: CdkDragEnter<any>) {
-    console.log('drag entered', event);
     this.dragOverIndex = event.container.data.indexOf(event.item.data);
   }
 
   dragExited(event: CdkDragExit<any>) {
-    console.log('drag exited', event);
     this.dragOverIndex = null;
   }
 
@@ -343,37 +289,12 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.filterSearch();
   }
 
-  updateDimensions() {
-    const width = this.colRef.nativeElement.offsetWidth;
-    // const centerHeight = this.colRef.nativeElement.offsetHeight / 2 + 0.15 * this.colRef.nativeElement.offsetHeight;
-    const centerHeight = this.colRef.nativeElement.offsetHeight / 2 + 0.15 * this.colRef.nativeElement.offsetHeight;
 
-    const radius = width * 0.23;
-    const pointWide = radius * 0.07;
-    //  const pointWide = radius * 0.00;
-    const centerWide = radius * 0.13;
-    const handWide = radius * 0.05;
-    const secondWide = radius * 0.03;
 
-    this.colRef.nativeElement.style.setProperty('--pomodoro-width', `${width}px`);
-    this.colRef.nativeElement.style.setProperty('--pomodoro-centerHeight', `${centerHeight}px`);
-    this.colRef.nativeElement.style.setProperty('--pomodoro-radius', `${radius}px`);
-    this.colRef.nativeElement.style.setProperty('--pomodoro-centerWide', `${centerWide}px`);
-    this.colRef.nativeElement.style.setProperty('--pomodoro-pointWide', `${pointWide}px`);
-    this.colRef.nativeElement.style.setProperty('--pomodoro-handWide', `${handWide}px`);
-    this.colRef.nativeElement.style.setProperty('--pomodoro-secondWide', `${secondWide}px`);
-  }
-  ngAfterViewInit() {
-    this.updateDimensions();
-  }
 
-  ngOnDestroy() {
-    window.removeEventListener('resize', this.updateDimensions.bind(this));
-  }
   //interficie de tarea
-  tasks: Task[] = [];
-  childTasks: SegmentTasks[] = [];
-  labels: Label[] = [];
+  // tasks: Task[] = [];
+
   clock: Clock = {
     timerStarted: false,
     isPaused: false,
@@ -393,7 +314,6 @@ export class ProductivityHubComponent implements AfterViewInit {
     undoTotalTime: 0,
     totalTime: 0  // Total time in seconds for a full cycle
   };
-  time: Date;
 
   interval: any; //object that will hold the interval
   clockInterval: any; //object that will hold the interval
@@ -406,45 +326,6 @@ export class ProductivityHubComponent implements AfterViewInit {
   referenceLongBreakTime = 900; // 15 minutes Break
 
 
-
-  startClock() {
-
-    const interval = setInterval(() => {
-      const currentTime = new Date();
-      // Añade un segundo cada 50 milisegundos
-      this.time = new Date(this.time.getTime() + 60000);
-      //obtener los segundos
-      if (currentTime.getSeconds() > this.time.getSeconds()) {
-        this.time.setMilliseconds(this.time.getMilliseconds() + 250);
-      }
-      this.updateClock(this.time);
-      // Compara si la hora y minutos del tiempo simulado son iguales a la hora y minutos actuales
-      if (this.time.getHours() >= currentTime.getHours() && this.time.getMinutes() >= currentTime.getMinutes()) {
-        this.clockTimer(); // Vuelve a llamar a la función para actualizar el reloj
-        clearInterval(interval); // Detiene el intervalo una vez alcanzada la hora actual
-
-      }
-    }, 5);
-  }
-  updateClock(date: Date) {
-    const seconds = date.getSeconds() * 6; // 360/60
-    const minutes = date.getMinutes() * 6; // 360/60
-    const hours = (date.getHours() % 12) * 30 + minutes / 12; // 360/12
-    const dateString = date.getDate();
-
-    if (this.secondHand && this.secondHand.nativeElement) {
-      this.secondHand.nativeElement.style.transform = `rotate(${seconds}deg)`;
-    }
-    if (this.minuteHand && this.minuteHand.nativeElement) {
-      this.minuteHand.nativeElement.style.transform = `rotate(${minutes}deg)`;
-    }
-    if (this.hourHand && this.hourHand.nativeElement) {
-      this.hourHand.nativeElement.style.transform = `rotate(${hours}deg)`;
-    }
-    if (this.dateDisplay && this.dateDisplay.nativeElement) {
-      this.dateDisplay.nativeElement.innerHTML = dateString;
-    }
-  }
 
   startTimer() {
     //primera vez que se inicia el timer
@@ -468,53 +349,19 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   clockTimer() {
+    this.clockComponent.startClock();
     this.clockInterval = setInterval(() => {
       if (this.resumeTimerSync) {
         this.resumeTimerSync = false;
         this.resumeTimer();
       }
-      this.updateClock(new Date());
+      this.clockComponent.updateClock(new Date());
     }, 1000);
   }
-  //core function
-  // resumeTimer() {
-  //   const timerStart = Date.now() - this.clock.elapsedTime * 1000;
-  //   if (this.clock.actualTask > -1) {
-  //     if (this.tasks[this.clock.actualTask].elapsedTime > 0) {
-  //       this.taskStartTime = Date.now() - this.tasks[this.clock.actualTask].elapsedTime * 1000;
-  //     } else {
-  //       this.taskStartTime = Date.now();
-  //     }
-  //   }
-  //   let counter = 0;
-  //   this.interval = setInterval(() => {
-  //     this.clock.elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
-  //     if (this.clock.actualTask > -1 && this.clock.pomodoroState === 'work') {
-  //       this.tasks[this.clock.actualTask].elapsedTime = Math.floor((Date.now() - this.taskStartTime) / 1000);
-  //     }
-  //     if (this.clock.elapsedTime >= this.clock.totalTime) {
-  //       // Pomodoro finished
-  //       this.clock.elapsedTime = 0;
-  //       this.clock.isPaused = false;
-  //       this.clock.timerStarted = false;
-  //       clearInterval(this.interval);
-  //       this.nextPomodoroState();
-  //     }
-  //     counter++;
-  //     if (counter % 30 === 0) {
-  //       this.saveTask(this.tasks[this.clock.actualTask]);
-  //     }
-  //     this.saveClock();
-  //   }, 1000);
-  // }
-
-  // startTaskElapsedTime() {
-  //   3
-  // }
-
+  
   resumeTimer() {
     const timerStart = Date.now() - this.clock.elapsedTime * 1000;
-    const actualTask = this.taskService.tasks.find(task => task.id === this.clock.actualTask);
+    const actualTask = this.tks.tasks.find(task => task.id === this.clock.actualTask);
     let segment: Task | undefined;
     if (actualTask) {
       if (actualTask.elapsedTime > 0) {
@@ -523,7 +370,7 @@ export class ProductivityHubComponent implements AfterViewInit {
         this.taskStartTime = Date.now();
       }
       if (actualTask.segmentId) {
-        segment = this.taskService.getTaskById(actualTask.segmentId);
+        segment = this.tks.getTaskById(actualTask.segmentId);
         if (segment.elapsedTime > 0) {
           this.segmentStartTime = Date.now() - segment.elapsedTime * 1000;
         } else {
@@ -597,9 +444,6 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.totalTimeAssingment(pomodoroState);
 
     if (pomodoroState !== this.clock.pomodoroState) {
-      console.log('pomodoroState', pomodoroState);
-
-      // if (this.elapsedTime < this.clock.totalTime ) {
 
       this.clock.undoStartTime = this.clock.startTime;
       this.clock.undoElapsedTime = this.clock.elapsedTime;
@@ -671,13 +515,13 @@ export class ProductivityHubComponent implements AfterViewInit {
 
     let positionButton = 0;
 
-    for (let i = 0; i < this.tasks.length; i++) {
+    for (let i = 0; i < this.tks.filteredTasks.length; i++) {
       
       if (i >= fatherIndex) {
         positionButton += index;
         break;
       }
-      const task = this.tasks[i];
+      const task =  this.tks.filteredTasks[i];
       positionButton += task.tasks.length;
     }
     const nativeElement = this.editTaskButtonChild.get(positionButton)?.nativeElement;
@@ -687,13 +531,13 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   saveTask(task: Task) {
-    this.taskService.saveTask(task);
+    this.tks.saveTask(task);
   }
 
 
 
   taskTimePercentage(id: number): number {
-    const task = this.tasks.find(task => task.id === id);
+    const task =  this.tks.filteredTasks.find(task => task.id === id);
     if (task && task.estimatedTime > 0 && task.elapsedTime > 0) {
       return task.elapsedTime * 1000 / task.estimatedTime * 100;
     }
@@ -715,10 +559,10 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   getLabelInfo(labelId: any): Label {
-    return this.taskService.getLabelById(labelId);
+    return this.tks.getLabelById(labelId);
   }
   getSegmentName(segmentId: any): string {
-    let segment = this.taskService.getTaskById(segmentId);
+    let segment = this.tks.getTaskById(segmentId);
     if (segment) {
       return segment.name;
     } else {
@@ -770,14 +614,6 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
 
-}
-
-
-
-
-interface SegmentTasks {
-  segmentId: number;
-  tasks: Task[];
 }
 
 
