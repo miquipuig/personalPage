@@ -18,9 +18,33 @@ export class TimerComponent {
   referenceWorkTime = 1500; // 25 minutes Work
   referenceShortBreakTime = 300;  // 5 minutes Break
   referenceLongBreakTime = 900; // 15 minutes Break
+  audio = new Audio();
 
   ngOnInit() {
     this.totalTimeAssingment(this.local.clock.pomodoroState);
+    this.preloadSounds();
+  }
+
+  private sounds: { [key: string]: HTMLAudioElement } = {}; 
+  private preloadSounds() {
+    const soundFiles = ['bell01', 'happyBell', 'ticking']; // Lista de tus archivos de sonido
+    soundFiles.forEach(sound => {
+      const audio = new Audio();
+      audio.src = `assets/productivity/sounds/${sound}.mp3`;
+      audio.load();
+      this.sounds[sound] = audio;
+    });
+  }
+
+  
+
+  playSound(soundName:string) {
+    const audio = this.sounds[soundName];
+    if (audio) {
+      audio.play();
+    } else {
+      console.error(`Sonido no encontrado: ${soundName}`);
+    }
   }
   changePomodoroState(pomodoroState: string, undoElapsedTime: number = 0): void {
     //carga de los tiempos de referencia
@@ -141,6 +165,8 @@ export class TimerComponent {
     const timerStart = Date.now() - this.local.clock.elapsedTime * 1000;
     const actualTask = this.tks.tasks.find(task => task.id === this.local.clock.actualTask);
     let segment: Task | undefined;
+    this.playSound('ticking');
+
     if (actualTask) {
       if (actualTask.elapsedTime > 0) {
         this.taskStartTime = Date.now() - actualTask.elapsedTime * 1000;
@@ -172,6 +198,12 @@ export class TimerComponent {
         this.local.clock.isPaused = false;
         this.local.clock.timerStarted = false;
         clearInterval(this.local.interval);
+        if (this.local.clock.pomodoroState === 'work') {
+          this.playSound('happyBell');
+        }else
+        {
+          this.playSound('bell01');
+        }
         this.nextPomodoroState();
       }
       counter++;
