@@ -204,13 +204,13 @@ export class ProductivityHubComponent implements AfterViewInit {
     if (this.orderedView) {
       console.log('ordered view');
       this.filteredAllSegments = false;
-      
+
       if (!this.filteredAllTasks) {
         tasks = tasks.filter(task => task.elementType === 'task' && (task.segmentId === undefined || task.segmentId === null || task.segmentId <= 0) || task.elementType === 'segment');
       } else {
         tasks = tasks.filter(task => task.elementType === 'segment');
       }
-       tasks.forEach(segment => {
+      tasks.forEach(segment => {
         segment.tasks = this.getTasksBySegment(segment.id);
       });
 
@@ -659,17 +659,30 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.childComponent.openModal(rect.left, rect.top);
   }
 
-  editTask(index: number) {
+  editTask(task: Task, index: number) {
     const nativeElement = this.editTaskButton.get(index)?.nativeElement;
 
     const rect = nativeElement.getBoundingClientRect();
-    this.childComponent.editModal(index, this.tasks[index], rect.left, rect.top);
-  }
-  editChild(index: number) {
-    const nativeElement = this.editTaskButtonChild.get(index)?.nativeElement;
+    this.childComponent.editModal(index, task, rect.left, rect.top);
 
+  }
+  editChild(task: Task, index: number, fatherIndex: number) {
+
+    let positionButton = 0;
+
+    for (let i = 0; i < this.tasks.length; i++) {
+      
+      if (i >= fatherIndex) {
+        positionButton += index;
+        break;
+      }
+      const task = this.tasks[i];
+      positionButton += task.tasks.length;
+    }
+    const nativeElement = this.editTaskButtonChild.get(positionButton)?.nativeElement;
     const rect = nativeElement.getBoundingClientRect();
-    this.childComponent.editModal(index, this.tasks[index], rect.left, rect.top);
+    this.childComponent.editModal(index, task, rect.left, rect.top);
+
   }
 
   saveTask(task: Task) {
