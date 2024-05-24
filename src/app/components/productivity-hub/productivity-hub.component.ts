@@ -6,7 +6,8 @@ import { Label } from 'src/app/services/productivity-hub/task-services.service';
 import { Task } from 'src/app/services/productivity-hub/task-services.service';
 import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragMove, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { State } from 'src/app/services/productivity-hub/task-services.service';
-
+import { LocalService } from 'src/app/services/productivity-hub/local.service';
+import {Clock} from 'src/app/services/productivity-hub/local.service';
 @Component({
   selector: 'app-productivity-hub',
   templateUrl: './productivity-hub.component.html',
@@ -77,7 +78,7 @@ export class ProductivityHubComponent implements AfterViewInit {
     { name: 'Completion Time' }
   ];
 
-  constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2, public taskService: TaskServicesService) {
+  constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2, public taskService: TaskServicesService, public local: LocalService) {
     this.time = new Date();
     this.time.setHours(12, 0, 0, 0);
   }
@@ -772,26 +773,7 @@ export class ProductivityHubComponent implements AfterViewInit {
 }
 
 
-interface Clock {
-  timerStarted: boolean;
-  isPaused: boolean;
-  actualTask: number; //index of the task that is being worked on   
-  elapsedTime: number; //in seconds, most important variable
-  startTime: number; //used to show the time when the timer started
-  endTime: number; //used to calculate the time left in the timer
-  pomodoroState: string;
-  pomodoroQuarterCounter: number;
-  pomodoroLimit: number;
-  pomodoroCounter: number;
-  undoStartTime: number;
-  undoElapsedTime: number;
-  undoPomodoroState: string;
-  undoPomodoroQuarterCounter: number;
-  undoPomodoroCounter: number;
-  undoTotalTime: number;
-  totalTime: number;
 
-}
 
 interface SegmentTasks {
   segmentId: number;
