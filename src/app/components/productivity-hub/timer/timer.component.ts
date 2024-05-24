@@ -18,7 +18,11 @@ export class TimerComponent {
   referenceWorkTime = 1500; // 25 minutes Work
   referenceShortBreakTime = 300;  // 5 minutes Break
   referenceLongBreakTime = 900; // 15 minutes Break
+  secureBlock=false;
+
+
   audio = new Audio();
+
 
   ngOnInit() {
     this.totalTimeAssingment(this.local.clock.pomodoroState);
@@ -82,6 +86,7 @@ export class TimerComponent {
 
   }
   nextPomodoroState() {
+    this.secureBlock=true;
     this.local.clock.timerStarted = false;
     clearInterval(this.local.interval);
     this.local.clock.undoPomodoroQuarterCounter = this.local.clock.pomodoroQuarterCounter;
@@ -102,11 +107,15 @@ export class TimerComponent {
       this.changePomodoroState('work');
     }
     this.saveClock();
+    this.secureBlock=false;
+
 
   }
   startTimer() {
     //primera vez que se inicia el timer
     if (!(this.local.clock.isPaused && this.local.clock.elapsedTime > 0)) {
+      this.playSound('ticking');
+
       this.local.clock.startTime = Date.now();
     }
     this.local.clock.endTime = Date.now() + this.local.clock.totalTime * 1000 - this.local.clock.elapsedTime * 1000;
@@ -114,6 +123,7 @@ export class TimerComponent {
     this.local.clock.timerStarted = true;
     this.local.resumeTimerSync = true;
     this.saveClock();
+    
 
   }
   undoPomodoro() {
@@ -156,16 +166,25 @@ export class TimerComponent {
   }
 
   pauseTimer() {
+    if(this.secureBlock){
+      return;
+    }
+    this.secureBlock=true;
     clearInterval(this.local.interval);
+    this.local.interval = undefined;
     this.local.clock.timerStarted = false;
     this.local.clock.isPaused = true;
     this.saveClock();
+    this.secureBlock=false;
   }
   resumeTimer() {
+    if(this.secureBlock){
+      return;
+    }
+    this.secureBlock=true;
     const timerStart = Date.now() - this.local.clock.elapsedTime * 1000;
     const actualTask = this.tks.tasks.find(task => task.id === this.local.clock.actualTask);
     let segment: Task | undefined;
-    this.playSound('ticking');
 
     if (actualTask) {
       if (actualTask.elapsedTime > 0) {
@@ -212,5 +231,6 @@ export class TimerComponent {
       }
       this.saveClock();
     }, 1000);
+    this.secureBlock=false;
   }
 }
