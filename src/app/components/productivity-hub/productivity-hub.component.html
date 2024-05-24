@@ -13,97 +13,7 @@
 			<div class=" col-sm-10 col-md-5 col-lg-4 col-12">
 				<app-clock></app-clock>
 				<app-timer></app-timer>
-				<div class="square" style="position: relative;"
-					[ngClass]="{'rest': local.clock.pomodoroState === 'shortBreak', 'longRest': local.clock.pomodoroState === 'longBreak','work': local.clock.pomodoroState === 'work' && local.clock.timerStarted}">
 
-					<div class="justify-content-center d-flex">
-						<button (click)="changePomodoroState('work')" class="btn botonMenu me-1"
-							[ngClass]="{'active': local.clock.pomodoroState === 'work'}"> Work Time</button>
-						<button (click)="changePomodoroState('shortBreak')" class="btn botonMenu me-1"
-							[ngClass]="{'active': local.clock.pomodoroState === 'shortBreak'}"> Short Break</button>
-						<button (click)="changePomodoroState('longBreak')" class="btn botonMenu"
-							[ngClass]="{'active': local.clock.pomodoroState === 'longBreak'}"> Long Break</button>
-					</div>
-					<p class="countdown">{{getTimeLeft()*1000 | date:'mm:ss'}}</p>
-					<div style="position: relative">
-						<p *ngIf="local.clock.timerStarted" class="end-time">{{local.clock.startTime | date:"shortTime"}} <i
-								class="ri-arrow-right-line"></i> {{local.clock.endTime | date:"shortTime" }}</p>
-					</div>
-
-					<div class="container" style="height: 30px">
-						<div class="d-flex justify-content-center align-items-center">
-							<!-- <div *ngFor="let tomato of [].constructor(pomodoroCounter); let i = index" >
-							<img src="/assets/productivity/tomato.png" class="pomodoroComplete" width="50" height="50">
-						  </div> -->
-							<div *ngFor="let tomato of [].constructor(local.clock.pomodoroQuarterCounter); let i = index">
-								<img src="/assets/productivity/tomato.png" class="pomodoroQuarter" width="30"
-									height="30">
-							</div>
-							<div *ngIf="local.clock.timerStarted">
-								<img src="/assets/productivity/tomato.png" class="pomodoroCurrent" width="30"
-									height="30">
-							</div>
-
-						</div>
-					</div>
-
-
-					<div class="d-flex justify-content-between align-items-center ">
-						<!-- Contenedor para el botón Back -->
-
-						<div class="flex-grow-1 d-flex justify-content-end  " style="width: 100px">
-							<button *ngIf="local.clock.undoStartTime>0" class="butoPlay" (click)="undoPomodoro()"
-								style="display: flex; align-items: center;">
-								<i class="ri-arrow-go-back-fill icono-petit"></i>
-							</button>
-
-						</div>
-
-						<!-- Botones Play y Pause, uno visible a la vez, siempre centrados -->
-						<div class="mx-auto">
-							<button *ngIf="!local.clock.timerStarted && !local.clock.isPaused" class="butoPlay "
-								(click)="startTimer()" style="display: flex; align-items: center;">
-								<i class="ri-play-circle-fill icono-gran"></i> Start Timer
-							</button>
-							<button *ngIf="!local.clock.timerStarted && local.clock.isPaused" class="butoPlay "
-								(click)="startTimer()" style="display: flex; align-items: center;">
-								<i class="ri-play-circle-fill icono-gran"></i>
-							</button>
-							<button *ngIf="local.clock.timerStarted" class="butoPlay " (click)="pauseTimer()"
-								style="display: flex; align-items: center;">
-								<i class="ri-pause-circle-fill icono-gran"></i>
-							</button>
-						</div>
-
-						<!-- Contenedor para el botón Skip -->
-						<div class="flex-grow-1 d-flex justify-content-start" style="width: 100px">
-							<button *ngIf="local.clock.timerStarted" class="butoPlay " (click)="nextPomodoroState()"
-								style="display: flex; align-items: center;">
-								<i class="ri-skip-right-fill icono-mitja"></i>
-							</button>
-						</div>
-					</div>
-
-					<div class="container buttonPanel">
-						<!-- Barra de progreso con tiempo de inicio y fin -->
-						<div class="row align-items-center ">
-							<div class="col-auto ">
-								<span>{{local.clock.elapsedTime*1000 | date:'mm:ss'}}</span>
-							</div>
-							<div class="col ">
-								<div class="progress play">
-									<div class="progress-bar bg-white play" role="progressbar"
-										[style]="'width:'+getPercentage()+'%'" aria-valuenow="50" aria-valuemin="0"
-										aria-valuemax="100"></div>
-								</div>
-							</div>
-							<div class="col-auto ">
-								<span>{{getPercentage()}}%</span>
-							</div>
-						</div>
-					</div>
-
-				</div>
 			</div>
 
 			<div class="col-12 col-md-7 col-lg-8">
@@ -222,13 +132,14 @@
 				<div *ngIf="tks.filteredTasks.length>0" style="position:relative">
 					<div class="animate__animated animate__fadeIn task-list " cdkDropList
 						(cdkDropListDropped)="onDrop($event)">
-						<div  *ngFor="let task of tks.filteredTasks; let i = index" cdkDrag (cdkDragStarted)="onDragStarted($event)"
-						(cdkDragEnded)="onDragEnded($event)">
-							<div (click)="activeTask(task.id);$event.stopPropagation()" class="task-card mb-1 card text-white"
-							[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': task.id === local.clock.actualTask}">
+						<div *ngFor="let task of tks.filteredTasks; let i = index" cdkDrag
+							(cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded($event)">
+							<div (click)="activeTask(task.id);$event.stopPropagation()"
+								class="task-card mb-1 card text-white"
+								[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': task.id === local.clock.actualTask}">
 								<div class="card-body d-flex justify-content-between align-items-start p-2">
-									<div class="card-title me-0 mb-0">
-										<div class="d-flex align-items-start justify-content-end">
+									<div>
+										<div class="d-flex align-items-start justify-content-start">
 											<div style="width: 25px; height: 25px; margin: 0px; padding:0px"
 												cdkDragHandle>
 												<i class="ri-draggable me-1"></i>
@@ -262,22 +173,28 @@
 												{{task.name | truncate:50}}
 											</div>
 										</div>
-										<div class="small-detail">{{task.detail | truncate:70 }}</div>
-										<div *ngIf="task.estimatedTime>0" class="small-detail">
-											<i class="ri-timer-line"></i> {{task.elapsedTime*1000 |
-											customTimeFormat}}
-											of
-											{{task.estimatedTime | customTimeFormat }} - {{
-											taskTimePercentage(task.id) |
-											number:'1.0-1' }}%
+										
+										<div >
+											<div class="small-detail">{{task.detail | truncate:70 }}</div>
+										
+											<div *ngIf="task.estimatedTime>0" class="small-detail">
+												<i class="ri-timer-line"></i> {{task.elapsedTime*1000 |
+												customTimeFormat}}
+												of
+												{{task.estimatedTime | customTimeFormat }} - {{
+												taskTimePercentage(task.id) |
+												number:'1.0-1' }}%
+											</div>
+											<div *ngIf="task.estimatedTime<1 &&task.elapsedTime >0" class="small-detail">
+												<i class="ri-timer-line"></i> {{task.elapsedTime*1000 |
+												customTimeFormat}}
+											</div>
 										</div>
-										<div *ngIf="task.estimatedTime<1 &&task.elapsedTime >0"
-											class="small-detail">
-											<i class="ri-timer-line"></i> {{task.elapsedTime*1000 |
-											customTimeFormat}}
-										</div>
+
 									</div>
 									<div class="d-flex">
+
+										
 										<select (click)="$event.stopPropagation()"
 											(change)="onStateChange($event, task); $event.stopPropagation()"
 											[(ngModel)]="task.state" class="state-select me-1"
@@ -301,14 +218,15 @@
 									</div>
 								</div>
 							</div>
-							<div  *ngIf="orderedView && task.elementType==='segment'"  cdkDropList class="example-list" (cdkDropListDropped)="onDrop($event,task.id)" class="ms-4">
-								<div  *ngFor="let childTask of task.tasks; let j = index" cdkDrag (cdkDragStarted)="onDragStarted($event)"
-								(cdkDragEnded)="onDragEnded($event)">
+							<div *ngIf="orderedView && task.elementType==='segment'" cdkDropList class="example-list"
+								(cdkDropListDropped)="onDrop($event,task.id)" class="ms-4">
+								<div *ngFor="let childTask of task.tasks; let j = index" cdkDrag
+									(cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded($event)">
 									<div (click)="activeTask(childTask.id)" class="task-card mb-1 card text-white"
 										[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': childTask.id === local.clock.actualTask}">
 
 										<div class="card-body d-flex justify-content-between align-items-start p-2">
-											<div class="card-title me-0 mb-0">
+											<div>
 												<div class="d-flex align-items-start justify-content-end">
 													<div style="width: 25px; height: 25px; margin: 0px; padding:0px"
 														cdkDragHandle>
@@ -346,7 +264,8 @@
 														{{state.name |
 														truncate:10}}</option>
 												</select>
-												<button #editTaskButtonChild (click)="editChild(childTask,j, i); $event.stopPropagation()"
+												<button #editTaskButtonChild
+													(click)="editChild(childTask,j, i); $event.stopPropagation()"
 													class="butoPlay">
 													<i class="ri-edit-2-fill"></i>
 												</button>

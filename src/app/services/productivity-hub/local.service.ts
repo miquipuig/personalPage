@@ -43,7 +43,10 @@ export class LocalService {
     undoTotalTime: 0,
     totalTime: 0  // Total time in seconds for a full cycle
   };
+  interval: any;
+  resumeTimerSync: boolean = false;
   constructor() { }
+
   loadClock() {
     if (localStorage.getItem('clock')) {
 

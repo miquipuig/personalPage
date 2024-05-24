@@ -7,14 +7,15 @@ import { Task } from 'src/app/services/productivity-hub/task-services.service';
 import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragMove, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { State } from 'src/app/services/productivity-hub/task-services.service';
 import { LocalService } from 'src/app/services/productivity-hub/local.service';
-import {Clock} from 'src/app/services/productivity-hub/local.service';
+import { Clock } from 'src/app/services/productivity-hub/local.service';
 import { ClockComponent } from './clock/clock.component';
+import { TimerComponent } from './timer/timer.component';
 @Component({
   selector: 'app-productivity-hub',
   templateUrl: './productivity-hub.component.html',
   styleUrls: ['./productivity-hub.component.css']
 })
-export class ProductivityHubComponent  implements AfterViewInit{
+export class ProductivityHubComponent implements AfterViewInit {
 
   @ViewChild('newTaskButton') newTaskButton!: ElementRef;
   @ViewChildren('editTaskButton') editTaskButton!: QueryList<ElementRef>;
@@ -24,7 +25,7 @@ export class ProductivityHubComponent  implements AfterViewInit{
 
   @ViewChild(TaskModalComponent) childComponent!: TaskModalComponent;
   @ViewChild(ClockComponent) clockComponent!: ClockComponent;
-
+  @ViewChild(TimerComponent) timerComponent!: TimerComponent;
 
 
   isSectionActive = false;
@@ -53,8 +54,6 @@ export class ProductivityHubComponent  implements AfterViewInit{
     }
   }
 
-
-  pomodoro = true;
   selectedTask = -1;
 
   ngOnInit() {
@@ -67,7 +66,7 @@ export class ProductivityHubComponent  implements AfterViewInit{
     this.loadStates();
     this.loadTasks();
     this.local.loadClock();
-    this.totalTimeAssingment(this.local.clock.pomodoroState);
+
   }
   ngAfterViewInit() {
     this.clockTimer();
@@ -206,13 +205,14 @@ export class ProductivityHubComponent  implements AfterViewInit{
         );
       }
     }
-     this.tks.filteredTasks = tasks;
+    this.tks.filteredTasks = tasks;
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray( this.tks.filteredTasks, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.tks.filteredTasks, event.previousIndex, event.currentIndex);
   }
 
+  //es necessario?
   onDragStarted(event: any) {
 
     this.labelsAnimated = false;
@@ -222,26 +222,13 @@ export class ProductivityHubComponent  implements AfterViewInit{
   }
 
 
-  getHoveringIndex(pointerY: number, listElements: HTMLCollection): number {
-    let hoverIndex = -1;
-    Array.from(listElements).some((element: Element, index: number) => {
-      const bounds = element.getBoundingClientRect();
-      if (pointerY > bounds.top && pointerY < bounds.bottom) {
-        hoverIndex = index;
-        return true; // Detiene la iteración una vez que se encuentra el índice
-      }
-      return false;
-    });
-    return hoverIndex;
-  }
-
 
   onDrop(event: CdkDragDrop<any>, segmentFatherId?: number | undefined) {
     let taskList: Task[] = [];
     if (segmentFatherId) {
-      taskList =  this.tks.filteredTasks.find(task => task.id === segmentFatherId)?.tasks || [];
+      taskList = this.tks.filteredTasks.find(task => task.id === segmentFatherId)?.tasks || [];
     } else {
-      taskList =  this.tks.filteredTasks;
+      taskList = this.tks.filteredTasks;
     }
 
     if (event.previousIndex !== event.currentIndex) {
@@ -258,7 +245,7 @@ export class ProductivityHubComponent  implements AfterViewInit{
       if (event.currentIndex > 0) {
         superiorPosition = taskList[event.currentIndex - 1 + additional];
 
-      } if (event.currentIndex <  this.tks.filteredTasks.length) {
+      } if (event.currentIndex < this.tks.filteredTasks.length) {
         inferiorPosition = taskList[event.currentIndex + additional];
       }
       moveItemInArray(taskList, event.previousIndex, event.currentIndex);
@@ -296,9 +283,7 @@ export class ProductivityHubComponent  implements AfterViewInit{
   // tasks: Task[] = [];
 
 
-  interval: any; //object that will hold the interval
   clockInterval: any; //object that will hold the interval
-  resumeTimerSync = false;
 
   taskStartTime = 0;
   segmentStartTime = 0;
@@ -308,172 +293,15 @@ export class ProductivityHubComponent  implements AfterViewInit{
 
 
 
-  startTimer() {
-    //primera vez que se inicia el timer
-    if (!(this.local.clock.isPaused && this.local.clock.elapsedTime > 0)) {
-      this.local.clock.startTime = Date.now();
-    }
-    this.local.clock.endTime = Date.now() + this.local.clock.totalTime * 1000 - this.local.clock.elapsedTime * 1000;
-    this.local.clock.isPaused = false;
-    this.local.clock.timerStarted = true;
-    this.resumeTimerSync = true;
-    this.saveClock();
-
-  }
-
-
-  pauseTimer() {
-    clearInterval(this.interval);
-    this.local.clock.timerStarted = false;
-    this.local.clock.isPaused = true;
-    this.saveClock();
-  }
-
   clockTimer() {
     this.clockComponent.startClock();
     this.clockInterval = setInterval(() => {
-      if (this.resumeTimerSync) {
-        this.resumeTimerSync = false;
-        this.resumeTimer();
+      if (this.local.resumeTimerSync) {
+        this.local.resumeTimerSync = false;
+        this.timerComponent.resumeTimer();
       }
       this.clockComponent.updateClock(new Date());
     }, 1000);
-  }
-  
-  resumeTimer() {
-    const timerStart = Date.now() - this.local.clock.elapsedTime * 1000;
-    const actualTask = this.tks.tasks.find(task => task.id === this.local.clock.actualTask);
-    let segment: Task | undefined;
-    if (actualTask) {
-      if (actualTask.elapsedTime > 0) {
-        this.taskStartTime = Date.now() - actualTask.elapsedTime * 1000;
-      } else {
-        this.taskStartTime = Date.now();
-      }
-      if (actualTask.segmentId) {
-        segment = this.tks.getTaskById(actualTask.segmentId);
-        if (segment.elapsedTime > 0) {
-          this.segmentStartTime = Date.now() - segment.elapsedTime * 1000;
-        } else {
-          this.segmentStartTime = Date.now();
-        }
-      }
-    }
-
-    let counter = 0;
-    this.interval = setInterval(() => {
-      this.local.clock.elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
-      if (actualTask && this.local.clock.pomodoroState === 'work') {
-        actualTask.elapsedTime = Math.floor((Date.now() - this.taskStartTime) / 1000);
-      }
-      if (segment && this.local.clock.pomodoroState === 'work') {
-        segment.elapsedTime = Math.floor((Date.now() - this.segmentStartTime) / 1000);
-      }
-      if (this.local.clock.elapsedTime >= this.local.clock.totalTime) {
-        // Pomodoro finished
-        this.local.clock.elapsedTime = 0;
-        this.local.clock.isPaused = false;
-        this.local.clock.timerStarted = false;
-        clearInterval(this.interval);
-        this.nextPomodoroState();
-      }
-      counter++;
-      if (counter % 30 === 0 && actualTask) {
-        this.saveTask(actualTask);
-      }
-      this.saveClock();
-    }, 1000);
-  }
-
-  nextPomodoroState() {
-    this.local.clock.timerStarted = false;
-    clearInterval(this.interval);
-    this.local.clock.undoPomodoroQuarterCounter = this.local.clock.pomodoroQuarterCounter;
-    this.local.clock.undoPomodoroCounter = this.local.clock.pomodoroCounter;
-    if (this.local.clock.pomodoroState === 'work') {
-      if (this.local.clock.pomodoroQuarterCounter >= this.local.clock.pomodoroLimit - 1) {
-        this.changePomodoroState('longBreak');
-      } else {
-        this.changePomodoroState('shortBreak');
-      }
-    } else if (this.local.clock.pomodoroState === 'shortBreak' || this.local.clock.pomodoroState === 'longBreak') {
-      if (this.local.clock.pomodoroQuarterCounter >= this.local.clock.pomodoroLimit - 1) {
-        this.local.clock.pomodoroCounter++;
-        this.local.clock.pomodoroQuarterCounter = 0;
-      } else {
-        this.local.clock.pomodoroQuarterCounter++;
-      }
-      this.changePomodoroState('work');
-    }
-    this.saveClock();
-
-  }
-
-  totalTimeAssingment(pomodoroState: string) {
-    if (pomodoroState === 'work') {
-      this.local.clock.totalTime = this.referenceWorkTime;
-    } else if (pomodoroState === 'shortBreak') {
-      this.local.clock.totalTime = this.referenceShortBreakTime;
-    } else if (pomodoroState === 'longBreak') {
-      this.local.clock.totalTime = this.referenceLongBreakTime;
-    }
-
-  }
-
-  changePomodoroState(pomodoroState: string, undoElapsedTime: number = 0): void {
-    //carga de los tiempos de referencia
-    this.totalTimeAssingment(pomodoroState);
-
-    if (pomodoroState !== this.local.clock.pomodoroState) {
-
-      this.local.clock.undoStartTime = this.local.clock.startTime;
-      this.local.clock.undoElapsedTime = this.local.clock.elapsedTime;
-      this.local.clock.undoPomodoroState = this.local.clock.pomodoroState;
-
-      this.local.clock.pomodoroState = pomodoroState;
-      clearInterval(this.interval);
-      if (undoElapsedTime > 0) {
-
-        this.local.clock.elapsedTime = undoElapsedTime;
-      } else {
-        this.local.clock.elapsedTime = 0;
-      }
-      if (!this.local.clock.isPaused) {
-        this.startTimer();
-      }
-    }
-    this.saveClock();
-  }
-
-  undoPomodoro() {
-    clearInterval(this.interval);
-    if (this.local.clock.undoStartTime > 0) {
-
-      const quarterCounter = this.local.clock.pomodoroQuarterCounter;
-      const counter = this.local.clock.pomodoroCounter;
-
-      if (this.local.clock.undoElapsedTime >= this.local.clock.undoTotalTime) {
-        this.local.clock.undoElapsedTime = 0;
-      }
-
-      this.local.clock.startTime = this.local.clock.undoStartTime;
-
-      this.local.clock.pomodoroQuarterCounter = this.local.clock.undoPomodoroQuarterCounter;
-      this.local.clock.pomodoroCounter = this.local.clock.undoPomodoroCounter;
-      this.local.clock.undoPomodoroCounter = counter;
-      this.local.clock.undoTotalTime = this.local.clock.totalTime;
-      this.local.clock.undoPomodoroQuarterCounter = quarterCounter;
-      this.changePomodoroState(this.local.clock.undoPomodoroState, this.local.clock.undoElapsedTime);
-    }
-
-  }
-
-  getTimeLeft() {
-    return (this.local.clock.totalTime - this.local.clock.elapsedTime);
-  }
-
-  getPercentage() {
-    return (Math.floor(this.local.clock.elapsedTime / this.local.clock.totalTime * 100));
   }
 
   newTask() {
@@ -497,12 +325,12 @@ export class ProductivityHubComponent  implements AfterViewInit{
     let positionButton = 0;
 
     for (let i = 0; i < this.tks.filteredTasks.length; i++) {
-      
+
       if (i >= fatherIndex) {
         positionButton += index;
         break;
       }
-      const task =  this.tks.filteredTasks[i];
+      const task = this.tks.filteredTasks[i];
       positionButton += task.tasks.length;
     }
     const nativeElement = this.editTaskButtonChild.get(positionButton)?.nativeElement;
@@ -511,14 +339,9 @@ export class ProductivityHubComponent  implements AfterViewInit{
 
   }
 
-  saveTask(task: Task) {
-    this.tks.saveTask(task);
-  }
-
-
 
   taskTimePercentage(id: number): number {
-    const task =  this.tks.filteredTasks.find(task => task.id === id);
+    const task = this.tks.filteredTasks.find(task => task.id === id);
     if (task && task.estimatedTime > 0 && task.elapsedTime > 0) {
       return task.elapsedTime * 1000 / task.estimatedTime * 100;
     }
@@ -528,10 +351,10 @@ export class ProductivityHubComponent  implements AfterViewInit{
     if (this.local.clock.actualTask === index) {
       this.local.clock.actualTask = -1;
     } else {
-      if (this.interval && this.local.clock.pomodoroState === 'work') {
-        clearInterval(this.interval);
+      if (this.local.interval && this.local.clock.pomodoroState === 'work') {
+        clearInterval(this.local.interval);
         this.local.clock.actualTask = index;
-        this.resumeTimer();
+        this.timerComponent.resumeTimer();
       } else {
         this.local.clock.actualTask = index;
       }
