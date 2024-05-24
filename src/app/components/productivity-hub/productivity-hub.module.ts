@@ -11,11 +11,12 @@ import { CustomTimeFormatPipe } from 'src/app/pipes/custom-time-format.pipe';
 import { LabelEditorComponent } from './complements/label-editor/label-editor.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ClockComponent } from './clock/clock.component';
+import { TimerComponent } from './timer/timer.component';
 
 
 
 @NgModule({
-  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent, ClockComponent],
+  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent],
   imports: [ 
     CommonModule,
     ProductivityHubRoutingModule,

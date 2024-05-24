@@ -12,22 +12,22 @@
 		<div class="row d-flex justify-content-center ">
 			<div class=" col-sm-10 col-md-5 col-lg-4 col-12">
 				<app-clock></app-clock>
-
+				<app-timer></app-timer>
 				<div class="square" style="position: relative;"
-					[ngClass]="{'rest': clock.pomodoroState === 'shortBreak', 'longRest': clock.pomodoroState === 'longBreak','work': clock.pomodoroState === 'work' && clock.timerStarted}">
+					[ngClass]="{'rest': local.clock.pomodoroState === 'shortBreak', 'longRest': local.clock.pomodoroState === 'longBreak','work': local.clock.pomodoroState === 'work' && local.clock.timerStarted}">
 
 					<div class="justify-content-center d-flex">
 						<button (click)="changePomodoroState('work')" class="btn botonMenu me-1"
-							[ngClass]="{'active': clock.pomodoroState === 'work'}"> Work Time</button>
+							[ngClass]="{'active': local.clock.pomodoroState === 'work'}"> Work Time</button>
 						<button (click)="changePomodoroState('shortBreak')" class="btn botonMenu me-1"
-							[ngClass]="{'active': clock.pomodoroState === 'shortBreak'}"> Short Break</button>
+							[ngClass]="{'active': local.clock.pomodoroState === 'shortBreak'}"> Short Break</button>
 						<button (click)="changePomodoroState('longBreak')" class="btn botonMenu"
-							[ngClass]="{'active': clock.pomodoroState === 'longBreak'}"> Long Break</button>
+							[ngClass]="{'active': local.clock.pomodoroState === 'longBreak'}"> Long Break</button>
 					</div>
 					<p class="countdown">{{getTimeLeft()*1000 | date:'mm:ss'}}</p>
 					<div style="position: relative">
-						<p *ngIf="clock.timerStarted" class="end-time">{{clock.startTime | date:"shortTime"}} <i
-								class="ri-arrow-right-line"></i> {{clock.endTime | date:"shortTime" }}</p>
+						<p *ngIf="local.clock.timerStarted" class="end-time">{{local.clock.startTime | date:"shortTime"}} <i
+								class="ri-arrow-right-line"></i> {{local.clock.endTime | date:"shortTime" }}</p>
 					</div>
 
 					<div class="container" style="height: 30px">
@@ -35,11 +35,11 @@
 							<!-- <div *ngFor="let tomato of [].constructor(pomodoroCounter); let i = index" >
 							<img src="/assets/productivity/tomato.png" class="pomodoroComplete" width="50" height="50">
 						  </div> -->
-							<div *ngFor="let tomato of [].constructor(clock.pomodoroQuarterCounter); let i = index">
+							<div *ngFor="let tomato of [].constructor(local.clock.pomodoroQuarterCounter); let i = index">
 								<img src="/assets/productivity/tomato.png" class="pomodoroQuarter" width="30"
 									height="30">
 							</div>
-							<div *ngIf="clock.timerStarted">
+							<div *ngIf="local.clock.timerStarted">
 								<img src="/assets/productivity/tomato.png" class="pomodoroCurrent" width="30"
 									height="30">
 							</div>
@@ -52,7 +52,7 @@
 						<!-- Contenedor para el botón Back -->
 
 						<div class="flex-grow-1 d-flex justify-content-end  " style="width: 100px">
-							<button *ngIf="clock.undoStartTime>0" class="butoPlay" (click)="undoPomodoro()"
+							<button *ngIf="local.clock.undoStartTime>0" class="butoPlay" (click)="undoPomodoro()"
 								style="display: flex; align-items: center;">
 								<i class="ri-arrow-go-back-fill icono-petit"></i>
 							</button>
@@ -61,15 +61,15 @@
 
 						<!-- Botones Play y Pause, uno visible a la vez, siempre centrados -->
 						<div class="mx-auto">
-							<button *ngIf="!clock.timerStarted && !clock.isPaused" class="butoPlay "
+							<button *ngIf="!local.clock.timerStarted && !local.clock.isPaused" class="butoPlay "
 								(click)="startTimer()" style="display: flex; align-items: center;">
 								<i class="ri-play-circle-fill icono-gran"></i> Start Timer
 							</button>
-							<button *ngIf="!clock.timerStarted && clock.isPaused" class="butoPlay "
+							<button *ngIf="!local.clock.timerStarted && local.clock.isPaused" class="butoPlay "
 								(click)="startTimer()" style="display: flex; align-items: center;">
 								<i class="ri-play-circle-fill icono-gran"></i>
 							</button>
-							<button *ngIf="clock.timerStarted" class="butoPlay " (click)="pauseTimer()"
+							<button *ngIf="local.clock.timerStarted" class="butoPlay " (click)="pauseTimer()"
 								style="display: flex; align-items: center;">
 								<i class="ri-pause-circle-fill icono-gran"></i>
 							</button>
@@ -77,7 +77,7 @@
 
 						<!-- Contenedor para el botón Skip -->
 						<div class="flex-grow-1 d-flex justify-content-start" style="width: 100px">
-							<button *ngIf="clock.timerStarted" class="butoPlay " (click)="nextPomodoroState()"
+							<button *ngIf="local.clock.timerStarted" class="butoPlay " (click)="nextPomodoroState()"
 								style="display: flex; align-items: center;">
 								<i class="ri-skip-right-fill icono-mitja"></i>
 							</button>
@@ -88,7 +88,7 @@
 						<!-- Barra de progreso con tiempo de inicio y fin -->
 						<div class="row align-items-center ">
 							<div class="col-auto ">
-								<span>{{clock.elapsedTime*1000 | date:'mm:ss'}}</span>
+								<span>{{local.clock.elapsedTime*1000 | date:'mm:ss'}}</span>
 							</div>
 							<div class="col ">
 								<div class="progress play">
@@ -225,7 +225,7 @@
 						<div  *ngFor="let task of tks.filteredTasks; let i = index" cdkDrag (cdkDragStarted)="onDragStarted($event)"
 						(cdkDragEnded)="onDragEnded($event)">
 							<div (click)="activeTask(task.id);$event.stopPropagation()" class="task-card mb-1 card text-white"
-							[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': task.id === clock.actualTask}">
+							[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': task.id === local.clock.actualTask}">
 								<div class="card-body d-flex justify-content-between align-items-start p-2">
 									<div class="card-title me-0 mb-0">
 										<div class="d-flex align-items-start justify-content-end">
@@ -305,7 +305,7 @@
 								<div  *ngFor="let childTask of task.tasks; let j = index" cdkDrag (cdkDragStarted)="onDragStarted($event)"
 								(cdkDragEnded)="onDragEnded($event)">
 									<div (click)="activeTask(childTask.id)" class="task-card mb-1 card text-white"
-										[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': childTask.id === clock.actualTask}">
+										[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': childTask.id === local.clock.actualTask}">
 
 										<div class="card-body d-flex justify-content-between align-items-start p-2">
 											<div class="card-title me-0 mb-0">

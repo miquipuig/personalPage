@@ -18,14 +18,61 @@ export interface Clock {
   undoPomodoroCounter: number;
   undoTotalTime: number;
   totalTime: number;
-
 }
 @Injectable({
   providedIn: 'root'
 })
 export class LocalService {
 
+  clock: Clock = {
+    timerStarted: false,
+    isPaused: false,
+    actualTask: -1,
+    elapsedTime: 0,
+    startTime: 0,
+    endTime: 0,
+    pomodoroState: 'work',
+    pomodoroQuarterCounter: 0,
+    pomodoroLimit: 4,
+    pomodoroCounter: 0,
+    undoStartTime: 0,
+    undoElapsedTime: 0,
+    undoPomodoroState: 'work',
+    undoPomodoroQuarterCounter: 0,
+    undoPomodoroCounter: 0,
+    undoTotalTime: 0,
+    totalTime: 0  // Total time in seconds for a full cycle
+  };
   constructor() { }
+  loadClock() {
+    if (localStorage.getItem('clock')) {
 
+      let clock = JSON.parse(localStorage.getItem('clock') as string || '{}');
+      this.clock = this.validateClock(clock);
+    }
+
+  }
+
+  validateClock(clock: any): Clock {
+    return {
+      timerStarted: typeof clock.timerStarted === 'boolean' ? clock.timerStarted : false,
+      isPaused: typeof clock.isPaused === 'boolean' ? clock.isPaused : false,
+      actualTask: typeof clock.actualTask === 'number' ? clock.actualTask : -1,
+      elapsedTime: typeof clock.elapsedTime === 'number' ? clock.elapsedTime : 0,
+      startTime: typeof clock.startTime === 'number' ? clock.startTime : 0,
+      endTime: typeof clock.endTime === 'number' ? clock.endTime : 0,
+      pomodoroState: typeof clock.pomodoroState === 'string' ? clock.pomodoroState : 'work',
+      pomodoroQuarterCounter: typeof clock.pomodoroQuarterCounter === 'number' ? clock.pomodoroQuarterCounter : 0,
+      pomodoroLimit: typeof clock.pomodoroLimit === 'number' ? clock.pomodoroLimit : 4,
+      pomodoroCounter: typeof clock.pomodoroCounter === 'number' ? clock.pomodoroCounter : 0,
+      undoStartTime: typeof clock.undoStartTime === 'number' ? clock.undoStartTime : 0,
+      undoElapsedTime: typeof clock.undoElapsedTime === 'number' ? clock.undoElapsedTime : 0,
+      undoPomodoroState: typeof clock.undoPomodoroState === 'string' ? clock.undoPomodoroState : 'work',
+      undoPomodoroQuarterCounter: typeof clock.undoPomodoroQuarterCounter === 'number' ? clock.undoPomodoroQuarterCounter : 0,
+      undoPomodoroCounter: typeof clock.undoPomodoroCounter === 'number' ? clock.undoPomodoroCounter : 0,
+      undoTotalTime: typeof clock.undoTotalTime === 'number' ? clock.undoTotalTime : 0,
+      totalTime: typeof clock.totalTime === 'number' ? clock.totalTime : 0
+    };
+  }
   
 }
