@@ -33,17 +33,16 @@ export class ProductivityHubComponent implements AfterViewInit {
   filteredSegment = -1;
   filteredAllTasks = false;
   filteredAllSegments = false;
-  orderedView = true;
+  orderedView = false;
   searchInput = '';
   dragOverIndex: number | null = null;
-  hoverIndex: number = -1;
   labelsAnimated = true;
   stateFilterMenu = false
   stateFilterMenuAll = false
   states: State[] = [];
-  dropListDisabled = false;
+  isVisible=true;
 
-  constructor(private cdr: ChangeDetectorRef, private renderer: Renderer2, public tks: TaskServicesService, public local: LocalService) {
+  constructor(private elRef: ElementRef,private cdr: ChangeDetectorRef, private renderer: Renderer2, public tks: TaskServicesService, public local: LocalService) {
 
   }
   @HostListener('document:click', ['$event'])
@@ -53,6 +52,8 @@ export class ProductivityHubComponent implements AfterViewInit {
       this.stateFilterMenu = false;
     }
   }
+
+  
 
   selectedTask = -1;
 
@@ -66,7 +67,21 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.loadStates();
     this.loadTasks();
     this.local.loadClock();
+    this.checkWidth()
 
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.checkWidth();
+  }
+
+  checkWidth() {
+    const parentElement = this.elRef.nativeElement.querySelector('#menu');
+    if (parentElement.offsetWidth < 420) {
+      this.isVisible = false;
+    } else {
+      this.isVisible = true;
+    }
   }
   ngAfterViewInit() {
     this.clockTimer();

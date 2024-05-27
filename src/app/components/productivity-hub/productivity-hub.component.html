@@ -3,7 +3,9 @@
 	<div class="about-me container c_custom ">
 
 		<div class="section-title">
-			<h2>productivity</h2>
+			<h2>Personal Time Management in Development
+
+			</h2>
 
 
 			<!-- <p>Pomodoro Time</p> -->
@@ -13,13 +15,11 @@
 			<div class=" col-sm-10 col-md-5 col-lg-4 col-12">
 				<app-clock></app-clock>
 				<app-timer></app-timer>
-
 			</div>
 
 			<div class="col-12 col-md-7 col-lg-8">
 				<div style="position: relative; height: 30px;" class="mt-2">
-					<div class=" align-items-center text-end">
-
+					<div class="align-items-center text-end">
 						<div *ngIf="!this.tks.taskLoaded"
 							class=" text-center d-flex align-items-center justify-content-end mb-2">
 							<div class=" d-md-block ms-2 animate__animated animate__fadeIn">Loading... </div>
@@ -38,9 +38,9 @@
 						</div>
 					</div>
 				</div>
-				<div class="row d-flex flex-column flex-md-row">
-					<div class="col-12 d-flex justify-content-start align-items-center">
-						<div class="d-flex justify-content-between align-items-center">
+				<div id="menu" class=" d-flex flex-column">
+					<div class="d-flex justify-content-between">
+						<div class=" d-flex justify-content-start align-items-center">
 							<div #newTaskButton>
 								<button class="butoPlay" (click)="newTask()"><i
 										class="ri-add-circle-line icono-mitja"></i></button>
@@ -66,7 +66,7 @@
 
 
 								<div *ngIf="stateFilterMenu" style="--animate-duration: 0.5s;"
-									class=" animate__animated animate__fadeIn  d-flex  justify-content-left list-group filterList ">
+									class=" animate__animated animate__fadeIn  d-flex  justify-content-left list-group filterList " [ngClass]="{'filterListRight': !isVisible}" >
 									<div (click)="asyncStateFilterAll()" class=" list-group-item listGreyColor">
 										<div class="form-check form-switch">
 											<input style="pointer-events: none;" [(ngModel)]="stateFilterMenuAll"
@@ -89,9 +89,13 @@
 
 
 
-
-
 							</div>
+
+						</div>
+
+						<div *ngIf="isVisible"  class="d-flex justify-content-end align-items-center">
+
+
 							<div class="ms-2 elementTypeButton"
 								(click)="filteredAllTasks=!filteredAllTasks;  filterSearch()"
 								[ngClass]="{'active': !filteredAllTasks}">
@@ -111,19 +115,39 @@
 					</div>
 
 
-					<div class="col-12 d-flex justify-content-start align-items-center mb-2">
-
-						<div (click)="loadUnfilteredTasksByLabel()" *ngIf="filteredLabel>=0"
-							class="outline-label2 ms-2 "
-							style="--color-base: var(--{{getLabelInfo(filteredLabel).color}}-color)">
-							<i *ngIf="getLabelInfo(filteredLabel).icon"
-								class="{{getLabelInfo(filteredLabel).icon}} me-1"></i>{{
-							getLabelInfo(filteredLabel).name }} <i class="ri-close-large-line"></i>
+					<div class="d-flex justify-content-between mb-2">
+						<div class="d-flex justify-content-start align-items-center">
+							<div (click)="loadUnfilteredTasksByLabel()" *ngIf="filteredLabel>=0"
+								class="outline-label2 ms-2 "
+								style="--color-base: var(--{{getLabelInfo(filteredLabel).color}}-color)">
+								<i *ngIf="getLabelInfo(filteredLabel).icon"
+									class="{{getLabelInfo(filteredLabel).icon}} me-1"></i>{{
+								getLabelInfo(filteredLabel).name }} <i class="ri-close-large-line"></i>
+							</div>
+							<div (click)="loadUnfilteredTasksBySegment()" *ngIf="filteredSegment>=0"
+								class="outline-label2 ms-2 ">
+								{{
+								getSegmentName(filteredSegment) | truncate:12 }} <i class="ri-close-large-line"></i>
+							</div>
 						</div>
-						<div (click)="loadUnfilteredTasksBySegment()" *ngIf="filteredSegment>=0"
-							class="outline-label2 ms-2 ">
-							{{
-							getSegmentName(filteredSegment) | truncate:12 }} <i class="ri-close-large-line"></i>
+
+						<div *ngIf="!isVisible" class="d-flex justify-content-end align-items-center">
+
+							<div class="ms-2 elementTypeButton"
+								(click)="filteredAllTasks=!filteredAllTasks;  filterSearch()"
+								[ngClass]="{'active': !filteredAllTasks}">
+								T
+							</div>
+							<div class="elementTypeButton"
+								(click)="filteredAllSegments=!filteredAllSegments;  filterSearch()"
+								[ngClass]="{'active': !filteredAllSegments}">
+								S
+							</div>
+
+							<div (click)="orderedView=!orderedView; filterSearch()" [ngClass]="{'active': orderedView}"
+								class="elementTypeButton">
+								<i class="ri-list-check"></i>
+							</div>
 						</div>
 					</div>
 
@@ -159,24 +183,27 @@
 													style="--color-base: var(--{{getLabelInfo(task.label).color}}-color)">
 													<i *ngIf="getLabelInfo(task.label).icon"
 														class="{{getLabelInfo(task.label).icon}}"></i>
-													{{ getLabelInfo(task.label).name }}
+													{{ getLabelInfo(task.label).name | truncate:10  }}
 												</div>
 											</div>
 											<div>
 												<div (click)="loadFilteredTasksBySegment(task.segmentId); $event.stopPropagation()"
 													*ngIf="task.segmentId!=null || task.segmentId!=undefined"
 													class="outline-label me-2">
-													{{getSegmentName(task.segmentId) | truncate:12 }}
+													{{getSegmentName(task.segmentId) | truncate:10 }}
 												</div>
 											</div>
-											<div class="me-1">
+											<div *ngIf="isVisible" class="me-1">
 												{{task.name | truncate:50}}
 											</div>
 										</div>
-										
-										<div >
+
+										<div>
+											<div *ngIf="!isVisible" class="me-1">
+												{{task.name | truncate:50}}
+											</div>
 											<div class="small-detail">{{task.detail | truncate:70 }}</div>
-										
+
 											<div *ngIf="task.estimatedTime>0" class="small-detail">
 												<i class="ri-timer-line"></i> {{task.elapsedTime*1000 |
 												customTimeFormat}}
@@ -185,7 +212,8 @@
 												taskTimePercentage(task.id) |
 												number:'1.0-1' }}%
 											</div>
-											<div *ngIf="task.estimatedTime<1 &&task.elapsedTime >0" class="small-detail">
+											<div *ngIf="task.estimatedTime<1 &&task.elapsedTime >0"
+												class="small-detail">
 												<i class="ri-timer-line"></i> {{task.elapsedTime*1000 |
 												customTimeFormat}}
 											</div>
@@ -194,7 +222,7 @@
 									</div>
 									<div class="d-flex">
 
-										
+
 										<select (click)="$event.stopPropagation()"
 											(change)="onStateChange($event, task); $event.stopPropagation()"
 											[(ngModel)]="task.state" class="state-select me-1"
@@ -286,7 +314,7 @@
 					</div>
 				</div>
 
-				<pre>{{tks.filteredTasks | json}}</pre>
+				<!-- <pre>{{tks.filteredTasks | json}}</pre> -->
 				<!-- <pre>{{states | json}}</pre> -->
 			</div>
 		</div>

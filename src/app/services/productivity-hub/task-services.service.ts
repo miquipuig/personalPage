@@ -169,14 +169,24 @@ export class TaskServicesService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         try {
+          let task = this.getTaskById(id);
+          if (task.tasks !== undefined && task.tasks.length > 0) {
+            task.tasks.forEach(child => {
+              this.tasks.forEach(task => {
+                if (task.id === child.id) {
+                  task.segmentId = undefined;
+                }
+              });
+            });
+          }
           this.tasks = this.tasks.filter(task => task.id !== id);
-          localStorage.setItem('tasks', JSON.stringify(this.tasks));
-          this.taskSaved = true;
-          resolve(this.tasks);
-        } catch (error) {
-          reject(error);
-        }
-      }, 1000); // Simula un retraso de 1 segundo
+            localStorage.setItem('tasks', JSON.stringify(this.tasks));
+            this.taskSaved = true;
+            resolve(this.tasks);
+          } catch (error) {
+            reject(error);
+          }
+        }, 1000); // Simula un retraso de 1 segundo
     });
   }
   async saveStates(): Promise<any> {

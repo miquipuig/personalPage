@@ -177,7 +177,7 @@ img.pomodoroCurrent {
 }
 
 .outline-label {
-	display: inline-block;
+	display: flex;
 
 	color: var(--color-base);
 	/* Color rojo de peligro */
@@ -461,7 +461,7 @@ img.pomodoroCurrent {
 	/* Se posiciona de forma absoluta respecto al contenedor */
 	top: 35px;
 	/* Se posiciona justo debajo del contenedor */
-	left: 0;
+	/* left: 0; */
 	/* Alinea la lista al borde izquierdo del contenedor */
 	width: auto;
 	max-height: 400px;
@@ -473,6 +473,15 @@ img.pomodoroCurrent {
 	/* Fondo blanco para la lista */
 	border: 1px white solid;
 	border-end-end-radius: 20px;
+	/* Borde blanco */
+}
+
+.filterListRight {
+
+	right: 0;
+	width: auto;
+	/* Alinea la lista al borde izquierdo del contenedor */
+
 	/* Borde blanco */
 }
 
