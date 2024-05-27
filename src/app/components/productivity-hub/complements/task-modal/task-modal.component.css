@@ -106,3 +106,35 @@
     bottom: 0; /* O height: 100%; según sea necesario */
     border: none; /* Ajusta según tu diseño */
 }
+
+.outline-label2 {
+	display: inline-block;
+
+	color: var(--color-base);
+	/* Color rojo de peligro */
+	font-size: 0.8rem;
+	/* Tamaño de letra estándar */
+	text-align: center;
+	vertical-align: middle;
+	user-select: none;
+	border: 1px solid var(--color-base);
+	/* Borde rojo de peligro */
+	padding: 0px 5px;
+	/* Padding similar al de Bootstrap */
+	line-height: 1.5;
+	border-radius: 0.5rem;
+	/* Bordes redondeados */
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+		border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	/* Transiciones suaves */
+	background-color: transparent;
+	/* Fondo transparente */
+	cursor: pointer;
+
+}
+
+.outline-label2:hover .ri-close-large-line {
+	font-weight: 900;
+	filter: brightness(30%);
+	/* font-size: large; */
+}

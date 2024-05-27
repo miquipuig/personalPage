@@ -11,15 +11,15 @@
 
         <div class="modal-body">
           <div class="d-flex mb-2 align-items-center">
-            <div class="">
+            <!-- <div class="">
               <div *ngIf="id === -1">
                 Enter details of your
               </div>
               <div *ngIf="id !== -1">
                 Edit details of your
               </div>
-            </div>
-            <div class="ms-auto" (click)="closeMenus()">
+            </div> -->
+            <div class="" (click)="closeMenus()">
               <select class="form-select" formControlName="elementType">
                 <option value="task">Task</option>
                 <option value="segment">Segment</option>
@@ -61,11 +61,12 @@
               </div>
             </div>
 
-            <div style="position: relative; padding-right: 0px;" class="col-4">
+            <div *ngIf="form.get('elementType')?.value === 'task'" style="position: relative; padding-right: 0px;"
+              class="col-4">
               <!-- (focusout)="onInputBlur()" -->
               <input style=" max-height: 40px;" type="text" class="form-control" formControlName="segmentId"
                 [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('segmentId')!.dirty || form.get('segmentId')!.touched)}"
-                (input)="onSegmentIdsearch()" aria-label="Segment Father" placeholder="Segment Father"
+                (input)="onSegmentIdSearch()" aria-label="Segment Father" placeholder="Segment Father"
                 (focus)="closeMenus();   showSectionIdList = true" (click)="selectSectionId()">
 
 
@@ -123,7 +124,37 @@
 
 
 
+
+
             </div>
+
+            <div *ngIf="form.get('elementType')?.value==='segment'"
+              class="row mt-1">
+              <div class="col-8 pe-2">
+
+
+                <input style=" max-height: 40px;" type="text" class="form-control" formControlName="addChildForm"
+                  (input)="onChildrenSearch()" aria-label="Add Task to Segment" placeholder="Add Task to Segment"
+                  (focus)="closeMenus();   childrenSectionList = true" (click)="onChildrenSearch()">
+
+
+                <div style="--animate-duration: 0.5s;"
+                  class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left list-group listGroupPosition"
+                  *ngIf="childrenSectionList">
+                  <div (click)="addTaskToSegment(task)" *ngFor="let task of addChildrenForm"
+                    class="listGreyColor list-group-item list-group-item-action d-flex justify-content-between">
+                    <a>{{ task.name | truncate:25}}</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 ps-0 ms-0" >
+                <button  type="button" [ngClass]="{'disabled': !(form.get('addChildForm')?.value?.length>0)}" (click)="addNewTaskToSegment()" style="width: 100%;"  class="btn btn-secondary">Add New Task</button>
+              </div>
+              <div class="col-12 d-flex mt-1">
+                <div *ngFor="let task of getSegmentTasks()"  class="outline-label2 me-1" style="--color-base: #808080"> {{task.name |truncate:15}}  <i class="ri-close-large-line"></i></div>
+              </div>
+            </div>
+
           </div>
         </div>
 
