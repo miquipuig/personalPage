@@ -39,7 +39,7 @@
 
             <div style="position: relative; padding-right: 0px" class="col-4">
               <!-- (focusout)="onInputBlur()" -->
-              <input style=" max-height: 40px" type="text" class="form-control" formControlName="label"
+              <input style=" max-height: 40px" type="text" class="form-control pe-4" formControlName="label"
                 [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('label')!.dirty || form.get('label')!.touched)}"
                 (input)="onSearch()" aria-label="Activity Type" placeholder="Activity Type"
                 (focus)="closeMenus(); showList = true" (click)="selectLabel()">
@@ -64,11 +64,14 @@
             <div *ngIf="form.get('elementType')?.value === 'task'" style="position: relative; padding-right: 0px;"
               class="col-4">
               <!-- (focusout)="onInputBlur()" -->
-              <input style=" max-height: 40px;" type="text" class="form-control" formControlName="segmentId"
+              <input style=" max-height: 40px;" type="text" class="form-control pe-4" formControlName="segmentId"
                 [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('segmentId')!.dirty || form.get('segmentId')!.touched)}"
-                (input)="onSegmentIdSearch()" aria-label="Segment Father" placeholder="Segment Father"
+                (input)="onSegmentIdSearch()" aria-label="Seg" placeholder="Top Segment"
                 (focus)="closeMenus();   showSectionIdList = true" (click)="selectSectionId()">
 
+                <button *ngIf="form.get('segmentId')?.value" (click)="form.get('segmentId')?.setValue('');onSegmentIdSearch() " style="position: absolute; top: 0; right: 3px; height: 100%;" type="button" class="butoPlay d-flex align-items-center">
+                  <i class="ri-close-line"></i>
+                </button>
 
               <div style="--animate-duration: 0.5s;"
                 class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left list-group listGroupPosition"
@@ -151,7 +154,7 @@
                 <button  type="button" [ngClass]="{'disabled': !(form.get('addChildForm')?.value?.length>0)}" (click)="addNewTaskToSegment()" style="width: 100%;"  class="btn btn-secondary">Add New Task</button>
               </div>
               <div class="col-12 d-flex mt-1">
-                <div *ngFor="let task of getSegmentTasks()"  class="outline-label2 me-1" style="--color-base: #808080"> {{task.name |truncate:15}}  <i class="ri-close-large-line"></i></div>
+                <div (click)="deleteTaskToSegment(task)" *ngFor="let task of getSegmentTasks()"  class="outline-label2 me-1" style="--color-base: #808080"> {{task.name |truncate:15}}  <i class="ri-close-large-line"></i></div>
               </div>
             </div>
 

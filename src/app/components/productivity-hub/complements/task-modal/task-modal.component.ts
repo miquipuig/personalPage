@@ -278,7 +278,6 @@ export class TaskModalComponent implements OnInit {
   }
 
   async onSubmit(close: boolean = true) {
-    console.log('onSubmit- close: ',close);
     if (this.form.valid) {
       if (this.id !== -1) {
         this.task = { ...this.task, ...this.form.value };
@@ -305,11 +304,14 @@ export class TaskModalComponent implements OnInit {
           console.log(segment);
           this.task.segmentId = segment.id;
         } else {
-          this.task.segmentId = undefined;
+          console.log('entro a borrar segmento');
+          this.task.segmentId = null;
+          console.log(this.task);
         }
         if (this.form.get('state')!.value < 0) {
           this.task.state = 1
         }
+        console.log(this.task);
         await this.taskService.saveTask(this.task);
 
       } else {
@@ -411,6 +413,11 @@ export class TaskModalComponent implements OnInit {
     await this.taskService.addTask(newTask);
     this.refreshTasks.emit();
 
+  }
+  deleteTaskToSegment(task: Task) {
+    task.segmentId = undefined;
+    this.taskService.saveTask(task);
+    this.refreshTasks.emit();
   }
 
   async deleteTaskEmit() {
