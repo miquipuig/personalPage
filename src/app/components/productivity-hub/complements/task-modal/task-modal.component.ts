@@ -311,6 +311,9 @@ export class TaskModalComponent implements OnInit {
         if (this.form.get('state')!.value < 0) {
           this.task.state = 1
         }
+        if(this.task.elementType === 'segment'){
+          this.task.segmentId = null;
+        }
         console.log(this.task);
         await this.taskService.saveTask(this.task);
 
@@ -338,6 +341,9 @@ export class TaskModalComponent implements OnInit {
         }
         if (this.form.get('state')!.value < 0) {
           this.task.state = 1
+        }
+        if(this.task.elementType === 'segment'){
+          this.task.segmentId = null;
         }
         this.task = await this.taskService.addTask(this.task);
         this.id = this.task.id;

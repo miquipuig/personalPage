@@ -1,0 +1,81 @@
+.q-datepicker {
+    ngb-datepicker {
+        position: fixed !important;
+        /* left: 50% !important; */
+        /* transform: translateX(-50%) !important;
+  transform: translate(-50%, 67%) !important; */
+        width: 350px !important;
+
+        /* Ajusta esto según sea necesario */
+        .ngb-dp-navigation-chevron {
+            color: var(--red-color) !important;
+        }
+
+        .ngb-dp-months {
+            .ngb-dp-month {
+
+
+
+                width: 100%;
+
+                .ngb-dp-weekday {
+                    color: var(--red-color) !important;
+
+                    width: 2.5rem;
+                    margin-right: .5rem;
+                }
+
+                .ngb-dp-week {
+                    .ngb-dp-day {
+                        width: 2.5rem;
+                        margin-right: .5rem;
+
+                        div {
+                            width: 100%;
+                        }
+                    }
+
+                    .ngb-dp-day:hover {
+
+
+                        width: 2.5rem;
+                        margin-right: .5rem;
+
+                        div {
+                            background-color: #ffa3a3 !important;
+                            width: 100%;
+                        }
+                    }
+
+                    .ngb-dp-day:active {
+                        width: 2.5rem;
+                        margin-right: .5rem;
+
+                        div {
+
+                            width: 100%;
+                        }
+                    }
+
+                    .bg-primary {
+                        background-color: var(--red-color) !important;
+                    }
+
+
+                }
+            }
+        }
+    }
+}
+
+
+@media (max-width: 576px) {
+    .q-datepicker {
+        ngb-datepicker {
+                
+                left: 50% !important;
+                transform: translate(-50%, 67%) !important;
+            
+        }
+    }
+}

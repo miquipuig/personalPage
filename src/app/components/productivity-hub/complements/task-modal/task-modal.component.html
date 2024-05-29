@@ -23,6 +23,7 @@
               <select class="form-select" formControlName="elementType">
                 <option value="task">Task</option>
                 <option value="segment">Segment</option>
+                <option value="simpleTask">Simple Task</option>
                 <option value="routine">Routine</option>
               </select>
             </div>
@@ -69,9 +70,12 @@
                 (input)="onSegmentIdSearch()" aria-label="Seg" placeholder="Top Segment"
                 (focus)="closeMenus();   showSectionIdList = true" (click)="selectSectionId()">
 
-                <button *ngIf="form.get('segmentId')?.value" (click)="form.get('segmentId')?.setValue('');onSegmentIdSearch() " style="position: absolute; top: 0; right: 3px; height: 100%;" type="button" class="butoPlay d-flex align-items-center">
-                  <i class="ri-close-line"></i>
-                </button>
+              <button *ngIf="form.get('segmentId')?.value"
+                (click)="form.get('segmentId')?.setValue('');onSegmentIdSearch() "
+                style="position: absolute; top: 0; right: 3px; height: 100%;" type="button"
+                class="butoPlay d-flex align-items-center">
+                <i class="ri-close-line"></i>
+              </button>
 
               <div style="--animate-duration: 0.5s;"
                 class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left list-group listGroupPosition"
@@ -83,12 +87,20 @@
               </div>
             </div>
 
-            <div class="col-4" (click)="closeMenus()">
+            <div *ngIf="form.get('elementType')?.value==='task' || form.get('elementType')?.value==='segment' "
+              class="col-4" (click)="closeMenus()">
               <select class="form-select" formControlName="state">
                 <option value="-1" disabled selected>Select State</option>
 
                 <option *ngFor="let state of states" [ngValue]="state.id">{{state.name}}</option>
               </select>
+            </div>
+
+            <div *ngIf="form.get('elementType')?.value==='simpleTask'" class="col-8">
+
+              <app-datapicker></app-datapicker>
+
+
             </div>
 
 
@@ -131,8 +143,7 @@
 
             </div>
 
-            <div *ngIf="form.get('elementType')?.value==='segment'"
-              class="row mt-1">
+            <div *ngIf="form.get('elementType')?.value==='segment'" class="row mt-1">
               <div class="col-8 pe-2">
 
 
@@ -150,11 +161,14 @@
                   </div>
                 </div>
               </div>
-              <div class="col-4 ps-0 ms-0" >
-                <button  type="button" [ngClass]="{'disabled': !(form.get('addChildForm')?.value?.length>0)}" (click)="addNewTaskToSegment()" style="width: 100%;"  class="btn btn-secondary">Add New Task</button>
+              <div class="col-4 ps-0 ms-0">
+                <button type="button" [ngClass]="{'disabled': !(form.get('addChildForm')?.value?.length>0)}"
+                  (click)="addNewTaskToSegment()" style="width: 100%;" class="btn btn-secondary">Add New Task</button>
               </div>
               <div class="col-12 d-flex mt-1">
-                <div (click)="deleteTaskToSegment(task)" *ngFor="let task of getSegmentTasks()"  class="outline-label2 me-1" style="--color-base: #808080"> {{task.name |truncate:15}}  <i class="ri-close-large-line"></i></div>
+                <div (click)="deleteTaskToSegment(task)" *ngFor="let task of getSegmentTasks()"
+                  class="outline-label2 me-1" style="--color-base: #808080"> {{task.name |truncate:15}} <i
+                    class="ri-close-large-line"></i></div>
               </div>
             </div>
 

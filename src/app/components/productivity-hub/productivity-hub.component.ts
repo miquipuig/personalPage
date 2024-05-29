@@ -28,12 +28,6 @@ export class ProductivityHubComponent implements AfterViewInit {
   @ViewChild(TimerComponent) timerComponent!: TimerComponent;
 
 
-  isSectionActive = false;
-  filteredLabel = -1;
-  filteredSegment = -1;
-  filteredAllTasks = false;
-  filteredAllSegments = false;
-  orderedView = false;
   searchInput = '';
   dragOverIndex: number | null = null;
   labelsAnimated = true;
@@ -60,7 +54,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   ngOnInit() {
     // temporizador que se espera 0.5 segundos y setea la variable isSectionActive a true``
     setTimeout(() => {
-      this.isSectionActive = true;
+      this.local.clock.isSectionActive = true;
     }, 50);
     this.tks.labels = this.tks.getLabels();
 
@@ -101,7 +95,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
   loadFilteredTasksByLabel(labelId: any) {
 
-    this.filteredLabel = labelId;
+    this.local.clock.filteredLabel = labelId;
     this.filterSearch();
   }
   async onStateChange(event: Event, task: Task) {
@@ -115,17 +109,17 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   loadUnfilteredTasksByLabel() {
-    this.filteredLabel = -1;
+    this.local.clock.filteredLabel = -1;
     this.filterSearch();
   }
 
   loadFilteredTasksBySegment(segmentId: any) {
-    this.filteredSegment = segmentId;
+    this.local.clock.filteredSegment = segmentId;
     this.filterSearch();
   }
 
   loadUnfilteredTasksBySegment() {
-    this.filteredSegment = -1;
+    this.local.clock.filteredSegment = -1;
     this.filterSearch();
   }
 
@@ -169,59 +163,52 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   filterSearch(): void {
-
-    let tasks: Task[] = [];
-    tasks = [...this.tks.tasks];
-    tasks = tasks.sort((a, b) => a.idPosition - b.idPosition);
+    // Copia inicial de tareas y ordenación por idPosition
+    let tasks: Task[] = [...this.tks.tasks].sort((a, b) => a.idPosition - b.idPosition);
+  
+    // Filtrado por estado visible
     if (this.states.length > 0) {
-      tasks = tasks.filter(task => this.states.find(state => state.id === task.state)?.visibilityTaskList);
+      tasks = tasks.filter(task => this.states.some(state => state.id === task.state && state.visibilityTaskList));
     }
-
-    if (this.orderedView) {
-      this.filteredAllSegments = false;
-
-      if (!this.filteredAllTasks) {
-        tasks = tasks.filter(task => task.elementType === 'task' && (task.segmentId === undefined || task.segmentId === null || task.segmentId <= 0) || task.elementType === 'segment');
+  
+    // Procesamiento dependiendo de si la vista está ordenada o no
+    if (this.local.clock.orderedView) {
+      if (!this.local.clock.filteredAllTasks) {
+        // Muestra solo las tareas y segmentos filtrados según 'segmentId'
+        tasks = tasks.filter(task => task.elementType === 'task' && (!task.segmentId || task.segmentId <= 0) || task.elementType === 'segment');
       } else {
+        // Muestra solo los segmentos si 'filteredAllTasks' está activado
         tasks = tasks.filter(task => task.elementType === 'segment');
       }
+      // Asignación de tareas a los segmentos
       tasks.forEach(segment => {
-        segment.tasks = this.getTasksBySegment(segment.id);
+        if (segment.elementType === 'segment') {
+          segment.tasks = this.getTasksBySegment(segment.id);
+        }
       });
-
-    } else {
-
-
-
-      if (this.filteredAllSegments || this.filteredAllTasks) {
-
-        tasks = tasks.filter(task => {
-
-          if (this.filteredAllSegments && task.elementType == 'segment') {
-            return false;
-          }
-          if (this.filteredAllTasks && task.elementType == 'task') {
-            return false;
-          }
-          return true;
-        });
-      }
-
-      if (this.filteredLabel !== -1) {
-        tasks = tasks.filter(task => task.label === this.filteredLabel);
-      }
-      if (this.filteredSegment !== -1) {
-        tasks = tasks.filter(task => task.segmentId === this.filteredSegment || task.id === this.filteredSegment);
-      }
-      if (this.searchInput !== '') {
-        tasks = tasks.filter(task =>
-          task.name.toLowerCase().includes(this.searchInput.toLowerCase()) ||
-          (task.detail && task.detail.toLowerCase().includes(this.searchInput.toLowerCase()))
-        );
-      }
+    } else if (this.local.clock.filteredAllSegments || this.local.clock.filteredAllTasks) {
+      // Filtra todos los segmentos o tareas según la configuración
+      tasks = tasks.filter(task => !(this.local.clock.filteredAllSegments && task.elementType == 'segment') &&
+                                    !(this.local.clock.filteredAllTasks && task.elementType == 'task'));
     }
+  
+   // Filtrado adicional común a ambos modos
+    if (this.local.clock.filteredLabel !== -1) {
+      tasks = tasks.filter(task => task.label === this.local.clock.filteredLabel);
+    }
+    if (this.local.clock.filteredSegment !== -1) {
+      tasks = tasks.filter(task => task.segmentId === this.local.clock.filteredSegment || task.id === this.local.clock.filteredSegment);
+    }
+    if (this.searchInput !== '') {
+      const searchLower = this.searchInput.toLowerCase();
+      tasks = tasks.filter(task => task.name.toLowerCase().includes(searchLower) || 
+                                   (task.detail && task.detail.toLowerCase().includes(searchLower)));
+    }
+    // Asignación final de tareas filtradas
     this.tks.filteredTasks = tasks;
   }
+  
+  
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.tks.filteredTasks, event.previousIndex, event.currentIndex);
@@ -403,27 +390,7 @@ export class ProductivityHubComponent implements AfterViewInit {
 
 
 
-  validateClock(clock: any): Clock {
-    return {
-      timerStarted: typeof clock.timerStarted === 'boolean' ? clock.timerStarted : false,
-      isPaused: typeof clock.isPaused === 'boolean' ? clock.isPaused : false,
-      actualTask: typeof clock.actualTask === 'number' ? clock.actualTask : -1,
-      elapsedTime: typeof clock.elapsedTime === 'number' ? clock.elapsedTime : 0,
-      startTime: typeof clock.startTime === 'number' ? clock.startTime : 0,
-      endTime: typeof clock.endTime === 'number' ? clock.endTime : 0,
-      pomodoroState: typeof clock.pomodoroState === 'string' ? clock.pomodoroState : 'work',
-      pomodoroQuarterCounter: typeof clock.pomodoroQuarterCounter === 'number' ? clock.pomodoroQuarterCounter : 0,
-      pomodoroLimit: typeof clock.pomodoroLimit === 'number' ? clock.pomodoroLimit : 4,
-      pomodoroCounter: typeof clock.pomodoroCounter === 'number' ? clock.pomodoroCounter : 0,
-      undoStartTime: typeof clock.undoStartTime === 'number' ? clock.undoStartTime : 0,
-      undoElapsedTime: typeof clock.undoElapsedTime === 'number' ? clock.undoElapsedTime : 0,
-      undoPomodoroState: typeof clock.undoPomodoroState === 'string' ? clock.undoPomodoroState : 'work',
-      undoPomodoroQuarterCounter: typeof clock.undoPomodoroQuarterCounter === 'number' ? clock.undoPomodoroQuarterCounter : 0,
-      undoPomodoroCounter: typeof clock.undoPomodoroCounter === 'number' ? clock.undoPomodoroCounter : 0,
-      undoTotalTime: typeof clock.undoTotalTime === 'number' ? clock.undoTotalTime : 0,
-      totalTime: typeof clock.totalTime === 'number' ? clock.totalTime : 0
-    };
-  }
+
 
 
 }

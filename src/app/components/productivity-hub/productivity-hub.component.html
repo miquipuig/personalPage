@@ -1,4 +1,4 @@
-<section id="pomodoro" [ngClass]="{'section-show': isSectionActive}">
+<section id="pomodoro" [ngClass]="{'section-show': local.clock.isSectionActive}">
 
 	<div class="about-me container c_custom ">
 
@@ -6,41 +6,40 @@
 			<h2>Time Management
 
 			</h2>
-
-
 			<!-- <p>Pomodoro Time</p> -->
+		</div>
+		<div style="position: relative; height: 30px;" class="mt-2">
+			<div class="align-items-center text-end">
+				<div *ngIf="!this.tks.taskLoaded"
+					class=" text-center d-flex align-items-center justify-content-end mb-2">
+					<div class=" d-md-block ms-2 animate__animated animate__fadeIn">Loading... </div>
+					<div class="ms-2 animate__animated animate__zoomIn">
+						<div class="spinner-border" role="status">
+						</div>
+					</div>
+				</div>
+				<div *ngIf="!this.tks.taskSaved" class="text-center d-flex align-items-center justify-content-end mb-2">
+					<div class="d-md-block ms-2 animate__animated animate__fadeIn">Saving... </div>
+					<div class="ms-2 animate__animated animate__zoomIn">
+						<div class="spinner-border" role="status">
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<div class="row d-flex justify-content-center ">
 			<div class=" col-sm-10 col-md-5 col-lg-4 col-12">
+				<app-datapicker></app-datapicker>
+				<app-timer></app-timer>
 				<div class="d-none d-md-block">
 					<app-clock></app-clock>
 
 				</div>
-				<app-timer></app-timer>
 			</div>
 
 			<div class="col-12 col-md-7 col-lg-8">
-				<div style="position: relative; height: 30px;" class="mt-2">
-					<div class="align-items-center text-end">
-						<div *ngIf="!this.tks.taskLoaded"
-							class=" text-center d-flex align-items-center justify-content-end mb-2">
-							<div class=" d-md-block ms-2 animate__animated animate__fadeIn">Loading... </div>
-							<div class="ms-2 animate__animated animate__zoomIn">
-								<div class="spinner-border" role="status">
-								</div>
-							</div>
-						</div>
-						<div *ngIf="!this.tks.taskSaved"
-							class="text-center d-flex align-items-center justify-content-end mb-2">
-							<div class="d-md-block ms-2 animate__animated animate__fadeIn">Saving... </div>
-							<div class="ms-2 animate__animated animate__zoomIn">
-								<div class="spinner-border" role="status">
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+
 				<div id="menu" class=" d-flex flex-column">
 					<div class="d-flex justify-content-between">
 						<div class=" d-flex justify-content-start align-items-center">
@@ -69,7 +68,8 @@
 
 
 								<div *ngIf="stateFilterMenu" style="--animate-duration: 0.5s;"
-									class=" animate__animated animate__fadeIn  d-flex  justify-content-left list-group filterList " [ngClass]="{'filterListRight': !isVisible}" >
+									class=" animate__animated animate__fadeIn  d-flex  justify-content-left list-group filterList "
+									[ngClass]="{'filterListRight': !isVisible}">
 									<div (click)="asyncStateFilterAll()" class=" list-group-item listGreyColor">
 										<div class="form-check form-switch">
 											<input style="pointer-events: none;" [(ngModel)]="stateFilterMenuAll"
@@ -96,22 +96,23 @@
 
 						</div>
 
-						<div *ngIf="isVisible"  class="d-flex justify-content-end align-items-center">
+						<div *ngIf="isVisible" class="d-flex justify-content-end align-items-center">
 
 
 							<div class="ms-2 elementTypeButton"
-								(click)="filteredAllTasks=!filteredAllTasks;  filterSearch()"
-								[ngClass]="{'active': !filteredAllTasks}">
+								(click)="local.clock.filteredAllTasks=!local.clock.filteredAllTasks;  filterSearch()"
+								[ngClass]="{'active': !local.clock.filteredAllTasks}">
 								T
 							</div>
 							<div class="elementTypeButton"
-								(click)="filteredAllSegments=!filteredAllSegments;  filterSearch()"
-								[ngClass]="{'active': !filteredAllSegments}">
+								(click)="local.clock.filteredAllSegments=!local.clock.filteredAllSegments;  filterSearch()"
+								[ngClass]="{'active': !local.clock.filteredAllSegments}">
 								S
 							</div>
 
-							<div (click)="orderedView=!orderedView; filterSearch()" [ngClass]="{'active': orderedView}"
-								class="elementTypeButton">
+
+							<div (click)="local.clock.orderedView=!local.clock.orderedView; filterSearch()"
+								[ngClass]="{'active': local.clock.orderedView}" class="elementTypeButton">
 								<i class="ri-list-check"></i>
 							</div>
 						</div>
@@ -120,35 +121,36 @@
 
 					<div class="d-flex justify-content-between mb-2">
 						<div class="d-flex justify-content-start align-items-center">
-							<div (click)="loadUnfilteredTasksByLabel()" *ngIf="filteredLabel>=0"
+							<div (click)="loadUnfilteredTasksByLabel()" *ngIf="local.clock.filteredLabel>=0"
 								class="outline-label2 ms-2 "
-								style="--color-base: var(--{{getLabelInfo(filteredLabel).color}}-color)">
-								<i *ngIf="getLabelInfo(filteredLabel).icon"
-									class="{{getLabelInfo(filteredLabel).icon}} me-1"></i>{{
-								getLabelInfo(filteredLabel).name }} <i class="ri-close-large-line"></i>
+								style="--color-base: var(--{{getLabelInfo(local.clock.filteredLabel).color}}-color)">
+								<i *ngIf="getLabelInfo(local.clock.filteredLabel).icon"
+									class="{{getLabelInfo(local.clock.filteredLabel).icon}} me-1"></i>{{
+								getLabelInfo(local.clock.filteredLabel).name }} <i class="ri-close-large-line"></i>
 							</div>
-							<div (click)="loadUnfilteredTasksBySegment()" *ngIf="filteredSegment>=0"
+							<div (click)="loadUnfilteredTasksBySegment()" *ngIf="local.clock.filteredSegment>=0"
 								class="outline-label2 ms-2 ">
 								{{
-								getSegmentName(filteredSegment) | truncate:12 }} <i class="ri-close-large-line"></i>
+								getSegmentName(local.clock.filteredSegment) | truncate:12 }} <i
+									class="ri-close-large-line"></i>
 							</div>
 						</div>
 
 						<div *ngIf="!isVisible" class="d-flex justify-content-end align-items-center">
 
 							<div class="ms-2 elementTypeButton"
-								(click)="filteredAllTasks=!filteredAllTasks;  filterSearch()"
-								[ngClass]="{'active': !filteredAllTasks}">
+								(click)="local.clock.filteredAllTasks=!local.clock.filteredAllTasks;  filterSearch()"
+								[ngClass]="{'active': !local.clock.filteredAllTasks}">
 								T
 							</div>
 							<div class="elementTypeButton"
-								(click)="filteredAllSegments=!filteredAllSegments;  filterSearch()"
-								[ngClass]="{'active': !filteredAllSegments}">
+								(click)="local.clock.filteredAllSegments=!local.clock.filteredAllSegments;  filterSearch()"
+								[ngClass]="{'active': !local.clock.filteredAllSegments}">
 								S
 							</div>
 
-							<div (click)="orderedView=!orderedView; filterSearch()" [ngClass]="{'active': orderedView}"
-								class="elementTypeButton">
+							<div (click)="local.clock.orderedView=!local.clock.orderedView; filterSearch()"
+								[ngClass]="{'active': local.clock.orderedView}" class="elementTypeButton">
 								<i class="ri-list-check"></i>
 							</div>
 						</div>
@@ -171,13 +173,17 @@
 												cdkDragHandle>
 												<i class="ri-draggable me-1"></i>
 											</div>
-											<div (click)="filteredAllSegments=true; filterSearch()"
+											<div (click)="local.clock.filteredAllSegments=true; filterSearch()"
 												*ngIf="task.elementType==='task'" class="me-2 elementType">
 												T
 											</div>
-											<div (click)="filteredAllTasks=true; filterSearch()"
+											<div (click)="local.clock.filteredAllTasks=true; filterSearch()"
 												*ngIf="task.elementType==='segment'" class="me-2 elementType">
 												S
+											</div>
+											<div (click)="local.clock.filteredAllTasks=true; filterSearch()"
+												*ngIf="task.elementType==='simpleTask'" class="me-2 elementType">
+												ST
 											</div>
 
 											<div>
@@ -186,7 +192,7 @@
 													style="--color-base: var(--{{getLabelInfo(task.label).color}}-color)">
 													<i *ngIf="getLabelInfo(task.label).icon"
 														class="{{getLabelInfo(task.label).icon}}"></i>
-													{{ getLabelInfo(task.label).name | truncate:10  }}
+													{{ getLabelInfo(task.label).name | truncate:10 }}
 												</div>
 											</div>
 											<div>
@@ -226,7 +232,7 @@
 									<div class="d-flex">
 
 
-										<select (click)="$event.stopPropagation()"
+										<select *ngIf="task.elementType==='task' || task.elementType==='segment'" (click)="$event.stopPropagation()"
 											(change)="onStateChange($event, task); $event.stopPropagation()"
 											[(ngModel)]="task.state" class="state-select me-1"
 											aria-label=".form-select-sm example">
@@ -249,8 +255,8 @@
 									</div>
 								</div>
 							</div>
-							<div *ngIf="orderedView && task.elementType==='segment'" cdkDropList class="example-list"
-								(cdkDropListDropped)="onDrop($event,task.id)" class="ms-4">
+							<div *ngIf="local.clock.orderedView && task.elementType==='segment'" cdkDropList
+								class="example-list" (cdkDropListDropped)="onDrop($event,task.id)" class="ms-4">
 								<div *ngFor="let childTask of task.tasks; let j = index" cdkDrag
 									(cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded($event)">
 									<div (click)="activeTask(childTask.id)" class="task-card mb-1 card text-white"
@@ -314,10 +320,27 @@
 								</div>
 							</div>
 						</div>
+
+
 					</div>
 				</div>
+				<div *ngIf="tks.filteredTasks.length===0"
+					class="text-center d-flex align-items-center justify-content-center mt-4">
+					<div *ngIf="tks.tasks.length>0" class="ms-2 animate__animated animate__fadeIn">No
+						elements found. Please check the filters.
+					</div>
+					<div *ngIf="tks.tasks.length===0"
+						class=" ms-2 animate__animated animate__fadeIn justify-content-center">There are no
+						items created. Create your first task using the
 
-				<pre>{{tks.filteredTasks | json}}</pre>
+						<div class="d-flex align-items-center justify-content-center">
+							<button class="butoPlay" (click)="newTask()"><i
+									class="ri-add-circle-line icono-mitja"></i></button>
+							button.
+						</div>
+					</div>
+				</div>
+				<!-- <pre>{{tks.filteredTasks | json}}</pre> -->
 				<!-- <pre>{{states | json}}</pre> -->
 			</div>
 		</div>

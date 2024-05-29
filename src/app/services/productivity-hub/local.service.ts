@@ -18,6 +18,13 @@ export interface Clock {
   undoPomodoroCounter: number;
   undoTotalTime: number;
   totalTime: number;
+  isSectionActive: boolean;
+  filteredLabel:number;
+  filteredSegment:number;
+  filteredAllTasks: boolean;
+  filteredAllSegments: boolean;
+  orderedView:boolean;
+
 }
 @Injectable({
   providedIn: 'root'
@@ -41,7 +48,14 @@ export class LocalService {
     undoPomodoroQuarterCounter: 0,
     undoPomodoroCounter: 0,
     undoTotalTime: 0,
-    totalTime: 0  // Total time in seconds for a full cycle
+    totalTime: 0, // Total time in seconds for a full cycle
+    isSectionActive: false,
+    filteredLabel: -1,
+    filteredSegment: -1,
+    filteredAllTasks: false,
+    filteredAllSegments: false,
+    orderedView: false
+    
   };
   interval: any;
   resumeTimerSync: boolean = false;
@@ -60,7 +74,7 @@ export class LocalService {
     return {
       timerStarted: typeof clock.timerStarted === 'boolean' ? clock.timerStarted : false,
       isPaused: typeof clock.isPaused === 'boolean' ? clock.isPaused : false,
-      actualTask: typeof clock.actualTask === 'number' ? clock.actualTask : -1,
+      actualTask: typeof clock.actualTask === 'number' ? clock.actualAask : -1,
       elapsedTime: typeof clock.elapsedTime === 'number' ? clock.elapsedTime : 0,
       startTime: typeof clock.startTime === 'number' ? clock.startTime : 0,
       endTime: typeof clock.endTime === 'number' ? clock.endTime : 0,
@@ -74,8 +88,15 @@ export class LocalService {
       undoPomodoroQuarterCounter: typeof clock.undoPomodoroQuarterCounter === 'number' ? clock.undoPomodoroQuarterCounter : 0,
       undoPomodoroCounter: typeof clock.undoPomodoroCounter === 'number' ? clock.undoPomodoroCounter : 0,
       undoTotalTime: typeof clock.undoTotalTime === 'number' ? clock.undoTotalTime : 0,
-      totalTime: typeof clock.totalTime === 'number' ? clock.totalTime : 0
+      totalTime: typeof clock.totalTime === 'number' ? clock.totalTime : 0,
+      isSectionActive: typeof clock.isSectionActive === 'boolean' ? clock.isSectionActive : false,
+      filteredLabel: typeof clock.filteredLabel === 'number' ? clock.filteredLabel : -1,
+      filteredSegment: typeof clock.filteredSegment === 'number' ? clock.filteredSegment : -1,
+      filteredAllTasks: typeof clock.filteredAllTasks === 'boolean' ? clock.filteredAllTasks : false,
+      filteredAllSegments: typeof clock.filteredAllSegments === 'boolean' ? clock.filteredAllSegments : false,
+      orderedView: typeof clock.orderedView === 'boolean' ? clock.orderedView : false
     };
   }
+
   
 }

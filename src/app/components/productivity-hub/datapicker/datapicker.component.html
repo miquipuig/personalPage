@@ -1,0 +1,20 @@
+<form >
+    <div  class="input-group q-datepicker">
+        <input class="form-control"
+               placeholder="mm-dd-yyyy"
+               name="dp"
+               [(ngModel)]="model"
+               ngbDatepicker
+               #d="ngbDatepicker"
+               #dateInput
+               (click)="d.toggle(); validate()"
+               [class.custom-datepicker]="true"
+        />
+        <button class="btn btn-outline-secondary"
+                (click)="d.toggle(); "
+                type="button">
+            <i class="ri-calendar-2-line"> </i> Start Date 
+        </button>
+    </div>
+</form>
+

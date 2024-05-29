@@ -22,8 +22,9 @@
   --grey-color: #808080;
   --clearGrey-color: rgb(214, 214, 214);
 
-  --color-base:#ff2600d2;
-  --color-base:rgb(214, 214, 214);;
+  --color-base: #ff2600d2;
+  --color-base: rgb(214, 214, 214);
+  ;
   --main-color: #18d26e;
   --hover-color: #35e888;
   --third-color: #4ceb95;
@@ -1233,7 +1234,7 @@ section .container.c_custom {
 /* Animaciones */
 
 .animated {
- 
+
   animation: show 1s;
 
 }
@@ -1254,6 +1255,7 @@ section .container.c_custom {
   0% {
     opacity: 0
   }
+
   100% {
     opacity: 1
   }
@@ -1347,7 +1349,7 @@ section .container.c_custom {
     }
   } */
 
- .mainPage {
+.mainPage {
   position: fixed;
   top: 0;
   left: 0;
@@ -1355,15 +1357,19 @@ section .container.c_custom {
   height: 100%;
   overflow-y: auto;
   z-index: 1200;
-} 
+}
+
 /* .modal {
   overflow: scroll;
 } */
 
 
-.form-control:focus, .form-select:focus {
-  border-color: rgb(255, 134, 134) !important;        /* Cambia el borde a rojo */
-  box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25); /* Sombra roja ligera */
+.form-control:focus,
+.form-select:focus {
+  border-color: rgb(255, 134, 134) !important;
+  /* Cambia el borde a rojo */
+  box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25);
+  /* Sombra roja ligera */
 }
 
 /* .modal.fade .modal-dialog {
@@ -1385,3 +1391,7 @@ section .container.c_custom {
 .modal-backdrop {
   display: none;
 }
+
+
+
+
