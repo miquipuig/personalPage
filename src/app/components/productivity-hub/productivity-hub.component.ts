@@ -123,6 +123,8 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.filterSearch();
   }
 
+  
+
   async stateFilter(state: State) {
 
     state.visibilityTaskList = !state.visibilityTaskList;
@@ -163,6 +165,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   filterSearch(): void {
+    this.local.saveClock();
     // Copia inicial de tareas y ordenación por idPosition
     let tasks: Task[] = [...this.tks.tasks].sort((a, b) => a.idPosition - b.idPosition);
   
@@ -173,29 +176,31 @@ export class ProductivityHubComponent implements AfterViewInit {
   
     // Procesamiento dependiendo de si la vista está ordenada o no
     if (this.local.clock.orderedView) {
-      if (!this.local.clock.filteredAllTasks) {
-        // Muestra solo las tareas y segmentos filtrados según 'segmentId'
-        tasks = tasks.filter(task => task.elementType === 'task' && (!task.segmentId || task.segmentId <= 0) || task.elementType === 'segment');
-      } else {
-        // Muestra solo los segmentos si 'filteredAllTasks' está activado
-        tasks = tasks.filter(task => task.elementType === 'segment');
+      this.local.clock.filteredAllSimpleTasks=true;
+      this.local.clock.filteredAllSegments=false;
+      if (this.local.clock.filteredAllSegments || this.local.clock.filteredAllTasks || this.local.clock.filteredAllSimpleTasks) {
+        // Filtra todos los segmentos o tareas según la configuración
+        tasks = tasks.filter(task => (!this.local.clock.filteredAllSegments && task.elementType == 'segment') ||
+                                      (!this.local.clock.filteredAllTasks && task.elementType == 'task') || (!this.local.clock.filteredAllSimpleTasks && task.elementType == 'simpleTask')) 
       }
+      
       // Asignación de tareas a los segmentos
       tasks.forEach(segment => {
         if (segment.elementType === 'segment') {
           segment.tasks = this.getTasksBySegment(segment.id);
         }
       });
-    } else if (this.local.clock.filteredAllSegments || this.local.clock.filteredAllTasks) {
+    } else if (this.local.clock.filteredAllSegments || this.local.clock.filteredAllTasks || this.local.clock.filteredAllSimpleTasks) {
       // Filtra todos los segmentos o tareas según la configuración
-      tasks = tasks.filter(task => !(this.local.clock.filteredAllSegments && task.elementType == 'segment') &&
-                                    !(this.local.clock.filteredAllTasks && task.elementType == 'task'));
+      tasks = tasks.filter(task => (!this.local.clock.filteredAllSegments && task.elementType == 'segment') ||
+                                    (!this.local.clock.filteredAllTasks && task.elementType == 'task') || (!this.local.clock.filteredAllSimpleTasks && task.elementType == 'simpleTask')) 
     }
   
    // Filtrado adicional común a ambos modos
     if (this.local.clock.filteredLabel !== -1) {
       tasks = tasks.filter(task => task.label === this.local.clock.filteredLabel);
     }
+
     if (this.local.clock.filteredSegment !== -1) {
       tasks = tasks.filter(task => task.segmentId === this.local.clock.filteredSegment || task.id === this.local.clock.filteredSegment);
     }
@@ -204,6 +209,7 @@ export class ProductivityHubComponent implements AfterViewInit {
       tasks = tasks.filter(task => task.name.toLowerCase().includes(searchLower) || 
                                    (task.detail && task.detail.toLowerCase().includes(searchLower)));
     }
+
     // Asignación final de tareas filtradas
     this.tks.filteredTasks = tasks;
   }

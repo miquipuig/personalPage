@@ -23,6 +23,7 @@ export interface Clock {
   filteredSegment:number;
   filteredAllTasks: boolean;
   filteredAllSegments: boolean;
+  filteredAllSimpleTasks:boolean;
   orderedView:boolean;
 
 }
@@ -54,6 +55,7 @@ export class LocalService {
     filteredSegment: -1,
     filteredAllTasks: false,
     filteredAllSegments: false,
+    filteredAllSimpleTasks: false,
     orderedView: false
     
   };
@@ -94,8 +96,13 @@ export class LocalService {
       filteredSegment: typeof clock.filteredSegment === 'number' ? clock.filteredSegment : -1,
       filteredAllTasks: typeof clock.filteredAllTasks === 'boolean' ? clock.filteredAllTasks : false,
       filteredAllSegments: typeof clock.filteredAllSegments === 'boolean' ? clock.filteredAllSegments : false,
+      filteredAllSimpleTasks: typeof clock.filteredAllSimpleTasks === 'boolean' ? clock.filteredAllSimpleTasks : false,
       orderedView: typeof clock.orderedView === 'boolean' ? clock.orderedView : false
     };
+  }
+
+  saveClock() {
+    localStorage.setItem('clock', JSON.stringify(this.clock));
   }
 
   
