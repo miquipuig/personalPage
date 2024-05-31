@@ -1,35 +1,28 @@
 .checkbox-container {
     position: relative;
-    display: inline-block;
     width: var(--size, 50px);
     height: var(--size, 50px);
 }
 
-input[type="checkbox"] {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
 
-label {
+.checkBox {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: var(--size, 50px);
+    height: var(--size, 50px);
     background-color: #b3b3b3;
     border-radius: calc(var(--size, 50px)/10);
     cursor: pointer;
     transition: filter 0.2s ease-in-out;
-
 }
 
-input:not(:checked)+label:hover {
+.checkBox:not(.checked):hover {
     filter: brightness(130%);
 }
 
 
-label:after {
+.checkBox:after {
     color: rgb(0, 0, 0);
     position: absolute;
     top: 50%;
@@ -42,11 +35,11 @@ label:after {
     transition: width 0.2s ease-in-out, height 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
-input:checked+label {
+.checkBox.checked {
     background-color: #66bb6a;
 }
 
-input:checked+label:after {
+.checkBox.checked:after {
     content: "";
     width: 95%;
     height: 95%;
@@ -54,11 +47,13 @@ input:checked+label:after {
 }
 
 .tick-mark {
-    position: absolute;
-    bottom: 50%;
-    left: 10%;
+    pointer-events: none;
+    position: fixed;
+    margin-left: calc(var(--size, 50px) *7/50);
+    margin-bottom: calc(var(--size, 50px) *7/50);
+
     width: calc(var(--size, 50px) *6/5);
-    height: calc(var(--size, 50px) /2);
+    height: calc(var(--size, 50px) *2/5);
     border-left: calc(var(--size, 50px) *7/50) solid white;
     border-bottom: calc(var(--size, 50px)*5/50) solid white;
     transform: rotate(25deg) translate(-50%, -50%) scale(5);
@@ -66,7 +61,7 @@ input:checked+label:after {
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
-input:checked+label .tick-mark {
+ .tick-mark.checked {
     opacity: 1;
     transform: rotate(-45deg) scale(1);
 }
