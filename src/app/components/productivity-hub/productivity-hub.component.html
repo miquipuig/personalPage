@@ -30,7 +30,7 @@
 
 		<div class="row d-flex justify-content-center ">
 			<div class=" col-sm-10 col-md-5 col-lg-4 col-12">
-				<app-datapicker></app-datapicker>
+				<app-check-box></app-check-box>
 				<app-timer></app-timer>
 				<div class="d-none d-md-block">
 					<app-clock></app-clock>
@@ -102,20 +102,22 @@
 								[ngClass]="{'active': !local.clock.filteredAllSimpleTasks}">
 								List
 							</div>
-							
+
 							<div class="ms-2 elementTypeButton"
 								(click)="local.clock.filteredAllTasks=!local.clock.filteredAllTasks;  filterSearch()"
 								[ngClass]="{'active': !local.clock.filteredAllTasks}">
 								T
 							</div>
 							<div class="elementTypeButton"
-								(click)="local.clock.filteredAllSegments=!local.clock.filteredAllSegments;  filterSearch()" style="padding-right: 9px !important;  margin-right:0px !important;"
+								(click)="local.clock.filteredAllSegments=!local.clock.filteredAllSegments;  filterSearch()"
+								style="padding-right: 9px !important;  margin-right:0px !important;"
 								[ngClass]="{'active': !local.clock.filteredAllSegments}">
 								S
 							</div>
 
-							<div (click)="local.clock.orderedView=!local.clock.orderedView; filterSearch()" style="margin-left:-3px !important;"
-								[ngClass]="{'active': local.clock.orderedView}" class="elementTypeButton">
+							<div (click)="local.clock.orderedView=!local.clock.orderedView; filterSearch()"
+								style="margin-left:-3px !important;" [ngClass]="{'active': local.clock.orderedView}"
+								class="elementTypeButton">
 								<i class="ri-list-check"></i>
 							</div>
 						</div>
@@ -142,25 +144,27 @@
 						<div *ngIf="!isVisible" class="d-flex justify-content-end align-items-center">
 
 							<div class="elementTypeButton"
-							(click)="local.clock.filteredAllSimpleTasks=!local.clock.filteredAllSimpleTasks;  filterSearch()"
-							[ngClass]="{'active': !local.clock.filteredAllSimpleTasks}">
-							List
-						</div>
-						<div class="ms-2 elementTypeButton"
-							(click)="local.clock.filteredAllTasks=!local.clock.filteredAllTasks;  filterSearch()"
-							[ngClass]="{'active': !local.clock.filteredAllTasks}">
-							T
-						</div>
-						<div class="elementTypeButton"
-							(click)="local.clock.filteredAllSegments=!local.clock.filteredAllSegments;  filterSearch()" style="padding-right: 9px !important;  margin-right:0px !important;"
-							[ngClass]="{'active': !local.clock.filteredAllSegments}">
-							S
-						</div>
+								(click)="local.clock.filteredAllSimpleTasks=!local.clock.filteredAllSimpleTasks;  filterSearch()"
+								[ngClass]="{'active': !local.clock.filteredAllSimpleTasks}">
+								List
+							</div>
+							<div class="ms-2 elementTypeButton"
+								(click)="local.clock.filteredAllTasks=!local.clock.filteredAllTasks;  filterSearch()"
+								[ngClass]="{'active': !local.clock.filteredAllTasks}">
+								T
+							</div>
+							<div class="elementTypeButton"
+								(click)="local.clock.filteredAllSegments=!local.clock.filteredAllSegments;  filterSearch()"
+								style="padding-right: 9px !important;  margin-right:0px !important;"
+								[ngClass]="{'active': !local.clock.filteredAllSegments}">
+								S
+							</div>
 
-						<div (click)="local.clock.orderedView=!local.clock.orderedView; filterSearch()" style="margin-left:-3px !important;"
-							[ngClass]="{'active': local.clock.orderedView}" class="elementTypeButton">
-							<i class="ri-list-check"></i>
-						</div>
+							<div (click)="local.clock.orderedView=!local.clock.orderedView; filterSearch()"
+								style="margin-left:-3px !important;" [ngClass]="{'active': local.clock.orderedView}"
+								class="elementTypeButton">
+								<i class="ri-list-check"></i>
+							</div>
 						</div>
 					</div>
 
@@ -194,7 +198,7 @@
 												List
 											</div>
 
-											
+
 
 											<div>
 												<div (click)="loadFilteredTasksByLabel(task.label); $event.stopPropagation()"
@@ -331,8 +335,6 @@
 								</div>
 							</div>
 						</div>
-
-
 					</div>
 				</div>
 				<div *ngIf="tks.filteredTasks.length===0"

@@ -1,5 +1,5 @@
-import { Component, forwardRef, Input, Output,EventEmitter } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, forwardRef, Input, Output, EventEmitter } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 
 @Component({
@@ -17,7 +17,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class TimePickerComponent {
   @Output() closeMenus = new EventEmitter<any>();
 
-  @Input() myLabel: string = '';
+  @Input() myLabel!: string;
   counter: number = 0;
   value: number = 0;
   representation: string = '';
@@ -41,11 +41,10 @@ export class TimePickerComponent {
     this.representationOnChanged();
     this.onChange(this.value);
   }
-  writeValue(value: any): void {
 
+  writeValue(value: any): void {
     this.value = value;
     this.representationOnChanged();
-
   }
 
   registerOnChange(fn: any): void {
@@ -157,7 +156,5 @@ export class TimePickerComponent {
     this.representation = `${horas.toString().padStart(1, '0')} hours and ${minutos.toString().padStart(1, '0')} minutes`
     this.shortRepresentation = `${horas.toString().padStart(1, '0')} hr ${minutos.toString().padStart(1, '0')} min`
   }
-
-
 
 }

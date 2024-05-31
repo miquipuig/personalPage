@@ -79,3 +79,29 @@
         }
     }
 }
+
+
+
+.butoPlay {
+    z-index: 10;
+    /* width: auto; */
+    margin: 0px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 0px !important;
+    border: none;
+    background: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    color: #575757d6;
+    transition: color 0.3s ease;
+  }
+  
+  .butoPlay:hover {
+    color: #000000;
+    /* Cambio de color al pasar el ratón por encima */
+    transition: background-color 0.3s ease, color 0.2s ease;
+    /* Transición para el fondo y el color del texto */
+  }

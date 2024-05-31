@@ -58,7 +58,8 @@ export class TaskModalComponent implements OnInit {
       estimatedTime: new FormControl(0), // Asegúrate que el control '' está definido aquí
       state: new FormControl(-1), // Asegúrate que el control '' está definido aquí
       addChildForm: new FormControl(''),
-
+      startDate: new FormControl(''),
+      endDate: new FormControl('')
     });
 
 
@@ -239,6 +240,8 @@ export class TaskModalComponent implements OnInit {
 
     this.form.get('detail')?.setValue(task.detail);
     this.form.get('estimatedTime')?.setValue(task.estimatedTime);
+    this.form.get('startDate')?.setValue(task.startDate);
+    this.form.get('endDate')?.setValue(task.endDate);
     if (this.taskService.getLabelById(task.label)) {
       this.label = this.taskService.getLabelById(task.label);
       this.form.get('label')?.setValue(this.label.name);
@@ -403,7 +406,7 @@ export class TaskModalComponent implements OnInit {
       elapsedTime:0,
       restTime:0,
       tasks:[],
-      completed:false,
+      isTaskDone:false,
       userStoryId:0,
       pomodoroCounter:0,
       pomodoroQuarterCounter:0,
@@ -413,7 +416,9 @@ export class TaskModalComponent implements OnInit {
       elementType: 'task',
       state: 1,
       estimatedTime: 0,
-      segmentId: this.id
+      segmentId: this.id,
+      startDate: undefined,
+      endDate: undefined,
     }
     this.form.get('addChildForm')!.setValue('');
     await this.taskService.addTask(newTask);

@@ -19,12 +19,14 @@ export interface Task {
   estimatedTime: number;
   elapsedTime: number;
   restTime: number;
-  completed: boolean;
+  isTaskDone: boolean;
   userStoryId: number;
   pomodoroCounter: number;
   pomodoroQuarterCounter: number;
   state: number;
   tasks: Task[];
+  startDate: Date | undefined | null;
+  endDate: Date | undefined | null;
 }
 
 export interface State {

@@ -176,8 +176,15 @@ export class ProductivityHubComponent implements AfterViewInit {
   
     // Procesamiento dependiendo de si la vista está ordenada o no
     if (this.local.clock.orderedView) {
-      this.local.clock.filteredAllSimpleTasks=true;
+     
       this.local.clock.filteredAllSegments=false;
+
+      //Filtrado de tareas con segment padre
+      tasks = tasks.filter(task => task.segmentId === -1 || task.segmentId === null ||task.segmentId === undefined );
+
+
+
+
       if (this.local.clock.filteredAllSegments || this.local.clock.filteredAllTasks || this.local.clock.filteredAllSimpleTasks) {
         // Filtra todos los segmentos o tareas según la configuración
         tasks = tasks.filter(task => (!this.local.clock.filteredAllSegments && task.elementType == 'segment') ||
@@ -338,8 +345,14 @@ export class ProductivityHubComponent implements AfterViewInit {
         positionButton += index;
         break;
       }
+      console.log(positionButton);
+      console.log(i);
+
       const task = this.tks.filteredTasks[i];
+      console.log(task);
       positionButton += task.tasks.length;
+      console.log(positionButton);
+
     }
     const nativeElement = this.editTaskButtonChild.get(positionButton)?.nativeElement;
     const rect = nativeElement.getBoundingClientRect();

@@ -16,11 +16,12 @@ import { PeriodicityComponent } from './complements/periodicity/periodicity.comp
 import { DatapickerComponent } from './datapicker/datapicker.component';
 import { NgbAlertModule, NgbDateParserFormatter, NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateCustomParserFormatter } from './datapicker/date-formatter.service';
+import { CheckBoxComponent } from './complements/check-box/check-box.component';
 
 
 
 @NgModule({
-  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent],
+  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent],
   imports: [ 
     CommonModule,
     ProductivityHubRoutingModule,

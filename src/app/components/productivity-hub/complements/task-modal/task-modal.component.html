@@ -23,7 +23,7 @@
               <select class="form-select" formControlName="elementType">
                 <option value="task">Task</option>
                 <option value="segment">Segment</option>
-                <option value="simpleTask">Simple Task</option>
+                <option value="simpleTask">Check Task</option>
                 <option value="routine">Routine</option>
               </select>
             </div>
@@ -48,7 +48,7 @@
 
                 <app-label-editor (closeMenus)="closeMenus()"
                   style="position: absolute; top: 0; right: 0; height: 100%;"></app-label-editor>
-              </div>
+                </div>
 
               <div style="--animate-duration: 0.5s;"
                 class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left list-group listGroupPosition"
@@ -62,8 +62,8 @@
               </div>
             </div>
 
-            <div *ngIf="form.get('elementType')?.value === 'task'" style="position: relative; padding-right: 0px;"
-              class="col-4">
+            <div *ngIf="form.get('elementType')?.value === 'task' || form.get('elementType')?.value === 'simpleTask'"
+              style="position: relative; padding-right: 0px;" class="col-4">
               <!-- (focusout)="onInputBlur()" -->
               <input style=" max-height: 40px;" type="text" class="form-control pe-4" formControlName="segmentId"
                 [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('segmentId')!.dirty || form.get('segmentId')!.touched)}"
@@ -95,12 +95,15 @@
                 <option *ngFor="let state of states" [ngValue]="state.id">{{state.name}}</option>
               </select>
             </div>
+          </div>
+          <div class="row mb-2">
 
-            <div *ngIf="form.get('elementType')?.value==='simpleTask'" class="col-8">
+            <div class="col-6 pe-1">
+              <app-datapicker formControlName="startDate"  [label]="'Start'"></app-datapicker>
+            </div>
 
-              <app-datapicker></app-datapicker>
-
-
+            <div class="col-6 ps-2">
+              <app-datapicker formControlName="endDate" [label]="'End'"></app-datapicker>
             </div>
 
 

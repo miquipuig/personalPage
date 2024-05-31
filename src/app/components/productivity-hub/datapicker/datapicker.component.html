@@ -1,20 +1,20 @@
-<form >
-    <div  class="input-group q-datepicker">
-        <input class="form-control"
-               placeholder="mm-dd-yyyy"
-               name="dp"
-               [(ngModel)]="model"
-               ngbDatepicker
-               #d="ngbDatepicker"
-               #dateInput
-               (click)="d.toggle(); validate()"
-               [class.custom-datepicker]="true"
-        />
-        <button class="btn btn-outline-secondary"
-                (click)="d.toggle(); "
-                type="button">
-            <i class="ri-calendar-2-line"> </i> Start Date 
+<form>
+    <div class="input-group q-datepicker">
+        <div style="position: relative; padding: 0px " class="form-control">
+            <input style="border-radius: 5px 0 0 5px;" class="form-control" placeholder="{{label}} Date" name="dp" [(ngModel)]="model" (input)="validate()"
+                ngbDatepicker #d="ngbDatepicker" #dateInput (click)="d.toggle(); validate()"
+                [class.custom-datepicker]="true" (dateSelect)="validate()" autocomplete="off"  />
+            <button *ngIf="model!=null" (click)="deleteData()" style="position: absolute; top: 0; right: 5px; height: 100%;" type="button"
+                class="butoPlay d-flex align-items-center">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+
+        <button *ngIf="invalidDate" class="btn btn-danger ps-2 pe-2" (click)="d.toggle(); validate();" type="button">
+            Wrong Format
+        </button>
+        <button *ngIf="!invalidDate" class="btn btn-secondary ps-2 pe-2" (click)="d.toggle(); validate();" type="button">
+            <i class="ri-calendar-2-line"></i> {{label}}
         </button>
     </div>
 </form>
-

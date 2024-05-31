@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="input-group" style="width: 80%">
-        <input (in¡put)="selectableOnChanged()" [(ngModel)]="hours" type="number" class="form-control input-hours">
+        <input (input)="selectableOnChanged()" [(ngModel)]="hours" type="number" class="form-control input-hours">
         <input (input)="selectableOnChanged()" [(ngModel)]="minutes" type="number" class="form-control input-minutes">
       </div>
       <p>{{representation}}</p>
