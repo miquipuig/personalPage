@@ -1,40 +1,41 @@
-<div class="d-flex align-items-center">
-  <!-- <label>{{ myLabel }}</label> -->
+<!-- <label>{{ myLabel }}</label> -->
 
-  <div *ngIf="value>0" class="input-group custom-number-input" style="width: 110px">
-    <input (click)="openTimePicker()" [(ngModel)]="shortRepresentation" type="text" class="form-control" readonly>
+
+
+<div class="d-flex justify-content-between align-items-center">
+
+
+<div *ngIf="value>0" class="input-group">
+  <input (click)="openTimePicker()" [(ngModel)]="shortRepresentation" type="text" class="form-control" readonly>
+</div>
+<button type="button" (click)="openTimePicker()" class="butoPlay ms-2 d-flex align-items-center">
+  <div *ngIf="!(value>0)" class="textTimer">
+    Estimated
   </div>
-
-  <button type="button" (click)="openTimePicker()" class="butoPlay ms-2 d-flex align-items-center">
-    <div *ngIf="!(value>0)" class="textTimer">
-      Estimated Time
+  <i class="ri-timer-line sizeplus"></i>
+</button>
+</div>
+<div *ngIf="timePickerOpened" class="">
+  <div class="animate__animated animate__fadeIn timePickerBox">
+    <div class="timePickerBoxHeader ">
+      <button type="button" (click)="closeTimePicker()" class="closeTimePicker">
+        <i class="ri-close-line"></i>
+      </button>
     </div>
-    <i class="ri-timer-line sizeplus"></i>
-  </button>
-  <div>
-
-  </div>
-  <div  *ngIf="timePickerOpened" class="">
-    <div class="animate__animated animate__fadeIn timePickerBox">
-      <div class="timePickerBoxHeader ">
-        <button type="button" (click)="closeTimePicker()" class="closeTimePicker">
-          <i class="ri-close-line"></i>
-        </button>
+    <div class="d-flex" style="width: 80%">
+      <button type="button" class="butoPlay sizeplus" (click)="minus15minutes()"><i
+          class="ri-indeterminate-circle-fill"></i></button>
+      <button type="button" class="butoPlay sizeplus" (click)="plus15minutes()"><i
+          class="ri-add-circle-fill"></i></button>
+      <div class="ms-3">
+        <button type="button" class="butoPlay sizeplus" (click)="zero()"><i class="ri-loop-left-line"></i></button>
       </div>
-      <div class="d-flex" style="width: 80%">
-        <button type="button" class="butoPlay sizeplus" (click)="minus15minutes()"><i
-            class="ri-indeterminate-circle-fill"></i></button>
-        <button type="button" class="butoPlay sizeplus" (click)="plus15minutes()"><i
-            class="ri-add-circle-fill"></i></button>
-        <div class="ms-3">
-          <button type="button" class="butoPlay sizeplus" (click)="zero()"><i class="ri-loop-left-line"></i></button>
-        </div>
-      </div>
-      <div class="input-group" style="width: 80%">
-        <input (input)="selectableOnChanged()" [(ngModel)]="hours" type="number" class="form-control input-hours">
-        <input (input)="selectableOnChanged()" [(ngModel)]="minutes" type="number" class="form-control input-minutes">
-      </div>
-      <p>{{representation}}</p>
-
     </div>
+    <div class="input-group" style="width: 80%">
+      <input (input)="selectableOnChanged()" [(ngModel)]="hours" type="number" class="form-control input-hours">
+      <input (input)="selectableOnChanged()" [(ngModel)]="minutes" type="number" class="form-control input-minutes">
+    </div>
+    <p>{{representation}}</p>
+
   </div>
+</div>

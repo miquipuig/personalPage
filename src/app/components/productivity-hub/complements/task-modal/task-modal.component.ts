@@ -59,7 +59,8 @@ export class TaskModalComponent implements OnInit {
       state: new FormControl(-1), // Asegúrate que el control '' está definido aquí
       addChildForm: new FormControl(''),
       startDate: new FormControl(''),
-      endDate: new FormControl('')
+      endDate: new FormControl(''),
+      isTaskDone: new FormControl(false)
     });
 
 
@@ -239,6 +240,7 @@ export class TaskModalComponent implements OnInit {
     this.form.get('name')?.setValue(task.name);
 
     this.form.get('detail')?.setValue(task.detail);
+    this.form.get('isTaskDone')?.setValue(task.isTaskDone);
     this.form.get('estimatedTime')?.setValue(task.estimatedTime);
     this.form.get('startDate')?.setValue(task.startDate);
     this.form.get('endDate')?.setValue(task.endDate);
@@ -393,6 +395,9 @@ export class TaskModalComponent implements OnInit {
     this.refreshTasks.emit();
     this.form.get('addChildForm')!.setValue('');
     this.closeMenus();
+
+
+   
   }
 
   async addNewTaskToSegment() {

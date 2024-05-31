@@ -1,25 +1,8 @@
-<!-- 
-
-<div #checkBox class="checkbox-container">
-    <input [(ngModel)]="check" type="checkbox" id="checkbox" />
-    <label for="checkbox">
-        <div class="tick-mark"></div>
-    </label>
-</div>  -->
-
-<!-- 
-<div #checkBox  class="checkbox-container">
-    <div (click)="check=!check; validate()" class="checkBox" [ngClass]="{'checked':check}">
-        <div class="tick-mark"></div>
-    </div>
-</div> -->
 <div #checkbox style="position: relatives;" class="checkbox-container">
-
     <div  (click)="toggleCheck()" class="checkBox" [ngClass]="{'checked': check}">
     </div>
     <div >
         <div  class="tick-mark" [ngClass]="{'checked': check}"></div>
 
     </div>
-
 </div>

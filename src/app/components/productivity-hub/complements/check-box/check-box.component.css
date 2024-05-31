@@ -54,8 +54,8 @@
 
     width: calc(var(--size, 50px) *6/5);
     height: calc(var(--size, 50px) *2/5);
-    border-left: calc(var(--size, 50px) *7/50) solid white;
-    border-bottom: calc(var(--size, 50px)*5/50) solid white;
+    border-left: calc(var(--size, 50px) *8/50) solid white;
+    border-bottom: calc(var(--size, 50px)*6/50) solid white;
     transform: rotate(25deg) translate(-50%, -50%) scale(5);
     opacity: 0;
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;

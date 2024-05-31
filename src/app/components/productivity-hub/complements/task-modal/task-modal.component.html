@@ -27,11 +27,19 @@
                 <option value="routine">Routine</option>
               </select>
             </div>
-            <div class="ms-auto" style="right:20px">
-              <!-- <app-time-picker (closeMenus)="closeMenus()" formControlName="estimatedTime"
-                [myLabel]="'Timer'"></app-time-picker> -->
-                <app-check-box [size]="25"></app-check-box>
+            <div class="ms-auto d-flex" >
+    
+              <app-check-box *ngIf="form.get('elementType')?.value==='simpleTask'" formControlName="isTaskDone"
+                [label]="'End'" [size]="35"></app-check-box>
 
+              <div style="width: 150px;"  *ngIf="form.get('elementType')?.value==='task' || form.get('elementType')?.value==='segment' "
+                class="col-4" (click)="closeMenus()">
+                <select class="form-select" formControlName="state">
+                  <option value="-1" disabled selected>Select State</option>
+
+                  <option *ngFor="let state of states" [ngValue]="state.id">{{state.name}}</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -49,7 +57,7 @@
 
                 <app-label-editor (closeMenus)="closeMenus()"
                   style="position: absolute; top: 0; right: 0; height: 100%;"></app-label-editor>
-                </div>
+              </div>
 
               <div style="--animate-duration: 0.5s;"
                 class="animate__animated animate__fadeIn d-flex align-items-center justify-content-left list-group listGroupPosition"
@@ -88,19 +96,21 @@
               </div>
             </div>
 
-            <div *ngIf="form.get('elementType')?.value==='task' || form.get('elementType')?.value==='segment' "
-              class="col-4" (click)="closeMenus()">
-              <select class="form-select" formControlName="state">
-                <option value="-1" disabled selected>Select State</option>
-
-                <option *ngFor="let state of states" [ngValue]="state.id">{{state.name}}</option>
-              </select>
+            <div class="col-4 d-flex  justify-content-end align-items-center">
+                
+               <app-time-picker (closeMenus)="closeMenus()" formControlName="estimatedTime"
+                [myLabel]="'Timer'"></app-time-picker> 
+          
             </div>
+
+                  
+
+
           </div>
           <div class="row mb-2">
 
             <div class="col-6 pe-1">
-              <app-datapicker formControlName="startDate"  [label]="'Start'"></app-datapicker>
+              <app-datapicker formControlName="startDate" [label]="'Start'"></app-datapicker>
             </div>
 
             <div class="col-6 ps-2">
@@ -175,7 +185,7 @@
                     class="ri-close-large-line"></i></div>
               </div>
             </div>
-
+            <pre>{{form.value | json}}</pre>
           </div>
         </div>
 
