@@ -2,6 +2,7 @@
     position: relative;
     width: var(--size, 50px);
     height: var(--size, 50px);
+
 }
 
 
@@ -21,7 +22,9 @@
 .checkBox:not(.checked):hover {
     filter: brightness(130%);
 }
-
+.modal-body {
+    overflow-x: hidden !important;
+}
 
 .checkBox:after {
     color: rgb(0, 0, 0);

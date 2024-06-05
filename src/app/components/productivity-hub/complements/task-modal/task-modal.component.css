@@ -24,8 +24,12 @@
 .modal-content {
     background: #cdcdcdf5 !important;
     color: black;
+    
 }
 
+.modal-body {
+    overflow-x: hidden !important;
+}
 .red-input {
     color: var(--main-color) !important;
     /* Color de texto rojo */

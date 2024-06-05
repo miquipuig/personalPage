@@ -10,6 +10,8 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
         <div class="modal-body">
+          <div style="width: 6000px">
+          </div>
           <div class="d-flex mb-2 align-items-center">
             <!-- <div class="">
               <div *ngIf="id === -1">
@@ -105,14 +107,14 @@
 
           </div>
           <div class="row mb-2">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-sm-6">
               <app-datapicker formControlName="startDate" [label]="'Start'"></app-datapicker>
             </div>
           
             <!-- Utiliza mt-3 y d-md-none para añadir margen superior solo en pantallas pequeñas -->
-            <div  *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-12 d-md-none mt-2"></div>
+            <div  *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-12 d-sm-none mt-2"></div>
           
-            <div *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-12 col-md-6 ">
+            <div *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-12 col-sm-6 ">
               <app-datapicker formControlName="endDate" [label]="'End'"></app-datapicker>
             </div>
           </div>
