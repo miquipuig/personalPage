@@ -79,7 +79,7 @@
 										</div>
 									</div>
 
-									<div style="width: 150px;" (click)="stateFilter(state)" *ngFor="let state of states"
+									<div style="width: 150px;" (click)="stateFilter(state)" *ngFor="let state of local.states"
 										class=" list-group-item listGreyColor">
 										<div class="form-check form-switch">
 											<input style="pointer-events: none;" [(ngModel)]="state.visibilityTaskList"
@@ -124,169 +124,13 @@
 						(cdkDropListDropped)="onDrop($event)">
 						<div *ngFor="let task of tks.filteredTasks; let i = index" cdkDrag
 							(cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded($event)">
-							<div (click)="activeTask(task.id);$event.stopPropagation()"
-								class="task-card mb-1 card text-white"
-								[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': task.id === local.clock.actualTask}">
-								<div class="card-body d-flex justify-content-between align-items-start p-2">
-									<div>
-										<div class="d-flex align-items-start  justify-content-start align-items-center">
-											<div style="width: 25px; height: 25px; margin: 0px; padding:0px"
-												cdkDragHandle>
-												<i class="ri-draggable me-1"></i>
-											</div>
-											<div (click)="local.clock.filteredAllSegments=true;local.clock.filteredAllSimpleTasks=true; filterSearch()"
-												*ngIf="task.elementType==='task'" class="me-2 elementType">
-												T
-											</div>
-											<div (click)="local.clock.filteredAllTasks=true; local.clock.filteredAllSimpleTasks=true; filterSearch()"
-												*ngIf="task.elementType==='segment'" class="me-2 elementType">
-												S
-											</div>
-											<!-- <div (click)="local.clock.filteredAllSegments=true;local.clock.filteredAllTasks=true; filterSearch()"
-												*ngIf="task.elementType==='simpleTask'" class="me-2 elementType">
-												List
-											</div> -->
-											<app-check-box class="me-2" *ngIf="task.elementType==='simpleTask'"
-												[task]="task" [size]="30"></app-check-box>
+							<app-task-card  [task]="task" [index]="i" (editTaskEmitter)="editTaskReferenced($event)" (resumeTimerEmitter)="resumeTimer()"  (filterSearchEmitter)="filterSearch()"></app-task-card>
 
-
-
-											<div>
-												<div (click)="loadFilteredTasksByLabel(task.label); $event.stopPropagation()"
-													*ngIf="getLabelInfo(task.label)" class="outline-label me-2"
-													style="--color-base: var(--{{getLabelInfo(task.label).color}}-color)">
-													<i *ngIf="getLabelInfo(task.label).icon"
-														class="{{getLabelInfo(task.label).icon}}"></i>
-													{{ getLabelInfo(task.label).name | truncate:10 }}
-												</div>
-											</div>
-											<div>
-												<div (click)="loadFilteredTasksBySegment(task.segmentId); $event.stopPropagation()"
-													*ngIf="task.segmentId!=null || task.segmentId!=undefined"
-													class="outline-label me-2">
-													{{getSegmentName(task.segmentId) | truncate:10 }}
-												</div>
-											</div>
-											<div *ngIf="isVisible || !(task.label || task.segmentId)" class="me-1">
-												{{task.name | truncate:50}}
-											</div>
-										</div>
-
-										<div>
-											<div *ngIf="!isVisible && (task.label || task.segmentId)" class="me-1">
-												{{task.name | truncate:50}}
-											</div>
-											<div class="small-detail">{{task.detail | truncate:70 }}</div>
-
-											<div *ngIf="task.estimatedTime>0" class="small-detail">
-												<i class="ri-timer-line"></i> {{task.elapsedTime*1000 |
-												customTimeFormat}}
-												of
-												{{task.estimatedTime | customTimeFormat }} - {{
-												taskTimePercentage(task.id) |
-												number:'1.0-1' }}%
-											</div>
-											<div *ngIf="task.estimatedTime<1 &&task.elapsedTime >0"
-												class="small-detail">
-												<i class="ri-timer-line"></i> {{task.elapsedTime*1000 |
-												customTimeFormat}}
-											</div>
-										</div>
-
-									</div>
-									<div class="d-flex">
-
-
-										<select *ngIf="task.elementType==='task' || task.elementType==='segment'"
-											(click)="$event.stopPropagation()"
-											(change)="onStateChange($event, task); $event.stopPropagation()"
-											[(ngModel)]="task.state" class="state-select me-1"
-											aria-label=".form-select-sm example">
-											<!-- <option value="-1" selected>Stateless</option> -->
-											<option *ngFor="let state of states" [value]=state.id>{{state.name |
-												truncate:10}}</option>
-										</select>
-										<button #editTaskButton (click)="editTask(task, i); $event.stopPropagation()"
-											class="butoPlay">
-											<i class="ri-edit-2-fill"></i>
-										</button>
-									</div>
-								</div>
-								<div *ngIf="tks.filteredTasks[i].estimatedTime>0" class="progress task">
-									<div class="progress-bar bg-danger" role="progressbar task"
-										style="width: {{taskTimePercentage(task.id)}}%">
-									</div>
-									<div class="progress-bar bg-grey" role="progressbar task"
-										style="width: {{taskTimePercentage(task.id) - 50}}%">
-									</div>
-								</div>
-							</div>
 							<div *ngIf="local.clock.orderedView && task.elementType==='segment'" cdkDropList
 								class="example-list" (cdkDropListDropped)="onDrop($event,task.id)" class="ms-4">
 								<div *ngFor="let childTask of task.tasks; let j = index" cdkDrag
 									(cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded($event)">
-
-									<div (click)="activeTask(childTask.id)" class="task-card mb-1 card text-white"
-										[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': childTask.id === local.clock.actualTask}">
-
-										<div class="card-body d-flex justify-content-between align-items-start p-2">
-											<div>
-												<div class="d-flex align-items-start justify-content-end">
-													<div style="width: 25px; height: 25px; margin: 0px; padding:0px"
-														cdkDragHandle>
-														<i class="ri-draggable me-1"></i>
-													</div>
-
-													<app-check-box class="me-2"
-														*ngIf="childTask.elementType==='simpleTask'" [task]="childTask"
-														[size]="30"></app-check-box>
-
-													<div class="me-1">
-														{{childTask.name | truncate:50}}
-													</div>
-												</div>
-												<div class="small-detail">{{childTask.detail | truncate:70 }}
-												</div>
-												<div *ngIf="childTask.estimatedTime>0" class="small-detail">
-													<i class="ri-timer-line"></i> {{childTask.elapsedTime*1000 |
-													customTimeFormat}}
-													of
-													{{childTask.estimatedTime | customTimeFormat }} - {{
-													taskTimePercentage(childTask.id) |
-													number:'1.0-1' }}%
-												</div>
-												<div *ngIf="childTask.estimatedTime<1 &&childTask.elapsedTime >0"
-													class="small-detail">
-													<i class="ri-timer-line"></i> {{childTask.elapsedTime*1000 |
-													customTimeFormat}}
-												</div>
-											</div>
-											<div class="d-flex">
-												<select (click)="$event.stopPropagation()"
-													(change)="onStateChange($event, childTask); $event.stopPropagation()"
-													[(ngModel)]="childTask.state" class="state-select me-1"
-													aria-label=".form-select-sm example">
-													<!-- <option value="-1" selected>Stateless</option> -->
-													<option *ngFor="let state of states" [value]=state.id>
-														{{state.name |
-														truncate:10}}</option>
-												</select>
-												<button #editTaskButtonChild
-													(click)="editChild(childTask,j, i); $event.stopPropagation()"
-													class="butoPlay">
-													<i class="ri-edit-2-fill"></i>
-												</button>
-											</div>
-										</div>
-										<div *ngIf="childTask.estimatedTime>0" class="progress task">
-											<div class="progress-bar bg-danger" role="progressbar task"
-												style="width: {{taskTimePercentage(childTask.id)}}%">
-											</div>
-											<div class="progress-bar bg-grey" role="progressbar task"
-												style="width: {{taskTimePercentage(childTask.id) - 50}}%">
-											</div>
-										</div>
-									</div>
+									<app-task-card [child]='true' [task]="childTask" [index]="j" (editTaskEmitter)="editTaskReferenced($event)"  (resumeTimerEmitter)="resumeTimer()"></app-task-card>
 								</div>
 							</div>
 						</div>

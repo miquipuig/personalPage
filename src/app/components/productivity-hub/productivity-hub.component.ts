@@ -5,12 +5,13 @@ import { TaskServicesService } from 'src/app/services/productivity-hub/task-serv
 import { Label } from 'src/app/services/productivity-hub/task-services.service';
 import { Task } from 'src/app/services/productivity-hub/task-services.service';
 import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragMove, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { State } from 'src/app/services/productivity-hub/task-services.service';
 import { LocalService } from 'src/app/services/productivity-hub/local.service';
 import { Clock } from 'src/app/services/productivity-hub/local.service';
 import { ClockComponent } from './clock/clock.component';
 import { TimerComponent } from './timer/timer.component';
 import { CheckBoxComponent } from './complements/check-box/check-box.component';
+import { State } from 'src/app/services/productivity-hub/task-services.service';
+
 @Component({
   selector: 'app-productivity-hub',
   templateUrl: './productivity-hub.component.html',
@@ -31,13 +32,11 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   searchInput = '';
   dragOverIndex: number | null = null;
-  labelsAnimated = true;
   stateFilterMenu = false
   stateFilterMenuAll = false
-  states: State[] = [];
-  isVisible=true;
+  isVisible = true;
 
-  constructor(private elRef: ElementRef,private cdr: ChangeDetectorRef, private renderer: Renderer2, public tks: TaskServicesService, public local: LocalService) {
+  constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef, private renderer: Renderer2, public tks: TaskServicesService, public local: LocalService) {
 
   }
   @HostListener('document:click', ['$event'])
@@ -48,7 +47,7 @@ export class ProductivityHubComponent implements AfterViewInit {
     }
   }
 
-  
+
 
   selectedTask = -1;
 
@@ -83,10 +82,10 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   async refreshTasks() {
-    this.labelsAnimated = true;
+    this.local.labelsAnimated = true;
 
     this.filterSearch();
-    if(this.checkBoxComponent){
+    if (this.checkBoxComponent) {
       this.checkBoxComponent.refresh();
     }
   }
@@ -96,7 +95,7 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.refreshTasks();
   }
   async loadStates() {
-    this.states = this.tks.states;
+    this.local.states = this.tks.states;
   }
   loadFilteredTasksByLabel(labelId: any) {
 
@@ -109,17 +108,11 @@ export class ProductivityHubComponent implements AfterViewInit {
     await this.tks.saveTask(task);
     this.filterSearch();
 
-    // this.refreshTasks();
-    // Lógica adicional que quieres ejecutar al cambiar la selección
+
   }
 
   loadUnfilteredTasksByLabel() {
     this.local.clock.filteredLabel = -1;
-    this.filterSearch();
-  }
-
-  loadFilteredTasksBySegment(segmentId: any) {
-    this.local.clock.filteredSegment = segmentId;
     this.filterSearch();
   }
 
@@ -128,14 +121,12 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.filterSearch();
   }
 
-  
-
   async stateFilter(state: State) {
 
     state.visibilityTaskList = !state.visibilityTaskList;
     this.checkStateAllFilter();
 
-    this.states = await (this.tks.saveState(state));
+    this.local.states = await (this.tks.saveState(state));
 
     this.filterSearch();
   }
@@ -143,12 +134,12 @@ export class ProductivityHubComponent implements AfterViewInit {
   asyncStateFilterAll() {
     //si todos los estados estan visibles, se ocultan
 
-    if (this.states.every(state => state.visibilityTaskList)) {
-      this.states.forEach(state => {
+    if (this.local.states.every(state => state.visibilityTaskList)) {
+      this.local.states.forEach(state => {
         state.visibilityTaskList = false;
       });
     } else {
-      this.states.forEach(state => {
+      this.local.states.forEach(state => {
         state.visibilityTaskList = true;
       });
     }
@@ -159,7 +150,7 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   checkStateAllFilter() {
     //si todos los estados estan visibles, se ocultan
-    if (this.states.every(state => state.visibilityTaskList)) {
+    if (this.local.states.every(state => state.visibilityTaskList)) {
       this.stateFilterMenuAll = true;
     } else {
       this.stateFilterMenuAll = false;
@@ -170,23 +161,24 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   filterSearch(): void {
+    
     console.log('filterSearch');
     this.local.saveClock();
     // Copia inicial de tareas y ordenación por idPosition
     let tasks: Task[] = [...this.tks.tasks].sort((a, b) => a.idPosition - b.idPosition);
-  
+
     // Filtrado por estado visible
-    if (this.states.length > 0) {
-      tasks = tasks.filter(task => this.states.some(state => state.id === task.state && state.visibilityTaskList));
+    if (this.local.states.length > 0) {
+      tasks = tasks.filter(task => this.local.states.some(state => state.id === task.state && state.visibilityTaskList));
     }
-  
+
     // Procesamiento dependiendo de si la vista está ordenada o no
     if (this.local.clock.orderedView) {
-     
-      this.local.clock.filteredAllSegments=false;
+
+      this.local.clock.filteredAllSegments = false;
 
       //Filtrado de tareas con segment padre
-      tasks = tasks.filter(task => task.segmentId === -1 || task.segmentId === null ||task.segmentId === undefined );
+      tasks = tasks.filter(task => task.segmentId === -1 || task.segmentId === null || task.segmentId === undefined);
 
 
 
@@ -194,9 +186,9 @@ export class ProductivityHubComponent implements AfterViewInit {
       if (this.local.clock.filteredAllSegments || this.local.clock.filteredAllTasks || this.local.clock.filteredAllSimpleTasks) {
         // Filtra todos los segmentos o tareas según la configuración
         tasks = tasks.filter(task => (!this.local.clock.filteredAllSegments && task.elementType == 'segment') ||
-                                      (!this.local.clock.filteredAllTasks && task.elementType == 'task') || (!this.local.clock.filteredAllSimpleTasks && task.elementType == 'simpleTask')) 
+          (!this.local.clock.filteredAllTasks && task.elementType == 'task') || (!this.local.clock.filteredAllSimpleTasks && task.elementType == 'simpleTask'))
       }
-      
+
       // Asignación de tareas a los segmentos
       tasks.forEach(segment => {
         if (segment.elementType === 'segment') {
@@ -206,10 +198,10 @@ export class ProductivityHubComponent implements AfterViewInit {
     } else if (this.local.clock.filteredAllSegments || this.local.clock.filteredAllTasks || this.local.clock.filteredAllSimpleTasks) {
       // Filtra todos los segmentos o tareas según la configuración
       tasks = tasks.filter(task => (!this.local.clock.filteredAllSegments && task.elementType == 'segment') ||
-                                    (!this.local.clock.filteredAllTasks && task.elementType == 'task') || (!this.local.clock.filteredAllSimpleTasks && task.elementType == 'simpleTask')) 
+        (!this.local.clock.filteredAllTasks && task.elementType == 'task') || (!this.local.clock.filteredAllSimpleTasks && task.elementType == 'simpleTask'))
     }
-  
-   // Filtrado adicional común a ambos modos
+
+    // Filtrado adicional común a ambos modos
     if (this.local.clock.filteredLabel !== -1) {
       tasks = tasks.filter(task => task.label === this.local.clock.filteredLabel);
     }
@@ -219,15 +211,15 @@ export class ProductivityHubComponent implements AfterViewInit {
     }
     if (this.searchInput !== '') {
       const searchLower = this.searchInput.toLowerCase();
-      tasks = tasks.filter(task => task.name.toLowerCase().includes(searchLower) || 
-                                   (task.detail && task.detail.toLowerCase().includes(searchLower)));
+      tasks = tasks.filter(task => task.name.toLowerCase().includes(searchLower) ||
+        (task.detail && task.detail.toLowerCase().includes(searchLower)));
     }
 
     // Asignación final de tareas filtradas
     this.tks.filteredTasks = tasks;
   }
-  
-  
+
+
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.tks.filteredTasks, event.previousIndex, event.currentIndex);
@@ -235,8 +227,8 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   //es necessario?
   onDragStarted(event: any) {
-
-    this.labelsAnimated = false;
+    this.local.labelsAnimated = false;
+    this.selectedTask=this.local.clock.actualTask;
   }
   onDragEnded(event: any) {
     this.local.clock.actualTask = this.selectedTask;
@@ -324,6 +316,9 @@ export class ProductivityHubComponent implements AfterViewInit {
       this.clockComponent.updateClock(new Date());
     }, 1000);
   }
+  resumeTimer() {
+    this.timerComponent.resumeTimer();
+  }
 
   newTask() {
     const rect = this.newTaskButton.nativeElement.getBoundingClientRect();
@@ -334,56 +329,13 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.childComponent.openModal(rect.left, rect.top);
   }
 
-  editTask(task: Task, index: number) {
-    const nativeElement = this.editTaskButton.get(index)?.nativeElement;
-
-    const rect = nativeElement.getBoundingClientRect();
+  editTaskReferenced(event: any,) {
+    const task = event.task;
+    const index = event.index;
+    const rect = event.rect;
     this.childComponent.editModal(index, task, rect.left, rect.top);
-
-  }
-  editChild(task: Task, index: number, fatherIndex: number) {
-
-    let positionButton = 0;
-    for (let i = 0; i < this.tks.filteredTasks.length; i++) {
-
-      if (i >= fatherIndex) {
-        positionButton += index;
-        break;
-      }
-
-      const task = this.tks.filteredTasks[i];
-      if(task.tasks){
-        positionButton += task.tasks.length;
-      }
-    }
-    const nativeElement = this.editTaskButtonChild.get(positionButton)?.nativeElement;
-    const rect = nativeElement.getBoundingClientRect();
-    this.childComponent.editModal(index, task, rect.left, rect.top);
-
   }
 
-
-  taskTimePercentage(id: number): number {
-    const task = this.tks.filteredTasks.find(task => task.id === id);
-    if (task && task.estimatedTime > 0 && task.elapsedTime > 0) {
-      return task.elapsedTime * 1000 / task.estimatedTime * 100;
-    }
-    return 0;
-  }
-  activeTask(index: number): void {
-    if (this.local.clock.actualTask === index) {
-      this.local.clock.actualTask = -1;
-    } else {
-      if (this.local.interval && this.local.clock.pomodoroState === 'work') {
-        clearInterval(this.local.interval);
-        this.local.clock.actualTask = index;
-        this.timerComponent.resumeTimer();
-      } else {
-        this.local.clock.actualTask = index;
-      }
-    }
-    this.saveClock();
-  }
 
   getLabelInfo(labelId: any): Label {
     return this.tks.getLabelById(labelId);
@@ -406,13 +358,6 @@ export class ProductivityHubComponent implements AfterViewInit {
     clock.isPaused = true;
     localStorage.setItem('clock', JSON.stringify(clock));
   }
-
-
-
-
-
-
-
 
 }
 

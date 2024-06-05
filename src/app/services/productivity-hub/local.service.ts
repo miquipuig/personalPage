@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { State } from 'src/app/services/productivity-hub/task-services.service';
 
 export interface Clock {
   timerStarted: boolean;
@@ -28,11 +29,12 @@ export interface Clock {
   
 
 }
+
 @Injectable({
   providedIn: 'root'
 })
 export class LocalService {
-
+  labelsAnimated = true;
   clock: Clock = {
     timerStarted: false,
     isPaused: false,
@@ -62,6 +64,9 @@ export class LocalService {
   };
   interval: any;
   resumeTimerSync: boolean = false;
+  isVisible=true;
+  states: State[] = [];
+
   constructor() { }
 
   loadClock() {
@@ -103,6 +108,9 @@ export class LocalService {
   }
 
   saveClock() {
+    let clock = { ...this.clock };
+    clock.timerStarted = false;
+    clock.isPaused = true;
     localStorage.setItem('clock', JSON.stringify(this.clock));
   }
 
