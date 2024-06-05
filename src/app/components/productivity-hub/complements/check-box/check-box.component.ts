@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, forwardRef, Input, Output, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Task, TaskServicesService } from 'src/app/services/productivity-hub/task-services.service';
 
 @Component({
   selector: 'app-check-box',
@@ -18,24 +19,48 @@ export class CheckBoxComponent {
   @Input() size?: number;
   @Input() label?: string;
   @Input() check: boolean = false;
+  @Input() task: Task | undefined;
   @Output() checkChange = new EventEmitter<boolean>();
+  formWorkMode: boolean = false;
 
   onChange = (_: any) => { }
   onTouch = () => { }
-  // constructor() { }
+  constructor(private tks: TaskServicesService,) { }
+
+
+
+  ngOnInit() {
+    this.refresh();
+  }
+  refresh() {
+    if (this.task === undefined) {
+      this.formWorkMode = true;
+    } else {
+      this.formWorkMode = false;
+      if (this.task?.isTaskDone) {
+        this.check = true;
+      } else {
+        this.check = false;
+      }
+    }
+  }
+
+
   ngAfterViewInit(): void {
-    if(this.size){
-      console.log(this.size);
+    if (this.size) {
       this.checkbox.nativeElement.style.setProperty('--size', `${this.size}px`);
     }
   }
- 
+
   toggleCheck() {
     this.check = !this.check;
-    console.log(this.check);
-    console.log(this.size);
-    this.onChange(this.check);
-    this.checkChange.emit(this.check);
+    if (this.formWorkMode) {
+      this.onChange(this.check);
+      this.checkChange.emit(this.check);
+    } else {
+      this.task!.isTaskDone = this.check;
+      this.tks.saveTask(this.task!);
+    }
   }
 
   writeValue(value: boolean): void {
@@ -48,7 +73,4 @@ export class CheckBoxComponent {
     this.onTouch = fn;
   }
 
-  ngOnInit() {
-    console.log(this.check);
-  }
 }

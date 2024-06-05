@@ -13,6 +13,7 @@
     height: var(--size, 50px);
     background-color: #b3b3b3;
     border-radius: calc(var(--size, 50px)/10);
+    border: calc(var(--size, 50px)/50*3) solid rgb(102, 102, 102);
     cursor: pointer;
     transition: filter 0.2s ease-in-out;
 }
@@ -48,7 +49,7 @@
 
 .tick-mark {
     pointer-events: none;
-    position: fixed;
+    position: absolute;
     margin-left: calc(var(--size, 50px) *7/50);
     margin-bottom: calc(var(--size, 50px) *7/50);
 

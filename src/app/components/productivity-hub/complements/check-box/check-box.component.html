@@ -1,5 +1,5 @@
 <div #checkbox style="position: relatives;" class="checkbox-container">
-    <div  (click)="toggleCheck()" class="checkBox" [ngClass]="{'checked': check}">
+    <div  (click)="toggleCheck();  $event.stopPropagation()" class="checkBox" [ngClass]="{'checked': check}">
     </div>
     <div >
         <div  class="tick-mark" [ngClass]="{'checked': check}"></div>

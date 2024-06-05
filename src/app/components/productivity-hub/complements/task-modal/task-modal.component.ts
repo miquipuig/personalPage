@@ -162,12 +162,6 @@ export class TaskModalComponent implements OnInit {
     }
     this.labels = this.labels.filter(option => option.id !== label.id);
     this.taskService.deleteLabel(label.id);
-    // this.filteredActivities = this.form.get('label')!.valueChanges
-    // .pipe(
-    //   startWith(''),
-    //   map(value => this.filterOptions(value))
-    // );
-    //refresh filteredActivities
     this.showList = true;
   }
 
@@ -287,6 +281,11 @@ export class TaskModalComponent implements OnInit {
       if (this.id !== -1) {
         this.task = { ...this.task, ...this.form.value };
 
+        
+        if(this.task.elementType === 'simpleTask' && this.task.startDate === undefined){
+          this.task.startDate = new Date();
+        }
+
         if (close) {
           this.closeModal()
         }
@@ -327,6 +326,11 @@ export class TaskModalComponent implements OnInit {
           this.closeModal();
         }
         this.task = { ...this.task, ...this.form.value };
+
+        if(this.task.elementType === 'simpleTask' && (this.task.startDate === undefined || this.task.startDate === null ) ){
+          this.task.startDate = new Date();
+        }
+
         if (this.form.get('label')!.value !== '' && this.form.get('label')!.value !== null && this.form.get('label')!.value !== undefined) {
           this.task.label = this.taskService.addLabelByName(this.form.get('label')!.value).id
         }

@@ -25,6 +25,7 @@ export interface Clock {
   filteredAllSegments: boolean;
   filteredAllSimpleTasks:boolean;
   orderedView:boolean;
+  
 
 }
 @Injectable({

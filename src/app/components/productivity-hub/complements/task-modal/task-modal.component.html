@@ -103,21 +103,18 @@
           
             </div>
 
-                  
-
-
           </div>
           <div class="row mb-2">
-
-            <div class="col-6 pe-1">
+            <div class="col-12 col-md-6">
               <app-datapicker formControlName="startDate" [label]="'Start'"></app-datapicker>
             </div>
-
-            <div class="col-6 ps-2">
+          
+            <!-- Utiliza mt-3 y d-md-none para añadir margen superior solo en pantallas pequeñas -->
+            <div  *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-12 d-md-none mt-2"></div>
+          
+            <div *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-12 col-md-6 ">
               <app-datapicker formControlName="endDate" [label]="'End'"></app-datapicker>
             </div>
-
-
           </div>
 
           <div>

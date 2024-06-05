@@ -10,6 +10,7 @@ import { LocalService } from 'src/app/services/productivity-hub/local.service';
 import { Clock } from 'src/app/services/productivity-hub/local.service';
 import { ClockComponent } from './clock/clock.component';
 import { TimerComponent } from './timer/timer.component';
+import { CheckBoxComponent } from './complements/check-box/check-box.component';
 @Component({
   selector: 'app-productivity-hub',
   templateUrl: './productivity-hub.component.html',
@@ -26,7 +27,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   @ViewChild(TaskModalComponent) childComponent!: TaskModalComponent;
   @ViewChild(ClockComponent) clockComponent!: ClockComponent;
   @ViewChild(TimerComponent) timerComponent!: TimerComponent;
-
+  @ViewChild(CheckBoxComponent) checkBoxComponent!: CheckBoxComponent;
 
   searchInput = '';
   dragOverIndex: number | null = null;
@@ -83,7 +84,11 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   async refreshTasks() {
     this.labelsAnimated = true;
+
     this.filterSearch();
+    if(this.checkBoxComponent){
+      this.checkBoxComponent.refresh();
+    }
   }
   async loadTasks() {
     await this.tks.loadTasks();
@@ -165,6 +170,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   filterSearch(): void {
+    console.log('filterSearch');
     this.local.saveClock();
     // Copia inicial de tareas y ordenación por idPosition
     let tasks: Task[] = [...this.tks.tasks].sort((a, b) => a.idPosition - b.idPosition);
@@ -338,21 +344,17 @@ export class ProductivityHubComponent implements AfterViewInit {
   editChild(task: Task, index: number, fatherIndex: number) {
 
     let positionButton = 0;
-
     for (let i = 0; i < this.tks.filteredTasks.length; i++) {
 
       if (i >= fatherIndex) {
         positionButton += index;
         break;
       }
-      console.log(positionButton);
-      console.log(i);
 
       const task = this.tks.filteredTasks[i];
-      console.log(task);
-      positionButton += task.tasks.length;
-      console.log(positionButton);
-
+      if(task.tasks){
+        positionButton += task.tasks.length;
+      }
     }
     const nativeElement = this.editTaskButtonChild.get(positionButton)?.nativeElement;
     const rect = nativeElement.getBoundingClientRect();

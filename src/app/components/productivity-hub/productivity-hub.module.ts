@@ -17,11 +17,13 @@ import { DatapickerComponent } from './datapicker/datapicker.component';
 import { NgbAlertModule, NgbDateParserFormatter, NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateCustomParserFormatter } from './datapicker/date-formatter.service';
 import { CheckBoxComponent } from './complements/check-box/check-box.component';
+import { FilterButtonsComponent } from './complements/filter-buttons/filter-buttons.component';
+import { TaskCardComponent } from './complements/task-card/task-card.component';
 
 
 
 @NgModule({
-  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent],
+  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent, FilterButtonsComponent, TaskCardComponent],
   imports: [ 
     CommonModule,
     ProductivityHubRoutingModule,

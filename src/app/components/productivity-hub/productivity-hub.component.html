@@ -30,8 +30,7 @@
 
 		<div class="row d-flex justify-content-center ">
 			<div class=" col-sm-10 col-md-5 col-lg-4 col-12">
-				<app-check-box></app-check-box>
-				<app-check-box></app-check-box>
+
 
 				<app-timer></app-timer>
 				<div class="d-none d-md-block">
@@ -43,8 +42,8 @@
 			<div class="col-12 col-md-7 col-lg-8">
 
 				<div id="menu" class=" d-flex flex-column">
-					<div class="d-flex justify-content-between">
-						<div class=" d-flex justify-content-start align-items-center">
+					<div class="d-flex justify-content-between  align-items-center">
+						<div class="d-flex justify-content-start align-items-center">
 							<div #newTaskButton>
 								<button class="butoPlay" (click)="newTask()"><i
 										class="ri-add-circle-line icono-mitja"></i></button>
@@ -91,40 +90,12 @@
 
 								</div>
 
-
-
-
 							</div>
 
 						</div>
+						<app-filter-buttons *ngIf="isVisible" (filterSearchEmitter)="filterSearch()"></app-filter-buttons>
 
-						<div *ngIf="isVisible" class="d-flex justify-content-end align-items-center">
-							<div class="elementTypeButton"
-								(click)="local.clock.filteredAllSimpleTasks=!local.clock.filteredAllSimpleTasks;  filterSearch()"
-								[ngClass]="{'active': !local.clock.filteredAllSimpleTasks}">
-								List
-							</div>
-
-							<div class="ms-2 elementTypeButton"
-								(click)="local.clock.filteredAllTasks=!local.clock.filteredAllTasks;  filterSearch()"
-								[ngClass]="{'active': !local.clock.filteredAllTasks}">
-								T
-							</div>
-							<div class="elementTypeButton"
-								(click)="local.clock.filteredAllSegments=!local.clock.filteredAllSegments;  filterSearch()"
-								style="padding-right: 9px !important;  margin-right:0px !important;"
-								[ngClass]="{'active': !local.clock.filteredAllSegments}">
-								S
-							</div>
-
-							<div (click)="local.clock.orderedView=!local.clock.orderedView; filterSearch()"
-								style="margin-left:-3px !important;" [ngClass]="{'active': local.clock.orderedView}"
-								class="elementTypeButton">
-								<i class="ri-list-check"></i>
-							</div>
-						</div>
 					</div>
-
 
 					<div class="d-flex justify-content-between mb-2">
 						<div class="d-flex justify-content-start align-items-center">
@@ -142,32 +113,8 @@
 									class="ri-close-large-line"></i>
 							</div>
 						</div>
+						<app-filter-buttons *ngIf="!isVisible" (filterSearchEmitter)="filterSearch()"></app-filter-buttons>
 
-						<div *ngIf="!isVisible" class="d-flex justify-content-end align-items-center">
-
-							<div class="elementTypeButton"
-								(click)="local.clock.filteredAllSimpleTasks=!local.clock.filteredAllSimpleTasks;  filterSearch()"
-								[ngClass]="{'active': !local.clock.filteredAllSimpleTasks}">
-								List
-							</div>
-							<div class="ms-2 elementTypeButton"
-								(click)="local.clock.filteredAllTasks=!local.clock.filteredAllTasks;  filterSearch()"
-								[ngClass]="{'active': !local.clock.filteredAllTasks}">
-								T
-							</div>
-							<div class="elementTypeButton"
-								(click)="local.clock.filteredAllSegments=!local.clock.filteredAllSegments;  filterSearch()"
-								style="padding-right: 9px !important;  margin-right:0px !important;"
-								[ngClass]="{'active': !local.clock.filteredAllSegments}">
-								S
-							</div>
-
-							<div (click)="local.clock.orderedView=!local.clock.orderedView; filterSearch()"
-								style="margin-left:-3px !important;" [ngClass]="{'active': local.clock.orderedView}"
-								class="elementTypeButton">
-								<i class="ri-list-check"></i>
-							</div>
-						</div>
 					</div>
 
 
@@ -195,10 +142,12 @@
 												*ngIf="task.elementType==='segment'" class="me-2 elementType">
 												S
 											</div>
-											<div (click)="local.clock.filteredAllSegments=true;local.clock.filteredAllTasks=true; filterSearch()"
+											<!-- <div (click)="local.clock.filteredAllSegments=true;local.clock.filteredAllTasks=true; filterSearch()"
 												*ngIf="task.elementType==='simpleTask'" class="me-2 elementType">
 												List
-											</div>
+											</div> -->
+											<app-check-box class="me-2" *ngIf="task.elementType==='simpleTask'"
+												[task]="task" [size]="30"></app-check-box>
 
 
 
@@ -276,6 +225,7 @@
 								class="example-list" (cdkDropListDropped)="onDrop($event,task.id)" class="ms-4">
 								<div *ngFor="let childTask of task.tasks; let j = index" cdkDrag
 									(cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded($event)">
+
 									<div (click)="activeTask(childTask.id)" class="task-card mb-1 card text-white"
 										[ngClass]="{'animate__animated animate__fadeIn': labelsAnimated, 'active': childTask.id === local.clock.actualTask}">
 
@@ -287,6 +237,9 @@
 														<i class="ri-draggable me-1"></i>
 													</div>
 
+													<app-check-box class="me-2"
+														*ngIf="childTask.elementType==='simpleTask'" [task]="childTask"
+														[size]="30"></app-check-box>
 
 													<div class="me-1">
 														{{childTask.name | truncate:50}}
@@ -355,7 +308,7 @@
 						</div>
 					</div>
 				</div>
-				<!-- <pre>{{tks.filteredTasks | json}}</pre> -->
+				<pre>{{tks.filteredTasks | json}}</pre>
 				<!-- <pre>{{states | json}}</pre> -->
 			</div>
 		</div>
