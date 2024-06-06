@@ -1,0 +1,58 @@
+.filteMenurCenter {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+}
+.filterMenuAbsolute{
+	top: 35px;
+    position: absolute;
+}
+
+
+
+.filterList {
+	
+	/* Se posiciona de forma absoluta respecto al contenedor */
+	top: 35px;
+	/* Se posiciona justo debajo del contenedor */
+	/* left: 0; */
+	/* Alinea la lista al borde izquierdo del contenedor */
+	width: 220px;
+	max-height: 400px;
+	overflow-y: auto;
+	z-index: 10000;
+	scrollbar-width: thin;
+	/* Hace la barra de desplazamiento más delgada en Firefox */
+	background-color: #000000;
+	/* Fondo blanco para la lista */
+	border: 1px white solid;
+	border-end-end-radius: 20px;
+
+    /* Sin barra de desplazamiento horizontal*/
+    overflow-x: hidden;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Estándar */
+}
+
+
+.close {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+
+  
+    border: none;
+    background: none;
+    font-size: 1.5em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    color: #d2d2d2d6;
+  
+  }
+  
+  .close:hover {
+    color: #ffffff;
+    transition: background-color 0.3s ease, color 0.2s ease;
+  }

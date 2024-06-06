@@ -155,17 +155,22 @@ img.pomodoroCurrent {
 }
 
 .task-card:active {
-	background-color: rgba(255, 255, 255, 0.7);
+	/* background-color: rgba(255, 255, 255, 0.7); */
 	/* Cambia esto por el código de color que prefieras */
 }
 
 .small-detail {
 	font-size: 0.8em;
-	color: #ffffffaa;
+	color: #d7d7d7;
 }
 
 .task-card.active {
-	background-color: rgba(255, 255, 255, 0.6);
+	/* background-color: rgba(255, 255, 255, 0.6); */
+		background-color: rgba(224, 29, 29, 0.6);
+		/* margin: 3px !important;
+		margen con color blanco */
+		/* border: 2px solid #ffffffaa; */
+		
 	/* Cambia esto por el código de color que prefieras */
 }
 
@@ -348,16 +353,11 @@ img.pomodoroCurrent {
 		0 8px 10px 1px rgba(0, 0, 0, 0.14),
 		0 3px 14px 2px rgba(0, 0, 0, 0.12);
 
-	background-color: #833535 !important;
-	background-color: #838383 !important;
+	/* background-color: #833535 !important; */
+	background-color: #000000df !important;
 	z-index: 6000 !important;
 }
 
-/* .cdk-drag-animating {
-	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-	color: #ff0000;
-	background-color: #ff0000;
-  } */
 
 .cdk-drag-placeholder {
 	opacity: 0 !important;
@@ -430,34 +430,8 @@ img.pomodoroCurrent {
     background-color: black; 
 } */
 
-.filterList {
-	position: absolute;
-	/* Se posiciona de forma absoluta respecto al contenedor */
-	top: 35px;
-	/* Se posiciona justo debajo del contenedor */
-	/* left: 0; */
-	/* Alinea la lista al borde izquierdo del contenedor */
-	width: auto;
-	max-height: 400px;
-	overflow-y: auto;
-	z-index: 10000;
-	scrollbar-width: thin;
-	/* Hace la barra de desplazamiento más delgada en Firefox */
-	background-color: #000000;
-	/* Fondo blanco para la lista */
-	border: 1px white solid;
-	border-end-end-radius: 20px;
-	/* Borde blanco */
-}
 
-.filterListRight {
 
-	right: 0;
-	width: auto;
-	/* Alinea la lista al borde izquierdo del contenedor */
-
-	/* Borde blanco */
-}
 
 .listGreyColor {
 	background-color: rgb(0, 0, 0);

@@ -39,6 +39,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   stateFilterMenuAll = false
   isVisible = true;
 
+
   constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef, private renderer: Renderer2, public tks: TaskServicesService, public local: LocalService) {
 
   }
@@ -65,6 +66,7 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.loadTasks();
     this.local.loadClock();
     this.checkWidth()
+    this.checkStateAllFilter();
 
   }
   @HostListener('window:resize', ['$event'])
@@ -91,8 +93,8 @@ export class ProductivityHubComponent implements AfterViewInit {
 
     this.taskCardComponent.forEach(taskCard => {
       taskCard.refresh();
-    } );
-   
+    });
+
   }
   async loadTasks() {
     await this.tks.loadTasks();
@@ -127,7 +129,6 @@ export class ProductivityHubComponent implements AfterViewInit {
   }
 
   async stateFilter(state: State) {
-
     state.visibilityTaskList = !state.visibilityTaskList;
     this.checkStateAllFilter();
 
@@ -140,16 +141,17 @@ export class ProductivityHubComponent implements AfterViewInit {
     //si todos los estados estan visibles, se ocultan
 
     if (this.local.states.every(state => state.visibilityTaskList)) {
-      this.local.states.forEach(state => {
+      this.local.states.forEach(async state => {
         state.visibilityTaskList = false;
+        await (this.tks.saveState(state));
       });
     } else {
-      this.local.states.forEach(state => {
+      this.local.states.forEach(async state => {
         state.visibilityTaskList = true;
+        await (this.tks.saveState(state));
       });
     }
     this.checkStateAllFilter();
-
     this.filterSearch();
   }
 
@@ -165,46 +167,74 @@ export class ProductivityHubComponent implements AfterViewInit {
     return [...this.tks.tasks.filter(task => task.segmentId === segmentId).sort((a, b) => a.idPosition - b.idPosition)];
   }
 
+  getTasksBySegment2(segmentId: number ,tasks:Task[]): Task[] {
+    return [...tasks.filter(task => task.segmentId === segmentId).sort((a, b) => a.idPosition - b.idPosition)];
+  }
+
+
+  //funciión para comprar fechas con la de hoy. Devulve true si la fecha es posterior a la de hoy. Solo set ienen en cuenta los días no las horas ni munutos etc
+
+  isFutureDate(date: Date) {
+    const today = new Date();
+    const taskDate = new Date(date);
+    const response = taskDate > today;
+    return taskDate > today;
+  }
+  isPastDate(date: Date) {
+    const today = new Date();
+    const taskDate = new Date(date);
+    return taskDate <= today;
+  }
+  endPastDate(date: Date) {
+    const today = new Date();
+    const taskDate = new Date(date);
+    return taskDate < today;
+  }
+
+
   filterSearch(): void {
-    
-    console.log('filterSearch');
+
     this.local.saveClock();
     // Copia inicial de tareas y ordenación por idPosition
     let tasks: Task[] = [...this.tks.tasks].sort((a, b) => a.idPosition - b.idPosition);
 
+
+
+    // Filtrado por tareas rutinarias y checks
+    tasks = tasks.filter(task => {
+      //Filtrado para segments y tasks normales
+      if (task.elementType === 'simpleTask' || task.elementType === 'routine') {
+        if (!this.local.clock.filteredCheckTasksRoutinesFinished && task.isTaskDone && task.endDate && this.endPastDate(task.endDate)) {
+          return false;
+        }
+
+        if (!this.local.clock.filteredCheckTasksRoutinesPendent && !task.isTaskDone && !task.startDate) {
+          return false;
+        }
+
+        if (!this.local.clock.filteredCheckTasksRoutinesPendent && !task.isTaskDone && task.startDate && this.isPastDate(task.startDate)) {
+          return false;
+        }
+        if (!this.local.clock.filteredCheckTasksRoutinesScheduled && !task.isTaskDone && task.startDate && this.isFutureDate(task.startDate)) {
+          return false;
+        }
+      }
+      return true;
+    });
+
     // Filtrado por estado visible
     if (this.local.states.length > 0) {
-      tasks = tasks.filter(task => this.local.states.some(state => state.id === task.state && state.visibilityTaskList));
+      tasks = tasks.filter(task =>
+        task.elementType !== 'segment' && task.elementType !== 'task' || // Permite todos los elementos que no son ni 'segment' ni 'task'
+        (task.elementType === 'segment' || task.elementType === 'task') && this.local.states.some(state =>
+          state.id === task.state && state.visibilityTaskList
+        )
+      );
     }
 
-    // Procesamiento dependiendo de si la vista está ordenada o no
-    if (this.local.clock.orderedView) {
-
-      this.local.clock.filteredAllSegments = false;
-
-      //Filtrado de tareas con segment padre
-      tasks = tasks.filter(task => task.segmentId === -1 || task.segmentId === null || task.segmentId === undefined);
 
 
 
-
-      if (this.local.clock.filteredAllSegments || this.local.clock.filteredAllTasks || this.local.clock.filteredAllSimpleTasks) {
-        // Filtra todos los segmentos o tareas según la configuración
-        tasks = tasks.filter(task => (!this.local.clock.filteredAllSegments && task.elementType == 'segment') ||
-          (!this.local.clock.filteredAllTasks && task.elementType == 'task') || (!this.local.clock.filteredAllSimpleTasks && task.elementType == 'simpleTask'))
-      }
-
-      // Asignación de tareas a los segmentos
-      tasks.forEach(segment => {
-        if (segment.elementType === 'segment') {
-          segment.tasks = this.getTasksBySegment(segment.id);
-        }
-      });
-    } else if (this.local.clock.filteredAllSegments || this.local.clock.filteredAllTasks || this.local.clock.filteredAllSimpleTasks) {
-      // Filtra todos los segmentos o tareas según la configuración
-      tasks = tasks.filter(task => (!this.local.clock.filteredAllSegments && task.elementType == 'segment') ||
-        (!this.local.clock.filteredAllTasks && task.elementType == 'task') || (!this.local.clock.filteredAllSimpleTasks && task.elementType == 'simpleTask'))
-    }
 
     // Filtrado adicional común a ambos modos
     if (this.local.clock.filteredLabel !== -1) {
@@ -220,9 +250,40 @@ export class ProductivityHubComponent implements AfterViewInit {
         (task.detail && task.detail.toLowerCase().includes(searchLower)));
     }
 
+    // Procesamiento dependiendo de si la vista está ordenada o no
+    if (this.local.clock.orderedView) {
+
+
+      if (this.local.clock.filteredAllSegments || this.local.clock.filteredAllTasks || this.local.clock.filteredAllSimpleTasks) {
+        // Filtra todos los segmentos o tareas según la configuración
+        tasks = tasks.filter(task => (!this.local.clock.filteredAllSegments && task.elementType == 'segment') ||
+          (!this.local.clock.filteredAllTasks && task.elementType == 'task') || (!this.local.clock.filteredAllSimpleTasks && task.elementType == 'simpleTask'))
+      }
+      tasks.forEach(segment => {
+        if (segment.elementType === 'segment') {
+          segment.tasks = this.getTasksBySegment2(segment.id, tasks);
+          // segment.tasks = this.getTasksBySegment(segment.id);
+
+        }
+      });
+      //Filtrado de tareas con segment padre
+
+      tasks = tasks.filter(task => task.segmentId === -1 || task.segmentId === null || task.segmentId === undefined);
+
+
+      // Asignación de tareas a los segmentos
+
+    } else if (this.local.clock.filteredAllSegments || this.local.clock.filteredAllTasks || this.local.clock.filteredAllSimpleTasks) {
+      // Filtra todos los segmentos o tareas según la configuración
+      tasks = tasks.filter(task => (!this.local.clock.filteredAllSegments && task.elementType == 'segment') ||
+        (!this.local.clock.filteredAllTasks && task.elementType == 'task') || (!this.local.clock.filteredAllSimpleTasks && task.elementType == 'simpleTask'))
+    }
+
     // Asignación final de tareas filtradas
     this.tks.filteredTasks = tasks;
   }
+
+
 
 
 
@@ -232,8 +293,8 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   //es necessario?
   onDragStarted(event: any) {
-    this.local.labelsAnimated = false;
-    this.selectedTask=this.local.clock.actualTask;
+    // this.local.labelsAnimated = false;
+    this.selectedTask = this.local.clock.actualTask;
   }
   onDragEnded(event: any) {
     this.local.clock.actualTask = this.selectedTask;

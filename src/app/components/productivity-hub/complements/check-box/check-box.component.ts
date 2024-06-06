@@ -73,4 +73,6 @@ export class CheckBoxComponent {
     this.onTouch = fn;
   }
 
+  
+
 }

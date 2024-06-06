@@ -60,40 +60,12 @@
 										class="ri-close-line"></i></span>
 
 							</div>
-
-							<div style="position: relative;">
-								<div (click)="stateFilterMenu=!stateFilterMenu; $event.stopPropagation()"
-									class="states-text ms-2 ms-2 searchDiv d-flex justify-content-between align-items-center">
-									<i class=" ms-1 me-1 ri-filter-3-line"></i>
-								</div>
-
-
-								<div *ngIf="stateFilterMenu" style="--animate-duration: 0.5s;"
-									class=" animate__animated animate__fadeIn  d-flex  justify-content-left list-group filterList "
-									[ngClass]="{'filterListRight': !isVisible}">
-									<div (click)="asyncStateFilterAll()" class=" list-group-item listGreyColor">
-										<div class="form-check form-switch">
-											<input style="pointer-events: none;" [(ngModel)]="stateFilterMenuAll"
-												class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-											Select All
-										</div>
-									</div>
-
-									<div style="width: 150px;" (click)="stateFilter(state)" *ngFor="let state of local.states"
-										class=" list-group-item listGreyColor">
-										<div class="form-check form-switch">
-											<input style="pointer-events: none;" [(ngModel)]="state.visibilityTaskList"
-												class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-											{{state.name | truncate:10}}
-										</div>
-									</div>
-
-								</div>
-
-							</div>
+							<app-filter-menu [isVisible]="isVisible"
+								(filterSearchEmitter)="filterSearch()"></app-filter-menu>
 
 						</div>
-						<app-filter-buttons *ngIf="isVisible" (filterSearchEmitter)="filterSearch()"></app-filter-buttons>
+						<app-filter-buttons *ngIf="isVisible"
+							(filterSearchEmitter)="filterSearch()"></app-filter-buttons>
 
 					</div>
 
@@ -113,7 +85,8 @@
 									class="ri-close-large-line"></i>
 							</div>
 						</div>
-						<app-filter-buttons *ngIf="!isVisible" (filterSearchEmitter)="filterSearch()"></app-filter-buttons>
+						<app-filter-buttons *ngIf="!isVisible"
+							(filterSearchEmitter)="filterSearch()"></app-filter-buttons>
 
 					</div>
 
@@ -124,13 +97,17 @@
 						(cdkDropListDropped)="onDrop($event)">
 						<div *ngFor="let task of tks.filteredTasks; let i = index" cdkDrag
 							(cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded($event)">
-							<app-task-card  [task]="task" [index]="i" (editTaskEmitter)="editTaskReferenced($event)" (resumeTimerEmitter)="resumeTimer()"  (filterSearchEmitter)="filterSearch()"></app-task-card>
+							<app-task-card [task]="task" [index]="i" (editTaskEmitter)="editTaskReferenced($event)"
+								(resumeTimerEmitter)="resumeTimer()"
+								(filterSearchEmitter)="filterSearch()"></app-task-card>
 
 							<div *ngIf="local.clock.orderedView && task.elementType==='segment'" cdkDropList
 								class="example-list" (cdkDropListDropped)="onDrop($event,task.id)" class="ms-4">
 								<div *ngFor="let childTask of task.tasks; let j = index" cdkDrag
 									(cdkDragStarted)="onDragStarted($event)" (cdkDragEnded)="onDragEnded($event)">
-									<app-task-card [child]='true' [task]="childTask" [index]="j" (editTaskEmitter)="editTaskReferenced($event)"  (resumeTimerEmitter)="resumeTimer()"></app-task-card>
+									<app-task-card [child]='true' [task]="childTask" [index]="j"
+										(editTaskEmitter)="editTaskReferenced($event)"
+										(resumeTimerEmitter)="resumeTimer()"></app-task-card>
 								</div>
 							</div>
 						</div>
@@ -152,7 +129,7 @@
 						</div>
 					</div>
 				</div>
-				<pre>{{tks.filteredTasks | json}}</pre>
+				<!-- <pre>{{tks.filteredTasks | json}}</pre> -->
 				<!-- <pre>{{states | json}}</pre> -->
 			</div>
 		</div>

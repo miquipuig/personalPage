@@ -19,11 +19,12 @@ import { NgbDateCustomParserFormatter } from './datapicker/date-formatter.servic
 import { CheckBoxComponent } from './complements/check-box/check-box.component';
 import { FilterButtonsComponent } from './complements/filter-buttons/filter-buttons.component';
 import { TaskCardComponent } from './complements/task-card/task-card.component';
+import { FilterMenuComponent } from './complements/filter-menu/filter-menu.component';
 
 
 
 @NgModule({
-  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent, FilterButtonsComponent, TaskCardComponent],
+  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent, FilterButtonsComponent, TaskCardComponent, FilterMenuComponent],
   imports: [ 
     CommonModule,
     ProductivityHubRoutingModule,
