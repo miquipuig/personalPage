@@ -11,6 +11,7 @@ import { ClockComponent } from './clock/clock.component';
 import { TimerComponent } from './timer/timer.component';
 import { CheckBoxComponent } from './complements/check-box/check-box.component';
 import { State } from 'src/app/services/productivity-hub/task-services.service';
+import { TaskCardComponent } from './complements/task-card/task-card.component';
 
 @Component({
   selector: 'app-productivity-hub',
@@ -29,6 +30,8 @@ export class ProductivityHubComponent implements AfterViewInit {
   @ViewChild(ClockComponent) clockComponent!: ClockComponent;
   @ViewChild(TimerComponent) timerComponent!: TimerComponent;
   @ViewChild(CheckBoxComponent) checkBoxComponent!: CheckBoxComponent;
+  @ViewChildren(TaskCardComponent) taskCardComponent!: QueryList<TaskCardComponent>;
+
 
   searchInput = '';
   dragOverIndex: number | null = null;
@@ -85,9 +88,11 @@ export class ProductivityHubComponent implements AfterViewInit {
     this.local.labelsAnimated = true;
 
     this.filterSearch();
-    if (this.checkBoxComponent) {
-      this.checkBoxComponent.refresh();
-    }
+
+    this.taskCardComponent.forEach(taskCard => {
+      taskCard.refresh();
+    } );
+   
   }
   async loadTasks() {
     await this.tks.loadTasks();
@@ -358,6 +363,8 @@ export class ProductivityHubComponent implements AfterViewInit {
     clock.isPaused = true;
     localStorage.setItem('clock', JSON.stringify(clock));
   }
+
+
 
 }
 

@@ -30,7 +30,7 @@ import { TaskCardComponent } from './complements/task-card/task-card.component';
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
-    NgbDatepickerModule, JsonPipe, NgbAlertModule
+    NgbDatepickerModule, JsonPipe, NgbAlertModule, DragDropModule
   ],exports: [ProductivityHubComponent],providers: [
 
     { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }  // <-- add this

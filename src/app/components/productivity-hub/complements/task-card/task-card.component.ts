@@ -3,6 +3,7 @@ import { LocalService } from 'src/app/services/productivity-hub/local.service';
 import { Label, Task, TaskServicesService } from 'src/app/services/productivity-hub/task-services.service';
 import { TimerComponent } from '../../timer/timer.component';
 import { TaskModalComponent } from '../task-modal/task-modal.component';
+import { CheckBoxComponent } from '../check-box/check-box.component';
 
 @Component({
   selector: 'app-task-card',
@@ -12,6 +13,7 @@ import { TaskModalComponent } from '../task-modal/task-modal.component';
 export class TaskCardComponent {
   @ViewChild(TaskModalComponent) childComponent!: TaskModalComponent;
   @ViewChildren('editTaskButton') editTaskButton!: QueryList<ElementRef>;
+  @ViewChild(CheckBoxComponent) checkBoxComponent!: CheckBoxComponent;
 
   @Input() task?: Task;
   @Input() index?: number;
@@ -88,4 +90,11 @@ export class TaskCardComponent {
     const rect = nativeElement.getBoundingClientRect();
     this.editTaskEmitter.emit({ task, index,rect });
   }
+
+  refresh() {
+    if (this.checkBoxComponent) {
+      this.checkBoxComponent.refresh();
+    }
+  }
+
 }
