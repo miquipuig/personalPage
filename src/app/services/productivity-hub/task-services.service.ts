@@ -27,6 +27,7 @@ export interface Task {
   tasks: Task[];
   startDate: Date | undefined | null;
   endDate: Date | undefined | null;
+  size: number;
 }
 
 export interface State {
@@ -48,7 +49,6 @@ export class TaskServicesService {
     this.loadLabels();
     this.loadTasks();
     this.loadStates();
-
   }
 
   labels: Label[] = [];

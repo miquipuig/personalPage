@@ -10,6 +10,7 @@ import { State } from 'src/app/services/productivity-hub/task-services.service';
 
 import { LabelEditorComponent } from '../label-editor/label-editor.component';
 import { state } from '@angular/animations';
+import { CheckBoxComponent } from '../check-box/check-box.component';
 @Component({
   selector: 'app-task-modal',
   templateUrl: './task-modal.component.html',
@@ -39,6 +40,7 @@ export class TaskModalComponent implements OnInit {
   @ViewChild('taskModalDialog') taskModalDialog!: ElementRef;
   @ViewChild(TimePickerComponent) timePicker!: TimePickerComponent;
   @ViewChild(LabelEditorComponent) labelEditor!: LabelEditorComponent;
+  @ViewChild(CheckBoxComponent) checkBox!: CheckBoxComponent;
 
 
   sugerencias = ['Sugerencia 1', 'Sugerencia 2', 'Sugerencia 3'];
@@ -60,7 +62,8 @@ export class TaskModalComponent implements OnInit {
       addChildForm: new FormControl(''),
       startDate: new FormControl(''),
       endDate: new FormControl(''),
-      isTaskDone: new FormControl(false)
+      isTaskDone: new FormControl(false),
+      size: new FormControl(2)
     });
 
 
@@ -217,6 +220,7 @@ export class TaskModalComponent implements OnInit {
     this.form.get('elementType')?.setValue('task');
     this.form.get('estimatedTime')?.setValue(0);
     this.form.get('state')?.setValue(-1);
+    this.form.get('size')?.setValue(2);
 
     this.id = -1;
     this.taskModalP.show();
@@ -238,6 +242,10 @@ export class TaskModalComponent implements OnInit {
     this.form.get('estimatedTime')?.setValue(task.estimatedTime);
     this.form.get('startDate')?.setValue(task.startDate);
     this.form.get('endDate')?.setValue(task.endDate);
+    this.form.get('size')?.setValue(task.size);
+    if(!task.size){
+      this.form.get('size')?.setValue(2);
+    }
     if (this.taskService.getLabelById(task.label)) {
       this.label = this.taskService.getLabelById(task.label);
       this.form.get('label')?.setValue(this.label.name);
@@ -281,10 +289,6 @@ export class TaskModalComponent implements OnInit {
       if (this.id !== -1) {
         this.task = { ...this.task, ...this.form.value };
 
-        
-        if(this.task.elementType === 'simpleTask' && this.task.startDate === undefined){
-          this.task.startDate = new Date();
-        }
 
         if (close) {
           this.closeModal()
@@ -357,6 +361,17 @@ export class TaskModalComponent implements OnInit {
         this.task = await this.taskService.addTask(this.task);
         this.id = this.task.id;
       }
+
+      if(this.task.elementType === 'simpleTask' && this.task.isTaskDone){
+        this.task.endDate = new Date();
+      }else{
+        this.task.endDate = null;
+        if(this.task.startDate === undefined || this.task.startDate === null){
+          this.task.startDate = new Date();
+        }
+      }
+
+
       this.refreshTasks.emit();
 
     } else {
@@ -401,7 +416,12 @@ export class TaskModalComponent implements OnInit {
     this.closeMenus();
 
 
-   
+  }
+
+  refreshCheckBox() {
+    if(this.checkBox){
+      this.checkBox.refreshSize();
+    }
   }
 
   async addNewTaskToSegment() {
@@ -428,6 +448,7 @@ export class TaskModalComponent implements OnInit {
       segmentId: this.id,
       startDate: undefined,
       endDate: undefined,
+      size: 2
     }
     this.form.get('addChildForm')!.setValue('');
     await this.taskService.addTask(newTask);

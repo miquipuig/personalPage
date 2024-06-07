@@ -18,36 +18,36 @@
                 Checks / Routines
             </div>
 
-            <div class="listGreyColor ps-3 pt-1 pb-1">
+            <div class="listMenu ps-3 pt-1 pb-1">
                 <div (click)="CheckFilterAll()" class=" form-check form-switch">
                     <input style="pointer-events: none;" [(ngModel)]="local.clock.filteredCheckTasksRoutinesFilterAll"
                         class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
                     Select All
                 </div>
             </div>
-            <div class="listGreyColor ps-3 pt-1 pb-1">
+            <div class="listMenu ps-3 pt-1 pb-1">
 
                 <div (click)="CheckScheduled()" class="  form-check form-switch">
                     <input style="pointer-events: none;" [(ngModel)]="local.clock.filteredCheckTasksRoutinesScheduled"
                         class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                    Scheduled
+                    Future Scheduled
                 </div>
             </div>
-            <div class="listGreyColor ps-3 pt-1 pb-1">
+            <div class="listMenu ps-3 pt-1 pb-1">
 
                 <div (click)="CheckPendent()" class="  form-check form-switch">
                     <input style="pointer-events: none;" [(ngModel)]="local.clock.filteredCheckTasksRoutinesPendent"
                         class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                    Pendent
+                    Today & Pendent
                 </div>
             </div>
             <div>
-                <div class="listGreyColor ps-3 pt-1 pb-1">
+                <div class="listMenu ps-3 pt-1 pb-1">
                     <div (click)="CheckFinished()" class="   form-check form-switch">
                         <input style="pointer-events: none;"
                             [(ngModel)]="local.clock.filteredCheckTasksRoutinesFinished" class="form-check-input"
                             type="checkbox" id="flexSwitchCheckDefault">
-                        Done
+                        Past Achieved
                     </div>
                 </div>
 
@@ -56,7 +56,7 @@
             <div class="ms-2 mt-1">
                 Tasks / Segments
             </div>
-            <div class="  listGreyColor ps-3 pt-1 pb-1">
+            <div class="  listMenu ps-3 pt-1 pb-1">
                 <div (click)="asyncStateFilterAll()" class="form-check form-switch">
                     <input style="pointer-events: none;" [(ngModel)]="stateFilterMenuAll" class="form-check-input"
                         type="checkbox" id="flexSwitchCheckDefault">
@@ -64,7 +64,7 @@
                 </div>
 
             </div>
-            <div (click)="stateFilter(state)" *ngFor="let state of local.states" class=" listGreyColor ps-3 pt-1 pb-1">
+            <div (click)="stateFilter(state)" *ngFor="let state of local.states" class=" listMenu ps-3 pt-1 pb-1">
 
                 <div class="form-check form-switch">
                     <input style="pointer-events: none;" [(ngModel)]="state.visibilityTaskList" class="form-check-input"

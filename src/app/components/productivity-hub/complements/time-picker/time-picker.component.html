@@ -5,15 +5,22 @@
 <div class="d-flex justify-content-between align-items-center">
 
 
-<div *ngIf="value>0" class="input-group">
-  <input (click)="openTimePicker()" [(ngModel)]="shortRepresentation" type="text" class="form-control" readonly>
-</div>
-<button type="button" (click)="openTimePicker()" class="butoPlay ms-2 d-flex align-items-center">
-  <div *ngIf="!(value>0)" class="textTimer">
-    Estimated
+
+    
+
+  <div style="position: relative;">
+    <input *ngIf="value>0" (click)="openTimePicker()" [(ngModel)]="shortRepresentation" type="text" class="form-control formClick" readonly>
+    <input  *ngIf="value<=0" (click)="openTimePicker()" placeholder="Estimated" type="text" class="form-control formClick" readonly>
+
+    <div class="label-button">
+      <button type="button" (click)="openTimePicker()" class="butoPlay ">
+        <div *ngIf="!(value>0)" class="textTimer">
+
+        </div>
+        <i class="ri-timer-line sizeplus"></i>
+      </button>
+    </div>
   </div>
-  <i class="ri-timer-line sizeplus"></i>
-</button>
 </div>
 <div *ngIf="timePickerOpened" class="">
   <div class="animate__animated animate__fadeIn timePickerBox">

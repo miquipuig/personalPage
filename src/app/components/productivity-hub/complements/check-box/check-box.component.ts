@@ -32,7 +32,8 @@ export class CheckBoxComponent {
   ngOnInit() {
     this.refresh();
   }
-  refresh() {
+  refresh(size:number= 0) {
+    console.log(size);
     if (this.task === undefined) {
       this.formWorkMode = true;
     } else {
@@ -43,23 +44,42 @@ export class CheckBoxComponent {
         this.check = false;
       }
     }
+    this.refreshSize(size);
   }
 
+  refreshSize( ss:number= 0) {
 
-  ngAfterViewInit(): void {
-    if (this.size) {
+    if (ss>0) {
+      console.log('entro'+ss);
+      this.size = ss*15;
+    }
+
+    if (this.size && this.checkbox) {
+      console.log(this.size);
       this.checkbox.nativeElement.style.setProperty('--size', `${this.size}px`);
     }
   }
 
+  ngAfterViewInit(): void {
+    this.refreshSize();
+  }
+
   toggleCheck() {
+   
     this.check = !this.check;
     if (this.formWorkMode) {
       this.onChange(this.check);
       this.checkChange.emit(this.check);
     } else {
       this.task!.isTaskDone = this.check;
+      if(this.check){
+        this.task!.endDate = new Date();
+      }else{
+        this.task!.endDate = null;
+        this.task!.startDate = new Date();
+      }
       this.tks.saveTask(this.task!);
+      this.checkChange.emit();
     }
   }
 

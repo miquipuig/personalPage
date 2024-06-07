@@ -19,8 +19,8 @@
                         S
                     </div>
                 </div>
-                <app-check-box class="me-2" *ngIf="task && task.elementType==='simpleTask'" [task]="task"
-                    [size]="30"></app-check-box>
+                <app-check-box (checkChange)="filterSearch()" class="me-2" *ngIf="task && task.elementType==='simpleTask'" [task]="task"
+                    [size]="15*task.size"></app-check-box>
                 <div *ngIf="!child">
                     <div (click)="loadFilteredTasksByLabel(task.label); $event.stopPropagation()"
                         *ngIf="getLabelInfo(task.label)" class="outline-label me-2"

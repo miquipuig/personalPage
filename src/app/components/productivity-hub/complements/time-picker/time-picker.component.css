@@ -117,3 +117,18 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 } */
+
+
+.label-button {
+  position: absolute;
+  right: 5px;
+  top: 1px;
+  bottom: 0;
+  /* O height: 100%; según sea necesario */
+  border: none;
+  /* Ajusta según tu diseño */
+}
+
+.formClick {
+  cursor: pointer;
+}

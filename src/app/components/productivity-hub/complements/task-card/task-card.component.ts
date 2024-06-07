@@ -93,8 +93,14 @@ export class TaskCardComponent {
 
   refresh() {
     if (this.checkBoxComponent) {
-      this.checkBoxComponent.refresh();
+      this.checkBoxComponent.refresh(this.task?.size);
     }
+  }
+
+  filterSearch() {
+    console.log('filterSearch11111');
+    this.filterSearchEmitter.emit();
+    console.log('filterSearch22222');
   }
 
 }

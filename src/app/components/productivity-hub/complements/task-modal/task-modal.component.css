@@ -13,23 +13,26 @@
     transition: background-color 0.3s ease, color 0.3s ease;
     color: #575757d6;
     transition: color 0.3s ease;
-  }
-  
-  .butoPlay:hover {
+}
+
+.butoPlay:hover {
     color: #000000;
     /* Cambio de color al pasar el ratón por encima */
     transition: background-color 0.3s ease, color 0.2s ease;
     /* Transición para el fondo y el color del texto */
-  }
+}
+
 .modal-content {
     background: #cdcdcdf5 !important;
     color: black;
-    
+
 }
 
 .modal-body {
     overflow-x: hidden !important;
+    overflow-y: auto !important;
 }
+
 .red-input {
     color: var(--main-color) !important;
     /* Color de texto rojo */
@@ -41,14 +44,16 @@
     color: rgb(122, 0, 0) !important;
     /* Cambia el color del texto del placeholder a rojo */
 }
+
 .red-text {
     color: rgb(122, 0, 0) !important;
     /* Color de texto rojo */
 }
+
 .grey-text {
     color: rgb(102, 102, 102) !important;
     /* Color de texto gris */
-}   
+}
 
 .custom-footer {
     display: flex;
@@ -72,14 +77,14 @@
 .modal.fade .modal-dialog {
     transition: transform 0.4s ease-out;
     transform-origin: var(--modal-originX) var(--modal-originY);
-        /* El punto de origen de la transformación es el punto de origen del modal */
+    /* El punto de origen de la transformación es el punto de origen del modal */
     transform: scale(1)
         /* Estado final, modal completamente visible */
 }
 
 .modal.fade:not(.show) .modal-dialog {
-    transform: scale(0)  
-    /*  */
+    transform: scale(0)
+        /*  */
 
         /* El modal se reduce a un punto central al cerrarse */
 }
@@ -93,7 +98,8 @@
     overflow-y: auto;
     z-index: 10000;
     /* Hace que la lista sea scrollable */
-    scrollbar-width: thin; /* Hace la barra de desplazamiento más delgada en Firefox */
+    scrollbar-width: thin;
+    /* Hace la barra de desplazamiento más delgada en Firefox */
     /* scrollbar-color: var(--main-color) #666666; */
 }
 
@@ -101,12 +107,15 @@
     background-color: rgb(241, 241, 241);
     color: rgb(102, 102, 102);
     /* padding: 2px 2px 2px 2px; */
-    cursor:pointer;
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;}
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
 .listGreyColor:hover {
     background-color: rgb(255, 255, 255);
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
+
 .closeTimePicker {
     right: 0px;
     top: 0px;
@@ -115,53 +124,55 @@
     font-size: 1em;
     transition: background-color 0.2s ease, color 0.2s ease;
     color: #575757d6;
-  }
-  
-  .closeTimePicker:hover{
+}
+
+.closeTimePicker:hover {
     color: #000000;
     transition: background-color 0.2s ease, color 0.2s ease;
-  }
-  
-  .closeTimePicker:active{
+}
+
+.closeTimePicker:active {
     scale: 95%;
-  }
-  
-  .label-button {
+}
+
+.label-button {
     position: absolute;
     right: 5px;
     top: 7px;
-    bottom: 0; /* O height: 100%; según sea necesario */
-    border: none; /* Ajusta según tu diseño */
+    bottom: 0;
+    /* O height: 100%; según sea necesario */
+    border: none;
+    /* Ajusta según tu diseño */
 }
 
 .outline-label2 {
-	display: inline-block;
+    display: inline-block;
 
-	color: var(--color-base);
-	/* Color rojo de peligro */
-	font-size: 0.8rem;
-	/* Tamaño de letra estándar */
-	text-align: center;
-	vertical-align: middle;
-	user-select: none;
-	border: 1px solid var(--color-base);
-	/* Borde rojo de peligro */
-	padding: 0px 5px;
-	/* Padding similar al de Bootstrap */
-	line-height: 1.5;
-	border-radius: 0.5rem;
-	/* Bordes redondeados */
-	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-		border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	/* Transiciones suaves */
-	background-color: transparent;
-	/* Fondo transparente */
-	cursor: pointer;
+    color: var(--color-base);
+    /* Color rojo de peligro */
+    font-size: 0.8rem;
+    /* Tamaño de letra estándar */
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid var(--color-base);
+    /* Borde rojo de peligro */
+    padding: 0px 5px;
+    /* Padding similar al de Bootstrap */
+    line-height: 1.5;
+    border-radius: 0.5rem;
+    /* Bordes redondeados */
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    /* Transiciones suaves */
+    background-color: transparent;
+    /* Fondo transparente */
+    cursor: pointer;
 
 }
 
 .outline-label2:hover .ri-close-large-line {
-	font-weight: 900;
-	filter: brightness(30%);
-	/* font-size: large; */
+    font-weight: 900;
+    filter: brightness(30%);
+    /* font-size: large; */
 }

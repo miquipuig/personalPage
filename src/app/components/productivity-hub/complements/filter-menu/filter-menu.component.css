@@ -1,6 +1,6 @@
 .filteMenurCenter {
     position: fixed;
-    top: 50%;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, 50%);
 }
@@ -24,7 +24,8 @@
 	z-index: 10000;
 	scrollbar-width: thin;
 	/* Hace la barra de desplazamiento más delgada en Firefox */
-	background-color: #000000;
+	background-color: rgba(241, 241, 241, 0.939);
+    color: black;
 	/* Fondo blanco para la lista */
 	border: 1px white solid;
 	border-end-end-radius: 20px;
@@ -48,11 +49,23 @@
     background: none;
     font-size: 1.5em;
     transition: background-color 0.3s ease, color 0.3s ease;
-    color: #d2d2d2d6;
+    color: #747474;
   
   }
   
   .close:hover {
-    color: #ffffff;
+    color: #000000;
     transition: background-color 0.3s ease, color 0.2s ease;
   }
+
+
+.listMenu {
+    /* background-color: rgba(241, 241, 241, 0.939); */
+    color: rgb(102, 102, 102);
+    /* padding: 2px 2px 2px 2px; */
+    cursor:pointer;
+    transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;}
+.listMenu:hover {
+    background-color: rgb(255, 255, 255);
+    color: #000000;
+}

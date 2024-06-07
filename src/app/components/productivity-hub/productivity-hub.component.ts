@@ -88,13 +88,10 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   async refreshTasks() {
     this.local.labelsAnimated = true;
-
-    this.filterSearch();
-
     this.taskCardComponent.forEach(taskCard => {
       taskCard.refresh();
     });
-
+    this.filterSearch();
   }
   async loadTasks() {
     await this.tks.loadTasks();
@@ -167,7 +164,7 @@ export class ProductivityHubComponent implements AfterViewInit {
     return [...this.tks.tasks.filter(task => task.segmentId === segmentId).sort((a, b) => a.idPosition - b.idPosition)];
   }
 
-  getTasksBySegment2(segmentId: number ,tasks:Task[]): Task[] {
+  getTasksBySegment2(segmentId: number, tasks: Task[]): Task[] {
     return [...tasks.filter(task => task.segmentId === segmentId).sort((a, b) => a.idPosition - b.idPosition)];
   }
 
@@ -193,33 +190,51 @@ export class ProductivityHubComponent implements AfterViewInit {
 
 
   filterSearch(): void {
-
+    console.log('filterSearch Oficial');
     this.local.saveClock();
     // Copia inicial de tareas y ordenación por idPosition
     let tasks: Task[] = [...this.tks.tasks].sort((a, b) => a.idPosition - b.idPosition);
-
 
 
     // Filtrado por tareas rutinarias y checks
     tasks = tasks.filter(task => {
       //Filtrado para segments y tasks normales
       if (task.elementType === 'simpleTask' || task.elementType === 'routine') {
-        if (!this.local.clock.filteredCheckTasksRoutinesFinished && task.isTaskDone && task.endDate && this.endPastDate(task.endDate)) {
-          return false;
+        if(this.local.clock.filteredCheckTasksRoutinesFilterAll){
+          return true;
+        }
+        if(this.local.clock.filteredCheckTasksRoutinesFinished){
+            if(task.isTaskDone && !task.endDate ){
+              return true;
+            }
+            if(task.isTaskDone && task.endDate && this.isFutureDate(task.endDate)){
+              return true;
+            }
         }
 
-        if (!this.local.clock.filteredCheckTasksRoutinesPendent && !task.isTaskDone && !task.startDate) {
-          return false;
+        if(this.local.clock.filteredCheckTasksRoutinesPendent){
+          if(!task.isTaskDone && !task.startDate){
+            return true;
+          }
+          if(!task.isTaskDone && task.startDate && this.isPastDate(task.startDate)){
+            return true;
+          }
+
+          if(task.isTaskDone && task.endDate && this.isPastDate(task.endDate)){
+            return true;
+          }
         }
 
-        if (!this.local.clock.filteredCheckTasksRoutinesPendent && !task.isTaskDone && task.startDate && this.isPastDate(task.startDate)) {
-          return false;
+        if(this.local.clock.filteredCheckTasksRoutinesScheduled){
+          if(!task.isTaskDone && task.startDate && this.isFutureDate(task.startDate)){
+            return true;
+          }
         }
-        if (!this.local.clock.filteredCheckTasksRoutinesScheduled && !task.isTaskDone && task.startDate && this.isFutureDate(task.startDate)) {
-          return false;
-        }
+    
+      }else{
+        return true;
       }
-      return true;
+      return false;
     });
 
     // Filtrado por estado visible
@@ -231,10 +246,6 @@ export class ProductivityHubComponent implements AfterViewInit {
         )
       );
     }
-
-
-
-
 
     // Filtrado adicional común a ambos modos
     if (this.local.clock.filteredLabel !== -1) {

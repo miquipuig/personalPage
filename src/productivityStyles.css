@@ -434,18 +434,14 @@ img.pomodoroCurrent {
 
 
 .listGreyColor {
-	background-color: rgb(0, 0, 0);
-	color: rgb(198, 198, 198);
-	/* padding: 2px 2px 2px 2px; */
-	cursor: pointer;
-	transition: background-color 0.2s ease, color 0.2s ease;
-	border: none !important;
-}
-
-
+    background-color: rgb(235, 234, 234);
+    color: rgb(102, 102, 102);
+    /* padding: 2px 2px 2px 2px; */
+    cursor:pointer;
+    transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;}
 .listGreyColor:hover {
-	background-color: rgb(33, 33, 33);
-	color: white
+    background-color: rgb(255, 255, 255);
+    transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
 }
 
 .form-check-input:not(:checked) {

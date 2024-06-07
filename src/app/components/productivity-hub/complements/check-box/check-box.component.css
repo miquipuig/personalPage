@@ -1,7 +1,7 @@
 .checkbox-container {
     position: relative;
-    width: var(--size, 50px);
-    height: var(--size, 50px);
+    width: var(--size, 30px);
+    height: var(--size, 30px);
 
 }
 
@@ -10,11 +10,11 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: var(--size, 50px);
-    height: var(--size, 50px);
+    width: var(--size, 30px);
+    height: var(--size, 30px);
     background-color: #b3b3b3;
-    border-radius: calc(var(--size, 50px)/10);
-    border: calc(var(--size, 50px)/50*3) solid rgb(102, 102, 102);
+    border-radius: calc(var(--size, 30px)/10);
+    border: calc(var(--size, 30px)/50*3) solid rgb(102, 102, 102);
     cursor: pointer;
     transition: filter 0.2s ease-in-out;
 }
@@ -53,13 +53,13 @@
 .tick-mark {
     pointer-events: none;
     position: absolute;
-    margin-left: calc(var(--size, 50px) *7/50);
-    margin-bottom: calc(var(--size, 50px) *7/50);
+    margin-left: calc(var(--size, 30px) *7/50);
+    margin-bottom: calc(var(--size, 30px) *7/50);
 
-    width: calc(var(--size, 50px) *6/5);
-    height: calc(var(--size, 50px) *2/5);
-    border-left: calc(var(--size, 50px) *8/50) solid white;
-    border-bottom: calc(var(--size, 50px)*6/50) solid white;
+    width: calc(var(--size, 30px) *6/5);
+    height: calc(var(--size, 30px) *2/5);
+    border-left: calc(var(--size, 30px) *8/50) solid white;
+    border-bottom: calc(var(--size, 30px)*6/50) solid white;
     transform: rotate(25deg) translate(-50%, -50%) scale(5);
     opacity: 0;
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
