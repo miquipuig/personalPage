@@ -1314,18 +1314,23 @@ section .container.c_custom {
     transform: rotate(360deg);
   }
 }
-
-#background-image {
-  position: absolute;
-  right: 0;
+#backgroundContainer {
+  position: fixed;
+  right: 0px;
   top: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  z-index: -1;
+}
+
+#background-image {
+  width: 100vw;
+  height: 100%;
+  left:0px;
   background-image: url('./assets/img/devMan.jpg');
   background-position: right;
   background-repeat: no-repeat;
   background-size: cover;
-  z-index: -1;
   opacity: 0;
   transition: opacity 1s ease-in-out;
 
@@ -1337,8 +1342,11 @@ section .container.c_custom {
 
 
 @media screen and (max-aspect-ratio: 1/1) {
+  #backgroundContainer {
+    width: 100%;
+    right: 180px;
+  }
   #background-image {
-    right: -190px;
     width: 160%;
   }
 }
