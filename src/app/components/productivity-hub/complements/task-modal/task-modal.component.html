@@ -5,44 +5,61 @@
         <h5 *ngIf="id===-1" class="modal-title"><i class="ri-pushpin-line"></i> New Element</h5>
         <h5 *ngIf="id!=-1" class="modal-title"> <i class="ri-pushpin-line"></i> Edit Element</h5>
 
-       
+
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
       </div>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
+        <div *ngIf="form.get('elementType')?.value==='simpleTask'" style="position: absolute; top:51px; right: 15px;">
+          <div class="d-flex justify-content-center align-items-center ">
+            <!-- <label for="customRange2" class="form-label mt-2 ms-1 me-1">Size </label> -->
+            <input (change)="refreshCheckBox()" formControlName="size" type="range" class="form-range" min="1"
+              max="5" id="customRange2">
+          </div>
+        </div>
         <div class="modal-body">
           <div style="width: 6000px">
           </div>
-          <div class="d-flex mb-2 align-items-center">
-
-            <div class="" (click)="closeMenus()">
-              <select class="form-select" formControlName="elementType">
-                <option value="task">Task</option>
-                <option value="simpleTask">Check Task</option>
-                <option value="segment">Segment</option>
-                <option value="routine">Routine</option>
-              </select>
-            </div>
-
-
-            <div class="ms-auto d-flex">
-              <div  class="d-flex justify-content-center align-items-center me-2">
-                <label for="customRange2" class="form-label mt-2 ms-1 me-1">Size </label>
-                <input (change)="refreshCheckBox()" formControlName="size" type="range" class="form-range" min="1" max="5" id="customRange2">
+          <div class="row mb-2">
+            <div class="col-4 justify-content-end align-items-end pe-0">
+              <div class="" (click)="closeMenus()">
+                <select class="form-select" formControlName="elementType">
+                  <option value="task">Task</option>
+                  <option value="simpleTask">Check Task</option>
+                  <option value="segment">Segment</option>
+                  <option value="routine">Routine</option>
+                </select>
               </div>
-              <app-check-box *ngIf="form.get('elementType')?.value==='simpleTask'" formControlName="isTaskDone"
-                [label]="'End'" [size]="35*form.get('size')?.value/2"></app-check-box>
+            </div>
+            <div class="col-4 d-flex justify-content-end align-items-end pe-0">
+              <!-- 
+              <app-time-picker (closeMenus)="closeMenus()" formControlName="estimatedTime"
+              [myLabel]="'Timer'"></app-time-picker> -->
+            </div>
+            <div class="col-4"
+              *ngIf="form.get('elementType')?.value==='task' || form.get('elementType')?.value==='segment' ">
 
-              <div style="width: 150px;"
-                *ngIf="form.get('elementType')?.value==='task' || form.get('elementType')?.value==='segment' "
-                class="col-4" (click)="closeMenus()">
+
+
+              <div style="width: 100%" class="col-4" (click)="closeMenus()">
                 <select class="form-select" formControlName="state">
                   <option value="-1" disabled selected>Select State</option>
 
                   <option *ngFor="let state of states" [ngValue]="state.id">{{state.name}}</option>
                 </select>
               </div>
+            </div>
+            <div class="col-4" *ngIf="form.get('elementType')?.value==='simpleTask'"
+              class=" d-flex justify-content-end align-items-center">
+  
+              <div style="position: absolute; top:15px">
+                <app-check-box formControlName="isTaskDone" [label]="'End'"
+                  [size]="35*form.get('size')?.value/2"></app-check-box>
+              </div>
+
+
+
+
             </div>
           </div>
 
@@ -98,26 +115,28 @@
               </div>
             </div>
 
-            <div class="col-4 d-flex  justify-content-end align-items-center">
 
-              <app-time-picker (closeMenus)="closeMenus()" formControlName="estimatedTime"
-                [myLabel]="'Timer'"></app-time-picker>
-
-            </div>
 
           </div>
           <div class="row mb-2">
             <!-- <div class="col-12 col-sm-6"> -->
 
-            <div class="col-6">
+            <div class="col-4  pe-0">
               <app-datapicker formControlName="startDate" [label]="'Start'"></app-datapicker>
             </div>
 
             <!-- Utiliza mt-3 y d-md-none para añadir margen superior solo en pantallas pequeñas -->
             <!-- <div *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-12 d-sm-none mt-2"></div> -->
 
-            <div *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-6 ">
+            <div *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-4 pe-0">
               <app-datapicker formControlName="endDate" [label]="'End'"></app-datapicker>
+            </div>
+
+            <div class="col-4 d-flex  justify-content-end align-items-center">
+
+              <app-time-picker (closeMenus)="closeMenus()" formControlName="estimatedTime"
+                [myLabel]="'Timer'"></app-time-picker>
+
             </div>
           </div>
 
@@ -186,7 +205,7 @@
                     class="ri-close-large-line"></i></div>
               </div>
             </div>
-            <pre>{{form.value | json}}</pre>
+            <!-- <pre>{{form.value | json}}</pre> -->
           </div>
         </div>
 

@@ -7,6 +7,7 @@
 */
 (function() {
   "use strict";
+  console.log('skillsAnimation.js');
 
   /**
    * Easy selector helper function
@@ -36,18 +37,22 @@
   }
 
   
-  let skilsContent = select('.skills-content');
+  let skilsContent = document.querySelector('.skills-content');
+  
   if (skilsContent) {
+    console.log('skilsContent2');
+    console.log(skilsContent);
     new Waypoint({
       element: skilsContent,
       offset: '80%',
       handler: function(direction) {
-        let progress = select('.progress .progress-bar', true);
+        console.log('skilsContent3');
+        let progress = document.querySelectorAll('.progress .progress-bar');
         progress.forEach((el) => {
-          el.style.width = el.getAttribute('aria-valuenow') + '%'
+          el.style.width = el.getAttribute('aria-valuenow') + '%';
         });
       }
-    })
+    });
   }
 
 })()

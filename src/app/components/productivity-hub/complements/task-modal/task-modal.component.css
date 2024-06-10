@@ -176,3 +176,36 @@
     filter: brightness(30%);
     /* font-size: large; */
 }
+
+/* Cambia la barra de seguimiento a rojo */
+.form-range::-webkit-slider-thumb {
+    background-color: var(--main-color);
+     }
+
+    /*.form-range::-webkit-slider-runnable-track {
+        background-color: red; 
+    }
+
+    .form-range::-moz-range-thumb {
+        background-color: red; 
+    }
+
+    .form-range::-moz-range-track {
+        background-color: red; 
+    }
+
+    .form-range::-ms-thumb {
+        background-color: red;
+    }
+
+    .form-range::-ms-track {
+        background-color: red; 
+    }
+
+    .form-range::-ms-fill-lower {
+        background-color: red;
+    }
+
+    .form-range::-ms-fill-upper {
+        background-color: red; 
+    } */
