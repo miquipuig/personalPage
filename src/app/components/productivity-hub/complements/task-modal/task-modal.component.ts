@@ -212,6 +212,7 @@ export class TaskModalComponent implements OnInit {
   }
 
   async openModal(left: number, top: number) {
+    this.task = {} as Task;
     this.visualEffectAddTask(left, top);
 
     this.modalOpened = true;
