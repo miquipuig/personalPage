@@ -37,7 +37,6 @@ export class ProductivityHubComponent implements AfterViewInit {
   dragOverIndex: number | null = null;
   stateFilterMenu = false
   stateFilterMenuAll = false
-  isVisible = true;
 
 
   constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef, private renderer: Renderer2, public tks: TaskServicesService, public local: LocalService) {
@@ -77,9 +76,9 @@ export class ProductivityHubComponent implements AfterViewInit {
   checkWidth() {
     const parentElement = this.elRef.nativeElement.querySelector('#menu');
     if (parentElement.offsetWidth < 420) {
-      this.isVisible = false;
+      this.local.isVisible = false;
     } else {
-      this.isVisible = true;
+      this.local.isVisible = true;
     }
   }
   ngAfterViewInit() {
@@ -171,20 +170,33 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   //funciión para comprar fechas con la de hoy. Devulve true si la fecha es posterior a la de hoy. Solo set ienen en cuenta los días no las horas ni munutos etc
 
-  isFutureDate(date: Date) {
-    const today = new Date();
-    const taskDate = new Date(date);
-    const response = taskDate > today;
+   setToMidnight(date: Date): Date {
+    const newDate = new Date(date);
+    newDate.setHours(0, 0, 0, 0);
+    return newDate;
+  }
+  
+   isFutureDate(date: Date): boolean {
+    const today = this.setToMidnight(new Date());
+    const taskDate = this.setToMidnight(date);
     return taskDate > today;
   }
-  isPastDate(date: Date) {
-    const today = new Date();
-    const taskDate = new Date(date);
+  
+   isFutureTodayDate(date: Date): boolean {
+    const today = this.setToMidnight(new Date());
+    const taskDate = this.setToMidnight(date);
+    return taskDate >= today;
+  }
+  
+   isPastDate(date: Date): boolean {
+    const today = this.setToMidnight(new Date());
+    const taskDate = this.setToMidnight(date);
     return taskDate <= today;
   }
-  endPastDate(date: Date) {
-    const today = new Date();
-    const taskDate = new Date(date);
+  
+   endPastDate(date: Date): boolean {
+    const today = this.setToMidnight(new Date());
+    const taskDate = this.setToMidnight(date);
     return taskDate < today;
   }
 
@@ -207,7 +219,7 @@ export class ProductivityHubComponent implements AfterViewInit {
             if(task.isTaskDone && !task.endDate ){
               return true;
             }
-            if(task.isTaskDone && task.endDate && this.isFutureDate(task.endDate)){
+            if(task.isTaskDone && task.endDate && this.endPastDate(task.endDate)){
               return true;
             }
         }
@@ -220,7 +232,7 @@ export class ProductivityHubComponent implements AfterViewInit {
             return true;
           }
 
-          if(task.isTaskDone && task.endDate && this.isPastDate(task.endDate)){
+          if(task.isTaskDone && task.endDate && this.isFutureTodayDate(task.endDate)){
             return true;
           }
         }

@@ -53,18 +53,18 @@
 								<input (input)="filterSearch()" class="searchInput flex-grow-1" id="searchInput"
 									type="text" [(ngModel)]="searchInput">
 								<span *ngIf="searchInput.length===0"
-									class="animate__animated animate__fadeIn searchIcon ms-1"
+									class="animate__animated animate__fadeIn searchIcon ms-1 d-flex justify-content-center"
 									style="position: absolute;"><i class="ri-search-line"></i></span>
 								<span (click)="clearSarch()" *ngIf="searchInput.length>0"
 									class="animate__animated animate__fadeIn closeIcon"><i
 										class="ri-close-line"></i></span>
 
 							</div>
-							<app-filter-menu [isVisible]="isVisible"
+							<app-filter-menu [isVisible]="local.isVisible"
 								(filterSearchEmitter)="filterSearch()"></app-filter-menu>
 
 						</div>
-						<app-filter-buttons *ngIf="isVisible"
+						<app-filter-buttons *ngIf="local.isVisible"
 							(filterSearchEmitter)="filterSearch()"></app-filter-buttons>
 
 					</div>
@@ -85,7 +85,7 @@
 									class="ri-close-large-line"></i>
 							</div>
 						</div>
-						<app-filter-buttons *ngIf="!isVisible"
+						<app-filter-buttons *ngIf="!local.isVisible"
 							(filterSearchEmitter)="filterSearch()"></app-filter-buttons>
 
 					</div>
