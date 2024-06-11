@@ -88,7 +88,7 @@ export class TaskCardComponent {
   editTask(task: Task, index: number) {
     const nativeElement = this.editTaskButton.get(0)?.nativeElement;
     const rect = nativeElement.getBoundingClientRect();
-    this.editTaskEmitter.emit({ task, index,rect });
+    this.editTaskEmitter.emit({ task, index, rect });
   }
 
   refresh() {
@@ -96,6 +96,15 @@ export class TaskCardComponent {
       this.checkBoxComponent.refresh(this.task?.size);
     }
   }
+
+  stopPropagation(event: any | null) {
+    console.log('stopPropagation');
+    console.log(event);
+    if(!event?.target?.className.includes( 'draggable')) {
+      event?.stopPropagation();
+    }
+  }
+
 
   filterSearch() {
     console.log('filterSearch11111');

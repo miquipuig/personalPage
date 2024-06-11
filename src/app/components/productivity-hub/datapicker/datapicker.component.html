@@ -1,7 +1,7 @@
 <form>
     <div class="input-group q-datepicker">
         <div style="position: relative; padding: 0px " class="form-control">
-            <input style="border-radius: 5px 0 0 5px;" class="form-control" placeholder="{{label}} Date" name="dp" [(ngModel)]="model" (input)="validate()"
+            <input style="border-radius: 5px 0 0 5px;" class="form-control" placeholder="{{label}}" name="dp" [(ngModel)]="model" (input)="validate()"
                 ngbDatepicker #d="ngbDatepicker" #dateInput (click)="d.toggle(); validate()"
                 [class.custom-datepicker]="true" (dateSelect)="validate()" autocomplete="off"  />
             <button *ngIf="model!=null" (click)="deleteData()" style="position: absolute; top: 0; right: 5px; height: 100%;" type="button"

@@ -37,7 +37,7 @@
   border: 2px solid rgba(255, 255, 255, 0);
   /* Borde negro sólido con un grosor de 2px */
   z-index: 100;
-  /* top: 50%;  */
+  top: 20%; 
   left: 50%;
   /* Centra horizontalmente */
   transform: translate(-50%, 0);

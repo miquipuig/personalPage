@@ -41,7 +41,7 @@
 
 
 
-              <div style="width: 100%" class="col-4" (click)="closeMenus()">
+              <div style="width: 100%" class="col-6 col-sm-5" (click)="closeMenus()">
                 <select class="form-select" formControlName="state">
                   <option value="-1" disabled selected>Select State</option>
 
@@ -49,7 +49,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-4" *ngIf="form.get('elementType')?.value==='simpleTask'"
+            <div class="col-6 col-sm-5" *ngIf="form.get('elementType')?.value==='simpleTask'"
               class=" d-flex justify-content-end align-items-center">
   
               <div style="position: absolute; top:15px">
@@ -66,16 +66,16 @@
 
           <div class="row mb-2">
 
-            <div style="position: relative; padding-right: 0px" class="col-4">
+            <div style="position: relative" class="col-5  ">
               <!-- (focusout)="onInputBlur()" -->
-              <input style=" max-height: 40px" type="text" class="form-control pe-4" formControlName="label"
+              <input style=" max-height: 40px" type="text" class="form-control" formControlName="label"
                 [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('label')!.dirty || form.get('label')!.touched)}"
                 (input)="onSearch()" aria-label="Activity Type" placeholder="Activity Type"
                 (focus)="closeMenus(); showList = true" (click)="selectLabel()">
               <div class="label-button">
 
                 <app-label-editor (closeMenus)="closeMenus()"
-                  style="position: absolute; top: 0; right: 0; height: 100%;"></app-label-editor>
+                  style="position: absolute; top: 0; right: 15px; height: 100%;"></app-label-editor>
               </div>
 
               <div style="--animate-duration: 0.5s;"
@@ -91,9 +91,9 @@
             </div>
 
             <div *ngIf="form.get('elementType')?.value === 'task' || form.get('elementType')?.value === 'simpleTask'"
-              style="position: relative; padding-right: 0px;" class="col-4">
+              style="position: relative" class="col-5 ps-1 pe-4">
               <!-- (focusout)="onInputBlur()" -->
-              <input style=" max-height: 40px;" type="text" class="form-control pe-4" formControlName="segmentId"
+              <input style="max-height: 40px;" type="text" class="form-control" formControlName="segmentId"
                 [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('segmentId')!.dirty || form.get('segmentId')!.touched)}"
                 (input)="onSegmentIdSearch()" aria-label="Seg" placeholder="Top Segment"
                 (focus)="closeMenus();   showSectionIdList = true" (click)="selectSectionId()">
@@ -121,22 +121,22 @@
           <div class="row mb-2">
             <!-- <div class="col-12 col-sm-6"> -->
 
-            <div class="col-4  pe-0">
+            <div class="col-5">
               <app-datapicker formControlName="startDate" [label]="'Start'"></app-datapicker>
             </div>
 
             <!-- Utiliza mt-3 y d-md-none para añadir margen superior solo en pantallas pequeñas -->
             <!-- <div *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-12 d-sm-none mt-2"></div> -->
 
-            <div *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-4 pe-0">
+            <div *ngIf="form.get('elementType')?.value!=='simpleTask'" class="col-5 ps-1 pe-4 mb-2">
               <app-datapicker formControlName="endDate" [label]="'End'"></app-datapicker>
             </div>
 
-            <div class="col-4 d-flex  justify-content-end align-items-center">
-
+          
+            <div class=" col-5 d-flex  justify-content-end align-items-center"[ngClass]="{'ps-1 pe-4': form.get('elementType')?.value==='simpleTask'}">
+           
               <app-time-picker (closeMenus)="closeMenus()" formControlName="estimatedTime"
                 [myLabel]="'Timer'"></app-time-picker>
-
             </div>
           </div>
 
