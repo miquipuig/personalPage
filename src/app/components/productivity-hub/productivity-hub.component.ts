@@ -75,7 +75,7 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   checkWidth() {
     const parentElement = this.elRef.nativeElement.querySelector('#menu');
-    if (parentElement.offsetWidth < 420) {
+    if (parentElement.offsetWidth < 550) {
       this.local.isVisible = false;
     } else {
       this.local.isVisible = true;
@@ -202,7 +202,6 @@ export class ProductivityHubComponent implements AfterViewInit {
 
 
   filterSearch(): void {
-    console.log('filterSearch Oficial');
     this.local.saveClock();
     // Copia inicial de tareas y ordenación por idPosition
     let tasks: Task[] = [...this.tks.tasks].sort((a, b) => a.idPosition - b.idPosition);

@@ -68,10 +68,16 @@
 
             <div style="position: relative" class="col-5  ">
               <!-- (focusout)="onInputBlur()" -->
-              <input style=" max-height: 40px" type="text" class="form-control" formControlName="label"
+              <input style=" max-height: 40px" type="text" class="form-control  pe-5" formControlName="label"
                 [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('label')!.dirty || form.get('label')!.touched)}"
                 (input)="onSearch()" aria-label="Activity Type" placeholder="Activity Type"
                 (focus)="closeMenus(); showList = true" (click)="selectLabel()">
+                <button *ngIf="form.get('label')?.value"
+                (click)="resetLabel()"
+                style="position: absolute;top:0px;  right: 38px; height: 100%;" type="button"
+                class="butoPlay ">
+                <i class="ri-close-line"></i>
+              </button>
               <div class="label-button">
 
                 <app-label-editor (closeMenus)="closeMenus()"
@@ -93,14 +99,14 @@
             <div *ngIf="form.get('elementType')?.value === 'task' || form.get('elementType')?.value === 'simpleTask'"
               style="position: relative" class="col-5 ps-1 pe-4">
               <!-- (focusout)="onInputBlur()" -->
-              <input style="max-height: 40px;" type="text" class="form-control" formControlName="segmentId"
+              <input  type="text" class="form-control pe-4" formControlName="segmentId"
                 [ngClass]="{'is-invalid': form.get('label')!.invalid && (form.get('segmentId')!.dirty || form.get('segmentId')!.touched)}"
                 (input)="onSegmentIdSearch()" aria-label="Seg" placeholder="Top Segment"
                 (focus)="closeMenus();   showSectionIdList = true" (click)="selectSectionId()">
 
               <button *ngIf="form.get('segmentId')?.value"
                 (click)="form.get('segmentId')?.setValue(''); onSegmentIdSearch()"
-                style="position: absolute; top: 0; right: 3px; height: 100%;" type="button"
+                style="position: absolute; top: 0; right: 30px; height: 100%;" type="button"
                 class="butoPlay d-flex align-items-center">
                 <i class="ri-close-line"></i>
               </button>

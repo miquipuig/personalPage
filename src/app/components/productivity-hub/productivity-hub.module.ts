@@ -20,11 +20,12 @@ import { CheckBoxComponent } from './complements/check-box/check-box.component';
 import { FilterButtonsComponent } from './complements/filter-buttons/filter-buttons.component';
 import { TaskCardComponent } from './complements/task-card/task-card.component';
 import { FilterMenuComponent } from './complements/filter-menu/filter-menu.component';
+import { HistoryBriefComponent } from './complements/history-brief/history-brief.component';
 
 
 
 @NgModule({
-  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent, FilterButtonsComponent, TaskCardComponent, FilterMenuComponent],
+  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent, FilterButtonsComponent, TaskCardComponent, FilterMenuComponent, HistoryBriefComponent],
   imports: [ 
     CommonModule,
     ProductivityHubRoutingModule,

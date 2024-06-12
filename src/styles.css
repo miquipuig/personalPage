@@ -1316,7 +1316,7 @@ section .container.c_custom {
 }
 #backgroundContainer {
   position: fixed;
-  right: 0px;
+  left: 0px;
   top: 0;
   width: 100vw;
   /* height: 100vh; */

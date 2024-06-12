@@ -63,6 +63,17 @@
 	font-size: 0.8em;
 	/* Elimina márgenes por defecto */
 }
+.selectedTask {
+	position: absolute;
+	top: -15px;
+	/* right: 30%; */
+	left: 50%;
+	transform: translateX(-50%);
+	margin: 0px;
+	padding: 0px;
+	font-size: 0.8em;
+	/* Elimina márgenes por defecto */
+}
 
 .square {
 	position: relative;
@@ -227,3 +238,66 @@
 	background-color: white;
 	/* Color blanco para la barra de progreso activa */
 }
+
+
+/* selected Task rotation */
+
+#rssBlock{
+	top:-15px;
+	left:0px;
+	height: 20px;
+	background: #00000000;
+	position: absolute;
+	width: 100%;
+	overflow: hidden;
+  }
+  
+  /*remove p*/
+  .cnnContents {
+	width:100%;
+	padding-top: 0px;
+	font-size: 0.8em;
+	white-space: nowrap;
+	font-weight: 100;
+  }
+  
+  .marqueeStyle {
+	display:inline-block;
+	/* Apply animation to this element */
+	-webkit-animation: scrolling-left1 12s linear infinite;
+	animation: scrolling-left1 12s linear infinite;
+  }
+  
+  .marqueeStyle2 {
+	display:inline-block;
+	/* Apply animation to this element */
+	-webkit-animation: scrolling-left2 12s linear infinite;
+	animation: scrolling-left2 12s linear infinite;
+	animation-delay: 3s;
+	transform: translateX(100%);
+  }
+  /* scrolling-left is continuous/repeatly text */
+  @keyframes scrolling-left1 {
+	  0% {transform: translateX(150%);
+		  -webkit-transform: translateX(150%);}
+		100% {transform: translateX(-200%);
+			-webkit-transform: translateX(-200%);}
+  }
+  @keyframes scrolling-left2 {
+	0% {transform: translateX(100%);
+		-webkit-transform: translateX(100%);}
+	  100% {transform: translateX(-250%);
+		  -webkit-transform: translateX(-250%);}
+  }
+  
+  /* @-webkit-keyframes scrolling-left1 {
+	  0% {-webkit-transform: translateX(100%);}
+		100% {-webkit-transform: translateX(-100%);}
+  }
+  @-webkit-keyframes scrolling-left2 {
+	  0% {-webkit-transform: translateX(200%);}
+		100% {-webkit-transform: translateX(-100%);}
+  }
+   */
+  
+  

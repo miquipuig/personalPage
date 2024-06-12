@@ -98,18 +98,14 @@ export class TaskCardComponent {
   }
 
   stopPropagation(event: any | null) {
-    console.log('stopPropagation');
-    console.log(event);
-    if(!event?.target?.className.includes( 'draggable')) {
+
+    if (!event?.target?.className.includes('draggable')) {
       event?.stopPropagation();
     }
   }
 
-
   filterSearch() {
-    console.log('filterSearch11111');
     this.filterSearchEmitter.emit();
-    console.log('filterSearch22222');
   }
 
 }

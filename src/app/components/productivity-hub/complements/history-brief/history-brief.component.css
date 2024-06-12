@@ -1,0 +1,10 @@
+.square {
+	position: relative;
+	background-color: rgba(255, 255, 255, 0.2);
+	/* Blanco con 20% de transparencia */
+	border-radius: 8px;
+	padding: 15px;
+	box-sizing: border-box;
+	transition: background-color 0.5s ease;
+	/* Transición suave del color de fondo */
+}

@@ -11,6 +11,8 @@ import { State } from 'src/app/services/productivity-hub/task-services.service';
 import { LabelEditorComponent } from '../label-editor/label-editor.component';
 import { state } from '@angular/animations';
 import { CheckBoxComponent } from '../check-box/check-box.component';
+import { LocalService } from 'src/app/services/productivity-hub/local.service';
+import { HistoryService } from 'src/app/services/productivity-hub/history.service';
 @Component({
   selector: 'app-task-modal',
   templateUrl: './task-modal.component.html',
@@ -49,7 +51,7 @@ export class TaskModalComponent implements OnInit {
   segmentIds: Task[] = [];
   addChildrenForm: Task[] = [];
   states: State[] = [];
-  constructor(private taskService: TaskServicesService, private fb: FormBuilder) {
+  constructor(private history: HistoryService,private local: LocalService, private taskService: TaskServicesService, private fb: FormBuilder) {
     this.id = -1;
     this.form = new FormGroup({
       elementType: new FormControl('task', Validators.required),
@@ -86,7 +88,7 @@ export class TaskModalComponent implements OnInit {
     let options: Task[]
 
     options = this.taskService.tasks.filter(task => task.elementType === 'segment').sort((a, b) => a.idPosition - b.idPosition);
-    if (this.label && this.label.id !== undefined) {
+    if (this.label && this.label.id !== undefined && this.label.id !== null) {
       options = options.filter(option => option.label === this.label.id);
     }
     return options.filter(option => option.name.toLowerCase().includes(filterValue));
@@ -112,10 +114,18 @@ export class TaskModalComponent implements OnInit {
     this.showSectionIdList = true;
   }
 
+  resetLabel() {
+    this.label = {} as Label;
+    this.form.get('label')!.setValue('');
+  }
+
   onSearch(): void {
-    // Logic to handle live search update
-    // this.filteredActivities = of(this.filterOptions(this.form.get('label')!.value));
+
+
     this.labels = this.filterOptions(this.form.get('label')!.value || '');
+    if (this.form.get('label')!.value === '') {
+      this.label = {} as Label;
+    }
     if (this.labels.length === 1) {
       this.label = this.labels[0];
     }
@@ -149,6 +159,7 @@ export class TaskModalComponent implements OnInit {
     this.showList = false;
     this.form.get('label')!.setValue(option.name);
     this.label = option;
+    this.segmentIds = this.filterSectionIdOptions('');
   }
 
   selectSectionIdOption(option: Task): void {
@@ -212,17 +223,18 @@ export class TaskModalComponent implements OnInit {
   }
 
   async openModal(left: number, top: number) {
+    this.label = {} as Label;
     this.task = {} as Task;
     this.visualEffectAddTask(left, top);
 
     this.modalOpened = true;
     // this.onModalShown();
     this.form.reset();
-    this.form.get('elementType')?.setValue('task');
+    console.log(this.form);
+    this.form.get('elementType')?.setValue(this.local.clock.genericTypeElement);
     this.form.get('estimatedTime')?.setValue(0);
     this.form.get('state')?.setValue(-1);
     this.form.get('size')?.setValue(2);
-
     this.id = -1;
     this.taskModalP.show();
   }
@@ -230,8 +242,12 @@ export class TaskModalComponent implements OnInit {
 
 
   async editModal(index: number, task: any, left: number, top: number) {
+
     this.visualEffectAddTask(left, top);
     this.modalOpened = true;
+
+    this.label = {} as Label;
+    this.form.reset();
 
     this.id = task.id;
     this.task = task;
@@ -244,7 +260,7 @@ export class TaskModalComponent implements OnInit {
     this.form.get('startDate')?.setValue(task.startDate);
     this.form.get('endDate')?.setValue(task.endDate);
     this.form.get('size')?.setValue(task.size);
-    if(!task.size){
+    if (!task.size) {
       this.form.get('size')?.setValue(2);
     }
     if (this.taskService.getLabelById(task.label)) {
@@ -286,6 +302,9 @@ export class TaskModalComponent implements OnInit {
   }
 
   async onSubmit(close: boolean = true) {
+    this.local.clock.genericTypeElement = this.form.get('elementType')!.value;
+    this.local.saveClock();
+
     if (this.form.valid) {
       if (this.id !== -1) {
         this.task = { ...this.task, ...this.form.value };
@@ -320,7 +339,7 @@ export class TaskModalComponent implements OnInit {
         if (this.form.get('state')!.value < 0) {
           this.task.state = 1
         }
-        if(this.task.elementType === 'segment'){
+        if (this.task.elementType === 'segment') {
           this.task.segmentId = null;
         }
         console.log(this.task);
@@ -332,7 +351,7 @@ export class TaskModalComponent implements OnInit {
         }
         this.task = { ...this.task, ...this.form.value };
 
-        if(this.task.elementType === 'simpleTask' && (this.task.startDate === undefined || this.task.startDate === null ) ){
+        if (this.task.elementType === 'simpleTask' && (this.task.startDate === undefined || this.task.startDate === null)) {
           this.task.startDate = new Date();
         }
 
@@ -356,24 +375,25 @@ export class TaskModalComponent implements OnInit {
         if (this.form.get('state')!.value < 0) {
           this.task.state = 1
         }
-        if(this.task.elementType === 'segment'){
+        if (this.task.elementType === 'segment') {
           this.task.segmentId = null;
         }
         this.task = await this.taskService.addTask(this.task);
         this.id = this.task.id;
       }
 
-      if(this.task.elementType === 'simpleTask' && this.task.isTaskDone){
+      if (this.task.elementType === 'simpleTask' && this.task.isTaskDone) {
         this.task.endDate = new Date();
-      }else{
+      } else {
         this.task.endDate = null;
-        if(this.task.startDate === undefined || this.task.startDate === null){
+        if (this.task.startDate === undefined || this.task.startDate === null) {
           this.task.startDate = new Date();
         }
       }
 
 
       this.refreshTasks.emit();
+      this.history.refreshTasksDone()
 
     } else {
       this.form.markAllAsTouched();
@@ -420,7 +440,7 @@ export class TaskModalComponent implements OnInit {
   }
 
   refreshCheckBox() {
-    if(this.checkBox){
+    if (this.checkBox) {
       this.checkBox.refreshSize();
     }
   }
@@ -431,15 +451,15 @@ export class TaskModalComponent implements OnInit {
     }
 
     const newTask: Task = {
-      id:0,
-      idPosition:0,
-      elapsedTime:0,
-      restTime:0,
-      tasks:[],
-      isTaskDone:false,
-      userStoryId:0,
-      pomodoroCounter:0,
-      pomodoroQuarterCounter:0,
+      id: 0,
+      idPosition: 0,
+      elapsedTime: 0,
+      restTime: 0,
+      tasks: [],
+      isTaskDone: false,
+      userStoryId: 0,
+      pomodoroCounter: 0,
+      pomodoroQuarterCounter: 0,
       name: this.form.get('addChildForm')!.value,
       detail: '',
       label: this.label.id,

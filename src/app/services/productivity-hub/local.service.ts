@@ -30,6 +30,8 @@ export interface Clock {
   filteredCheckTasksRoutinesFinished: boolean;
   filteredCheckTasksRoutinesPendent: boolean;
   filteredCheckTasksRoutinesScheduled: boolean;
+  genericTypeElement: string;
+
 
 }
 
@@ -66,7 +68,8 @@ export class LocalService {
     filteredCheckTasksRoutinesFilterAll: false,
     filteredCheckTasksRoutinesFinished: false,
     filteredCheckTasksRoutinesPendent: true,
-    filteredCheckTasksRoutinesScheduled: true
+    filteredCheckTasksRoutinesScheduled: true,
+    genericTypeElement: 'task'
   
 
 
@@ -116,7 +119,8 @@ export class LocalService {
       filteredCheckTasksRoutinesFilterAll: typeof clock.filteredCheckTasksRoutinesFilterAll === 'boolean' ? clock.filteredCheckTasksRoutinesFilterAll : false,
       filteredCheckTasksRoutinesFinished: typeof clock.filteredCheckTasksRoutinesFinished === 'boolean' ? clock.filteredCheckTasksRoutinesFinished : false,
       filteredCheckTasksRoutinesPendent: typeof clock.filteredCheckTasksRoutinesPendent === 'boolean' ? clock.filteredCheckTasksRoutinesPendent : true,
-      filteredCheckTasksRoutinesScheduled: typeof clock.filteredCheckTasksRoutinesScheduled === 'boolean' ? clock.filteredCheckTasksRoutinesScheduled : true
+      filteredCheckTasksRoutinesScheduled: typeof clock.filteredCheckTasksRoutinesScheduled === 'boolean' ? clock.filteredCheckTasksRoutinesScheduled : true,
+      genericTypeElement: typeof clock.genericTypeElement === 'string' ? clock.genericTypeElement : 'task',
 
     };
   }
