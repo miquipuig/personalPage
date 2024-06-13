@@ -35,13 +35,19 @@
                         {{getSegmentName(task.segmentId) | truncate:10 }}
                     </div>
                 </div>
-                <div   *ngIf="local.isVisible || !(task.label || task.segmentId)" class="me-1">
+                <!-- <div   *ngIf="local.isVisible || !(task.label || task.segmentId)" class="me-1">
                     {{task.name | truncate:50}}
+                </div> -->
+                <div *ngIf="child || (!task.label && !task.segmentId)" class="me-1">
+                    {{task.name | truncate:40}}
                 </div>
             </div>
 
             <div >
-                <div *ngIf="!local.isVisible && (task.label || task.segmentId)" class="me-1">
+                <!-- <div *ngIf="!local.isVisible && (task.label || task.segmentId)" class="me-1">
+                    {{task.name | truncate:50}}
+                </div> -->
+                <div *ngIf="!child && (task.label || task.segmentId)" class="me-1">
                     {{task.name | truncate:50}}
                 </div>
                 <div class="small-detail">{{task.detail | truncate:300 }}</div>
@@ -82,6 +88,9 @@
                 <option *ngFor="let state of local.states" [value]=state.id>{{state.name |
                     truncate:10}}</option>
             </select>
+            <button #editTaskButton (click)="editTask(task, index, true); $event.stopPropagation()" class="butoPlay d-flex justify-content-center">
+                <i class="ri-add-fill"></i>
+            </button>
             <button #editTaskButton (click)="editTask(task, index); $event.stopPropagation()" class="butoPlay d-flex justify-content-center">
                 <i class="ri-edit-2-fill"></i>
             </button>

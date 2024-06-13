@@ -85,11 +85,14 @@ export class TaskCardComponent {
     await this.tks.saveTask(task);
     this.filterSearchEmitter.emit();
   }
-  editTask(task: Task, index: number) {
+  editTask(task: Task, index: number, add: boolean = false) {
     const nativeElement = this.editTaskButton.get(0)?.nativeElement;
     const rect = nativeElement.getBoundingClientRect();
-    this.editTaskEmitter.emit({ task, index, rect });
+    console.log(add);
+    this.editTaskEmitter.emit({ task, index, rect, add});
   }
+
+
 
   refresh() {
     if (this.checkBoxComponent) {

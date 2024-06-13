@@ -222,7 +222,10 @@ export class TaskModalComponent implements OnInit {
 
   }
 
-  async openModal(left: number, top: number) {
+  async openModal(left: number, top: number, task: Task = {} as Task) {
+    if(task.id){
+
+    }
     this.label = {} as Label;
     this.task = {} as Task;
     this.visualEffectAddTask(left, top);
@@ -235,6 +238,20 @@ export class TaskModalComponent implements OnInit {
     this.form.get('estimatedTime')?.setValue(0);
     this.form.get('state')?.setValue(-1);
     this.form.get('size')?.setValue(2);
+    if(task.id){
+      this.task.segmentId=task.id;
+      this.form.get('segmentId')?.setValue(task.name);
+      if(task.label){
+      this.task.label = task.label;
+      this.form.get('label')?.setValue(this.taskService.getLabelById(task.label).name);
+      }
+      if(this.form.get('elementType')?.value!='task' && this.form.get('elementType')?.value!='simpleTask'){
+        this.form.get('elementType')?.setValue('task');
+      }
+    }
+
+
+
     this.id = -1;
     this.taskModalP.show();
   }
