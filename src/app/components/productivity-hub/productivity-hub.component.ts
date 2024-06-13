@@ -38,7 +38,6 @@ export class ProductivityHubComponent implements AfterViewInit {
   stateFilterMenu = false
   stateFilterMenuAll = false
 
-
   constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef, private renderer: Renderer2, public tks: TaskServicesService, public local: LocalService) {
 
   }
@@ -211,38 +210,50 @@ export class ProductivityHubComponent implements AfterViewInit {
     tasks = tasks.filter(task => {
       //Filtrado para segments y tasks normales
       if (task.elementType === 'simpleTask' || task.elementType === 'routine') {
-        if(this.local.clock.filteredCheckTasksRoutinesFilterAll){
+        if(this.local.filteredCheckTasksRoutinesFilterAll){
+          console.log('FilterAll')
           return true;
         }
         if(this.local.clock.filteredCheckTasksRoutinesFinished){
             if(task.isTaskDone && !task.endDate ){
+              console.log('FilterFinished1')
               return true;
             }
             if(task.isTaskDone && task.endDate && this.endPastDate(task.endDate)){
+              console.log('FilterFinished2')
+
               return true;
             }
         }
 
         if(this.local.clock.filteredCheckTasksRoutinesPendent){
           if(!task.isTaskDone && !task.startDate){
+            console.log('FilterPendent1')
             return true;
           }
           if(!task.isTaskDone && task.startDate && this.isPastDate(task.startDate)){
+            console.log('FilterPendent2')
+
             return true;
           }
 
           if(task.isTaskDone && task.endDate && this.isFutureTodayDate(task.endDate)){
+            console.log('FilterPendent3')
+
             return true;
           }
         }
 
         if(this.local.clock.filteredCheckTasksRoutinesScheduled){
           if(!task.isTaskDone && task.startDate && this.isFutureDate(task.startDate)){
+            console.log('FilterScheduled1')
+
             return true;
           }
         }
     
       }else{
+        console.log('No es simple task ni routine')
         return true;
       }
       return false;

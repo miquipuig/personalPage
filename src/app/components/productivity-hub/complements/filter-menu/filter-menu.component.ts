@@ -13,7 +13,7 @@ export class FilterMenuComponent {
   constructor( public local: LocalService, private tks: TaskServicesService) { }
 
   ngOnInit(): void {
-    this.checkFilterAll();
+    this.loadFilterAll();
   }
 
   @Output() filterSearchEmitter = new EventEmitter<any>();
@@ -57,27 +57,38 @@ export class FilterMenuComponent {
     this.filterSearchEmitter.emit();
   }
 
-  CheckScheduled(){
+  checkScheduled(){
     this.local.clock.filteredCheckTasksRoutinesScheduled = !this.local.clock.filteredCheckTasksRoutinesScheduled;
     this.filterSearchEmitter.emit();
+    this.loadFilterAll();
     this.local.saveClock();
   }
 
-  CheckPendent(){
+  checkPendent(){
     this.local.clock.filteredCheckTasksRoutinesPendent = !this.local.clock.filteredCheckTasksRoutinesPendent;
     this.filterSearchEmitter.emit();
+    this.loadFilterAll();
     this.local.saveClock();
   }
 
-  CheckFinished(){
+  checkFinished(){
     this.local.clock.filteredCheckTasksRoutinesFinished = !this.local.clock.filteredCheckTasksRoutinesFinished;
     this.filterSearchEmitter.emit();
+    this.loadFilterAll();
     this.local.saveClock();
   }
+  loadFilterAll(){
+    if(this.local.clock.filteredCheckTasksRoutinesScheduled && this.local.clock.filteredCheckTasksRoutinesPendent && this.local.clock.filteredCheckTasksRoutinesFinished){
+      this.local.filteredCheckTasksRoutinesFilterAll = true;
+    }else{
+      this.local.filteredCheckTasksRoutinesFilterAll = false;
+    }
+  }
 
-  CheckFilterAll(){
-    this.local.clock.filteredCheckTasksRoutinesFilterAll = !this.local.clock.filteredCheckTasksRoutinesFilterAll;
-    if(this.local.clock.filteredCheckTasksRoutinesFilterAll){
+  selectFilterAll(){
+    this.loadFilterAll();
+    this.local.filteredCheckTasksRoutinesFilterAll = !this.local.filteredCheckTasksRoutinesFilterAll;
+    if(this.local.filteredCheckTasksRoutinesFilterAll){
       this.local.clock.filteredCheckTasksRoutinesScheduled = true;
       this.local.clock.filteredCheckTasksRoutinesPendent = true;
       this.local.clock.filteredCheckTasksRoutinesFinished = true;
@@ -90,12 +101,5 @@ export class FilterMenuComponent {
     this.local.saveClock();
   }
 
-  checkFilterAll(){
-    if(this.local.clock.filteredCheckTasksRoutinesScheduled && this.local.clock.filteredCheckTasksRoutinesPendent && this.local.clock.filteredCheckTasksRoutinesFinished){
-      this.stateFilterMenuAll = true;
-    }else{
-      this.stateFilterMenuAll = false;
-    }
-  }
   
 }

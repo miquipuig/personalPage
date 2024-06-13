@@ -26,7 +26,6 @@ export interface Clock {
   filteredAllSegments: boolean;
   filteredAllSimpleTasks: boolean;
   orderedView: boolean;
-  filteredCheckTasksRoutinesFilterAll: boolean;
   filteredCheckTasksRoutinesFinished: boolean;
   filteredCheckTasksRoutinesPendent: boolean;
   filteredCheckTasksRoutinesScheduled: boolean;
@@ -65,7 +64,6 @@ export class LocalService {
     filteredAllSegments: false,
     filteredAllSimpleTasks: false,
     orderedView: false,
-    filteredCheckTasksRoutinesFilterAll: false,
     filteredCheckTasksRoutinesFinished: false,
     filteredCheckTasksRoutinesPendent: true,
     filteredCheckTasksRoutinesScheduled: true,
@@ -77,6 +75,8 @@ export class LocalService {
   interval: any;
   resumeTimerSync: boolean = false;
   isVisible = true;
+  filteredCheckTasksRoutinesFilterAll=false;
+
   states: State[] = [];
 
   constructor() { }
@@ -116,7 +116,6 @@ export class LocalService {
       filteredAllSegments: typeof clock.filteredAllSegments === 'boolean' ? clock.filteredAllSegments : false,
       filteredAllSimpleTasks: typeof clock.filteredAllSimpleTasks === 'boolean' ? clock.filteredAllSimpleTasks : false,
       orderedView: typeof clock.orderedView === 'boolean' ? clock.orderedView : false,
-      filteredCheckTasksRoutinesFilterAll: typeof clock.filteredCheckTasksRoutinesFilterAll === 'boolean' ? clock.filteredCheckTasksRoutinesFilterAll : false,
       filteredCheckTasksRoutinesFinished: typeof clock.filteredCheckTasksRoutinesFinished === 'boolean' ? clock.filteredCheckTasksRoutinesFinished : false,
       filteredCheckTasksRoutinesPendent: typeof clock.filteredCheckTasksRoutinesPendent === 'boolean' ? clock.filteredCheckTasksRoutinesPendent : true,
       filteredCheckTasksRoutinesScheduled: typeof clock.filteredCheckTasksRoutinesScheduled === 'boolean' ? clock.filteredCheckTasksRoutinesScheduled : true,
