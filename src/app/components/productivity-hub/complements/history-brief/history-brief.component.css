@@ -8,3 +8,30 @@
 	transition: background-color 0.5s ease;
 	/* Transición suave del color de fondo */
 }
+
+.redText {
+	color: var(--red-color);
+}
+
+
+.closeTimePicker {
+	position: absolute;
+	right: -10px;
+	top: -10px;
+	
+	border: none;
+	background: none;
+	font-size: 2em;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	color: #8f8f8f;
+	
+  }
+  
+  .closeTimePicker:hover{
+	color: #ffffff;
+	transition: background-color 0.3s ease, color 0.2s ease;
+  }
+
+  .closeTimePicker:active{
+	scale: 95%;
+  }

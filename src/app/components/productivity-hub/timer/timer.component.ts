@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HistoryService } from 'src/app/services/productivity-hub/history.service';
 import { LocalService } from 'src/app/services/productivity-hub/local.service';
 import { TaskServicesService } from 'src/app/services/productivity-hub/task-services.service';
 import { Task } from 'src/app/services/productivity-hub/task-services.service';
@@ -10,7 +11,7 @@ import { Task } from 'src/app/services/productivity-hub/task-services.service';
 })
 export class TimerComponent {
 
-  constructor(public local: LocalService, public tks:TaskServicesService) { }
+  constructor(private history: HistoryService,   public local: LocalService, public tks:TaskServicesService) { }
 
 
   taskStartTime = 0;
@@ -183,6 +184,7 @@ export class TimerComponent {
     }
     this.secureBlock=true;
     const timerStart = Date.now() - this.local.clock.elapsedTime * 1000;
+    const historyTimerStart = Date.now() - this.history.today.elapsedTime*1000;
     const actualTask = this.tks.tasks.find(task => task.id === this.local.clock.actualTask);
     let segment: Task | undefined;
 
@@ -202,9 +204,12 @@ export class TimerComponent {
       }
     }
 
+
+
     let counter = 0;
     this.local.interval = setInterval(() => {
       this.local.clock.elapsedTime = Math.floor((Date.now() - timerStart) / 1000);
+      this.history.today.elapsedTime = Math.floor((Date.now() - historyTimerStart) / 1000);
       if (actualTask && this.local.clock.pomodoroState === 'work') {
         actualTask.elapsedTime = Math.floor((Date.now() - this.taskStartTime) / 1000);
       }
@@ -228,6 +233,7 @@ export class TimerComponent {
       counter++;
       if (counter % 30 === 0 && actualTask) {
         this.tks.saveTask(actualTask);
+        this.history.saveHistory();
       }
       this.saveClock();
     }, 1000);

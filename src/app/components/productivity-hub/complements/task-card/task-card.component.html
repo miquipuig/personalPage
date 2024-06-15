@@ -88,7 +88,7 @@
                 <option *ngFor="let state of local.states" [value]=state.id>{{state.name |
                     truncate:10}}</option>
             </select>
-            <button #editTaskButton (click)="editTask(task, index, true); $event.stopPropagation()" class="butoPlay d-flex justify-content-center">
+            <button *ngIf="task.elementType==='segment'" (click)="editTask(task, index, true); $event.stopPropagation()" class="butoPlay d-flex justify-content-center">
                 <i class="ri-add-fill"></i>
             </button>
             <button #editTaskButton (click)="editTask(task, index); $event.stopPropagation()" class="butoPlay d-flex justify-content-center">

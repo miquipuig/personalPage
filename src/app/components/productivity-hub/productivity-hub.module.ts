@@ -21,19 +21,48 @@ import { FilterButtonsComponent } from './complements/filter-buttons/filter-butt
 import { TaskCardComponent } from './complements/task-card/task-card.component';
 import { FilterMenuComponent } from './complements/filter-menu/filter-menu.component';
 import { HistoryBriefComponent } from './complements/history-brief/history-brief.component';
-
-
+import { HumanTimeFormatPipe } from 'src/app/pipes/human-time-format.pipe';
+import { SocialLoginModule, SocialAuthServiceConfig} from '@abacritt/angularx-social-login';
+import {
+  GoogleLoginProvider,
+  
+} from '@abacritt/angularx-social-login';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
-  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent, FilterButtonsComponent, TaskCardComponent, FilterMenuComponent, HistoryBriefComponent],
+  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent,TruncatePipe,CustomTimeFormatPipe, HumanTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent, FilterButtonsComponent, TaskCardComponent, FilterMenuComponent, HistoryBriefComponent, LoginComponent],
   imports: [ 
     CommonModule,
     ProductivityHubRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
-    NgbDatepickerModule, JsonPipe, NgbAlertModule, DragDropModule
+    NgbDatepickerModule, JsonPipe, NgbAlertModule, DragDropModule, SocialLoginModule
   ],exports: [ProductivityHubComponent],providers: [
+    
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        lang: 'en',
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '575980238998-i8ss198g31m6jrjlc5ik2lsh18pq9q3d.apps.googleusercontent.com'
+            )
+          },
+          // {
+          //   id: FacebookLoginProvider.PROVIDER_ID,
+          //   provider: new FacebookLoginProvider('clientId')
+          // }
+        ],
+        onError: (err) => {
+          console.error(err);
+        }
+      } as SocialAuthServiceConfig,
+    },
+
 
     { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter }  // <-- add this
   ],

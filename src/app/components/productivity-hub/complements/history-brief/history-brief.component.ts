@@ -9,5 +9,11 @@ import { HistoryService } from 'src/app/services/productivity-hub/history.servic
 export class HistoryBriefComponent {
 
 
-  constructor(public history:HistoryService) { }
+  constructor(public history: HistoryService) {
+  }
+  ngOnInit() {
+    
+  }
+
+
 }

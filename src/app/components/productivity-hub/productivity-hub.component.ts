@@ -32,7 +32,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   @ViewChild(CheckBoxComponent) checkBoxComponent!: CheckBoxComponent;
   @ViewChildren(TaskCardComponent) taskCardComponent!: QueryList<TaskCardComponent>;
 
-
+  isSectionActive = false;
   searchInput = '';
   dragOverIndex: number | null = null;
   stateFilterMenu = false
@@ -56,7 +56,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   ngOnInit() {
     // temporizador que se espera 0.5 segundos y setea la variable isSectionActive a true``
     setTimeout(() => {
-      this.local.clock.isSectionActive = true;
+      this.isSectionActive = true;
     }, 50);
     this.tks.labels = this.tks.getLabels();
 

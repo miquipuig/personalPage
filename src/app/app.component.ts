@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ScriptService } from './services/script.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 
@@ -18,17 +18,34 @@ export class AppComponent implements AfterViewInit, OnInit {
    */
   @ViewChild('skills-content') skillsContent: ElementRef | undefined;
 
-  constructor(private script: ScriptService, private router: Router, private route: ActivatedRoute) { 
+  constructor(private script: ScriptService, private router: Router, private route: ActivatedRoute,) {
+
+    // Obtener solo la parte de la ruta de la URL actual
+    this.route.url.subscribe(segments => {
+      console.log('Segmentos de la ruta:', segments.join('/'));
+    });
+
+    // Acceder a los parámetros de la ruta si es necesario
+    this.route.params.subscribe(params => {
+      console.log('Parámetros de la ruta:', params);
+    });
+
+
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
+      console.log(this.router);
       const childRoute = this.route.firstChild;
-      if (childRoute) {
+      console.log(childRoute?.snapshot);
+      console.log(this.route);
+
+      if (childRoute && childRoute.snapshot.url[0]) {
         this.setActiveSection(childRoute.snapshot.url[0].path);
-      }else{
+      } else {
         this.setActiveSection('/');
       }
-    }); 
+    });
 
   }
   pageLoaded = false;
@@ -53,10 +70,10 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   }
 
-  
+
   sectionsList = ['/', 'about', 'resume', 'contact'];
   ngOnInit(): void {
-     this.loadscipts();
+    this.loadscipts();
 
   }
   activeSection = '';
@@ -79,7 +96,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       setTimeout((a: any) => {
         this.activeSection = section;
         this.scrollToSection(section);
-    }, 500);
+      }, 500);
 
 
     } else if (section != "/") {

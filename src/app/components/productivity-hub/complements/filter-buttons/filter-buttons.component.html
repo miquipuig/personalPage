@@ -11,13 +11,13 @@
         T
     </div>
     <div class="elementTypeButton"
-        (click)="local.clock.filteredAllSegments=!local.clock.filteredAllSegments;  filterSearch()"
+        (click)="filterSegment()"
         style="padding-right: 9px !important;  margin-right:0px !important;"
         [ngClass]="{'active': !local.clock.filteredAllSegments}">
         S
     </div>
 
-    <div (click)="local.clock.orderedView=!local.clock.orderedView; filterSearch()"
+    <div (click)="filterOrderedView()"
         style="margin-left:-3px !important; " [ngClass]="{'active': local.clock.orderedView}"
         class="elementTypeButton d-flex justify-content-center">
         <i class="ri-list-check"></i>

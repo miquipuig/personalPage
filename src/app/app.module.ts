@@ -8,17 +8,21 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ServicesComponent } from './components/services/services.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EmptyComponentComponent } from './components/empty-component/empty-component.component';
+import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    ServicesComponent
+    ServicesComponent,
+    EmptyComponentComponent
   ],
   imports: [ReactiveFormsModule,
     BrowserModule,
-    AppRoutingModule, HttpClientModule, BrowserAnimationsModule, NgbModule
+     HttpClientModule, BrowserAnimationsModule, NgbModule,AppRoutingModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  // providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

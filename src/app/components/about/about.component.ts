@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ScriptService } from 'src/app/services/script.service';
 
 @Component({
@@ -7,7 +8,11 @@ import { ScriptService } from 'src/app/services/script.service';
   styleUrls: ['./about.component.css']
 })
 export class AboutComponent implements OnInit{
-  constructor(private scriptService: ScriptService) { }
+  constructor(private scriptService: ScriptService) { 
+
+
+       
+  }
   isSectionActive=false;
   ngOnInit() {
     // temporizador que se espera 0.5 segundos y setea la variable isSectionActive a true``

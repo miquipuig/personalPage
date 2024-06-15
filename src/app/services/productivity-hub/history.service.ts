@@ -16,9 +16,10 @@ export class HistoryService {
 
   history: dayHistory[] = [];
   today: dayHistory = { date: new Date().getDate(), numTasksDone: 0, elapsedTime: 0 };
+  todayTaskCount: boolean = false;
 
 
-  constructor(private tks:TaskServicesService) { this.loadHistory() }
+  constructor(private tks:TaskServicesService) { this.loadHistory(), this.refreshTasksDone() }
 
   saveHistory() {
     let index = this.history.findIndex(day => day.date === this.today.date);
@@ -51,18 +52,6 @@ export class HistoryService {
     }
   }
 
-  addTaskDone() {
-    this.loadToday();
-    this.today.numTasksDone++;
-    this.saveHistory();
-
-  }
-  subsTaskDone() {
-    this.loadToday();
-
-    this.today.numTasksDone--;
-    this.saveHistory();
-  }
 
   refreshTasksDone() {
     console.log('refreshTasksDone');
@@ -72,8 +61,27 @@ export class HistoryService {
         todayTasks++;
       }
     });
-    this.today.numTasksDone = todayTasks;
-    this.saveHistory();
+    if (this.today.numTasksDone !== todayTasks) {
+      this.briefActivationDecisions();
+      this.today.numTasksDone = todayTasks;
+      this.saveHistory();
+    }
+
+  }
+
+
+  briefActivationDecisions(probabilidad = 0.5) {
+    console.log('briefActivationDecisions');
+    if (this.today.numTasksDone > 1) {
+      console.log('paso1');
+      if (this.getRandom() < probabilidad) {
+        this.todayTaskCount = true;
+      }
+    }
+    console.log(this.todayTaskCount);
+  }
+  getRandom() {
+    return Math.random();
   }
 
 

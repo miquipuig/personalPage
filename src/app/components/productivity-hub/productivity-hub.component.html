@@ -1,4 +1,4 @@
-<section id="pomodoro" [ngClass]="{'section-show': local.clock.isSectionActive}">
+<section id="pomodoro" [ngClass]="{'section-show': isSectionActive}">
 
 	<div class="about-me container c_custom ">
 
@@ -8,6 +8,10 @@
 			</h2>
 			<!-- <p>Pomodoro Time</p> -->
 		</div>
+
+		<a class="btn btn-secondary" routerLink="login"> Login
+
+		</a>
 		<div style="position: relative; height: 30px;" class="mt-2">
 			<div class="align-items-center text-end">
 				<div *ngIf="!this.tks.taskLoaded"
@@ -116,9 +120,6 @@
 									<app-task-card [child]='true' [task]="childTask" [index]="j"
 										(editTaskEmitter)="editTaskReferenced($event)"
 										(resumeTimerEmitter)="resumeTimer()"></app-task-card>
-
-
-										
 								</div>
 							</div>
 						</div>

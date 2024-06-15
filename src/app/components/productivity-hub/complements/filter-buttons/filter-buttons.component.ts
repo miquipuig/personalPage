@@ -15,4 +15,23 @@ export class FilterButtonsComponent {
     this.local.saveClock();
     this.filterSearchEmitter.emit();
   }
+
+
+  filterSegment(){
+    this.local.clock.filteredAllSegments = !this.local.clock.filteredAllSegments;
+
+    if(this.local.clock.filteredAllSegments){
+      this.local.clock.orderedView = false; 
+    }
+
+    this.filterSearch();
+  }
+
+  filterOrderedView(){
+    this.local.clock.orderedView = !this.local.clock.orderedView;
+    if(this.local.clock.orderedView){
+      this.local.clock.filteredAllSegments = false; 
+    }
+    this.filterSearch();
+  }
 }

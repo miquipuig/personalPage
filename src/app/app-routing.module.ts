@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { EmptyComponentComponent } from './components/empty-component/empty-component.component';
+import { AppComponent } from './app.component';
 
 const routes: Routes = [
   // Tus otras rutas aquí...
+
+ 
   {
     path: 'contact',
     loadChildren: () => import('./components/contact/contact.module').then(m => m.ContactModule)
@@ -26,12 +30,22 @@ const routes: Routes = [
   {
     path: 'pomodoro',
     loadChildren: () => import('./components/productivity-hub/productivity-hub.module').then(m => m.ProductivityHubModule)
-  }
+  },
+  // { path: '**',     loadChildren: () => import('./components/jueguito/jueguito.module').then(m => m.JueguitoModule)
+  // }
+  { path: '', component: EmptyComponentComponent },
+  { path: '**', pathMatch: 'full', redirectTo: ''}
+
+  
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
-  ],
+  imports: [RouterModule.forRoot(routes, {
+    onSameUrlNavigation: "ignore",
+    anchorScrolling: 'enabled',
+    scrollPositionRestoration: 'enabled',
+    scrollOffset: [0, 64] // [x, y]
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

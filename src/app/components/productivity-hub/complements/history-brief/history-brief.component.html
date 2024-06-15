@@ -1,7 +1,16 @@
 
-  <div class="square mb-3" style="max-width: 18rem;">
-    <div class="card-body">
-      <h5 class="card-title">{{history.today.numTasksDone}} Tasks Completed Today!</h5>
-      <p class="card-text">Total time used 23 minutes</p>
+  <div *ngIf="history.todayTaskCount  " class="animate__animated animate__tada square mb-3" style="max-width: 19rem;">
+    <div style="position: relative; ">
+      <button (click)="history.todayTaskCount=false;" type="button"  class="closeTimePicker">
+        <i class="ri-close-line"></i>
+      </button>
     </div>
-  </div>
+    <div class="card-body">
+      <h5 class="card-title">Congrats!</h5>
+
+      <h6 class="card-subtitle redText mb-2"> {{history.today.numTasksDone}}  Tasks Done Today.</h6>
+      <p *ngIf="history.today.elapsedTime*1000 | humanTimeFormat" class="card-text">You have spent and recorded a total of  {{history.today.elapsedTime*1000 | humanTimeFormat }} on your tasks today.
+        <p *ngIf="!(history.today.elapsedTime*1000 | humanTimeFormat)" class="card-text">Use the timer to log the time spent on your tasks and gain better control of your schedule.
+      </p>
+    </div>
+</div>
