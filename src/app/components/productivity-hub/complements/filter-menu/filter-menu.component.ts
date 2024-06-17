@@ -59,22 +59,23 @@ export class FilterMenuComponent {
 
   checkScheduled(){
     this.local.clock.filteredCheckTasksRoutinesScheduled = !this.local.clock.filteredCheckTasksRoutinesScheduled;
-    this.filterSearchEmitter.emit();
     this.loadFilterAll();
+    this.filterSearchEmitter.emit();
     this.local.saveClock();
   }
 
   checkPendent(){
     this.local.clock.filteredCheckTasksRoutinesPendent = !this.local.clock.filteredCheckTasksRoutinesPendent;
-    this.filterSearchEmitter.emit();
     this.loadFilterAll();
+    this.filterSearchEmitter.emit();
     this.local.saveClock();
   }
 
   checkFinished(){
     this.local.clock.filteredCheckTasksRoutinesFinished = !this.local.clock.filteredCheckTasksRoutinesFinished;
-    this.filterSearchEmitter.emit();
     this.loadFilterAll();
+    this.filterSearchEmitter.emit();
+
     this.local.saveClock();
   }
   loadFilterAll(){

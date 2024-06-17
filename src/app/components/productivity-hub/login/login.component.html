@@ -1,8 +1,19 @@
 <section id="pomodoro" [ngClass]="{'section-show': isSectionActive}">
-	<div class="about-me container c_custom ">	<div class="section-title">
-        <h2>Login
+    <div class="about-me container c_custom ">
+        <div class="section-title">
+            <h2>Login</h2>
 
-        </h2>
-        <!-- <p>Pomodoro Time</p> -->
-    </div></div>
+            <!-- <p>Pomodoro Time</p> -->
+        </div>
+        <app-google-signin (loginWithGoogle)="googleSignin($event)"></app-google-signin>
+
+
+
+<!-- <asl-google-signin-button type='icon' size='medium'></asl-google-signin-button> -->
+<img src="{{ user?.photoUrl }}" referrerpolicy="no-referrer">
+<div>
+  <h4>{{ user?.name }}</h4>
+  <p>{{ user?.email }}</p>
+</div>
+    </div>
 </section>

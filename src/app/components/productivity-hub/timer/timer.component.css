@@ -27,6 +27,7 @@
 	align-items: center;
 	/* Centra el contenido verticalmente dentro del contenedor */
 	justify-content: center;
+	width: 100%;
 	/* Centra el contenido horizontalmente dentro del contenedor */
 
 }
@@ -54,14 +55,10 @@
 .end-time {
 	position: absolute;
 	top: -30px;
-	/* right: 30%; */
-	left: 50%;
-	transform: translateX(-50%);
-	margin: 0px;
 	padding: 0px;
 	font-size: 0.8em;
-	/* Elimina márgenes por defecto */
 }
+
 .selectedTask {
 	position: absolute;
 	top: -15px;

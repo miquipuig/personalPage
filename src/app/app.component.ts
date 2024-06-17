@@ -21,24 +21,22 @@ export class AppComponent implements AfterViewInit, OnInit {
   constructor(private script: ScriptService, private router: Router, private route: ActivatedRoute,) {
 
     // Obtener solo la parte de la ruta de la URL actual
-    this.route.url.subscribe(segments => {
-      console.log('Segmentos de la ruta:', segments.join('/'));
-    });
+    // this.route.url.subscribe(segments => {
+    //   console.log('Segmentos de la ruta:', segments.join('/'));
+    // });
 
     // Acceder a los parámetros de la ruta si es necesario
-    this.route.params.subscribe(params => {
-      console.log('Parámetros de la ruta:', params);
-    });
+    // this.route.params.subscribe(params => {
+    //   console.log('Parámetros de la ruta:', params);
+    // });
 
 
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
-      console.log(this.router);
       const childRoute = this.route.firstChild;
-      console.log(childRoute?.snapshot);
-      console.log(this.route);
+
 
       if (childRoute && childRoute.snapshot.url[0]) {
         this.setActiveSection(childRoute.snapshot.url[0].path);

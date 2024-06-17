@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EmptyComponentComponent } from './components/empty-component/empty-component.component';
 import { AppComponent } from './app.component';
+import { LoginComponent } from './components/productivity-hub/login/login.component';
 
 const routes: Routes = [
   // Tus otras rutas aquí...
@@ -31,9 +32,14 @@ const routes: Routes = [
     path: 'pomodoro',
     loadChildren: () => import('./components/productivity-hub/productivity-hub.module').then(m => m.ProductivityHubModule)
   },
+
+  {
+    path: 'login',
+    component: LoginComponent
+  },
   // { path: '**',     loadChildren: () => import('./components/jueguito/jueguito.module').then(m => m.JueguitoModule)
   // }
-  { path: '', component: EmptyComponentComponent },
+  { path: '', component: EmptyComponentComponent },   
   { path: '**', pathMatch: 'full', redirectTo: ''}
 
   

@@ -11,7 +11,7 @@
     </div>
     
     <p class="countdown">{{getTimeLeft()*1000 | date:'mm:ss'}}</p>
-    <div style="position: relative">
+    <div style="position: relative; justify-content: center;display: flex;">
         <p *ngIf="local.clock.timerStarted" class="end-time">{{local.clock.startTime | date:"shortTime"}} <i
                 class="ri-arrow-right-line"></i> {{local.clock.endTime | date:"shortTime" }}</p>
 
