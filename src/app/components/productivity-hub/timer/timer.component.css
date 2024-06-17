@@ -28,8 +28,7 @@
 	/* Centra el contenido verticalmente dentro del contenedor */
 	justify-content: center;
 	/* Centra el contenido horizontalmente dentro del contenedor */
-	height: 100%;
-	/* Asegura que el contenedor tenga altura completa para centrar verticalmente */
+
 }
 
 
@@ -76,6 +75,7 @@
 }
 
 .square {
+	height: auto;
 	position: relative;
 	background-color: rgba(255, 255, 255, 0.2);
 	/* Blanco con 20% de transparencia */

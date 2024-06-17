@@ -1,4 +1,4 @@
-<div class="square" style="position: relative;"
+<div class="square"
     [ngClass]="{'rest': local.clock.pomodoroState === 'shortBreak', 'longRest': local.clock.pomodoroState === 'longBreak','work': local.clock.pomodoroState === 'work' && local.clock.timerStarted}">
 
     <div class="justify-content-center d-flex">
@@ -9,6 +9,7 @@
         <button (click)="changePomodoroState('longBreak')" class="btn botonMenu"
             [ngClass]="{'active': local.clock.pomodoroState === 'longBreak'}"> Long Break</button>
     </div>
+    
     <p class="countdown">{{getTimeLeft()*1000 | date:'mm:ss'}}</p>
     <div style="position: relative">
         <p *ngIf="local.clock.timerStarted" class="end-time">{{local.clock.startTime | date:"shortTime"}} <i
