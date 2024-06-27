@@ -22,8 +22,6 @@ import { TaskCardComponent } from './complements/task-card/task-card.component';
 import { FilterMenuComponent } from './complements/filter-menu/filter-menu.component';
 import { HistoryBriefComponent } from './complements/history-brief/history-brief.component';
 import { HumanTimeFormatPipe } from 'src/app/pipes/human-time-format.pipe';
-import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
-import { GoogleLoginProvider} from '@abacritt/angularx-social-login';
 
 @NgModule({
   declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent, TruncatePipe, CustomTimeFormatPipe, HumanTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent, FilterButtonsComponent, TaskCardComponent, FilterMenuComponent, HistoryBriefComponent],
@@ -33,28 +31,9 @@ import { GoogleLoginProvider} from '@abacritt/angularx-social-login';
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
-    NgbDatepickerModule, JsonPipe, NgbAlertModule, DragDropModule, SocialLoginModule
+    NgbDatepickerModule, JsonPipe, NgbAlertModule, DragDropModule
   ], exports: [ProductivityHubComponent],
 
-  providers: [
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider('575980238998-i8ss198g31m6jrjlc5ik2lsh18pq9q3d.apps.googleusercontent.com', {
-              scopes: 'openid profile email',
-            }),
-          },
-        ],
-        onError: (err) => {
-          console.error(err);
-        },
-      } as SocialAuthServiceConfig,
-    },
-  ],
 })
 export class ProductivityHubModule {
 

@@ -9,9 +9,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { ServicesComponent } from './components/services/services.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EmptyComponentComponent } from './components/empty-component/empty-component.component';
-import { LoginComponent } from './components/productivity-hub/login/login.component';
-import { GoogleSigninComponent } from './components/productivity-hub/login/google-signin/google-signin.component';
+import { LoginComponent } from './components/productivity-hub/access/login/login.component';
+import { GoogleSigninComponent } from './components/productivity-hub/access/login/google-signin/google-signin.component';
 import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig, SocialLoginModule, GoogleSigninButtonDirective } from "@abacritt/angularx-social-login";
+import { RegistrationComponent } from './components/productivity-hub/access/registration/registration.component';
 
 
 
@@ -21,6 +22,7 @@ import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig,
     ServicesComponent,
     EmptyComponentComponent,
     LoginComponent,
+    RegistrationComponent,
     GoogleSigninComponent
 
   ],

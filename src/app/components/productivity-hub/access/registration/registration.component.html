@@ -1,0 +1,53 @@
+<section [ngClass]="{'section-show': isSectionActive}">
+    <div class="about-me container c_custom ">
+        <div class="section-title">
+            <h2>Registration Page</h2>
+            <!-- <p>Pomodoro Time</p> -->
+        </div>
+        <!-- <app-google-signin (loginWithGoogle)="googleSignin($event)"></app-google-signin> -->
+        <form style="width: 400px" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+              <div class="form-floating mb-1">
+                <input [ngClass]="{'red-input': validateForm()}" id="name" type="text" formControlName="name"
+                  type="text" class="form-control" placeholder="" aria-label="name" aria-describedby="addon-wrapping">
+                <label *ngIf="!validateForm()" class="form-label grey-text" for="floatingInput">Enter your name...
+                </label>
+
+                <label class="red-text" *ngIf="validateForm()" for="floatingInput">Your Name is Needed</label>
+              </div>
+
+
+              <div class="form-floating mb-1">
+                <input [ngClass]="{'red-input': validateForm()}" id="name" type="text" formControlName="name"
+                  type="text" class="form-control" placeholder="" aria-label="name" aria-describedby="addon-wrapping">
+                <label *ngIf="!validateForm()" class="form-label grey-text" for="floatingInput">Enter your email...
+                  </label>
+
+                <label class="red-text" *ngIf="validateForm()" for="floatingInput">Your Email is Needed</label>
+              </div>
+        </form>
+
+
+
+
+
+
+        <div class="d-flex justify-content-center">
+    <!-- <div *ngIf="!user"> -->
+        
+        <asl-google-signin-button type='standard' size='medium'></asl-google-signin-button>
+
+    <!-- </div> -->
+    <!-- <div class="mt-3 d-flex justify-content-center">
+
+
+        <img class="me-2" src="{{ user?.photoUrl }}" referrerpolicy="no-referrer">
+        <div class="mt-3">
+            <h4>{{ user?.name }}</h4>
+            <p>{{ user?.email }}</p>
+        </div>
+    </div> -->
+</div>
+
+    </div>
+</section>

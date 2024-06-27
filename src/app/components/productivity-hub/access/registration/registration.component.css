@@ -1,0 +1,9 @@
+.red-text {
+    color: rgb(122, 0, 0) !important;
+    /* Color de texto rojo */
+}
+
+.grey-text {
+    color: rgb(102, 102, 102) !important;
+    /* Color de texto gris */
+}

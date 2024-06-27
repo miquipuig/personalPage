@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 import { SocialAuthService } from "@abacritt/angularx-social-login";
 import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
 import { SocialUser } from "@abacritt/angularx-social-login";
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,18 +12,21 @@ import { SocialUser } from "@abacritt/angularx-social-login";
 })
 
 export class LoginComponent {
-  isSectionActive = true;
+  isSectionActive = false;
   private accessToken = '';
   user: SocialUser | null = null;
   loggedIn: boolean = false;
 
-  constructor(private authService: SocialAuthService, private httpClient: HttpClient) { }
+  constructor(private authService: SocialAuthService, private auth:AuthService ) { }
 
   ngOnInit() {
     setTimeout(() => {
       this.isSectionActive = true;
-    }, 50);
+    }, 100);
     this.authService.authState.subscribe((user) => {
+      this.auth.loginOAuth(user).then((token) => {
+        console.log(token);
+      });
       this.user = user;
       this.loggedIn = (user != null);
     });

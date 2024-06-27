@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EmptyComponentComponent } from './components/empty-component/empty-component.component';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './components/productivity-hub/login/login.component';
+import { LoginComponent } from './components/productivity-hub/access/login/login.component';
+import { RegistrationComponent } from './components/productivity-hub/access/registration/registration.component';
 
 const routes: Routes = [
   // Tus otras rutas aquí...
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'registration',
+    component: RegistrationComponent
   },
   // { path: '**',     loadChildren: () => import('./components/jueguito/jueguito.module').then(m => m.JueguitoModule)
   // }
