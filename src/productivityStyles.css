@@ -529,3 +529,17 @@ img.pomodoroCurrent {
   }
   
 
+  .swal2-container {
+	z-index: 9999; /* Puedes aumentar este valor si es necesario */
+  }
+
+  .swal2-confirm {
+	background-color: var(--red-color) !important; /* Color de fondo para el botón confirmar */
+	color: white; /* Color de texto */
+  }
+  
+  .swal2-cancel {
+	background-color: var(--base-color) !important; /* Color de fondo para el botón cancelar */
+	color: white; /* Color de texto */
+  }
+  

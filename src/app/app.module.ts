@@ -13,6 +13,7 @@ import { LoginComponent } from './components/productivity-hub/access/login/login
 import { GoogleSigninComponent } from './components/productivity-hub/access/login/google-signin/google-signin.component';
 import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig, SocialLoginModule, GoogleSigninButtonDirective } from "@abacritt/angularx-social-login";
 import { RegistrationComponent } from './components/productivity-hub/access/registration/registration.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 
 
@@ -23,7 +24,8 @@ import { RegistrationComponent } from './components/productivity-hub/access/regi
     EmptyComponentComponent,
     LoginComponent,
     RegistrationComponent,
-    GoogleSigninComponent
+    GoogleSigninComponent,
+    NavbarComponent
 
   ],
   imports: [ReactiveFormsModule,

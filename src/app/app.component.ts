@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, OnInit, QueryList, 
 import { ScriptService } from './services/script.service';
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
-
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 
 @Component({
@@ -17,35 +17,11 @@ export class AppComponent implements AfterViewInit, OnInit {
    * The reference to the 'header' element in the component's template.
    */
   @ViewChild('skills-content') skillsContent: ElementRef | undefined;
+  @ViewChild(NavbarComponent) navbar!: NavbarComponent;
 
-  constructor(private script: ScriptService, private router: Router, private route: ActivatedRoute,) {
-
-    // Obtener solo la parte de la ruta de la URL actual
-    // this.route.url.subscribe(segments => {
-    //   console.log('Segmentos de la ruta:', segments.join('/'));
-    // });
-
-    // Acceder a los parámetros de la ruta si es necesario
-    // this.route.params.subscribe(params => {
-    //   console.log('Parámetros de la ruta:', params);
-    // });
+  constructor(private script: ScriptService, private router: Router, private route: ActivatedRoute,) {}
 
 
-
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      const childRoute = this.route.firstChild;
-
-
-      if (childRoute && childRoute.snapshot.url[0]) {
-        this.setActiveSection(childRoute.snapshot.url[0].path);
-      } else {
-        this.setActiveSection('/');
-      }
-    });
-
-  }
   pageLoaded = false;
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -73,26 +49,39 @@ export class AppComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.loadscipts();
 
+
   }
   activeSection = '';
-  classBiList = true;
-  navbarMobile = false;
+  // navbarMobile = false;
   classHeaderTop = false;
 
   ngAfterViewInit() {
     this.pageLoaded = true;
+    // this.router.events.pipe(
+    //   filter(event => event instanceof NavigationEnd)
+    // ).subscribe(() => {
+    //   const childRoute = this.route.firstChild;
+
+
+    //   if (childRoute && childRoute.snapshot.url[0]) {
+    //     this.setActiveSection(childRoute.snapshot.url[0].path);
+    //   } else {
+    //     this.setActiveSection('/');
+    //   }
+    // });
+
   }
   setActiveSection(section: string) {
 
-    if (this.navbarMobile) {
-      this.navbarMobile = false;
-      this.classBiList = !this.classBiList;
-
+    if (this.navbar.navbarMobile) {
+      this.navbar.navbarMobile = false;
+      this.navbar.classBiList = !this.navbar.classBiList;
     }
     if (section != "/" && this.activeSection === "/") {
       this.classHeaderTop = true;
       setTimeout((a: any) => {
         this.activeSection = section;
+        this.navbar.activeSection = section;
         this.scrollToSection(section);
       }, 500);
 
@@ -100,11 +89,14 @@ export class AppComponent implements AfterViewInit, OnInit {
     } else if (section != "/") {
       this.classHeaderTop = true;
       this.activeSection = section;
+      this.navbar.activeSection = section;
+
       this.scrollToSection(section)
 
     } else {
       this.classHeaderTop = false;
       this.activeSection = section;
+      this.navbar.activeSection = section;
       this.scrollToSection(section)
 
     }
@@ -121,10 +113,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
   }
 
-  navBarClick() {
-    this.navbarMobile = !this.navbarMobile;
-    this.classBiList = !this.classBiList;
-  }
+
 
   public loadscipts() {
     this.script.load('main').then((data2: any) => {
@@ -134,6 +123,7 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   public closeSection() {
     this.activeSection = '';
+    this.navbar.activeSection = '';
     this.classHeaderTop = false;
   }
 

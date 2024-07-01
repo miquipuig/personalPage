@@ -6,7 +6,11 @@
         "secure": true
     },
 
-    "/api/loginOAuth": {
+    "/api/login": {
+        "target": "http://localhost:3000",
+        "secure": true
+    },
+    "/api/register": {
         "target": "http://localhost:3000",
         "secure": true
     }

@@ -11,19 +11,17 @@
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="mr-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a> -->
       <!-- <h2>I'm a passionate <span>graphic designer</span> from New York</h2> -->
-
-      <nav id="navbar" class="navbar" [ngClass]="{'navbar-mobile':navbarMobile}">
+      <app-navbar (setActiveSection)="setActiveSection($event)"></app-navbar>
+      <!-- <nav id="navbar" class="navbar" [ngClass]="{'navbar-mobile':navbarMobile}">
         <ul>
           <li><a [class.active]="isSectionActive('/')" class="nav-link active" routerLink="">Home</a></li>
           <li><a [class.active]="isSectionActive('about')" routerLink="/about" class="nav-link">About</a></li>
           <li><a [class.active]="isSectionActive('resume')" class="nav-link" routerLink="/resume">Resume</a></li>
-          <!-- <li><a [class.active]="isSectionActive('services')" class="nav-link" href="#services">Services</a></li>
-        <li><a [class.active]="isSectionActive('portfolio')" class="nav-link" href="#portfolio">Portfolio</a></li> -->
           <li><a [class.active]="isSectionActive('contact')" class="nav-link" routerLink="/contact">Contact</a></li>
         </ul>
         <i (click)="navBarClick()" class="bi mobile-nav-toggle"
           [ngClass]="{'bi-list':classBiList,'bi-x':!classBiList}"></i>
-      </nav><!-- .navbar -->
+      </nav> -->
 
       <div class="social-links">
         <!-- <a href="https://twitter.com/MiquelGibert" class="twitter"><i class="bi bi-twitter-x"></i></a> -->

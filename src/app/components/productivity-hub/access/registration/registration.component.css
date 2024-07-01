@@ -7,3 +7,18 @@
     color: rgb(102, 102, 102) !important;
     /* Color de texto gris */
 }
+
+.form-border {
+    border: 1px solid var(  --main-color);
+    padding: 10px; /* espacio dentro del borde */
+    position: relative; /* necesario para posicionar el título */
+    margin-top: 20px; /* espacio arriba para visualización */
+    border-radius: 7px; /* bordes redondeados */
+}
+
+.title-inside-border {
+    position: absolute; /* posición absoluta respecto al padre .form-border */
+    top: -12px; /* mover hacia arriba para que quede sobre el borde */
+    background: rgb(0, 0, 0); /* fondo blanco para simular interrupción en el borde */
+    padding: 0 5px; /* espacio horizontal para no tocar el borde */
+}

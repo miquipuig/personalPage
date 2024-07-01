@@ -12,6 +12,7 @@ import { TimerComponent } from './timer/timer.component';
 import { CheckBoxComponent } from './complements/check-box/check-box.component';
 import { State } from 'src/app/services/productivity-hub/task-services.service';
 import { TaskCardComponent } from './complements/task-card/task-card.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-productivity-hub',
@@ -38,7 +39,7 @@ export class ProductivityHubComponent implements AfterViewInit {
   stateFilterMenu = false
   stateFilterMenuAll = false
 
-  constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef, private renderer: Renderer2, public tks: TaskServicesService, public local: LocalService) {
+  constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef, private renderer: Renderer2, public tks: TaskServicesService, public local: LocalService, public auth:AuthService) {
 
   }
   @HostListener('document:click', ['$event'])
@@ -431,9 +432,6 @@ export class ProductivityHubComponent implements AfterViewInit {
     }
   }
 
-
-
-
   getLabelInfo(labelId: any): Label {
     return this.tks.getLabelById(labelId);
   }
@@ -447,16 +445,12 @@ export class ProductivityHubComponent implements AfterViewInit {
 
   }
 
-
-
   saveClock() {
     let clock = { ...this.local.clock };
     clock.timerStarted = false;
     clock.isPaused = true;
     localStorage.setItem('clock', JSON.stringify(clock));
   }
-
-
 
 }
 
