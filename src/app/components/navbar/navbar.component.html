@@ -3,7 +3,7 @@
 
         <h2>Welkome, I am</h2>
         <!-- <h1 *ngIf="activeSection!=='pomodoro' && activeSection!=='/'"><img src="assets/img/favicon200.png" alt="">  <a href="index.html">Miquel Puig</a></h1> -->
-        <h1 *ngIf="activeSection==='pomodoro'">  <img src="assets/productivity/tomato.png" alt=""> <a href="index.html">Pomodoro</a></h1>
+        <h1 *ngIf="activeSection==='pomodoro'">  <img src="assets/productivity/tomato.png" alt=""> <a href="pomodoro">Pomodoro</a></h1>
         <!-- <h1 *ngIf="activeSection==='/'">   <a href="index.html">Miquel Puig</a></h1> -->
         <h1 *ngIf="activeSection!=='pomodoro'">   <a href="index.html">Miquel Puig</a></h1>
 <div *ngIf="activeSection!=='pomodoro'">
@@ -48,10 +48,14 @@
 
             <li *ngIf="!auth.authenticated" ><a [class.active]="isFullRouteActive('/pomodoro/login')" class="nav-link" routerLink="/pomodoro/login">Log In</a></li>
             
-            <div class="ms-4" *ngIf="auth.authenticated && classBiList ">
-                <img  style="width: 40px; height: 40px;" src="{{ auth.user?.img }}"
+            <div class="ms-4" *ngIf="auth.authenticated && classBiList">
+                <img  *ngIf="auth.user?.img" style="width: 40px; height: 40px;" src="{{ auth.user?.img }}"
                 referrerpolicy="no-referrer">
+                <i *ngIf="!auth.user?.img" style="font-size:30px;"   class="bi bi-person-circle me-2">
+                </i>
             </div>
+ 
+
         	<li (click)="userMenu=!userMenu" style="cursor:pointer" *ngIf="auth.authenticated">
                 <a class="d-flex align-items-center justify-content-start">                   
                     {{ auth.user?.name }}
@@ -61,10 +65,14 @@
         </ul>
 
         
-        <i class=" me-4 mobile-nav-toggle" *ngIf="auth.authenticated">
-            <img  style="width: 30px; height: 30px;" src="{{ auth.user?.img }}"
-            referrerpolicy="no-referrer">
+        <i (click)="userMenu=!userMenu" style="width: 30px; height: 30px;"   class="me-5 bi mobile-nav-toggle bi-person-circle" *ngIf="auth.authenticated && !auth.user?.img">
         </i>
+
+        <div (click)="userMenu=!userMenu" style="width: 30px; height: 30px;"   class="me-5 mobile-nav-toggle" *ngIf="auth.authenticated && auth.user?.img">
+            <img  *ngIf="auth.user?.img" style="width: 30px; height: 30px;" src="{{ auth.user?.img }}"
+            referrerpolicy="no-referrer">
+            <!-- <i style="size: 30px;" class="ri-user-5-fill"></i> -->
+        </div>
 
         <i (click)="navBarClick()" class="bi mobile-nav-toggle"
             [ngClass]="{'bi-list':classBiList,'bi-x':!classBiList}"></i>
