@@ -203,3 +203,22 @@
   background-color: rgb(255, 255, 255);
   color: #000000;
 }
+
+.rectangulo {
+  width: 100px;        /* Ancho del rectángulo */
+  height: 50px;        /* Alto del rectángulo */
+  background-color: #0000FF; /* Color de fondo */
+  border: 2px solid #000000; /* Borde: grosor, estilo, color */
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blinker 1s linear infinite;
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+  color: grey
+}

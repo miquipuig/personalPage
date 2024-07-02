@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { TruncatePipe } from 'src/app/pipes/truncate.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -27,7 +27,8 @@ import { HeaderComponent } from './component/header/header.component';
     RegistrationComponent,
     GoogleSigninComponent,
     NavbarComponent,
-    HeaderComponent
+    HeaderComponent,
+    TruncatePipe
 
   ],
   imports: [ReactiveFormsModule,

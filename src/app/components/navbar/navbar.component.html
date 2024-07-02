@@ -5,8 +5,11 @@
         <!-- <h1 *ngIf="activeSection!=='pomodoro' && activeSection!=='/'"><img src="assets/img/favicon200.png" alt="">  <a href="index.html">Miquel Puig</a></h1> -->
         <h1 *ngIf="activeSection==='pomodoro'">  <img src="assets/productivity/tomato.png" alt=""> <a href="pomodoro">Pomodoro</a></h1>
         <!-- <h1 *ngIf="activeSection==='/'">   <a href="index.html">Miquel Puig</a></h1> -->
-        <h1 *ngIf="activeSection!=='pomodoro'">   <a href="index.html">Miquel Puig</a></h1>
-<div *ngIf="activeSection!=='pomodoro'">
+        <h1 *ngIf="activeSection!=='pomodoro'" style="display: flex; align-items: center;">
+            <a href="index.html" style="margin-right: 10px;">Miquel Puig</a>
+            <div *ngIf="activeSection==='/'" class="blink">░</div>
+        </h1>
+        <div *ngIf="activeSection!=='pomodoro'">
 
     <nav id="navbar" class="navbar" [ngClass]="{'navbar-mobile':navbarMobile}">
         <ul>
@@ -58,7 +61,7 @@
 
         	<li (click)="userMenu=!userMenu" style="cursor:pointer" *ngIf="auth.authenticated">
                 <a class="d-flex align-items-center justify-content-start">                   
-                    {{ auth.user?.name }}
+                    {{ auth.user?.name | truncate:20}}
                     <div><i class="ri-arrow-down-s-fill"></i></div>
                 </a>
             </li>
