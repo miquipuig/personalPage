@@ -14,6 +14,7 @@ import { GoogleSigninComponent } from './components/productivity-hub/access/logi
 import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig, SocialLoginModule, GoogleSigninButtonDirective } from "@abacritt/angularx-social-login";
 import { RegistrationComponent } from './components/productivity-hub/access/registration/registration.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { HeaderComponent } from './component/header/header.component';
 
 
 
@@ -25,7 +26,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     LoginComponent,
     RegistrationComponent,
     GoogleSigninComponent,
-    NavbarComponent
+    NavbarComponent,
+    HeaderComponent
 
   ],
   imports: [ReactiveFormsModule,

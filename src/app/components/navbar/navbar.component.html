@@ -1,9 +1,90 @@
-<nav id="navbar" class="navbar" [ngClass]="{'navbar-mobile':navbarMobile}">
-    <ul>
-        <li><a [class.active]="isSectionActive('/')" class="nav-link active" routerLink="">Home</a></li>
-        <li><a [class.active]="isSectionActive('about')" routerLink="/about" class="nav-link">About</a></li>
-        <li><a [class.active]="isSectionActive('resume')" class="nav-link" routerLink="/resume">Resume</a></li>
-        <li><a [class.active]="isSectionActive('contact')" class="nav-link" routerLink="/contact">Contact</a></li>
-    </ul>
-    <i (click)="navBarClick()" class="bi mobile-nav-toggle" [ngClass]="{'bi-list':classBiList,'bi-x':!classBiList}"></i>
-</nav>
+<header id="header" [ngClass]="{'header-top':classHeaderTop}">
+    <div class="container c_custom ">
+
+        <h2>Welkome, I am</h2>
+        <!-- <h1 *ngIf="activeSection!=='pomodoro' && activeSection!=='/'"><img src="assets/img/favicon200.png" alt="">  <a href="index.html">Miquel Puig</a></h1> -->
+        <h1 *ngIf="activeSection==='pomodoro'">  <img src="assets/productivity/tomato.png" alt=""> <a href="index.html">Pomodoro</a></h1>
+        <!-- <h1 *ngIf="activeSection==='/'">   <a href="index.html">Miquel Puig</a></h1> -->
+        <h1 *ngIf="activeSection!=='pomodoro'">   <a href="index.html">Miquel Puig</a></h1>
+<div *ngIf="activeSection!=='pomodoro'">
+
+    <nav id="navbar" class="navbar" [ngClass]="{'navbar-mobile':navbarMobile}">
+        <ul>
+            <li><a [class.active]="isSectionActive('/')" class="nav-link active" routerLink="">Home</a></li>
+            <li><a [class.active]="isSectionActive('about')" routerLink="/about" class="nav-link">About</a></li>
+            <li><a [class.active]="isSectionActive('resume')" class="nav-link" routerLink="/resume">Resume</a></li>
+            <li><a [class.active]="isSectionActive('contact')" class="nav-link" routerLink="/contact">Contact</a>
+            </li>
+        </ul>
+        <i (click)="navBarClick()" class="bi mobile-nav-toggle"
+            [ngClass]="{'bi-list':classBiList,'bi-x':!classBiList}"></i>
+    </nav>
+
+</div>
+
+<div *ngIf="activeSection==='pomodoro'">
+<div style="position: relative;" >
+<div *ngIf="userMenu" class="animate__animated animate__fadeIn  d-flex  justify-content-left list-group filterList ">
+    <div class="mt-2">
+
+
+        <div class="listMenu ps-3 pt-1 pb-1">
+            <div (click)="auth.logout(); userMenu=false">
+                <i class="ri-logout-box-line"></i>
+                Log Out
+            </div>
+        </div>
+        <div class="mt-2">
+
+        </div>
+    </div>
+</div>
+    
+</div>
+    <nav id="navbar" class="navbar" [ngClass]="{'navbar-mobile':navbarMobile}">
+        <ul>
+            <li><a [class.active]="isSectionActive('/')" class="nav-link active" routerLink="">Home</a></li>
+            <li><a [class.active]="isFullRouteActive('/pomodoro')" class="nav-link active" routerLink="/pomodoro">Dashboard</a></li>
+
+            <li *ngIf="!auth.authenticated" ><a [class.active]="isFullRouteActive('/pomodoro/login')" class="nav-link" routerLink="/pomodoro/login">Log In</a></li>
+            
+            <div class="ms-4" *ngIf="auth.authenticated && classBiList ">
+                <img  style="width: 40px; height: 40px;" src="{{ auth.user?.img }}"
+                referrerpolicy="no-referrer">
+            </div>
+        	<li (click)="userMenu=!userMenu" style="cursor:pointer" *ngIf="auth.authenticated">
+                <a class="d-flex align-items-center justify-content-start">                   
+                    {{ auth.user?.name }}
+                    <div><i class="ri-arrow-down-s-fill"></i></div>
+                </a>
+            </li>
+        </ul>
+
+        
+        <i class=" me-4 mobile-nav-toggle" *ngIf="auth.authenticated">
+            <img  style="width: 30px; height: 30px;" src="{{ auth.user?.img }}"
+            referrerpolicy="no-referrer">
+        </i>
+
+        <i (click)="navBarClick()" class="bi mobile-nav-toggle"
+            [ngClass]="{'bi-list':classBiList,'bi-x':!classBiList}"></i>
+    </nav>
+
+</div>
+       
+
+      <div class="social-links">
+     
+        <a href="https://www.instagram.com/miquelshot/" class="instagram"><i class="bi bi-instagram"></i></a>
+        <a href="https://www.linkedin.com/in/mpuig22/" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        <a href="https://github.com/miquipuig" class="github"><i class="bi bi-github"></i></a>
+        <a href="https://quelexplorer.com/" class="web"><i class="bi bi-globe"></i></a>
+        <a routerLink="/mickeyDino" class="web"><i class="bi bi-joystick"></i></a>
+        <a routerLink="/pomodoro" class="web"><i class="bi bi-clock-fill"></i>
+        </a>
+          
+      </div>
+
+    </div>
+  
+  </header>

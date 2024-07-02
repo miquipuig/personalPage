@@ -137,4 +137,64 @@
     font-size: 16px;
     position: relative;
   }
+
+  .menuButton {
+    /* Tamaño de letra pequeño */
+    color: #ffffffaa;
+    /* Color inicial de la letra */
+    /* transition: color 0.3s ease; */
+    /* Transición suave del color */
+    cursor: pointer;
+  }
   
+  .menuButton:hover {
+    color: #ffffff;
+    /* Cambio de color al pasar el ratón por encima */
+    /* Transición para el fondo y el color del texto */
+  }
+  
+  .menuButton:active {
+    transform: scale(0.95);
+    /* Disminuye el tamaño a 98% cuando se presiona */
+  }
+  
+
+
+.filterList {
+	position: fixed;
+	/* Se posiciona de forma absoluta respecto al contenedor */
+	top: 65px;
+  right: 45px;
+	/* Se posiciona justo debajo del contenedor */
+	/* left: 0; */
+	/* Alinea la lista al borde izquierdo del contenedor */
+	width: 220px;
+	max-height: 400px;
+	overflow-y: auto;
+	z-index: 10000;
+	scrollbar-width: thin;
+	/* Hace la barra de desplazamiento más delgada en Firefox */
+	background-color: rgba(241, 241, 241, 0.939);
+    color: black;
+	/* Fondo blanco para la lista */
+	border: 1px white solid;
+	border-end-end-radius: 20px;
+
+    /* Sin barra de desplazamiento horizontal*/
+    overflow-x: hidden;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Estándar */
+}
+
+.listMenu {
+  /* background-color: rgba(241, 241, 241, 0.939); */
+  color: rgb(102, 102, 102);
+  /* padding: 2px 2px 2px 2px; */
+  cursor:pointer;
+  transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;}
+.listMenu:hover {
+  background-color: rgb(255, 255, 255);
+  color: #000000;
+}

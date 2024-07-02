@@ -7,7 +7,6 @@
 */
 (function() {
   "use strict";
-  console.log('skillsAnimation.js');
 
   /**
    * Easy selector helper function
@@ -21,9 +20,6 @@
     }
   }
 
-  /**
-   * Easy event listener function
-   */
   const on = (type, el, listener, all = false) => {
     let selectEl = select(el, all)
 
@@ -40,13 +36,11 @@
   let skilsContent = document.querySelector('.skills-content');
   
   if (skilsContent) {
-    console.log('skilsContent2');
-    console.log(skilsContent);
+
     new Waypoint({
       element: skilsContent,
       offset: '80%',
       handler: function(direction) {
-        console.log('skilsContent3');
         let progress = document.querySelectorAll('.progress .progress-bar');
         progress.forEach((el) => {
           el.style.width = el.getAttribute('aria-valuenow') + '%';

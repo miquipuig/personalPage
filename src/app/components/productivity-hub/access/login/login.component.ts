@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { SocialAuthService } from "@abacritt/angularx-social-login";
 import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
@@ -20,6 +21,9 @@ export class LoginComponent {
   oauthUser: SocialUser | null = null;
   loggedIn: boolean = false;
   form: FormGroup;
+  
+  private authSubscription: Subscription | null = null;
+
   constructor(private authService: SocialAuthService, private auth: AuthService, private router: Router) {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required]),
@@ -31,11 +35,19 @@ export class LoginComponent {
     setTimeout(() => {
       this.isSectionActive = true;
     }, 100);
-    this.authService.authState.subscribe((user) => {
+    this.authSubscription =this.authService.authState.subscribe((user) => {
+      console.log('passoo');
+      this.authService.signOut();
+
       this.onSubmit(user.idToken);
     });
   }
-
+  ngOnDestroy() {
+    if (this.authSubscription) {
+      console.log('destroy');
+      this.authSubscription.unsubscribe();
+    }
+  }
 
   googleSignin(googleWrapper: any) {
     googleWrapper.click();

@@ -212,12 +212,13 @@ h6 {
 
 #header.header-top h1 {
   margin-right: auto;
-  font-size: 36px;
+  font-size: 30px;
 }
 
 #header.header-top img {
+  margin-top: -5px !important;
   max-height: 60px;
-  margin-right: 20px !important;
+  margin-right: 10px !important;
 }
 
 #header.header-top .container {
@@ -229,9 +230,15 @@ h6 {
   margin: 0;
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) { */
+  @media (max-width: 985px) {
   #header.header-top {
     height: 60px;
+  }
+  #header.header-top img {
+    margin-top: 0px !important;
+    max-height: 45px;
+    margin-right: 10px !important;
   }
 
   #header.header-top h1 {

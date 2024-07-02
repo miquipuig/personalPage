@@ -33,6 +33,7 @@ export class RegistrationComponent {
       this.oauthUser = user;
       this.form.get('name')?.setValue(user.name);
       this.form.get('email')?.setValue(user.email);
+      this.authService.signOut();
     });
   }
 

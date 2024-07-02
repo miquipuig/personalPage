@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { lastValueFrom, throwError } from 'rxjs';
 import { of } from 'rxjs';
-
+import { SocialAuthService } from "@abacritt/angularx-social-login";
 @Injectable({
   providedIn: 'root'
 })
@@ -14,8 +14,7 @@ export class AuthService {
   user: any;
   constructor(private http: HttpClient) { }
 
-
-  login(user: any, token?:string): Promise<any> {
+  login( user: any, token?:string): Promise<any> {
 
     return new Promise((resolve, reject) => {
       this.http.post('api/login', { token: token, user: user }).subscribe({
@@ -59,6 +58,12 @@ export class AuthService {
       });
   
     });
+  }
+
+  logout(){
+    this.token = null;
+    this.authenticated = false;
+    this.user = null;
   }
 
 }
