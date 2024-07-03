@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TruncatePipe } from 'src/app/pipes/truncate.pipe';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -15,7 +14,7 @@ import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig,
 import { RegistrationComponent } from './components/productivity-hub/access/registration/registration.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HeaderComponent } from './component/header/header.component';
-
+import { SharedModule } from './shared.module';
 
 
 @NgModule({
@@ -27,14 +26,13 @@ import { HeaderComponent } from './component/header/header.component';
     RegistrationComponent,
     GoogleSigninComponent,
     NavbarComponent,
-    HeaderComponent,
-    TruncatePipe
+    HeaderComponent
 
   ],
   imports: [ReactiveFormsModule,
     BrowserModule,
      HttpClientModule, BrowserAnimationsModule, NgbModule,AppRoutingModule,   SocialLoginModule,
-     GoogleSigninButtonModule,
+     GoogleSigninButtonModule,SharedModule
   ],
   providers: [
     {

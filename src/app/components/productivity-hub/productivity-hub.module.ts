@@ -6,7 +6,6 @@ import { ProductivityHubComponent } from './productivity-hub.component';
 import { TaskModalComponent } from './complements/task-modal/task-modal.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TimePickerComponent } from './complements/time-picker/time-picker.component';
-import { TruncatePipe } from 'src/app/pipes/truncate.pipe';
 import { CustomTimeFormatPipe } from 'src/app/pipes/custom-time-format.pipe';
 import { LabelEditorComponent } from './complements/label-editor/label-editor.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -22,16 +21,16 @@ import { TaskCardComponent } from './complements/task-card/task-card.component';
 import { FilterMenuComponent } from './complements/filter-menu/filter-menu.component';
 import { HistoryBriefComponent } from './complements/history-brief/history-brief.component';
 import { HumanTimeFormatPipe } from 'src/app/pipes/human-time-format.pipe';
-
+import { SharedModule } from 'src/app/shared.module';
 @NgModule({
-  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent, TruncatePipe, CustomTimeFormatPipe, HumanTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent, FilterButtonsComponent, TaskCardComponent, FilterMenuComponent, HistoryBriefComponent],
+  declarations: [ProductivityHubComponent, TaskModalComponent, TimePickerComponent, CustomTimeFormatPipe, HumanTimeFormatPipe, LabelEditorComponent, ClockComponent, TimerComponent, PeriodicityComponent, DatapickerComponent, CheckBoxComponent, FilterButtonsComponent, TaskCardComponent, FilterMenuComponent, HistoryBriefComponent],
   imports: [
     CommonModule,
     ProductivityHubRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
-    NgbDatepickerModule, JsonPipe, NgbAlertModule, DragDropModule
+    NgbDatepickerModule, JsonPipe, NgbAlertModule, DragDropModule,SharedModule
   ], exports: [ProductivityHubComponent],
 
 })
