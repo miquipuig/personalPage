@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { PolicyRoutingModule } from './policy-routing.module';
 import { PolicyComponent } from './policy.component';
-import { MarkdownComponent } from '../shared/markdown/markdown.component';
+// import { MarkdownComponent } from '../shared/markdown/markdown.component';
 
 
 
 @NgModule({
   declarations: [
-    PolicyComponent, MarkdownComponent
+    
+    PolicyComponent, 
   ],
   imports: [
     CommonModule,

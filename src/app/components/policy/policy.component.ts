@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MarkdownService } from 'ngx-markdown';
+// import { MarkdownService } from 'ngx-markdown';
 
 @Component({
   selector: 'app-policy',
