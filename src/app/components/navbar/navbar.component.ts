@@ -37,7 +37,6 @@ export class NavbarComponent {
         this.router.navigate(['mickeyDino']);
       }
     }
-
   }
 
   constructor(private router: Router, private route: ActivatedRoute, public auth: AuthService) { }

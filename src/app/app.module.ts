@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule, SecurityContext } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ServicesComponent } from './components/services/services.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EmptyComponentComponent } from './components/empty-component/empty-component.component';
@@ -13,8 +13,8 @@ import { GoogleSigninComponent } from './components/productivity-hub/access/logi
 import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig, SocialLoginModule, GoogleSigninButtonDirective } from "@abacritt/angularx-social-login";
 import { RegistrationComponent } from './components/productivity-hub/access/registration/registration.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { HeaderComponent } from './component/header/header.component';
 import { SharedModule } from './shared.module';
+import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 
 
 @NgModule({
@@ -25,14 +25,26 @@ import { SharedModule } from './shared.module';
     LoginComponent,
     RegistrationComponent,
     GoogleSigninComponent,
-    NavbarComponent,
-    HeaderComponent
+    NavbarComponent
 
   ],
   imports: [ReactiveFormsModule,
     BrowserModule,
      HttpClientModule, BrowserAnimationsModule, NgbModule,AppRoutingModule,   SocialLoginModule,
-     GoogleSigninButtonModule,SharedModule
+     GoogleSigninButtonModule,SharedModule,
+     MarkdownModule.forRoot({
+      loader: HttpClient, // optional, only if you use [src] attribute
+      markedOptions: {
+        provide: MarkedOptions,
+        useValue: {
+          gfm: true,
+          breaks: false,
+          pedantic: false,
+          smartLists: true,
+          smartypants: false,
+        },
+      },
+    }),
   ],
   providers: [
     {

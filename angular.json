@@ -33,7 +33,8 @@
               "node_modules/remixicon/fonts/remixicon.css"
             ],
             "scripts": [
-              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"            ]
+              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+            "node_modules/marked/marked.min.js"            ]
           },
           "configurations": {
             "production": {
@@ -101,7 +102,8 @@
               "src/productivityStyles.css"
             ],
             "scripts": [
-              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "node_modules/marked/marked.min.js"
             ]
           }
         }
