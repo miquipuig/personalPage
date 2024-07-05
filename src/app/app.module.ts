@@ -14,7 +14,7 @@ import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig,
 import { RegistrationComponent } from './components/productivity-hub/access/registration/registration.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SharedModule } from './shared.module';
-import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+// import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 
 
 @NgModule({
@@ -32,19 +32,19 @@ import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
     BrowserModule,
      HttpClientModule, BrowserAnimationsModule, NgbModule,AppRoutingModule,   SocialLoginModule,
      GoogleSigninButtonModule,SharedModule,
-     MarkdownModule.forRoot({
-      loader: HttpClient, // optional, only if you use [src] attribute
-      markedOptions: {
-        provide: MarkedOptions,
-        useValue: {
-          gfm: true,
-          breaks: false,
-          pedantic: false,
-          smartLists: true,
-          smartypants: false,
-        },
-      },
-    }),
+    //  MarkdownModule.forRoot({
+    //   loader: HttpClient, // optional, only if you use [src] attribute
+    //   markedOptions: {
+    //     provide: MarkedOptions,
+    //     useValue: {
+    //       gfm: true,
+    //       breaks: false,
+    //       pedantic: false,
+    //       smartLists: true,
+    //       smartypants: false,
+    //     },
+    //   },
+    // }),
   ],
   providers: [
     {
