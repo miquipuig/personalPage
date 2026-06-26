@@ -1,23 +1,55 @@
-import { Component } from '@angular/core';
-// import { MarkdownService } from 'ngx-markdown';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { marked } from 'marked';
+import { NgcCookieConsentService } from 'ngx-cookieconsent';
+import { POLICY_DOCS, PolicyDoc } from './policy-content';
 
 @Component({
   selector: 'app-policy',
   templateUrl: './policy.component.html',
   styleUrls: ['./policy.component.css']
 })
-export class PolicyComponent {
+export class PolicyComponent implements OnInit, OnDestroy {
   isSectionActive = false;
-  markdown = '# Hello, world!';
-  // html: string;
-  constructor() {
-    // this.html = this.markdownService.parse(this.markdown);
-  }
+  doc: PolicyDoc = 'privacy';
+  html: SafeHtml = '';
+  private dataSub?: Subscription;
+
+  constructor(
+    private sanitizer: DomSanitizer,
+    private router: Router,
+    private route: ActivatedRoute,
+    private ccService: NgcCookieConsentService,
+  ) {}
+
   ngOnInit() {
-    console.log('PolicyComponent');
-    // temporizador que se espera 0.5 segundos y setea la variable isSectionActive a true``
-    setTimeout(() => {
-      this.isSectionActive = true;
-    }, 50);
+    // Subscribe (not snapshot) so navigating /policy → /terms → /cookies while
+    // the component instance is reused still re-renders the right document.
+    this.dataSub = this.route.data.subscribe(data => {
+      this.doc = (data['doc'] as PolicyDoc | undefined) ?? this.docFromUrl();
+      const rendered = marked.parse(POLICY_DOCS[this.doc]) as string;
+      this.html = this.sanitizer.bypassSecurityTrustHtml(rendered);
+    });
+    setTimeout(() => { this.isSectionActive = true; }, 50);
+  }
+
+  ngOnDestroy() {
+    this.dataSub?.unsubscribe();
+  }
+
+  // Fallback when route data is absent (e.g. a hard refresh): use the URL path.
+  private docFromUrl(): PolicyDoc {
+    const path = this.router.url.split('?')[0].split('#')[0];
+    if (path.startsWith('/terms')) return 'terms';
+    if (path.startsWith('/cookies')) return 'cookie';
+    return 'privacy';
+  }
+
+  // Re-open the cookie-consent banner so the visitor can change their choice.
+  revokeConsent(): void {
+    this.ccService.destroy();
+    this.ccService.init(this.ccService.getConfig());
   }
 }

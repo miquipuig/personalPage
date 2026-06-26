@@ -19,6 +19,17 @@ const routes: Routes = [
   },
   {
     path: 'policy',
+    data: { doc: 'privacy' },
+    loadChildren: () => import('./components/policy/policy.module').then(m => m.PolicyModule)
+  },
+  {
+    path: 'terms',
+    data: { doc: 'terms' },
+    loadChildren: () => import('./components/policy/policy.module').then(m => m.PolicyModule)
+  },
+  {
+    path: 'cookies',
+    data: { doc: 'cookie' },
     loadChildren: () => import('./components/policy/policy.module').then(m => m.PolicyModule)
   },
   {
@@ -59,6 +70,7 @@ const routes: Routes = [
     onSameUrlNavigation: "ignore",
     anchorScrolling: 'enabled',
     scrollPositionRestoration: 'enabled',
+    paramsInheritanceStrategy: 'always', // child '' route inherits parent's `data.doc`
     scrollOffset: [0, 64] // [x, y]
   })],
   exports: [RouterModule]

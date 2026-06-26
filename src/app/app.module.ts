@@ -14,6 +14,8 @@ import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig,
 import { RegistrationComponent } from './components/productivity-hub/access/registration/registration.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SharedModule } from './shared.module';
+import { NgcCookieConsentModule } from 'ngx-cookieconsent';
+import { cookieConfig } from './cookie.config';
 // import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 
 
@@ -32,6 +34,7 @@ import { SharedModule } from './shared.module';
     BrowserModule,
      HttpClientModule, BrowserAnimationsModule, NgbModule,AppRoutingModule,   SocialLoginModule,
      GoogleSigninButtonModule,SharedModule,
+     NgcCookieConsentModule.forRoot(cookieConfig),
     //  MarkdownModule.forRoot({
     //   loader: HttpClient, // optional, only if you use [src] attribute
     //   markedOptions: {

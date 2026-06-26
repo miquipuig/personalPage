@@ -1,0 +1,18 @@
+/* Footer bar: lay the three blocks out across the width (cookie link · legal
+   links · credit) instead of letting them stack into the bottom-right corner. */
+.credits {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 24px;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.credits > * {
+  margin: 0;
+}
+
+.credits a {
+  cursor: pointer;
+}

@@ -30,11 +30,14 @@
               "node_modules/animate.css/animate.min.css",
               "src/styles.css",
               "src/productivityStyles.css",
-              "node_modules/remixicon/fonts/remixicon.css"
+              "node_modules/remixicon/fonts/remixicon.css",
+              "node_modules/cookieconsent/build/cookieconsent.min.css"
             ],
             "scripts": [
               "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-            "node_modules/marked/marked.min.js"            ]
+              "node_modules/marked/marked.min.js",
+              "node_modules/cookieconsent/build/cookieconsent.min.js"
+            ]
           },
           "configurations": {
             "production": {
