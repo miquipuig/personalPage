@@ -3,7 +3,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { marked } from 'marked';
-import { NgcCookieConsentService } from 'ngx-cookieconsent';
 import { POLICY_DOCS, PolicyDoc } from './policy-content';
 
 @Component({
@@ -21,7 +20,6 @@ export class PolicyComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private router: Router,
     private route: ActivatedRoute,
-    private ccService: NgcCookieConsentService,
   ) {}
 
   ngOnInit() {
@@ -45,11 +43,5 @@ export class PolicyComponent implements OnInit, OnDestroy {
     if (path.startsWith('/terms')) return 'terms';
     if (path.startsWith('/cookies')) return 'cookie';
     return 'privacy';
-  }
-
-  // Re-open the cookie-consent banner so the visitor can change their choice.
-  revokeConsent(): void {
-    this.ccService.destroy();
-    this.ccService.init(this.ccService.getConfig());
   }
 }

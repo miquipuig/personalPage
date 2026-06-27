@@ -122,7 +122,7 @@ You can control and/or delete cookies as you wish. For more details, visit about
 
 ### Revoke consent
 
-If you wish to revoke your consent for the use of cookies on this website, you can do so at any time using the button below. By clicking it, all non-essential cookies stored on your device will be removed, and your cookie preferences will be reset.
+If you wish to revoke your consent for the use of cookies on this website, you can do so at any time by clearing the cookies stored by this site through your browser settings. This will remove all non-essential cookies and reset your cookie preferences.
 
 ### Changes to the cookie policy
 

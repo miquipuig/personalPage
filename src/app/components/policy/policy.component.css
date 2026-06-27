@@ -43,18 +43,3 @@
 .policy-content a:hover {
   text-decoration: underline;
 }
-
-.btn-revoke {
-  background: #ff2600;
-  color: #fff;
-  border: none;
-  padding: 10px 22px;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.btn-revoke:hover {
-  opacity: 0.85;
-}
