@@ -1,13 +1,12 @@
-/* Compact one-line footer: legal links on the left, credit on the right.
-   Overrides the global .credits padding/size so the fixed bar stays slim and
-   doesn't cover page content. */
+/* Compact one-line footer, centered. Overrides the global .credits padding/size
+   so the fixed bar stays slim and doesn't cover page content. */
 .credits {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 6px 18px;
   flex-wrap: nowrap;
-  text-align: left;
+  text-align: center;
   padding: 7px 16px;
   font-size: 12px;
 }

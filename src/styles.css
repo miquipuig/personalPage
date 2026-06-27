@@ -1270,6 +1270,11 @@ section .container.c_custom {
   display: none;
 }
 
-
-
+/* The cookie-consent "revoke" tab (.cc-revoke) slides over the footer text on
+   hover. Hide it on mobile so it never covers the footer links. */
+@media (max-width: 992px) {
+  .cc-revoke {
+    display: none !important;
+  }
+}
 
