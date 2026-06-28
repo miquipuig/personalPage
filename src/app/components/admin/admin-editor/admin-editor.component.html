@@ -1,4 +1,4 @@
-<section class="admin-editor section-show" *ngIf="!showPreview">
+<section class="admin-editor section-show" [hidden]="showPreview">
   <div class="admin-editor-inner">
     <header class="editor-header">
       <h2>{{ id ? 'Edit post' : 'New post' }}</h2>
@@ -30,8 +30,8 @@
         <input type="text" class="field-input" [(ngModel)]="coverImage" name="coverImage"
           placeholder="/api/uploads/... or external URL" />
         <div class="cover-upload">
-          <input type="file" accept="image/*" (change)="onCoverFileSelected($event)" />
-          <span class="muted" *ngIf="uploadingCover">Uploading…</span>
+          <button type="button" class="btn btn-outline" (click)="mediaPicker.show('cover')">Choose from library</button>
+          <button type="button" class="btn btn-outline" *ngIf="coverImage" (click)="coverImage=''">Remove</button>
         </div>
         <img class="cover-preview" *ngIf="coverImage" [src]="coverImage" alt="cover preview" />
       </div>
@@ -48,7 +48,7 @@
     </div>
   </div>
 
-  <app-media-picker #mediaPicker (pick)="onMediaPicked($event)"></app-media-picker>
+  <app-media-picker #mediaPicker (insert)="onInsertImage($event)" (cover)="onSelectCover($event)"></app-media-picker>
 </section>
 
 <section class="admin-preview section-show" *ngIf="showPreview">

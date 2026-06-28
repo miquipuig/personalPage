@@ -1,36 +1,73 @@
 <div class="media-overlay" *ngIf="open" (click)="hide()">
   <div class="media-modal" (click)="$event.stopPropagation()">
     <header class="media-header">
-      <h3>Media library</h3>
+      <h3>{{ mode === 'cover' ? 'Select cover image' : 'Media library' }}</h3>
       <div class="media-actions">
-        <button type="button" class="btn btn-outline" (click)="triggerUpload()" [disabled]="uploading">
-          {{ uploading ? 'Uploading…' : 'Upload' }}
+        <button type="button" class="btn btn-primary" (click)="triggerUpload()" [disabled]="uploading">
+          {{ uploading ? 'Uploading…' : 'Upload new' }}
         </button>
         <button type="button" class="btn btn-outline" (click)="hide()">Close</button>
         <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
       </div>
     </header>
 
-    <div class="media-size">
-      <span class="media-size-label">Insert size:</span>
-      <button type="button" class="size-btn" *ngFor="let s of sizes"
-        [class.active]="selectedWidth === s.value" (click)="selectedWidth = s.value">{{ s.label }}</button>
+    <div class="media-toolbar">
+      <input type="text" class="media-search" placeholder="Search by name or description…"
+        [(ngModel)]="search" />
+      <label class="media-sort">
+        Sort:
+        <select [(ngModel)]="sortBy">
+          <option value="new">Newest</option>
+          <option value="name">Name</option>
+          <option value="size">Size</option>
+        </select>
+      </label>
+      <div class="media-size" *ngIf="mode === 'insert'">
+        <span class="media-size-label">Size:</span>
+        <button type="button" class="size-btn" *ngFor="let s of sizes"
+          [class.active]="selectedWidth === s.value" (click)="selectedWidth = s.value">{{ s.label }}</button>
+      </div>
     </div>
 
     <div class="media-error" *ngIf="error">{{ error }}</div>
     <div class="media-loading" *ngIf="loading">Loading…</div>
 
-    <div class="media-empty" *ngIf="!loading && files.length === 0">No files yet. Upload one to get started.</div>
+    <div class="media-empty" *ngIf="!loading && files.length === 0">
+      No files yet. Upload one to get started.
+    </div>
+    <div class="media-empty" *ngIf="!loading && files.length > 0 && visibleFiles.length === 0">
+      No files match “{{ search }}”.
+    </div>
 
-    <div class="media-grid" *ngIf="!loading && files.length > 0">
-      <div class="media-item" *ngFor="let file of files">
-        <button type="button" class="thumb-btn" (click)="onPick(file)" [title]="'Insert ' + file.name">
-          <img class="thumb" [src]="file.url" [alt]="file.name" />
+    <div class="media-grid" *ngIf="!loading && visibleFiles.length > 0">
+      <div class="media-item" *ngFor="let file of visibleFiles">
+        <button type="button" class="thumb-btn" (click)="pick(file)"
+          [title]="mode === 'cover' ? 'Use as cover' : 'Insert into post'">
+          <img class="thumb" [src]="file.url" [alt]="file.description || file.name" />
+          <span class="thumb-overlay">{{ mode === 'cover' ? 'Use as cover' : 'Insert' }}</span>
         </button>
+
         <div class="meta">
-          <span class="filename" [title]="file.name">{{ file.name }}</span>
-          <span class="filesize">{{ formatSize(file.size) }}</span>
+          <span class="filename" [title]="file.originalName || file.name">{{ file.originalName || file.name }}</span>
+          <span class="fileinfo">{{ formatSize(file.size) }} · {{ formatDate(file.mtime) }}</span>
+
+          <div class="desc" *ngIf="editingName !== file.name">
+            <span class="desc-text" [class.empty]="!file.description">
+              {{ file.description || 'No description' }}
+            </span>
+            <button type="button" class="link-btn" (click)="startEdit(file)">Edit</button>
+          </div>
+
+          <div class="desc-edit" *ngIf="editingName === file.name">
+            <input type="text" class="desc-input" [(ngModel)]="editingDesc"
+              placeholder="Describe this image (used as alt text)" />
+            <div class="desc-edit-actions">
+              <button type="button" class="btn btn-sm btn-primary" (click)="saveEdit(file)">Save</button>
+              <button type="button" class="btn btn-sm btn-outline" (click)="cancelEdit()">Cancel</button>
+            </div>
+          </div>
         </div>
+
         <div class="row-actions">
           <button type="button" class="btn btn-sm btn-outline" (click)="copyUrl(file)">Copy URL</button>
           <button type="button" class="btn btn-sm btn-danger" (click)="remove(file)">Delete</button>

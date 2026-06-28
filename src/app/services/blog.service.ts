@@ -47,15 +47,22 @@ export class BlogService {
     return this.http.post('api/blog/admin/login', { token });
   }
 
-  uploadImage(file: Blob | File): Observable<any> {
+  uploadImage(file: Blob | File, description?: string): Observable<any> {
     const formData = new FormData();
     formData.append('image', file);
+    if (description) {
+      formData.append('description', description);
+    }
     // No explicit Content-Type: let the browser set the multipart boundary.
     return this.http.post('api/blog/admin/upload', formData);
   }
 
   listUploads(): Observable<any> {
     return this.http.get('api/blog/admin/uploads');
+  }
+
+  updateUpload(name: string, description: string): Observable<any> {
+    return this.http.patch(`api/blog/admin/uploads/${encodeURIComponent(name)}`, { description });
   }
 
   // force=true bypasses the in-use guard (server returns 409 + refs otherwise).

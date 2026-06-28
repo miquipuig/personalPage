@@ -23,7 +23,6 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   content = '';
 
   saving = false;
-  uploadingCover = false;
   error = '';
 
   showPreview = false;
@@ -106,15 +105,18 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onMediaPicked(payload: { url: string; width: string }): void {
+  onInsertImage(payload: { url: string; width: string; alt: string }): void {
     if (!this.editor) return;
-    const { url, width } = payload;
-    const alt = url.split('/').pop() || 'image';
+    const { url, width, alt } = payload;
     // Always insert a real markdown image so it renders in the editor. Width is
     // carried in the URL fragment (#w=) and applied by the public/preview
     // renderer (see shared/markdown.util.ts).
     const src = width ? `${url}#w=${width}` : url;
-    this.editor.exec('addImage', { imageUrl: src, altText: alt });
+    this.editor.exec('addImage', { imageUrl: src, altText: alt || (url.split('/').pop() || 'image') });
+  }
+
+  onSelectCover(payload: { url: string }): void {
+    this.coverImage = payload.url;
   }
 
   ngOnDestroy(): void {
@@ -130,27 +132,6 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.pendingMarkdown = markdown || '';
     }
-  }
-
-  onCoverFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files && input.files[0];
-    if (!file) {
-      return;
-    }
-    this.uploadingCover = true;
-    this.error = '';
-    this.blogService.uploadImage(file).subscribe({
-      next: (r: any) => {
-        this.coverImage = r.url;
-        this.uploadingCover = false;
-        input.value = '';
-      },
-      error: () => {
-        this.uploadingCover = false;
-        this.error = 'Cover image upload failed.';
-      }
-    });
   }
 
   save(): void {

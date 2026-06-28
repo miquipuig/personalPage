@@ -2,11 +2,17 @@ import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular
 import { BlogService } from '../../../services/blog.service';
 
 interface MediaFile {
+  id: number;
   name: string;
   url: string;
+  description: string;
+  originalName: string;
   size: number;
+  mimetype: string;
   mtime: number;
 }
+
+type PickerMode = 'insert' | 'cover';
 
 @Component({
   selector: 'app-media-picker',
@@ -14,8 +20,9 @@ interface MediaFile {
   styleUrls: ['./media-picker.component.css']
 })
 export class MediaPickerComponent {
-  // Parent listens for the picked image (url + chosen width), then closes.
-  @Output() pick = new EventEmitter<{ url: string; width: string }>();
+  // Insert into the post body (with chosen width + alt) or select a cover.
+  @Output() insert = new EventEmitter<{ url: string; width: string; alt: string }>();
+  @Output() cover = new EventEmitter<{ url: string }>();
   @Output() closed = new EventEmitter<void>();
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
@@ -23,10 +30,13 @@ export class MediaPickerComponent {
   open = false;
   loading = false;
   uploading = false;
+  mode: PickerMode = 'insert';
   files: MediaFile[] = [];
   error = '';
 
-  // Width applied on insert. '' means original (markdown image, no size).
+  search = '';
+  sortBy: 'new' | 'name' | 'size' = 'new';
+
   sizes = [
     { label: 'Original', value: '' },
     { label: 'Small', value: '25%' },
@@ -35,11 +45,17 @@ export class MediaPickerComponent {
   ];
   selectedWidth = '';
 
+  editingName: string | null = null;
+  editingDesc = '';
+
   constructor(private blogService: BlogService) {}
 
-  show(): void {
+  show(mode: PickerMode = 'insert'): void {
+    this.mode = mode;
     this.open = true;
     this.error = '';
+    this.search = '';
+    this.editingName = null;
     this.load();
   }
 
@@ -56,14 +72,41 @@ export class MediaPickerComponent {
         this.loading = false;
       },
       error: () => {
-        this.error = 'Could not load media library.';
+        this.error = 'Could not load the media library.';
         this.loading = false;
       }
     });
   }
 
-  onPick(file: MediaFile): void {
-    this.pick.emit({ url: file.url, width: this.selectedWidth });
+  get visibleFiles(): MediaFile[] {
+    const q = this.search.trim().toLowerCase();
+    let list = this.files;
+    if (q) {
+      list = list.filter(
+        (f) =>
+          f.name.toLowerCase().includes(q) ||
+          (f.description || '').toLowerCase().includes(q) ||
+          (f.originalName || '').toLowerCase().includes(q)
+      );
+    }
+    const sorted = [...list];
+    if (this.sortBy === 'name') {
+      sorted.sort((a, b) => (a.originalName || a.name).localeCompare(b.originalName || b.name));
+    } else if (this.sortBy === 'size') {
+      sorted.sort((a, b) => b.size - a.size);
+    } else {
+      sorted.sort((a, b) => b.mtime - a.mtime);
+    }
+    return sorted;
+  }
+
+  pick(file: MediaFile): void {
+    if (this.mode === 'cover') {
+      this.cover.emit({ url: file.url });
+    } else {
+      const alt = file.description?.trim() || file.originalName || file.name;
+      this.insert.emit({ url: file.url, width: this.selectedWidth, alt });
+    }
     this.hide();
   }
 
@@ -90,8 +133,31 @@ export class MediaPickerComponent {
     });
   }
 
-  // Two-step delete: a first call returns 409 + refs if the file is used in
-  // any post; we surface the titles and ask the admin to confirm with force.
+  startEdit(file: MediaFile): void {
+    this.editingName = file.name;
+    this.editingDesc = file.description || '';
+  }
+
+  cancelEdit(): void {
+    this.editingName = null;
+    this.editingDesc = '';
+  }
+
+  saveEdit(file: MediaFile): void {
+    const desc = this.editingDesc;
+    this.blogService.updateUpload(file.name, desc).subscribe({
+      next: () => {
+        file.description = desc;
+        this.editingName = null;
+      },
+      error: () => {
+        this.error = 'Could not save the description.';
+      }
+    });
+  }
+
+  // Two-step delete: a first call returns 409 + refs if the file is used in any
+  // post; surface the titles and ask for confirmation before forcing.
   remove(file: MediaFile): void {
     this.error = '';
     this.blogService.deleteUpload(file.name).subscribe({
@@ -104,11 +170,11 @@ export class MediaPickerComponent {
           if (confirm(msg)) {
             this.blogService.deleteUpload(file.name, true).subscribe({
               next: () => this.load(),
-              error: () => { this.error = 'Could not delete file.'; }
+              error: () => { this.error = 'Could not delete the file.'; }
             });
           }
         } else {
-          this.error = 'Could not delete file.';
+          this.error = 'Could not delete the file.';
         }
       }
     });
@@ -119,8 +185,17 @@ export class MediaPickerComponent {
   }
 
   formatSize(bytes: number): string {
+    if (!bytes) return '—';
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} kB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
+  formatDate(mtime: number): string {
+    try {
+      return new Date(mtime).toLocaleDateString();
+    } catch {
+      return '';
+    }
   }
 }
