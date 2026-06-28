@@ -1,0 +1,35 @@
+<div class="media-overlay" *ngIf="open" (click)="hide()">
+  <div class="media-modal" (click)="$event.stopPropagation()">
+    <header class="media-header">
+      <h3>Media library</h3>
+      <div class="media-actions">
+        <button type="button" class="btn btn-outline" (click)="triggerUpload()" [disabled]="uploading">
+          {{ uploading ? 'Uploading…' : 'Upload' }}
+        </button>
+        <button type="button" class="btn btn-outline" (click)="hide()">Close</button>
+        <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+      </div>
+    </header>
+
+    <div class="media-error" *ngIf="error">{{ error }}</div>
+    <div class="media-loading" *ngIf="loading">Loading…</div>
+
+    <div class="media-empty" *ngIf="!loading && files.length === 0">No files yet. Upload one to get started.</div>
+
+    <div class="media-grid" *ngIf="!loading && files.length > 0">
+      <div class="media-item" *ngFor="let file of files">
+        <button type="button" class="thumb-btn" (click)="onPick(file)" [title]="'Insert ' + file.name">
+          <img class="thumb" [src]="file.url" [alt]="file.name" />
+        </button>
+        <div class="meta">
+          <span class="filename" [title]="file.name">{{ file.name }}</span>
+          <span class="filesize">{{ formatSize(file.size) }}</span>
+        </div>
+        <div class="row-actions">
+          <button type="button" class="btn btn-sm btn-outline" (click)="copyUrl(file)">Copy URL</button>
+          <button type="button" class="btn btn-sm btn-danger" (click)="remove(file)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

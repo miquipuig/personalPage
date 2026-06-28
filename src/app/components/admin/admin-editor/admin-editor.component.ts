@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { ActivatedRoute, Router } from '@angular/router';
 import Editor from '@toast-ui/editor';
 import { BlogService } from '../../../services/blog.service';
+import { MediaPickerComponent } from '../media-picker/media-picker.component';
 
 @Component({
   selector: 'app-admin-editor',
@@ -10,6 +11,7 @@ import { BlogService } from '../../../services/blog.service';
 })
 export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('editorEl') editorEl!: ElementRef<HTMLDivElement>;
+  @ViewChild('mediaPicker') mediaPicker!: MediaPickerComponent;
 
   id: string | null = null;
   title = '';
@@ -52,12 +54,32 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    // Extra toolbar button that opens the media library picker. Toast-UI lets
+    // you pass a plain DOM element with click handlers — no need to register a
+    // custom command.
+    const mediaButton = document.createElement('button');
+    mediaButton.type = 'button';
+    mediaButton.className = 'toastui-editor-toolbar-icons';
+    mediaButton.style.backgroundImage = 'none';
+    mediaButton.style.font = '600 13px/1 sans-serif';
+    mediaButton.textContent = 'Media';
+    mediaButton.title = 'Insert from media library';
+    mediaButton.addEventListener('click', () => this.mediaPicker.show());
+
     this.editor = new Editor({
       el: this.editorEl.nativeElement,
       height: '500px',
       initialEditType: 'wysiwyg',
       previewStyle: 'vertical',
       initialValue: this.content || '',
+      toolbarItems: [
+        ['heading', 'bold', 'italic', 'strike'],
+        ['hr', 'quote'],
+        ['ul', 'ol', 'task', 'indent', 'outdent'],
+        ['table', 'image', 'link'],
+        ['code', 'codeblock'],
+        [{ el: mediaButton, name: 'media', tooltip: 'Insert from media library' }]
+      ],
       hooks: {
         addImageBlobHook: (blob: Blob | File, callback: (url: string, altText: string) => void) => {
           this.blogService.uploadImage(blob).subscribe({
@@ -76,6 +98,13 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
       this.editor.setMarkdown(this.pendingMarkdown);
       this.pendingMarkdown = null;
     }
+  }
+
+  onMediaPicked(url: string): void {
+    if (!this.editor) return;
+    // 'addImage' is the same Toast-UI command used by the built-in image button.
+    const alt = url.split('/').pop() || 'image';
+    this.editor.exec('addImage', { imageUrl: url, altText: alt });
   }
 
   ngOnDestroy(): void {

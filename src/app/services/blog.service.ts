@@ -48,4 +48,14 @@ export class BlogService {
     // No explicit Content-Type: let the browser set the multipart boundary.
     return this.http.post('api/blog/admin/upload', formData);
   }
+
+  listUploads(): Observable<any> {
+    return this.http.get('api/blog/admin/uploads');
+  }
+
+  // force=true bypasses the in-use guard (server returns 409 + refs otherwise).
+  deleteUpload(name: string, force = false): Observable<any> {
+    const qs = force ? '?force=1' : '';
+    return this.http.delete(`api/blog/admin/uploads/${encodeURIComponent(name)}${qs}`);
+  }
 }
