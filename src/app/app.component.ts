@@ -47,7 +47,9 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    this.pageLoaded = true;
+    // Defer to the next microtask: setting pageLoaded synchronously here flips
+    // an *ngIf already checked this cycle, triggering NG0100 in dev mode.
+    Promise.resolve().then(() => (this.pageLoaded = true));
   }
 
 
