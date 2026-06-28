@@ -9,15 +9,15 @@
         <div class="d-flex justify-content-center">
             <div class="form-border"> <!-- Clase para aplicar el borde -->
                 <div class="title-inside-border">Enter your credentials to log in</div>
-
-                <div class="d-flex justify-content-center mb-3 mt-2">
-                    <asl-google-signin-button *ngIf="!oauthUser" type='standard'
-                        size='large'></asl-google-signin-button>
-                </div>
-
-                <div class="login-divider mb-3"><span>or</span></div>
-
                 <form style="width: 350px; margin-bottom: 0px;" [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="d-flex justify-content-between mb-2 mt-2">
+                        <div>
+                            <asl-google-signin-button *ngIf="!oauthUser" type='standard'
+                                size='medium'></asl-google-signin-button>
+                        </div>
+                    </div>
+
+
                     <div class="form-floating mb-2">
                         <input id="email" type="text" formControlName="email" class="form-control" placeholder=""
                             aria-label="email" aria-describedby="addon-wrapping" [readonly]="oauthUser ? true : null">
