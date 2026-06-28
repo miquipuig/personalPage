@@ -53,7 +53,7 @@ export class AdminLoginComponent implements OnInit, OnDestroy {
           },
           error: () => {
             this.loading = false;
-            this.errorMessage = 'This account is not authorized to manage the blog';
+            this.errorMessage = 'This account is not authorized.';
             this.auth.logout();
           }
         });
