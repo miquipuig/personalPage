@@ -59,7 +59,8 @@ import { cookieConfig } from './cookie.config';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              "890461686537-e4s232ra16rcq23mnnkq9p9fah4n60t0.apps.googleusercontent.com"
+              "890461686537-e4s232ra16rcq23mnnkq9p9fah4n60t0.apps.googleusercontent.com",
+              { oneTapEnabled: false }
             ),
           },
         ],
