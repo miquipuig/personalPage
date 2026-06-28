@@ -24,6 +24,15 @@ export class AdminLoginComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // Already signed in with a valid admin session → skip the login screen.
+    if (this.auth.token) {
+      this.loading = true;
+      this.blogService.checkAdmin().subscribe({
+        next: () => this.router.navigate(['/admin']),
+        error: () => { this.loading = false; }
+      });
+    }
+
     this.authSubscription = this.socialAuthService.authState.subscribe((user) => {
       if (!user) {
         return;

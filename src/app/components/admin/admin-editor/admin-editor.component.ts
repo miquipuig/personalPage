@@ -50,6 +50,10 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
           this.published = !!post.published;
           this.content = post.content ?? '';
           this.applyMarkdown(this.content);
+          // Arriving from the posts-list "Preview" action.
+          if (this.route.snapshot.queryParamMap.get('preview') === '1') {
+            this.openPreview();
+          }
         },
         error: () => {
           this.error = 'Could not load the post.';

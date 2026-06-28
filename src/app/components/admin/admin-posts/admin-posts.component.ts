@@ -50,6 +50,11 @@ export class AdminPostsComponent implements OnInit {
     });
   }
 
+  preview(post: any): void {
+    // Open the editor on this post and auto-open its (unpublished) preview.
+    this.router.navigate(['/admin/edit', post.id], { queryParams: { preview: 1 } });
+  }
+
   togglePublish(post: any): void {
     this.blogService.updatePost(post.id, { published: !post.published }).subscribe({
       next: () => this.loadPosts(),

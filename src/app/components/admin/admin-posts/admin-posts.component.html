@@ -33,6 +33,7 @@
           <td class="muted">{{ post.updatedAt | date:'medium' }}</td>
           <td class="actions-col">
             <a class="btn btn-sm btn-outline" [routerLink]="['/admin/edit', post.id]">Edit</a>
+            <button type="button" class="btn btn-sm btn-outline" (click)="preview(post)">Preview</button>
             <button type="button" class="btn btn-sm btn-outline" (click)="togglePublish(post)">
               {{ post.published ? 'Unpublish' : 'Publish' }}
             </button>

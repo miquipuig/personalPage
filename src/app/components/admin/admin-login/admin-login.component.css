@@ -2,6 +2,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 60vh;
+}
+
+.admin-card {
+  width: 100%;
 }
 
 /* Reuse the site's semi-transparent black box (.container.c_custom) for
