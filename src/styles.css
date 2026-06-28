@@ -1194,12 +1194,19 @@ section .container.c_custom {
   background-repeat: no-repeat;
   background-size: cover;
   opacity: 0;
-  transition: opacity 1s ease-in-out;
+  filter: grayscale(0);
+  transition: opacity 1s ease-in-out, filter 1.2s ease-in-out;
 
 }
 
 #background-image.loaded {
   opacity: 1;
+}
+
+/* When a section is open (body gets .section-open), fade the background to
+   black & white. Removed again on the home view. */
+body.section-open #background-image {
+  filter: grayscale(1);
 }
 
 

@@ -29,8 +29,22 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.loadscipts();
+
+    // Toggle the black & white background: colour on the home view, grayscale
+    // once a section is open. CSS (body.section-open #background-image) animates
+    // the transition.
+    this.applySectionBg();
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(() => this.applySectionBg());
   }
   activeSection = '';
+
+  private applySectionBg(): void {
+    const path = this.router.url.split('?')[0].split('#')[0];
+    const isHome = path === '/' || path === '';
+    document.body.classList.toggle('section-open', !isHome);
+  }
 
   ngAfterViewInit() {
     this.pageLoaded = true;
