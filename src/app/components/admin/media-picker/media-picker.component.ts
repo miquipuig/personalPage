@@ -14,8 +14,8 @@ interface MediaFile {
   styleUrls: ['./media-picker.component.css']
 })
 export class MediaPickerComponent {
-  // Parent listens for the URL the user picked, then closes the picker.
-  @Output() pick = new EventEmitter<string>();
+  // Parent listens for the picked image (url + chosen width), then closes.
+  @Output() pick = new EventEmitter<{ url: string; width: string }>();
   @Output() closed = new EventEmitter<void>();
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
@@ -25,6 +25,15 @@ export class MediaPickerComponent {
   uploading = false;
   files: MediaFile[] = [];
   error = '';
+
+  // Width applied on insert. '' means original (markdown image, no size).
+  sizes = [
+    { label: 'Original', value: '' },
+    { label: 'Small', value: '25%' },
+    { label: 'Medium', value: '50%' },
+    { label: 'Large', value: '100%' },
+  ];
+  selectedWidth = '';
 
   constructor(private blogService: BlogService) {}
 
@@ -54,7 +63,7 @@ export class MediaPickerComponent {
   }
 
   onPick(file: MediaFile): void {
-    this.pick.emit(file.url);
+    this.pick.emit({ url: file.url, width: this.selectedWidth });
     this.hide();
   }
 

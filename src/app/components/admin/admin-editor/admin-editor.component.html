@@ -4,6 +4,7 @@
       <h2>{{ id ? 'Edit post' : 'New post' }}</h2>
       <div class="header-actions">
         <button type="button" class="btn btn-outline" (click)="cancel()">Cancel</button>
+        <button type="button" class="btn btn-outline" (click)="openPreview()">Preview</button>
         <button type="button" class="btn btn-primary" (click)="save()" [disabled]="saving">
           {{ saving ? 'Saving…' : 'Save' }}
         </button>
@@ -48,4 +49,18 @@
   </div>
 
   <app-media-picker #mediaPicker (pick)="onMediaPicked($event)"></app-media-picker>
+
+  <div class="preview-overlay" *ngIf="showPreview" (click)="closePreview()">
+    <div class="preview-modal" (click)="$event.stopPropagation()">
+      <header class="preview-header">
+        <span>Preview (not published)</span>
+        <button type="button" class="btn btn-outline" (click)="closePreview()">Close</button>
+      </header>
+      <article class="preview-body">
+        <h1 class="preview-title">{{ title }}</h1>
+        <img class="preview-cover" *ngIf="coverImage" [src]="coverImage" alt="cover" />
+        <div class="post-body" [innerHTML]="previewHtml"></div>
+      </article>
+    </div>
+  </div>
 </section>

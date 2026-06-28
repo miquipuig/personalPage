@@ -11,6 +11,12 @@
       </div>
     </header>
 
+    <div class="media-size">
+      <span class="media-size-label">Insert size:</span>
+      <button type="button" class="size-btn" *ngFor="let s of sizes"
+        [class.active]="selectedWidth === s.value" (click)="selectedWidth = s.value">{{ s.label }}</button>
+    </div>
+
     <div class="media-error" *ngIf="error">{{ error }}</div>
     <div class="media-loading" *ngIf="loading">Loading…</div>
 

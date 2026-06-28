@@ -37,6 +37,35 @@
   gap: 8px;
 }
 
+.media-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px 0;
+  flex-wrap: wrap;
+}
+
+.media-size-label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.size-btn {
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #333;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.size-btn.active {
+  background: #1b212b;
+  color: #fff;
+  border-color: #1b212b;
+}
+
 .media-error {
   margin: 12px 20px 0;
   color: #b91c1c;

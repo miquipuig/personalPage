@@ -1285,3 +1285,15 @@ body.section-open #background-image {
   }
 }
 
+/* Toast-UI editor popups (heading dropdown, link/image dialogs, context menu)
+   render at <body> level, so they inherit body{color:#fff} and become
+   invisible on their white background. Force dark text inside them. */
+.toastui-editor-popup,
+.toastui-editor-popup *,
+.toastui-editor-dropdown-toolbar,
+.toastui-editor-dropdown-toolbar *,
+.toastui-editor-context-menu,
+.toastui-editor-context-menu * {
+  color: #222;
+}
+

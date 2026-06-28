@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { marked } from 'marked';
 import Editor from '@toast-ui/editor';
 import { BlogService } from '../../../services/blog.service';
 import { MediaPickerComponent } from '../media-picker/media-picker.component';
@@ -24,13 +26,17 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   uploadingCover = false;
   error = '';
 
+  showPreview = false;
+  previewHtml: SafeHtml = '';
+
   private editor: Editor | null = null;
   private pendingMarkdown: string | null = null;
 
   constructor(
     private blogService: BlogService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -100,11 +106,17 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onMediaPicked(url: string): void {
+  onMediaPicked(payload: { url: string; width: string }): void {
     if (!this.editor) return;
-    // 'addImage' is the same Toast-UI command used by the built-in image button.
+    const { url, width } = payload;
     const alt = url.split('/').pop() || 'image';
-    this.editor.exec('addImage', { imageUrl: url, altText: alt });
+    if (!width) {
+      // Original size → plain markdown image.
+      this.editor.exec('addImage', { imageUrl: url, altText: alt });
+    } else {
+      // Sized image → raw HTML the public marked renderer passes through.
+      this.editor.insertText(`<img src="${url}" alt="${alt}" width="${width}">`);
+    }
   }
 
   ngOnDestroy(): void {
@@ -174,6 +186,17 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
         this.error = 'Could not save the post.';
       }
     });
+  }
+
+  openPreview(): void {
+    const content = this.editor ? this.editor.getMarkdown() : this.content;
+    const rendered = marked.parse(content || '') as string;
+    this.previewHtml = this.sanitizer.bypassSecurityTrustHtml(rendered);
+    this.showPreview = true;
+  }
+
+  closePreview(): void {
+    this.showPreview = false;
   }
 
   cancel(): void {
