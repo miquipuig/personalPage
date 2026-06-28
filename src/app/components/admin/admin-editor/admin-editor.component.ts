@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { marked } from 'marked';
+import { renderMarkdown } from '../../../shared/markdown.util';
 import Editor from '@toast-ui/editor';
 import { BlogService } from '../../../services/blog.service';
 import { MediaPickerComponent } from '../media-picker/media-picker.component';
@@ -110,13 +110,11 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.editor) return;
     const { url, width } = payload;
     const alt = url.split('/').pop() || 'image';
-    if (!width) {
-      // Original size → plain markdown image.
-      this.editor.exec('addImage', { imageUrl: url, altText: alt });
-    } else {
-      // Sized image → raw HTML the public marked renderer passes through.
-      this.editor.insertText(`<img src="${url}" alt="${alt}" width="${width}">`);
-    }
+    // Always insert a real markdown image so it renders in the editor. Width is
+    // carried in the URL fragment (#w=) and applied by the public/preview
+    // renderer (see shared/markdown.util.ts).
+    const src = width ? `${url}#w=${width}` : url;
+    this.editor.exec('addImage', { imageUrl: src, altText: alt });
   }
 
   ngOnDestroy(): void {
@@ -190,8 +188,7 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openPreview(): void {
     const content = this.editor ? this.editor.getMarkdown() : this.content;
-    const rendered = marked.parse(content || '') as string;
-    this.previewHtml = this.sanitizer.bypassSecurityTrustHtml(rendered);
+    this.previewHtml = this.sanitizer.bypassSecurityTrustHtml(renderMarkdown(content));
     this.showPreview = true;
   }
 

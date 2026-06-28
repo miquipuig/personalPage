@@ -1,4 +1,4 @@
-<section class="admin-editor section-show">
+<section class="admin-editor section-show" *ngIf="!showPreview">
   <div class="admin-editor-inner">
     <header class="editor-header">
       <h2>{{ id ? 'Edit post' : 'New post' }}</h2>
@@ -49,18 +49,20 @@
   </div>
 
   <app-media-picker #mediaPicker (pick)="onMediaPicked($event)"></app-media-picker>
+</section>
 
-  <div class="preview-overlay" *ngIf="showPreview" (click)="closePreview()">
-    <div class="preview-modal" (click)="$event.stopPropagation()">
-      <header class="preview-header">
-        <span>Preview (not published)</span>
-        <button type="button" class="btn btn-outline" (click)="closePreview()">Close</button>
-      </header>
-      <article class="preview-body">
-        <h1 class="preview-title">{{ title }}</h1>
-        <img class="preview-cover" *ngIf="coverImage" [src]="coverImage" alt="cover" />
-        <div class="post-body" [innerHTML]="previewHtml"></div>
-      </article>
+<section class="admin-preview section-show" *ngIf="showPreview">
+  <div class="about-me container c_custom">
+    <div class="preview-bar">
+      <button type="button" class="btn btn-outline" (click)="closePreview()">&larr; Back to editor</button>
+      <span class="preview-flag">Preview — not published</span>
     </div>
+    <article class="post">
+      <h1 class="post-title">{{ title || 'Untitled' }}</h1>
+      <div class="post-cover" *ngIf="coverImage">
+        <img [src]="coverImage" [alt]="title" />
+      </div>
+      <div class="post-body" [innerHTML]="previewHtml"></div>
+    </article>
   </div>
 </section>

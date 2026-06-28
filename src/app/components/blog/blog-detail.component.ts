@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { marked } from 'marked';
+import { renderMarkdown } from '../../shared/markdown.util';
 import { BlogService } from '../../services/blog.service';
 
 @Component({
@@ -47,7 +47,7 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
           this.post = null;
         } else {
           this.post = post;
-          const rendered = marked.parse(post.content ?? '') as string;
+          const rendered = renderMarkdown(post.content ?? '');
           this.html = this.sanitizer.bypassSecurityTrustHtml(rendered);
         }
         this.loaded = true;
