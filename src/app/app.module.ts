@@ -59,7 +59,7 @@ import { cookieConfig } from './cookie.config';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              "575980238998-i8ss198g31m6jrjlc5ik2lsh18pq9q3d.apps.googleusercontent.com"
+              "890461686537-e4s232ra16rcq23mnnkq9p9fah4n60t0.apps.googleusercontent.com"
             ),
           },
         ],
