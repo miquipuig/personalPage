@@ -1,0 +1,51 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class BlogService {
+  constructor(private http: HttpClient) {}
+
+  // --- Public ---
+  listPosts(): Observable<any> {
+    return this.http.get('api/blog/posts');
+  }
+
+  getPost(slug: string): Observable<any> {
+    return this.http.get(`api/blog/posts/${slug}`);
+  }
+
+  // --- Admin ---
+  adminListPosts(): Observable<any> {
+    return this.http.get('api/blog/admin/posts');
+  }
+
+  getAdminPost(id: any): Observable<any> {
+    return this.http.get(`api/blog/admin/posts/${id}`);
+  }
+
+  createPost(body: any): Observable<any> {
+    return this.http.post('api/blog/admin/posts', body);
+  }
+
+  updatePost(id: any, body: any): Observable<any> {
+    return this.http.put(`api/blog/admin/posts/${id}`, body);
+  }
+
+  deletePost(id: any): Observable<any> {
+    return this.http.delete(`api/blog/admin/posts/${id}`);
+  }
+
+  checkAdmin(): Observable<any> {
+    return this.http.get('api/blog/admin/me');
+  }
+
+  uploadImage(file: Blob | File): Observable<any> {
+    const formData = new FormData();
+    formData.append('image', file);
+    // No explicit Content-Type: let the browser set the multipart boundary.
+    return this.http.post('api/blog/admin/upload', formData);
+  }
+}

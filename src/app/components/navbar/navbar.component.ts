@@ -13,7 +13,7 @@ export class NavbarComponent {
   classBiList = true;
   activeSection = '';
   classHeaderTop = false;
-  sectionsList = ['/', 'about', 'resume', 'contact'];
+  sectionsList = ['/', 'about', 'resume', 'contact', 'blog'];
   fullRoute = '';
   userMenu = false;
   @Output() scrollToSection = new EventEmitter<any>();

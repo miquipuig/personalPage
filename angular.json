@@ -31,7 +31,8 @@
               "src/styles.css",
               "src/productivityStyles.css",
               "node_modules/remixicon/fonts/remixicon.css",
-              "node_modules/cookieconsent/build/cookieconsent.min.css"
+              "node_modules/cookieconsent/build/cookieconsent.min.css",
+              "node_modules/@toast-ui/editor/dist/toastui-editor.css"
             ],
             "scripts": [
               "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",

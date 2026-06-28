@@ -1,0 +1,49 @@
+<section class="admin-editor">
+  <div class="admin-editor-inner">
+    <header class="editor-header">
+      <h2>{{ id ? 'Edit post' : 'New post' }}</h2>
+      <div class="header-actions">
+        <button type="button" class="btn btn-outline" (click)="cancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="save()" [disabled]="saving">
+          {{ saving ? 'Saving…' : 'Save' }}
+        </button>
+      </div>
+    </header>
+
+    <div class="admin-error" *ngIf="error">{{ error }}</div>
+
+    <div class="form-grid">
+      <label class="field">
+        <span class="field-label">Title</span>
+        <input type="text" class="field-input" [(ngModel)]="title" name="title" placeholder="Post title" />
+      </label>
+
+      <label class="field">
+        <span class="field-label">Excerpt</span>
+        <textarea class="field-input" [(ngModel)]="excerpt" name="excerpt" rows="3"
+          placeholder="Short summary shown in listings"></textarea>
+      </label>
+
+      <div class="field">
+        <span class="field-label">Cover image</span>
+        <input type="text" class="field-input" [(ngModel)]="coverImage" name="coverImage"
+          placeholder="/api/uploads/... or external URL" />
+        <div class="cover-upload">
+          <input type="file" accept="image/*" (change)="onCoverFileSelected($event)" />
+          <span class="muted" *ngIf="uploadingCover">Uploading…</span>
+        </div>
+        <img class="cover-preview" *ngIf="coverImage" [src]="coverImage" alt="cover preview" />
+      </div>
+
+      <label class="field checkbox-field">
+        <input type="checkbox" [(ngModel)]="published" name="published" />
+        <span class="field-label">Published</span>
+      </label>
+
+      <div class="field">
+        <span class="field-label">Content</span>
+        <div #editorEl></div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -12,7 +12,28 @@ export class AuthService {
   authenticated = false;
   socialUser: any;
   user: any;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    const storedToken = localStorage.getItem('pp_token');
+    if (storedToken) {
+      this.token = storedToken;
+      const storedUser = localStorage.getItem('pp_user');
+      this.user = storedUser ? JSON.parse(storedUser) : null;
+      this.authenticated = true;
+    }
+  }
+
+  get isLoggedIn(): boolean {
+    return !!this.token;
+  }
+
+  private persistSession(): void {
+    if (this.token) {
+      localStorage.setItem('pp_token', this.token);
+    }
+    if (this.user) {
+      localStorage.setItem('pp_user', JSON.stringify(this.user));
+    }
+  }
 
   login( user: any, token?:string): Promise<any> {
 
@@ -25,6 +46,7 @@ export class AuthService {
             if (response.user) {
               this.user = response.user;
             }
+            this.persistSession();
           }
           resolve(response);
         },
@@ -48,6 +70,7 @@ export class AuthService {
             if (response.user) {
               this.user = response.user;
             }
+            this.persistSession();
           }
           resolve(response);
         },
@@ -56,7 +79,7 @@ export class AuthService {
           reject(error.error);
         }
       });
-  
+
     });
   }
 
@@ -64,6 +87,8 @@ export class AuthService {
     this.token = null;
     this.authenticated = false;
     this.user = null;
+    localStorage.removeItem('pp_token');
+    localStorage.removeItem('pp_user');
   }
 
 }

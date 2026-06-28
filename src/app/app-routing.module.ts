@@ -33,6 +33,14 @@ const routes: Routes = [
     loadChildren: () => import('./components/policy/policy.module').then(m => m.PolicyModule)
   },
   {
+    path: 'blog',
+    loadChildren: () => import('./components/blog/blog.module').then(m => m.BlogModule)
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./components/admin/admin.module').then(m => m.AdminModule)
+  },
+  {
     path: 'portfolio',
     loadChildren: () => import('./components/portfolio/portfolio.module').then(m => m.PortfolioModule)
   },

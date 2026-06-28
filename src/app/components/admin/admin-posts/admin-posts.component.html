@@ -1,0 +1,45 @@
+<section class="admin-posts">
+  <div class="admin-posts-inner">
+    <header class="admin-posts-header">
+      <h2>Blog posts</h2>
+      <div class="header-actions">
+        <a class="btn btn-primary" [routerLink]="'/admin/new'">New post</a>
+        <button type="button" class="btn btn-outline" (click)="logout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="admin-error" *ngIf="error">{{ error }}</div>
+    <div class="admin-loading" *ngIf="loading">Loading…</div>
+
+    <div class="empty" *ngIf="!loading && posts.length === 0">No posts yet.</div>
+
+    <table class="posts-table" *ngIf="!loading && posts.length > 0">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Updated</th>
+          <th class="actions-col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let post of posts">
+          <td class="title-cell">{{ post.title }}</td>
+          <td>
+            <span class="badge" [class.published]="post.published" [class.draft]="!post.published">
+              {{ post.published ? 'Published' : 'Draft' }}
+            </span>
+          </td>
+          <td class="muted">{{ post.updatedAt | date:'medium' }}</td>
+          <td class="actions-col">
+            <a class="btn btn-sm btn-outline" [routerLink]="['/admin/edit', post.id]">Edit</a>
+            <button type="button" class="btn btn-sm btn-outline" (click)="togglePublish(post)">
+              {{ post.published ? 'Unpublish' : 'Publish' }}
+            </button>
+            <button type="button" class="btn btn-sm btn-danger" (click)="deletePost(post)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

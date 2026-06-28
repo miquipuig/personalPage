@@ -23,6 +23,7 @@
     "@angular/router": "^17.3.11",
     "@ng-bootstrap/ng-bootstrap": "^15.1.2",
     "@popperjs/core": "^2.11.8",
+    "@toast-ui/editor": "^3.2.2",
     "angular-oauth2-oidc": "^17.0.2",
     "animate.css": "^4.1.1",
     "bootstrap": "^5.3.3",

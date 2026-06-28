@@ -1,0 +1,18 @@
+<section id="blog" class="about" [ngClass]="{'section-show': isSectionActive}">
+  <div class="about-me container c_custom">
+    <article class="post" *ngIf="post">
+      <h1 class="post-title">{{ post.title }}</h1>
+      <span class="post-date" *ngIf="post.publishedAt">{{ post.publishedAt | date:'mediumDate' }}</span>
+      <div class="post-cover" *ngIf="post.coverImage">
+        <img [src]="post.coverImage" [alt]="post.title" />
+      </div>
+      <div class="post-body" [innerHTML]="html"></div>
+    </article>
+
+    <div class="post-not-found" *ngIf="loaded && notFound">
+      <h1>Post not found</h1>
+      <p>The post you are looking for does not exist.</p>
+      <a routerLink="/blog" class="back-link">&larr; Back to Blog</a>
+    </div>
+  </div>
+</section><!-- End Blog Detail Section -->

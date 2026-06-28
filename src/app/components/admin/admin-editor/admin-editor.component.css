@@ -1,0 +1,145 @@
+.admin-editor {
+  min-height: 70vh;
+  background: #11151c;
+  padding: 2rem 1rem;
+}
+
+.admin-editor-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.editor-header h2 {
+  color: #f1f5f9;
+  margin: 0;
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field-label {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.field-input {
+  background: #1b212b;
+  border: 1px solid #2a3340;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+textarea.field-input {
+  resize: vertical;
+}
+
+.checkbox-field {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox-field input {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.cover-upload {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.cover-upload input[type='file'] {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+}
+
+.cover-preview {
+  margin-top: 0.6rem;
+  max-width: 280px;
+  border-radius: 8px;
+  border: 1px solid #2a3340;
+}
+
+.muted {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.btn {
+  display: inline-block;
+  border: none;
+  border-radius: 7px;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1px solid #3a4554;
+}
+
+.btn-outline:hover {
+  background: #232b36;
+}
+
+.admin-error {
+  margin-bottom: 1rem;
+  color: #fca5a5;
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  border-radius: 8px;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.9rem;
+}
