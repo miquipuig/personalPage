@@ -41,27 +41,22 @@ export class AdminLoginComponent implements OnInit, OnDestroy {
   }
 
   private handleLogin(idToken?: string): void {
+    if (!idToken) {
+      return;
+    }
     this.errorMessage = '';
     this.loading = true;
-    this.auth
-      .login({}, idToken)
-      .then(() => {
-        this.blogService.checkAdmin().subscribe({
-          next: () => {
-            this.loading = false;
-            this.router.navigate(['/admin']);
-          },
-          error: () => {
-            this.loading = false;
-            this.errorMessage = 'This account is not authorized.';
-            this.auth.logout();
-          }
-        });
-      })
-      .catch(() => {
+    this.blogService.adminLogin(idToken).subscribe({
+      next: (res: any) => {
         this.loading = false;
-        this.errorMessage = 'This account is not authorized to manage the blog';
+        this.auth.setSession(res.token, res.user);
+        this.router.navigate(['/admin']);
+      },
+      error: () => {
+        this.loading = false;
+        this.errorMessage = 'This account is not authorized.';
         this.auth.logout();
-      });
+      }
+    });
   }
 }

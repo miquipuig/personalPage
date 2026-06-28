@@ -35,6 +35,15 @@ export class AuthService {
     }
   }
 
+  setSession(token: string, user?: any): void {
+    this.token = token;
+    this.authenticated = true;
+    if (user) {
+      this.user = user;
+    }
+    this.persistSession();
+  }
+
   login( user: any, token?:string): Promise<any> {
 
     return new Promise((resolve, reject) => {

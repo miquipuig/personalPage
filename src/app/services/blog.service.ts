@@ -42,6 +42,11 @@ export class BlogService {
     return this.http.get('api/blog/admin/me');
   }
 
+  // Exchange a Google id_token for an admin JWT (allowlist-gated server-side).
+  adminLogin(token: string): Observable<any> {
+    return this.http.post('api/blog/admin/login', { token });
+  }
+
   uploadImage(file: Blob | File): Observable<any> {
     const formData = new FormData();
     formData.append('image', file);
