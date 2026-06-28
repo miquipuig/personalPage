@@ -1297,3 +1297,25 @@ body.section-open #background-image {
   color: #222;
 }
 
+/* Rendered post code blocks (public detail + admin preview). highlight.js's
+   theme colours the .hljs spans; these add the block chrome. */
+.post-body pre {
+  overflow-x: auto;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.post-body pre code.hljs {
+  display: block;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.9em;
+}
+
+.post-body :not(pre) > code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+

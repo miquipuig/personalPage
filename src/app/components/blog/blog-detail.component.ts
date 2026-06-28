@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, Title, Meta } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { renderMarkdown } from '../../shared/markdown.util';
@@ -21,8 +21,23 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private blogService: BlogService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private titleService: Title,
+    private meta: Meta
   ) {}
+
+  private setSeo(post: any): void {
+    const title = `${post.title} — Miquel Puig`;
+    const desc = post.excerpt || '';
+    this.titleService.setTitle(title);
+    this.meta.updateTag({ name: 'description', content: desc });
+    this.meta.updateTag({ property: 'og:title', content: post.title });
+    this.meta.updateTag({ property: 'og:description', content: desc });
+    this.meta.updateTag({ property: 'og:type', content: 'article' });
+    if (post.coverImage) {
+      this.meta.updateTag({ property: 'og:image', content: post.coverImage });
+    }
+  }
 
   ngOnInit() {
     this.paramsSub = this.route.params.subscribe(params => {
@@ -47,6 +62,7 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
           this.post = null;
         } else {
           this.post = post;
+          this.setSeo(post);
           const rendered = renderMarkdown(post.content ?? '');
           this.html = this.sanitizer.bypassSecurityTrustHtml(rendered);
         }
