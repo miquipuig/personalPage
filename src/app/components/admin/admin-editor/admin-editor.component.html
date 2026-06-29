@@ -87,32 +87,40 @@
           </div>
         </div>
 
-        <div class="table-context-bar" *ngIf="inTable">
-          <span class="tcb-label"><i class="bi bi-table"></i> Table</span>
-          <button type="button" class="btn btn-sm btn-outline" (click)="addRowAbove()" title="Add row above">+ Row above</button>
-          <button type="button" class="btn btn-sm btn-outline" (click)="addRowBelow()" title="Add row below">+ Row below</button>
-          <button type="button" class="btn btn-sm btn-outline" (click)="addColLeft()" title="Add column left">+ Col left</button>
-          <button type="button" class="btn btn-sm btn-outline" (click)="addColRight()" title="Add column right">+ Col right</button>
-          <span class="tcb-sep"></span>
-          <button type="button" class="btn btn-sm btn-outline" (click)="deleteRow()" title="Delete current row">&minus; Row</button>
-          <button type="button" class="btn btn-sm btn-outline" (click)="deleteColumn()" title="Delete current column">&minus; Col</button>
-          <button type="button" class="btn btn-sm btn-danger" (click)="deleteTable()" title="Delete table">Delete table</button>
-        </div>
-
         <div class="milkdown-host" #editorEl></div>
-
-        <div class="img-panel" *ngIf="selImg">
-          <span class="img-panel-label">Selected image:</span>
-          <div class="img-panel-sizes">
-            <button type="button" class="btn btn-sm btn-outline" *ngFor="let s of imgSizes"
-              [class.active]="selImg.width === s.value" (click)="setImgSize(s.value)">{{ s.label }}</button>
-          </div>
-          <input type="text" class="field-input img-panel-alt" [ngModel]="selImg.alt" name="imgAlt"
-            (ngModelChange)="setImgAlt($event)" placeholder="alt text (description)" />
-          <button type="button" class="btn btn-sm btn-danger" (click)="removeImg()">Delete image</button>
-        </div>
       </div>
     </div>
+  </div>
+
+  <!-- Floating toolbar anchored to the selected element -->
+  <div class="float-tools" *ngIf="floatKind" [style.top.px]="floatTop" [style.left.px]="floatLeft"
+    (mousedown)="$event.preventDefault()">
+
+    <ng-container *ngIf="floatKind === 'image'">
+      <button type="button" class="ft-btn" *ngFor="let s of imgSizes"
+        [class.on]="selImg && selImg.width === s.value" (click)="setImgSize(s.value)">{{ s.label }}</button>
+      <input type="text" class="ft-input" [ngModel]="selImg?.alt" name="ftAlt"
+        (mousedown)="$event.stopPropagation()" (ngModelChange)="setImgAlt($event)" placeholder="alt text" />
+      <button type="button" class="ft-btn ft-danger" title="Delete image" (click)="removeImg()"><i class="bi bi-trash"></i></button>
+    </ng-container>
+
+    <ng-container *ngIf="floatKind === 'table'">
+      <button type="button" class="ft-btn" title="Add row above" (click)="addRowAbove()">+Row↑</button>
+      <button type="button" class="ft-btn" title="Add row below" (click)="addRowBelow()">+Row↓</button>
+      <button type="button" class="ft-btn" title="Add column left" (click)="addColLeft()">+Col←</button>
+      <button type="button" class="ft-btn" title="Add column right" (click)="addColRight()">+Col→</button>
+      <button type="button" class="ft-btn" title="Delete row" (click)="deleteRow()">−Row</button>
+      <button type="button" class="ft-btn" title="Delete column" (click)="deleteColumn()">−Col</button>
+      <button type="button" class="ft-btn ft-danger" title="Delete table" (click)="deleteTable()"><i class="bi bi-trash"></i></button>
+    </ng-container>
+
+    <ng-container *ngIf="floatKind === 'text'">
+      <button type="button" class="ft-btn" title="Bold" (click)="toggleBold()"><i class="bi bi-type-bold"></i></button>
+      <button type="button" class="ft-btn" title="Italic" (click)="toggleItalic()"><i class="bi bi-type-italic"></i></button>
+      <button type="button" class="ft-btn" title="Strikethrough" (click)="toggleStrike()"><i class="bi bi-type-strikethrough"></i></button>
+      <button type="button" class="ft-btn" title="Inline code" (click)="toggleInlineCode()"><i class="bi bi-code-slash"></i></button>
+      <button type="button" class="ft-btn" title="Link" (click)="insertLink()"><i class="bi bi-link-45deg"></i></button>
+    </ng-container>
   </div>
 
   <app-media-picker #mediaPicker (insert)="onInsertImage($event)" (cover)="onSelectCover($event)"></app-media-picker>

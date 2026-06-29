@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, NgZone, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Inject, NgZone, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -36,7 +36,7 @@ import { NodeSelection } from '@milkdown/prose/state';
 import { nord } from '@milkdown/theme-nord';
 import { imageWidth, SelectedImage } from './image-width.plugin';
 import { codeBlock, trailingParagraph } from './code-block.plugin';
-import { tableTools } from './table.plugin';
+import { contextTools } from './table.plugin';
 import { BlogService } from '../../../services/blog.service';
 import { MediaPickerComponent } from '../media-picker/media-picker.component';
 
@@ -65,6 +65,17 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   // Currently selected image (drives the controls panel below the editor).
   selImg: SelectedImage | null = null;
   inTable = false;
+  hasTextSel = false;
+
+  // Floating toolbar on the selected element (image / table / text)
+  floatTop = 0;
+  floatLeft = 0;
+  get floatKind(): 'image' | 'table' | 'text' | null {
+    if (this.selImg) return 'image';
+    if (this.inTable) return 'table';
+    if (this.hasTextSel) return 'text';
+    return null;
+  }
 
   // Excel-style table size picker
   showTableGrid = false;
@@ -149,10 +160,10 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
       .use(gfm)
       .use(listener)
       .use(upload)
-      .use(imageWidth((img) => this.zone.run(() => (this.selImg = img))))
+      .use(imageWidth((img) => this.zone.run(() => { this.selImg = img; this.afterSel(); })))
       .use(codeBlock)
       .use(trailingParagraph)
-      .use(tableTools((v) => this.zone.run(() => (this.inTable = v))))
+      .use(contextTools((s) => this.zone.run(() => { this.inTable = s.inTable; this.hasTextSel = s.hasText; this.afterSel(); })))
       .create();
 
     // If the post loaded before the editor was ready, apply now.
@@ -230,6 +241,51 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   deleteRow(): void { this.tableCmd(deleteRow); }
   deleteColumn(): void { this.tableCmd(deleteColumn); }
   deleteTable(): void { this.tableCmd(deleteTable); }
+
+  // --- floating toolbar positioning ---
+  private afterSel(): void {
+    setTimeout(() => this.positionFloat(), 0);
+  }
+
+  @HostListener('window:scroll')
+  @HostListener('window:resize')
+  onWindowChange(): void {
+    if (this.floatKind) this.positionFloat();
+  }
+
+  private positionFloat(): void {
+    const kind = this.floatKind;
+    if (!kind || !this.isBrowser) return;
+    let rect: DOMRect | null = null;
+    if (kind === 'text') {
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount > 0) {
+        const r = sel.getRangeAt(0).getBoundingClientRect();
+        if (r.width || r.height) rect = r;
+      }
+    } else {
+      this.editor?.action((ctx) => {
+        const view = ctx.get(editorViewCtx);
+        let dom: any = null;
+        if (kind === 'image' && this.selImg) {
+          dom = view.nodeDOM(this.selImg.pos);
+        } else if (kind === 'table') {
+          const $from = view.state.selection.$from;
+          for (let d = $from.depth; d > 0; d--) {
+            if ($from.node(d)?.type?.name === 'table') { dom = view.nodeDOM($from.before(d)); break; }
+          }
+        }
+        const el = dom && dom.nodeType === 1 ? dom : dom?.parentElement;
+        if (el?.getBoundingClientRect) rect = el.getBoundingClientRect();
+      });
+    }
+    if (!rect) return;
+    const H = 46;
+    let top = rect.top - H - 8;
+    if (top < 84) top = rect.bottom + 8;
+    this.floatTop = Math.round(top);
+    this.floatLeft = Math.round(Math.min(Math.max(8, rect.left), window.innerWidth - 380));
+  }
 
   insertLink(): void {
     const href = typeof window !== 'undefined' ? window.prompt('Link URL') : '';

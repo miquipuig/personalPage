@@ -223,6 +223,58 @@ textarea.field-input {
   margin: 0 2px;
 }
 
+/* Floating toolbar anchored to the selected element */
+.float-tools {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 6px;
+  background: #1b212b;
+  border: 1px solid #2a3340;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+}
+
+.ft-btn {
+  border: 1px solid #3a4554;
+  background: #232b36;
+  color: #e2e8f0;
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 0.8rem;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ft-btn:hover {
+  background: #2f3947;
+}
+
+.ft-btn.on {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.ft-btn.ft-danger {
+  background: #3a1f1f;
+  color: #fca5a5;
+  border-color: #5b2b2b;
+}
+
+.ft-input {
+  width: 140px;
+  border: 1px solid #3a4554;
+  background: #0f141b;
+  color: #e2e8f0;
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 0.8rem;
+}
+
 /* Excel-style table size picker */
 .tb-table-wrap {
   position: relative;
