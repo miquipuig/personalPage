@@ -11,7 +11,28 @@
       </div>
     </header>
 
-    <div class="media-toolbar">
+    <div class="crop-view" *ngIf="cropFile">
+      <image-cropper
+        [imageFile]="cropFile"
+        [maintainAspectRatio]="false"
+        [format]="forcePng ? 'png' : 'jpeg'"
+        [imageQuality]="quality"
+        output="blob"
+        (imageCropped)="onCropped($event)"></image-cropper>
+      <div class="crop-controls">
+        <label class="crop-opt"><input type="checkbox" [(ngModel)]="forcePng" /> Keep PNG (lossless)</label>
+        <label class="crop-opt" *ngIf="!forcePng">Quality {{ quality }}%
+          <input type="range" min="40" max="95" [(ngModel)]="quality" /></label>
+        <span class="crop-spacer"></span>
+        <button type="button" class="btn btn-outline" (click)="cancelCrop()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="confirmUpload()" [disabled]="uploading || !croppedBlob">
+          {{ uploading ? 'Uploading…' : 'Crop &amp; upload' }}
+        </button>
+      </div>
+      <div class="media-error" *ngIf="error">{{ error }}</div>
+    </div>
+
+    <div class="media-toolbar" *ngIf="!cropFile">
       <input type="text" class="media-search" placeholder="Search by name or description…"
         [(ngModel)]="search" />
       <label class="media-sort">
@@ -29,17 +50,17 @@
       </div>
     </div>
 
-    <div class="media-error" *ngIf="error">{{ error }}</div>
-    <div class="media-loading" *ngIf="loading">Loading…</div>
+    <div class="media-error" *ngIf="!cropFile && error">{{ error }}</div>
+    <div class="media-loading" *ngIf="!cropFile && loading">Loading…</div>
 
-    <div class="media-empty" *ngIf="!loading && files.length === 0">
+    <div class="media-empty" *ngIf="!cropFile && !loading && files.length === 0">
       No files yet. Upload one to get started.
     </div>
-    <div class="media-empty" *ngIf="!loading && files.length > 0 && visibleFiles.length === 0">
+    <div class="media-empty" *ngIf="!cropFile && !loading && files.length > 0 && visibleFiles.length === 0">
       No files match “{{ search }}”.
     </div>
 
-    <div class="media-grid" *ngIf="!loading && visibleFiles.length > 0">
+    <div class="media-grid" *ngIf="!cropFile && !loading && visibleFiles.length > 0">
       <div class="media-item" *ngFor="let file of visibleFiles">
         <button type="button" class="thumb-btn" (click)="pick(file)"
           [title]="mode === 'cover' ? 'Use as cover' : 'Insert into post'">

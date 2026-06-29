@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { BlogService } from '../../../services/blog.service';
 
 interface MediaFile {
@@ -47,6 +48,12 @@ export class MediaPickerComponent {
 
   editingName: string | null = null;
   editingDesc = '';
+
+  // Crop + convert step before uploading
+  cropFile: File | null = null;
+  croppedBlob: Blob | null = null;
+  forcePng = false;
+  quality = 82;
 
   constructor(private blogService: BlogService) {}
 
@@ -118,12 +125,32 @@ export class MediaPickerComponent {
     const input = event.target as HTMLInputElement;
     const file = input.files && input.files[0];
     if (!file) return;
+    // Open the crop/convert step instead of uploading directly.
+    this.error = '';
+    this.croppedBlob = null;
+    this.cropFile = file;
+    input.value = '';
+  }
+
+  onCropped(e: ImageCroppedEvent): void {
+    this.croppedBlob = e.blob ?? null;
+  }
+
+  cancelCrop(): void {
+    this.cropFile = null;
+    this.croppedBlob = null;
+  }
+
+  confirmUpload(): void {
+    if (!this.croppedBlob) return;
     this.uploading = true;
     this.error = '';
-    this.blogService.uploadImage(file).subscribe({
+    const ext = this.forcePng ? 'png' : 'jpg';
+    this.blogService.uploadImage(this.croppedBlob, undefined, `image.${ext}`).subscribe({
       next: () => {
         this.uploading = false;
-        input.value = '';
+        this.cropFile = null;
+        this.croppedBlob = null;
         this.load();
       },
       error: () => {

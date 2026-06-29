@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
+import { ImageCropperComponent } from 'ngx-image-cropper';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminPostsComponent } from './admin-posts/admin-posts.component';
@@ -21,7 +22,8 @@ import { MediaPickerComponent } from './media-picker/media-picker.component';
     FormsModule,
     RouterModule,
     AdminRoutingModule,
-    GoogleSigninButtonModule
+    GoogleSigninButtonModule,
+    ImageCropperComponent
   ]
 })
 export class AdminModule {}

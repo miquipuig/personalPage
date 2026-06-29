@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { renderMarkdown } from '../../../shared/markdown.util';
+import { toJpeg } from '../../../shared/image.util';
 import { Editor, rootCtx, defaultValueCtx, editorViewCtx } from '@milkdown/core';
 import { commonmark } from '@milkdown/preset-commonmark';
 import { gfm } from '@milkdown/preset-gfm';
@@ -175,8 +176,9 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private async uploadFile(file: Blob | File): Promise<string | null> {
     try {
+      const jpeg = await toJpeg(file);
       const r: any = await new Promise((resolve, reject) =>
-        this.blogService.uploadImage(file).subscribe({ next: resolve, error: reject }));
+        this.blogService.uploadImage(jpeg, undefined, 'image.jpg').subscribe({ next: resolve, error: reject }));
       return r?.url ?? null;
     } catch {
       this.error = 'Image upload failed.';

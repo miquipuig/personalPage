@@ -47,9 +47,13 @@ export class BlogService {
     return this.http.post('api/blog/admin/login', { token });
   }
 
-  uploadImage(file: Blob | File, description?: string): Observable<any> {
+  uploadImage(file: Blob | File, description?: string, filename?: string): Observable<any> {
     const formData = new FormData();
-    formData.append('image', file);
+    if (filename) {
+      formData.append('image', file, filename);
+    } else {
+      formData.append('image', file);
+    }
     if (description) {
       formData.append('description', description);
     }

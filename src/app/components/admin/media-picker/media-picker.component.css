@@ -278,3 +278,40 @@
   color: #b91c1c;
   border: 1px solid #e3b3b3;
 }
+
+/* Crop + convert step */
+.crop-view {
+  padding: 14px 20px 18px;
+  overflow-y: auto;
+}
+
+.crop-view image-cropper {
+  display: block;
+  max-height: 58vh;
+  background: #0d1117;
+  border-radius: 8px;
+}
+
+.crop-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.crop-opt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.crop-opt input[type="range"] {
+  vertical-align: middle;
+}
+
+.crop-spacer {
+  flex: 1;
+}
