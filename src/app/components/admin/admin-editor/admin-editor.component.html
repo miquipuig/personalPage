@@ -63,7 +63,21 @@
           </div>
           <div class="tb-group">
             <button type="button" class="tb-btn" title="Link" aria-label="Link" (click)="insertLink()"><i class="bi bi-link-45deg"></i></button>
-            <button type="button" class="tb-btn" title="Table" aria-label="Table" (click)="insertTable()"><i class="bi bi-table"></i></button>
+            <div class="tb-table-wrap">
+              <button type="button" class="tb-btn" title="Table" aria-label="Table" (click)="toggleTableGrid()"><i class="bi bi-table"></i></button>
+              <div class="tg-backdrop" *ngIf="showTableGrid" (click)="showTableGrid=false"></div>
+              <div class="table-grid-pop" *ngIf="showTableGrid" (mouseleave)="hoverR=0;hoverC=0">
+                <div class="tg-grid">
+                  <div class="tg-row" *ngFor="let r of gridArr">
+                    <div class="tg-cell" *ngFor="let c of gridArr"
+                      [class.on]="r <= hoverR && c <= hoverC"
+                      (mouseenter)="hoverR=r; hoverC=c"
+                      (click)="pickTable(r, c)"></div>
+                  </div>
+                </div>
+                <div class="tg-label">{{ hoverC }} &times; {{ hoverR }}</div>
+              </div>
+            </div>
             <button type="button" class="tb-btn" title="Horizontal rule" aria-label="Horizontal rule" (click)="horizontalRule()"><i class="bi bi-dash-lg"></i></button>
             <button type="button" class="tb-btn" title="Line break" aria-label="Line break" (click)="lineBreak()"><i class="bi bi-arrow-return-left"></i></button>
           </div>

@@ -194,6 +194,56 @@ textarea.field-input {
   color: #fff;
 }
 
+/* Excel-style table size picker */
+.tb-table-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.tg-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 19;
+}
+
+.table-grid-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  background: #1b212b;
+  border: 1px solid #2a3340;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.tg-row {
+  display: flex;
+}
+
+.tg-cell {
+  width: 18px;
+  height: 18px;
+  margin: 2px;
+  border: 1px solid #3a4554;
+  border-radius: 3px;
+  background: #0f141b;
+  cursor: pointer;
+}
+
+.tg-cell.on {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.tg-label {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
 .milkdown-host {
   border: 1px solid #2a3340;
   border-radius: 8px;

@@ -65,6 +65,12 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   // Currently selected image (drives the controls panel below the editor).
   selImg: SelectedImage | null = null;
   inTable = false;
+
+  // Excel-style table size picker
+  showTableGrid = false;
+  gridArr = [1, 2, 3, 4, 5, 6, 7, 8];
+  hoverR = 1;
+  hoverC = 1;
   imgSizes = [
     { label: 'Small', value: '25%' },
     { label: 'Medium', value: '50%' },
@@ -198,13 +204,15 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   horizontalRule(): void { this.run(insertHrCommand.key); }
   lineBreak(): void { this.run(insertHardbreakCommand.key); }
 
-  insertTable(): void {
-    const ans = typeof window !== 'undefined' ? window.prompt('Table size (rows x columns)', '3x3') : null;
-    if (!ans) return;
-    const m = ans.match(/(\d+)\s*[x×*]\s*(\d+)/i);
-    const row = m ? Math.max(1, +m[1]) : 3;
-    const col = m ? Math.max(1, +m[2]) : 3;
+  toggleTableGrid(): void {
+    this.showTableGrid = !this.showTableGrid;
+    this.hoverR = 1;
+    this.hoverC = 1;
+  }
+
+  pickTable(row: number, col: number): void {
     this.run(insertTableCommand.key, { row, col });
+    this.showTableGrid = false;
   }
 
   // Table editing (shown when the cursor is inside a table)
