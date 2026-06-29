@@ -176,6 +176,68 @@ textarea.field-input {
   max-width: 100%;
 }
 
+/* Interactive image toolbar (size / alt / delete) */
+::ng-deep .milkdown-host .img-tools-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+::ng-deep .milkdown-host .img-tools-wrap.selected > img {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+::ng-deep .milkdown-host .img-tools {
+  display: none;
+  position: absolute;
+  top: -42px;
+  left: 0;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 6px;
+  background: #1b212b;
+  border: 1px solid #2a3340;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  z-index: 6;
+}
+
+::ng-deep .milkdown-host .img-tools-wrap.selected .img-tools {
+  display: flex;
+}
+
+::ng-deep .milkdown-host .img-tools button {
+  border: 1px solid #3a4554;
+  background: transparent;
+  color: #cbd5e1;
+  border-radius: 5px;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+::ng-deep .milkdown-host .img-tools button.active {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+::ng-deep .milkdown-host .img-tools .img-alt {
+  width: 130px;
+  border: 1px solid #3a4554;
+  background: #0f141b;
+  color: #e2e8f0;
+  border-radius: 5px;
+  padding: 3px 6px;
+  font-size: 0.75rem;
+}
+
+::ng-deep .milkdown-host .img-tools .img-del {
+  color: #fca5a5;
+  border-color: #5b2b2b;
+}
+
 ::ng-deep .milkdown-host .milkdown .ProseMirror pre {
   background: #0d1117;
   color: #e6edf3;
