@@ -45,31 +45,31 @@
         <span class="field-label">Content</span>
         <div class="editor-toolbar">
           <div class="tb-group">
-            <button type="button" class="tb-btn" title="Bold" (click)="toggleBold()"><b>B</b></button>
-            <button type="button" class="tb-btn" title="Italic" (click)="toggleItalic()"><i>I</i></button>
-            <button type="button" class="tb-btn" title="Strikethrough" (click)="toggleStrike()"><s>S</s></button>
-            <button type="button" class="tb-btn" title="Inline code" (click)="toggleInlineCode()">&lt;/&gt;</button>
+            <button type="button" class="tb-btn" title="Bold" aria-label="Bold" (click)="toggleBold()"><i class="bi bi-type-bold"></i></button>
+            <button type="button" class="tb-btn" title="Italic" aria-label="Italic" (click)="toggleItalic()"><i class="bi bi-type-italic"></i></button>
+            <button type="button" class="tb-btn" title="Strikethrough" aria-label="Strikethrough" (click)="toggleStrike()"><i class="bi bi-type-strikethrough"></i></button>
+            <button type="button" class="tb-btn" title="Inline code" aria-label="Inline code" (click)="toggleInlineCode()"><i class="bi bi-code-slash"></i></button>
           </div>
           <div class="tb-group">
-            <button type="button" class="tb-btn" title="Heading 1" (click)="heading(1)">H1</button>
-            <button type="button" class="tb-btn" title="Heading 2" (click)="heading(2)">H2</button>
-            <button type="button" class="tb-btn" title="Heading 3" (click)="heading(3)">H3</button>
-            <button type="button" class="tb-btn" title="Paragraph" (click)="paragraph()">P</button>
+            <button type="button" class="tb-btn" title="Heading 1" aria-label="Heading 1" (click)="heading(1)"><i class="bi bi-type-h1"></i></button>
+            <button type="button" class="tb-btn" title="Heading 2" aria-label="Heading 2" (click)="heading(2)"><i class="bi bi-type-h2"></i></button>
+            <button type="button" class="tb-btn" title="Heading 3" aria-label="Heading 3" (click)="heading(3)"><i class="bi bi-type-h3"></i></button>
+            <button type="button" class="tb-btn" title="Paragraph" aria-label="Paragraph" (click)="paragraph()"><i class="bi bi-text-paragraph"></i></button>
           </div>
           <div class="tb-group">
-            <button type="button" class="tb-btn" title="Bullet list" (click)="bulletList()">&bull; List</button>
-            <button type="button" class="tb-btn" title="Numbered list" (click)="orderedList()">1. List</button>
-            <button type="button" class="tb-btn" title="Quote" (click)="quote()">&ldquo; Quote</button>
+            <button type="button" class="tb-btn" title="Bullet list" aria-label="Bullet list" (click)="bulletList()"><i class="bi bi-list-ul"></i></button>
+            <button type="button" class="tb-btn" title="Numbered list" aria-label="Numbered list" (click)="orderedList()"><i class="bi bi-list-ol"></i></button>
+            <button type="button" class="tb-btn" title="Quote" aria-label="Quote" (click)="quote()"><i class="bi bi-quote"></i></button>
           </div>
           <div class="tb-group">
-            <button type="button" class="tb-btn" title="Link" (click)="insertLink()">Link</button>
-            <button type="button" class="tb-btn" title="Table" (click)="insertTable()">Table</button>
-            <button type="button" class="tb-btn" title="Horizontal rule" (click)="horizontalRule()">&mdash; HR</button>
-            <button type="button" class="tb-btn" title="Line break" (click)="lineBreak()">&crarr; Break</button>
+            <button type="button" class="tb-btn" title="Link" aria-label="Link" (click)="insertLink()"><i class="bi bi-link-45deg"></i></button>
+            <button type="button" class="tb-btn" title="Table" aria-label="Table" (click)="insertTable()"><i class="bi bi-table"></i></button>
+            <button type="button" class="tb-btn" title="Horizontal rule" aria-label="Horizontal rule" (click)="horizontalRule()"><i class="bi bi-dash-lg"></i></button>
+            <button type="button" class="tb-btn" title="Line break" aria-label="Line break" (click)="lineBreak()"><i class="bi bi-arrow-return-left"></i></button>
           </div>
           <div class="tb-group">
-            <button type="button" class="tb-btn" title="Insert image" (click)="mediaPicker.show('insert')">Image</button>
-            <button type="button" class="tb-btn" title="Insert code block" (click)="insertCode()">Code</button>
+            <button type="button" class="tb-btn" title="Insert image" aria-label="Insert image" (click)="mediaPicker.show('insert')"><i class="bi bi-image"></i></button>
+            <button type="button" class="tb-btn" title="Insert code block" aria-label="Insert code block" (click)="insertCode()"><i class="bi bi-code-square"></i></button>
           </div>
         </div>
         <div class="milkdown-host" #editorEl></div>

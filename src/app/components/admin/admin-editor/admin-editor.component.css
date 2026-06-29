@@ -170,20 +170,28 @@ textarea.field-input {
 }
 
 .tb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
   border: 1px solid transparent;
   background: transparent;
   color: #cbd5e1;
   border-radius: 6px;
-  padding: 5px 9px;
-  font-size: 0.85rem;
-  line-height: 1;
+  padding: 0 7px;
   cursor: pointer;
-  white-space: nowrap;
+}
+
+.tb-btn i {
+  font-size: 1.05rem;
+  line-height: 1;
 }
 
 .tb-btn:hover {
   background: #232b36;
   border-color: #3a4554;
+  color: #fff;
 }
 
 .milkdown-host {
