@@ -1,5 +1,5 @@
 import { $prose } from '@milkdown/utils';
-import { Plugin } from '@milkdown/prose/state';
+import { Plugin, NodeSelection } from '@milkdown/prose/state';
 
 // Interactive image node view for Milkdown. It applies the width carried in the
 // `#w=` URL fragment so sized images look right while editing, and — when the
@@ -98,7 +98,10 @@ class ImageView {
     const pos = this.getPos();
     if (pos == null) return;
     const attrs = { ...this.node.attrs, ...partial };
-    this.view.dispatch(this.view.state.tr.setNodeMarkup(pos, undefined, attrs));
+    const tr = this.view.state.tr.setNodeMarkup(pos, undefined, attrs);
+    // Keep the image selected so the toolbar stays up across edits.
+    tr.setSelection(NodeSelection.create(tr.doc, pos));
+    this.view.dispatch(tr);
   }
 
   private remove(): void {

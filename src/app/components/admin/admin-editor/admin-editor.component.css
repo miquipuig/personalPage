@@ -199,15 +199,17 @@ textarea.field-input {
 ::ng-deep .milkdown-host .img-tools {
   display: none;
   position: absolute;
-  top: -42px;
-  left: 0;
+  /* Overlay the top-left of the image so it's never clipped by the editor's
+     own scroll (which happened when it sat above the image). */
+  top: 8px;
+  left: 8px;
   align-items: center;
-  gap: 4px;
-  padding: 5px 6px;
-  background: #1b212b;
+  gap: 6px;
+  padding: 7px 8px;
+  background: rgba(20, 25, 33, 0.96);
   border: 1px solid #2a3340;
-  border-radius: 6px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
   z-index: 6;
 }
@@ -218,12 +220,18 @@ textarea.field-input {
 
 ::ng-deep .milkdown-host .img-tools button {
   border: 1px solid #3a4554;
-  background: transparent;
-  color: #cbd5e1;
-  border-radius: 5px;
-  padding: 3px 8px;
-  font-size: 0.75rem;
+  background: #232b36;
+  color: #e2e8f0;
+  border-radius: 6px;
+  padding: 7px 13px;
+  font-size: 0.9rem;
+  line-height: 1;
+  min-width: 38px;
   cursor: pointer;
+}
+
+::ng-deep .milkdown-host .img-tools button:hover {
+  background: #2f3947;
 }
 
 ::ng-deep .milkdown-host .img-tools button.active {
@@ -233,18 +241,23 @@ textarea.field-input {
 }
 
 ::ng-deep .milkdown-host .img-tools .img-alt {
-  width: 130px;
+  width: 150px;
   border: 1px solid #3a4554;
   background: #0f141b;
   color: #e2e8f0;
-  border-radius: 5px;
-  padding: 3px 6px;
-  font-size: 0.75rem;
+  border-radius: 6px;
+  padding: 7px 9px;
+  font-size: 0.9rem;
 }
 
 ::ng-deep .milkdown-host .img-tools .img-del {
+  background: #3a1f1f;
   color: #fca5a5;
   border-color: #5b2b2b;
+}
+
+::ng-deep .milkdown-host .img-tools .img-del:hover {
+  background: #4a2525;
 }
 
 ::ng-deep .milkdown-host .milkdown .ProseMirror pre {
