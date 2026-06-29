@@ -62,7 +62,7 @@
             <button type="button" class="tb-btn" title="Quote" aria-label="Quote" (click)="quote()"><i class="bi bi-quote"></i></button>
           </div>
           <div class="tb-group">
-            <button type="button" class="tb-btn" title="Link" aria-label="Link" (click)="insertLink()"><i class="bi bi-link-45deg"></i></button>
+            <button type="button" class="tb-btn" title="Link" aria-label="Link" (click)="openLinkMenu($event)"><i class="bi bi-link-45deg"></i></button>
             <div class="tb-table-wrap">
               <button type="button" class="tb-btn" title="Table" aria-label="Table" (click)="toggleTableGrid()"><i class="bi bi-table"></i></button>
               <div class="tg-backdrop" *ngIf="showTableGrid" (click)="showTableGrid=false"></div>
@@ -93,7 +93,7 @@
   </div>
 
   <!-- Floating toolbar anchored to the selected element -->
-  <div class="float-tools" *ngIf="floatKind" [style.top.px]="floatTop" [style.left.px]="floatLeft"
+  <div class="float-tools" *ngIf="floatKind && !showLinkMenu" [style.top.px]="floatTop" [style.left.px]="floatLeft"
     (mousedown)="$event.preventDefault()">
 
     <ng-container *ngIf="floatKind === 'image'">
@@ -119,8 +119,18 @@
       <button type="button" class="ft-btn" title="Italic" (click)="toggleItalic()"><i class="bi bi-type-italic"></i></button>
       <button type="button" class="ft-btn" title="Strikethrough" (click)="toggleStrike()"><i class="bi bi-type-strikethrough"></i></button>
       <button type="button" class="ft-btn" title="Inline code" (click)="toggleInlineCode()"><i class="bi bi-code-slash"></i></button>
-      <button type="button" class="ft-btn" title="Link" (click)="insertLink()"><i class="bi bi-link-45deg"></i></button>
+      <button type="button" class="ft-btn" title="Link" (click)="openLinkMenu()"><i class="bi bi-link-45deg"></i></button>
     </ng-container>
+  </div>
+
+  <!-- Link editor popover -->
+  <div class="link-backdrop" *ngIf="showLinkMenu" (click)="cancelLinkMenu()"></div>
+  <div class="link-pop" *ngIf="showLinkMenu" [style.top.px]="linkTop" [style.left.px]="linkLeft"
+    (mousedown)="$event.stopPropagation()">
+    <input #linkInput type="url" class="link-input" [(ngModel)]="linkUrl" name="linkUrl"
+      placeholder="https://example.com" (keydown.enter)="applyLink()" (keydown.escape)="cancelLinkMenu()" />
+    <button type="button" class="ft-btn" (click)="applyLink()">Apply</button>
+    <button type="button" class="ft-btn ft-danger" (click)="removeLink()">Remove</button>
   </div>
 
   <app-media-picker #mediaPicker (insert)="onInsertImage($event)" (cover)="onSelectCover($event)"></app-media-picker>

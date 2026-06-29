@@ -49,6 +49,7 @@ import { MediaPickerComponent } from '../media-picker/media-picker.component';
 export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('editorEl') editorEl!: ElementRef<HTMLDivElement>;
   @ViewChild('mediaPicker') mediaPicker!: MediaPickerComponent;
+  @ViewChild('linkInput') linkInput?: ElementRef<HTMLInputElement>;
 
   id: string | null = null;
   title = '';
@@ -71,6 +72,12 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   // Floating toolbar on the selected element (image / table / text)
   floatTop = 0;
   floatLeft = 0;
+
+  // Link editor popover
+  showLinkMenu = false;
+  linkUrl = '';
+  linkTop = 0;
+  linkLeft = 0;
   get floatKind(): 'image' | 'table' | 'text' | null {
     if (this.selImg) return 'image';
     if (this.inTable) return 'table';
@@ -289,9 +296,84 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.floatLeft = Math.round(Math.min(Math.max(8, rect.left), window.innerWidth - 380));
   }
 
-  insertLink(): void {
-    const href = typeof window !== 'undefined' ? window.prompt('Link URL') : '';
-    if (href) this.run(toggleLinkCommand.key, { href });
+  // --- link editor popover ---
+  private looksLikeUrl(s: string): boolean {
+    return /^(https?:\/\/|mailto:|www\.)\S+$/i.test(s) || /^[^\s.]+\.[^\s.]{2,}(\/\S*)?$/i.test(s);
+  }
+
+  private normalizeUrl(s: string): string {
+    s = s.trim();
+    if (!s) return '';
+    if (/^(https?:\/\/|mailto:|#|\/)/i.test(s)) return s;
+    return 'https://' + s.replace(/^\/+/, '');
+  }
+
+  private linkPrefill(): string {
+    let prefill = '';
+    this.editor?.action((ctx) => {
+      const view = ctx.get(editorViewCtx);
+      const { state } = view;
+      const { from, to } = state.selection;
+      const linkType = state.schema.marks['link'];
+      if (linkType) {
+        let href = '';
+        state.doc.nodesBetween(from, to, (node: any) => {
+          const m = node.marks?.find((mk: any) => mk.type === linkType);
+          if (m) href = m.attrs?.['href'] || href;
+        });
+        if (href) { prefill = href; return; }
+      }
+      const text = state.doc.textBetween(from, to, ' ').trim();
+      if (this.looksLikeUrl(text)) prefill = text;
+    });
+    return prefill;
+  }
+
+  openLinkMenu(ev?: MouseEvent): void {
+    this.linkUrl = this.linkPrefill();
+    if (this.hasTextSel) {
+      this.positionFloat();
+      this.linkTop = this.floatTop;
+      this.linkLeft = this.floatLeft;
+    } else if (ev) {
+      const r = (ev.currentTarget as HTMLElement).getBoundingClientRect();
+      this.linkTop = Math.round(r.bottom + 6);
+      this.linkLeft = Math.round(r.left);
+    }
+    this.showLinkMenu = true;
+    setTimeout(() => this.linkInput?.nativeElement.focus(), 0);
+  }
+
+  cancelLinkMenu(): void {
+    this.showLinkMenu = false;
+  }
+
+  applyLink(): void {
+    const url = this.normalizeUrl(this.linkUrl);
+    if (url) {
+      this.editor?.action((ctx) => {
+        const view = ctx.get(editorViewCtx);
+        const { state } = view;
+        const linkType = state.schema.marks['link'];
+        const { from, to } = state.selection;
+        if (linkType && from !== to) {
+          const tr = state.tr.removeMark(from, to, linkType).addMark(from, to, linkType.create({ href: url }));
+          view.dispatch(tr);
+        }
+      });
+    }
+    this.showLinkMenu = false;
+  }
+
+  removeLink(): void {
+    this.editor?.action((ctx) => {
+      const view = ctx.get(editorViewCtx);
+      const { state } = view;
+      const linkType = state.schema.marks['link'];
+      const { from, to } = state.selection;
+      if (linkType) view.dispatch(state.tr.removeMark(from, to, linkType));
+    });
+    this.showLinkMenu = false;
   }
 
   // --- Selected-image controls (panel below the editor) ---
