@@ -194,6 +194,35 @@ textarea.field-input {
   color: #fff;
 }
 
+/* Contextual table toolbar (shown when the cursor is inside a table) */
+.table-context-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 7px 10px;
+  background: #11202b;
+  border: 1px solid #234;
+  border-radius: 8px;
+}
+
+.tcb-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #7dd3fc;
+  margin-right: 4px;
+}
+
+.tcb-sep {
+  width: 1px;
+  height: 20px;
+  background: #2a3340;
+  margin: 0 2px;
+}
+
 /* Excel-style table size picker */
 .tb-table-wrap {
   position: relative;

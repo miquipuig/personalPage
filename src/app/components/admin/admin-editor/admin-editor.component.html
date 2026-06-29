@@ -86,22 +86,20 @@
             <button type="button" class="tb-btn" title="Insert code block" aria-label="Insert code block" (click)="insertCode()"><i class="bi bi-code-square"></i></button>
           </div>
         </div>
-        <div class="milkdown-host" #editorEl></div>
 
-        <div class="img-panel" *ngIf="inTable">
-          <span class="img-panel-label">Table:</span>
-          <div class="img-panel-sizes">
-            <button type="button" class="btn btn-sm btn-outline" (click)="addRowAbove()" title="Add row above">+ Row ↑</button>
-            <button type="button" class="btn btn-sm btn-outline" (click)="addRowBelow()" title="Add row below">+ Row ↓</button>
-            <button type="button" class="btn btn-sm btn-outline" (click)="addColLeft()" title="Add column left">+ Col ←</button>
-            <button type="button" class="btn btn-sm btn-outline" (click)="addColRight()" title="Add column right">+ Col →</button>
-          </div>
-          <div class="img-panel-sizes">
-            <button type="button" class="btn btn-sm btn-outline" (click)="deleteRow()" title="Delete current row">− Row</button>
-            <button type="button" class="btn btn-sm btn-outline" (click)="deleteColumn()" title="Delete current column">− Col</button>
-          </div>
-          <button type="button" class="btn btn-sm btn-danger" (click)="deleteTable()">Delete table</button>
+        <div class="table-context-bar" *ngIf="inTable">
+          <span class="tcb-label"><i class="bi bi-table"></i> Table</span>
+          <button type="button" class="btn btn-sm btn-outline" (click)="addRowAbove()" title="Add row above">+ Row above</button>
+          <button type="button" class="btn btn-sm btn-outline" (click)="addRowBelow()" title="Add row below">+ Row below</button>
+          <button type="button" class="btn btn-sm btn-outline" (click)="addColLeft()" title="Add column left">+ Col left</button>
+          <button type="button" class="btn btn-sm btn-outline" (click)="addColRight()" title="Add column right">+ Col right</button>
+          <span class="tcb-sep"></span>
+          <button type="button" class="btn btn-sm btn-outline" (click)="deleteRow()" title="Delete current row">&minus; Row</button>
+          <button type="button" class="btn btn-sm btn-outline" (click)="deleteColumn()" title="Delete current column">&minus; Col</button>
+          <button type="button" class="btn btn-sm btn-danger" (click)="deleteTable()" title="Delete table">Delete table</button>
         </div>
+
+        <div class="milkdown-host" #editorEl></div>
 
         <div class="img-panel" *ngIf="selImg">
           <span class="img-panel-label">Selected image:</span>
