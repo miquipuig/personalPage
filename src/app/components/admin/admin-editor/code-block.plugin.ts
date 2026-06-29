@@ -90,3 +90,18 @@ export const codeBlock = $prose(() => new Plugin({
     },
   },
 }));
+
+// Always keep a trailing paragraph at the end of the document, so you're never
+// trapped inside a code block (or any block) that ends the post — you can click
+// below it and keep writing.
+export const trailingParagraph = $prose(() => new Plugin({
+  appendTransaction: (trs: readonly any[], _old: any, state: any) => {
+    if (!trs.some((t) => t.docChanged)) return null;
+    const para = state.schema.nodes['paragraph'];
+    const last = state.doc.lastChild;
+    if (para && (!last || last.type.name !== 'paragraph')) {
+      return state.tr.insert(state.doc.content.size, para.create());
+    }
+    return null;
+  },
+}));

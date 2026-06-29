@@ -13,7 +13,7 @@ import { createCodeBlockCommand } from '@milkdown/preset-commonmark';
 import { NodeSelection } from '@milkdown/prose/state';
 import { nord } from '@milkdown/theme-nord';
 import { imageWidth, SelectedImage } from './image-width.plugin';
-import { codeBlock } from './code-block.plugin';
+import { codeBlock, trailingParagraph } from './code-block.plugin';
 import { BlogService } from '../../../services/blog.service';
 import { MediaPickerComponent } from '../media-picker/media-picker.component';
 
@@ -121,6 +121,7 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
       .use(upload)
       .use(imageWidth((img) => this.zone.run(() => (this.selImg = img))))
       .use(codeBlock)
+      .use(trailingParagraph)
       .create();
 
     // If the post loaded before the editor was ready, apply now.
