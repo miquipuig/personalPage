@@ -1319,3 +1319,24 @@ body.section-open #background-image {
   font-size: 0.9em;
 }
 
+/* Rendered tables (public detail + admin preview, dark theme). */
+.post-body table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  display: block;
+  overflow-x: auto;
+}
+
+.post-body th,
+.post-body td {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.post-body th {
+  background: rgba(255, 255, 255, 0.07);
+  font-weight: 600;
+}
+
