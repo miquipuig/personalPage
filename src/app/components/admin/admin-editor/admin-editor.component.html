@@ -48,6 +48,17 @@
           <span class="muted">Drag &amp; drop or paste images to upload</span>
         </div>
         <div class="milkdown-host" #editorEl></div>
+
+        <div class="img-panel" *ngIf="selImg">
+          <span class="img-panel-label">Selected image:</span>
+          <div class="img-panel-sizes">
+            <button type="button" class="btn btn-sm btn-outline" *ngFor="let s of imgSizes"
+              [class.active]="selImg.width === s.value" (click)="setImgSize(s.value)">{{ s.label }}</button>
+          </div>
+          <input type="text" class="field-input img-panel-alt" [ngModel]="selImg.alt" name="imgAlt"
+            (ngModelChange)="setImgAlt($event)" placeholder="alt text (description)" />
+          <button type="button" class="btn btn-sm btn-danger" (click)="removeImg()">Delete image</button>
+        </div>
       </div>
     </div>
   </div>

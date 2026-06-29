@@ -1,16 +1,17 @@
-import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, NgZone, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { renderMarkdown } from '../../../shared/markdown.util';
-import { Editor, rootCtx, defaultValueCtx } from '@milkdown/core';
+import { Editor, rootCtx, defaultValueCtx, editorViewCtx } from '@milkdown/core';
 import { commonmark } from '@milkdown/preset-commonmark';
 import { gfm } from '@milkdown/preset-gfm';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 import { upload, uploadConfig, Uploader } from '@milkdown/plugin-upload';
 import { replaceAll, insert, getMarkdown } from '@milkdown/utils';
+import { NodeSelection } from '@milkdown/prose/state';
 import { nord } from '@milkdown/theme-nord';
-import { imageWidth } from './image-width.plugin';
+import { imageWidth, SelectedImage } from './image-width.plugin';
 import { BlogService } from '../../../services/blog.service';
 import { MediaPickerComponent } from '../media-picker/media-picker.component';
 
@@ -36,6 +37,15 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   showPreview = false;
   previewHtml: SafeHtml = '';
 
+  // Currently selected image (drives the controls panel below the editor).
+  selImg: SelectedImage | null = null;
+  imgSizes = [
+    { label: 'Small', value: '25%' },
+    { label: 'Medium', value: '50%' },
+    { label: 'Large', value: '100%' },
+    { label: 'Original', value: '' },
+  ];
+
   private editor: Editor | null = null;
   private pendingMarkdown: string | null = null;
   private isBrowser: boolean;
@@ -45,6 +55,7 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
+    private zone: NgZone,
     @Inject(PLATFORM_ID) platformId: object
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -106,7 +117,7 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
       .use(gfm)
       .use(listener)
       .use(upload)
-      .use(imageWidth)
+      .use(imageWidth((img) => this.zone.run(() => (this.selImg = img))))
       .create();
 
     // If the post loaded before the editor was ready, apply now.
@@ -137,6 +148,46 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSelectCover(payload: { url: string }): void {
     this.coverImage = payload.url;
+  }
+
+  // --- Selected-image controls (panel below the editor) ---
+  private editImage(mutate: (attrs: any) => any | null): void {
+    if (!this.editor || !this.selImg) return;
+    const pos = this.selImg.pos;
+    this.editor.action((ctx) => {
+      const view = ctx.get(editorViewCtx);
+      const node = view.state.doc.nodeAt(pos);
+      if (!node || node.type.name !== 'image') return;
+      const next = mutate({ ...node.attrs });
+      let tr = view.state.tr;
+      if (next === null) {
+        tr = tr.delete(pos, pos + node.nodeSize);
+      } else {
+        tr = tr.setNodeMarkup(pos, undefined, next).setSelection(NodeSelection.create(tr.doc, pos));
+      }
+      view.dispatch(tr);
+      view.focus();
+    });
+  }
+
+  setImgSize(width: string): void {
+    this.editImage((attrs) => {
+      const base = String(attrs.src ?? '').replace(/#w=\d+%?$/, '');
+      attrs.src = width ? `${base}#w=${width}` : base;
+      return attrs;
+    });
+  }
+
+  setImgAlt(value: string): void {
+    this.editImage((attrs) => {
+      attrs.alt = value;
+      return attrs;
+    });
+  }
+
+  removeImg(): void {
+    this.editImage(() => null);
+    this.selImg = null;
   }
 
   ngOnDestroy(): void {

@@ -178,88 +178,63 @@ textarea.field-input {
   max-width: 100%;
 }
 
-/* Interactive image toolbar (size / alt / delete) */
-::ng-deep .milkdown-host .img-tools-wrap {
-  position: relative;
+/* Image node: block display + no baseline gap so the whole image is clickable
+   to select it. A blue outline marks the selected image. */
+::ng-deep .milkdown-host .img-node {
   display: inline-block;
-  /* Kill the inline baseline gap so the image box matches its pixels — without
-     this, clicks on the lower part of the image land "after" the node instead
-     of selecting it. */
   line-height: 0;
   vertical-align: top;
 }
 
-::ng-deep .milkdown-host .img-tools-wrap > img {
+::ng-deep .milkdown-host .img-node > img {
   display: block;
 }
 
-::ng-deep .milkdown-host .img-tools-wrap.selected > img {
+/* Suppress ProseMirror's default node-selection outline (it drew a stray box)
+   and put a clean one on the image itself. */
+::ng-deep .milkdown-host .milkdown .ProseMirror-selectednode {
+  outline: none;
+}
+
+::ng-deep .milkdown-host .ProseMirror-selectednode > .img-node > img,
+::ng-deep .milkdown-host .img-node.ProseMirror-selectednode > img {
   outline: 2px solid #2563eb;
   outline-offset: 1px;
 }
 
-::ng-deep .milkdown-host .img-tools {
-  display: none;
-  position: absolute;
-  /* Above the image (outside it) so it never overlaps the image's own click
-     area — clicking the image always selects it, never a toolbar button. */
-  bottom: calc(100% + 6px);
-  left: 0;
+/* Controls panel below the editor for the selected image (never overlaps the
+   editor content, so it can't intercept clicks). */
+.img-panel {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 8px;
-  background: rgba(20, 25, 33, 0.96);
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: #1b212b;
   border: 1px solid #2a3340;
   border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-  white-space: nowrap;
-  z-index: 6;
 }
 
-::ng-deep .milkdown-host .img-tools-wrap.selected .img-tools {
+.img-panel-label {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.img-panel-sizes {
   display: flex;
+  gap: 6px;
 }
 
-::ng-deep .milkdown-host .img-tools button {
-  border: 1px solid #3a4554;
-  background: #232b36;
-  color: #e2e8f0;
-  border-radius: 6px;
-  padding: 7px 13px;
-  font-size: 0.9rem;
-  line-height: 1;
-  min-width: 38px;
-  cursor: pointer;
-}
-
-::ng-deep .milkdown-host .img-tools button:hover {
-  background: #2f3947;
-}
-
-::ng-deep .milkdown-host .img-tools button.active {
+.img-panel-sizes .btn.active {
   background: #2563eb;
   color: #fff;
   border-color: #2563eb;
 }
 
-::ng-deep .milkdown-host .img-tools .img-alt {
-  width: 150px;
-  border: 1px solid #3a4554;
-  background: #0f141b;
-  color: #e2e8f0;
-  border-radius: 6px;
-  padding: 7px 9px;
-  font-size: 0.9rem;
-}
-
-::ng-deep .milkdown-host .img-tools .img-del {
-  background: #3a1f1f;
-  color: #fca5a5;
-  border-color: #5b2b2b;
-}
-
-::ng-deep .milkdown-host .img-tools .img-del:hover {
-  background: #4a2525;
+.img-panel-alt {
+  flex: 1;
+  min-width: 160px;
 }
 
 ::ng-deep .milkdown-host .milkdown .ProseMirror pre {
