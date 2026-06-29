@@ -245,6 +245,46 @@ textarea.field-input {
   overflow-x: auto;
 }
 
+/* Code block node view with a language field */
+::ng-deep .milkdown-host .cm-codeblock {
+  border: 1px solid #2a3340;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+::ng-deep .milkdown-host .cm-codeblock-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #161b22;
+  border-bottom: 1px solid #2a3340;
+}
+
+::ng-deep .milkdown-host .cm-codeblock-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+::ng-deep .milkdown-host .cm-codeblock-lang {
+  margin-left: auto;
+  width: 200px;
+  border: 1px solid #3a4554;
+  background: #0d1117;
+  color: #e6edf3;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+}
+
+::ng-deep .milkdown-host .cm-codeblock pre {
+  margin: 0;
+  border-radius: 0;
+}
+
 /* Draft preview — a full page styled like the public post (dark theme). */
 .preview-bar {
   display: flex;

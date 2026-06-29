@@ -8,10 +8,12 @@ import { commonmark } from '@milkdown/preset-commonmark';
 import { gfm } from '@milkdown/preset-gfm';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 import { upload, uploadConfig, Uploader } from '@milkdown/plugin-upload';
-import { replaceAll, insert, getMarkdown } from '@milkdown/utils';
+import { replaceAll, insert, getMarkdown, callCommand } from '@milkdown/utils';
+import { createCodeBlockCommand } from '@milkdown/preset-commonmark';
 import { NodeSelection } from '@milkdown/prose/state';
 import { nord } from '@milkdown/theme-nord';
 import { imageWidth, SelectedImage } from './image-width.plugin';
+import { codeBlock } from './code-block.plugin';
 import { BlogService } from '../../../services/blog.service';
 import { MediaPickerComponent } from '../media-picker/media-picker.component';
 
@@ -118,6 +120,7 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
       .use(listener)
       .use(upload)
       .use(imageWidth((img) => this.zone.run(() => (this.selImg = img))))
+      .use(codeBlock)
       .create();
 
     // If the post loaded before the editor was ready, apply now.
@@ -148,6 +151,11 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSelectCover(payload: { url: string }): void {
     this.coverImage = payload.url;
+  }
+
+  insertCode(): void {
+    if (!this.editor) return;
+    this.editor.action(callCommand(createCodeBlockCommand.key));
   }
 
   // --- Selected-image controls (panel below the editor) ---
