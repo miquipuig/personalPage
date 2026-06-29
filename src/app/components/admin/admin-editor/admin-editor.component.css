@@ -180,6 +180,15 @@ textarea.field-input {
 ::ng-deep .milkdown-host .img-tools-wrap {
   position: relative;
   display: inline-block;
+  /* Kill the inline baseline gap so the image box matches its pixels — without
+     this, clicks on the lower part of the image land "after" the node instead
+     of selecting it. */
+  line-height: 0;
+  vertical-align: top;
+}
+
+::ng-deep .milkdown-host .img-tools-wrap > img {
+  display: block;
 }
 
 ::ng-deep .milkdown-host .img-tools-wrap.selected > img {
