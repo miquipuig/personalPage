@@ -155,7 +155,9 @@ textarea.field-input {
 .milkdown-host {
   border: 1px solid #2a3340;
   border-radius: 8px;
-  overflow: hidden;
+  /* visible (not hidden) so the image toolbar above an image near the top edge
+     isn't clipped. */
+  overflow: visible;
   background: #fff;
 }
 
@@ -166,8 +168,8 @@ textarea.field-input {
 
 ::ng-deep .milkdown-host .milkdown .ProseMirror {
   min-height: 420px;
-  max-height: 70vh;
-  overflow-y: auto;
+  /* No max-height/overflow: an inner scroll would clip the image toolbar that
+     sits just above the image. Let the editor grow and the page scroll. */
   padding: 18px 20px;
   outline: none;
 }
@@ -199,10 +201,10 @@ textarea.field-input {
 ::ng-deep .milkdown-host .img-tools {
   display: none;
   position: absolute;
-  /* Overlay the top-left of the image so it's never clipped by the editor's
-     own scroll (which happened when it sat above the image). */
-  top: 8px;
-  left: 8px;
+  /* Above the image (outside it) so it never overlaps the image's own click
+     area — clicking the image always selects it, never a toolbar button. */
+  bottom: calc(100% + 6px);
+  left: 0;
   align-items: center;
   gap: 6px;
   padding: 7px 8px;
