@@ -144,6 +144,46 @@ textarea.field-input {
   font-size: 0.9rem;
 }
 
+/* Milkdown editor */
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.milkdown-host {
+  border: 1px solid #2a3340;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+::ng-deep .milkdown-host .milkdown {
+  background: #fff;
+  color: #1a1a1a;
+}
+
+::ng-deep .milkdown-host .milkdown .ProseMirror {
+  min-height: 420px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 18px 20px;
+  outline: none;
+}
+
+::ng-deep .milkdown-host .milkdown .ProseMirror img {
+  max-width: 100%;
+}
+
+::ng-deep .milkdown-host .milkdown .ProseMirror pre {
+  background: #0d1117;
+  color: #e6edf3;
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
 /* Draft preview — a full page styled like the public post (dark theme). */
 .preview-bar {
   display: flex;
