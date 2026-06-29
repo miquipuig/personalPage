@@ -44,9 +44,33 @@
       <div class="field">
         <span class="field-label">Content</span>
         <div class="editor-toolbar">
-          <button type="button" class="btn btn-sm btn-outline" (click)="mediaPicker.show('insert')">Insert image</button>
-          <button type="button" class="btn btn-sm btn-outline" (click)="insertCode()">Insert code</button>
-          <span class="muted">Drag &amp; drop or paste images to upload</span>
+          <div class="tb-group">
+            <button type="button" class="tb-btn" title="Bold" (click)="toggleBold()"><b>B</b></button>
+            <button type="button" class="tb-btn" title="Italic" (click)="toggleItalic()"><i>I</i></button>
+            <button type="button" class="tb-btn" title="Strikethrough" (click)="toggleStrike()"><s>S</s></button>
+            <button type="button" class="tb-btn" title="Inline code" (click)="toggleInlineCode()">&lt;/&gt;</button>
+          </div>
+          <div class="tb-group">
+            <button type="button" class="tb-btn" title="Heading 1" (click)="heading(1)">H1</button>
+            <button type="button" class="tb-btn" title="Heading 2" (click)="heading(2)">H2</button>
+            <button type="button" class="tb-btn" title="Heading 3" (click)="heading(3)">H3</button>
+            <button type="button" class="tb-btn" title="Paragraph" (click)="paragraph()">P</button>
+          </div>
+          <div class="tb-group">
+            <button type="button" class="tb-btn" title="Bullet list" (click)="bulletList()">&bull; List</button>
+            <button type="button" class="tb-btn" title="Numbered list" (click)="orderedList()">1. List</button>
+            <button type="button" class="tb-btn" title="Quote" (click)="quote()">&ldquo; Quote</button>
+          </div>
+          <div class="tb-group">
+            <button type="button" class="tb-btn" title="Link" (click)="insertLink()">Link</button>
+            <button type="button" class="tb-btn" title="Table" (click)="insertTable()">Table</button>
+            <button type="button" class="tb-btn" title="Horizontal rule" (click)="horizontalRule()">&mdash; HR</button>
+            <button type="button" class="tb-btn" title="Line break" (click)="lineBreak()">&crarr; Break</button>
+          </div>
+          <div class="tb-group">
+            <button type="button" class="tb-btn" title="Insert image" (click)="mediaPicker.show('insert')">Image</button>
+            <button type="button" class="tb-btn" title="Insert code block" (click)="insertCode()">Code</button>
+          </div>
         </div>
         <div class="milkdown-host" #editorEl></div>
 

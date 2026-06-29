@@ -148,8 +148,42 @@ textarea.field-input {
 .editor-toolbar {
   display: flex;
   align-items: center;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-bottom: 8px;
+  padding: 6px;
+  background: #161b22;
+  border: 1px solid #2a3340;
+  border-radius: 8px;
+}
+
+.tb-group {
+  display: flex;
+  gap: 4px;
+  padding-right: 6px;
+  margin-right: 2px;
+  border-right: 1px solid #2a3340;
+}
+
+.tb-group:last-child {
+  border-right: none;
+}
+
+.tb-btn {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #cbd5e1;
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tb-btn:hover {
+  background: #232b36;
+  border-color: #3a4554;
 }
 
 .milkdown-host {

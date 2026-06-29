@@ -9,7 +9,21 @@ import { gfm } from '@milkdown/preset-gfm';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 import { upload, uploadConfig, Uploader } from '@milkdown/plugin-upload';
 import { replaceAll, insert, getMarkdown, callCommand } from '@milkdown/utils';
-import { createCodeBlockCommand } from '@milkdown/preset-commonmark';
+import {
+  createCodeBlockCommand,
+  toggleStrongCommand,
+  toggleEmphasisCommand,
+  toggleInlineCodeCommand,
+  toggleLinkCommand,
+  wrapInHeadingCommand,
+  wrapInBulletListCommand,
+  wrapInOrderedListCommand,
+  wrapInBlockquoteCommand,
+  insertHrCommand,
+  insertHardbreakCommand,
+  turnIntoTextCommand,
+} from '@milkdown/preset-commonmark';
+import { toggleStrikethroughCommand, insertTableCommand } from '@milkdown/preset-gfm';
 import { NodeSelection } from '@milkdown/prose/state';
 import { nord } from '@milkdown/theme-nord';
 import { imageWidth, SelectedImage } from './image-width.plugin';
@@ -154,9 +168,28 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.coverImage = payload.url;
   }
 
-  insertCode(): void {
-    if (!this.editor) return;
-    this.editor.action(callCommand(createCodeBlockCommand.key));
+  private run(key: any, payload?: any): void {
+    this.editor?.action(callCommand(key, payload));
+  }
+
+  insertCode(): void { this.run(createCodeBlockCommand.key); }
+
+  // --- formatting toolbar ---
+  toggleBold(): void { this.run(toggleStrongCommand.key); }
+  toggleItalic(): void { this.run(toggleEmphasisCommand.key); }
+  toggleStrike(): void { this.run(toggleStrikethroughCommand.key); }
+  toggleInlineCode(): void { this.run(toggleInlineCodeCommand.key); }
+  heading(level: number): void { this.run(wrapInHeadingCommand.key, level); }
+  paragraph(): void { this.run(turnIntoTextCommand.key); }
+  bulletList(): void { this.run(wrapInBulletListCommand.key); }
+  orderedList(): void { this.run(wrapInOrderedListCommand.key); }
+  quote(): void { this.run(wrapInBlockquoteCommand.key); }
+  horizontalRule(): void { this.run(insertHrCommand.key); }
+  lineBreak(): void { this.run(insertHardbreakCommand.key); }
+  insertTable(): void { this.run(insertTableCommand.key); }
+  insertLink(): void {
+    const href = typeof window !== 'undefined' ? window.prompt('Link URL') : '';
+    if (href) this.run(toggleLinkCommand.key, { href });
   }
 
   // --- Selected-image controls (panel below the editor) ---
