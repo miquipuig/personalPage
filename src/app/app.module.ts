@@ -1,11 +1,12 @@
 import { NgModule, SecurityContext } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { ApiBaseInterceptor } from './interceptors/api-base.interceptor';
 import { ServicesComponent } from './components/services/services.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EmptyComponentComponent } from './components/empty-component/empty-component.component';
@@ -70,7 +71,9 @@ import { cookieConfig } from './cookie.config';
       } as SocialAuthServiceConfig,
     },
     GoogleSigninButtonDirective,
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ApiBaseInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    provideClientHydration()
   ],
   // providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
     bootstrap: [AppComponent]

@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Inject, OnInit, PLATFORM_ID, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ScriptService } from './services/script.service';
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -20,14 +21,22 @@ export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild('skills-content') skillsContent: ElementRef | undefined;
   @ViewChild(NavbarComponent) navbar!: NavbarComponent;
 
+  private isBrowser: boolean;
+
   // ccService is injected so the cookie-consent banner initialises on load.
   constructor(private script: ScriptService, private router: Router, private route: ActivatedRoute,
-    private ccService: NgcCookieConsentService) {}
+    private ccService: NgcCookieConsentService, @Inject(PLATFORM_ID) platformId: object) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
 
   pageLoaded = false;
 
   ngOnInit(): void {
+    // Browser-only: script injection and direct DOM access break during SSR.
+    if (!this.isBrowser) {
+      return;
+    }
     this.loadscipts();
 
     // Toggle the black & white background: colour on the home view, grayscale

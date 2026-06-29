@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/personalPage",
+            "outputPath": "dist/personal-page/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -111,6 +111,60 @@
               "node_modules/marked/marked.min.js"
             ]
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/personal-page/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "personal-page:build:development",
+              "serverTarget": "personal-page:server:development"
+            },
+            "production": {
+              "browserTarget": "personal-page:build:production",
+              "serverTarget": "personal-page:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@angular-devkit/build-angular:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "personal-page:build:production",
+              "serverTarget": "personal-page:server:production"
+            },
+            "development": {
+              "browserTarget": "personal-page:build:development",
+              "serverTarget": "personal-page:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

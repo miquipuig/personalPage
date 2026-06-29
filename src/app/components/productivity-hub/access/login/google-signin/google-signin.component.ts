@@ -20,7 +20,7 @@ export class GoogleSigninComponent {
     document.body.appendChild(googleLoginWrapper);
    
 
-    window.google.accounts.id.renderButton(googleLoginWrapper, {
+    (window as any).google.accounts.id.renderButton(googleLoginWrapper, {
       type: 'icon',
       width: '200',
     });

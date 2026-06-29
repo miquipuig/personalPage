@@ -43,6 +43,10 @@ renderer.code = (code: string, infostring: string | undefined): string => {
 
 export function renderMarkdown(md: string): string {
   const raw = marked.parse(md || '', { renderer }) as string;
-  // Sanitize before the caller injects it with bypassSecurityTrustHtml.
+  // DOMPurify needs a DOM; during SSR there's no window, so skip it (content is
+  // admin-authored, and the browser re-sanitizes on hydration).
+  if (typeof window === 'undefined' || !DOMPurify?.sanitize) {
+    return raw;
+  }
   return DOMPurify.sanitize(raw, { ADD_ATTR: ['width'] });
 }

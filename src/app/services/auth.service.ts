@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { lastValueFrom, throwError } from 'rxjs';
@@ -12,13 +13,17 @@ export class AuthService {
   authenticated = false;
   socialUser: any;
   user: any;
-  constructor(private http: HttpClient) {
-    const storedToken = localStorage.getItem('pp_token');
-    if (storedToken) {
-      this.token = storedToken;
-      const storedUser = localStorage.getItem('pp_user');
-      this.user = storedUser ? JSON.parse(storedUser) : null;
-      this.authenticated = true;
+  private isBrowser: boolean;
+  constructor(private http: HttpClient, @Inject(PLATFORM_ID) platformId: object) {
+    this.isBrowser = isPlatformBrowser(platformId);
+    if (this.isBrowser) {
+      const storedToken = localStorage.getItem('pp_token');
+      if (storedToken) {
+        this.token = storedToken;
+        const storedUser = localStorage.getItem('pp_user');
+        this.user = storedUser ? JSON.parse(storedUser) : null;
+        this.authenticated = true;
+      }
     }
   }
 
@@ -27,6 +32,9 @@ export class AuthService {
   }
 
   private persistSession(): void {
+    if (!this.isBrowser) {
+      return;
+    }
     if (this.token) {
       localStorage.setItem('pp_token', this.token);
     }
@@ -96,8 +104,10 @@ export class AuthService {
     this.token = null;
     this.authenticated = false;
     this.user = null;
-    localStorage.removeItem('pp_token');
-    localStorage.removeItem('pp_user');
+    if (this.isBrowser) {
+      localStorage.removeItem('pp_token');
+      localStorage.removeItem('pp_user');
+    }
   }
 
 }
