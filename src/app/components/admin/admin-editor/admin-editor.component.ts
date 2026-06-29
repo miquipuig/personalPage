@@ -23,11 +23,20 @@ import {
   insertHardbreakCommand,
   turnIntoTextCommand,
 } from '@milkdown/preset-commonmark';
-import { toggleStrikethroughCommand, insertTableCommand } from '@milkdown/preset-gfm';
+import {
+  toggleStrikethroughCommand,
+  insertTableCommand,
+  addRowBeforeCommand,
+  addRowAfterCommand,
+  addColBeforeCommand,
+  addColAfterCommand,
+} from '@milkdown/preset-gfm';
+import { deleteRow, deleteColumn, deleteTable } from 'prosemirror-tables';
 import { NodeSelection } from '@milkdown/prose/state';
 import { nord } from '@milkdown/theme-nord';
 import { imageWidth, SelectedImage } from './image-width.plugin';
 import { codeBlock, trailingParagraph } from './code-block.plugin';
+import { tableTools } from './table.plugin';
 import { BlogService } from '../../../services/blog.service';
 import { MediaPickerComponent } from '../media-picker/media-picker.component';
 
@@ -55,6 +64,7 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Currently selected image (drives the controls panel below the editor).
   selImg: SelectedImage | null = null;
+  inTable = false;
   imgSizes = [
     { label: 'Small', value: '25%' },
     { label: 'Medium', value: '50%' },
@@ -136,6 +146,7 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
       .use(imageWidth((img) => this.zone.run(() => (this.selImg = img))))
       .use(codeBlock)
       .use(trailingParagraph)
+      .use(tableTools((v) => this.zone.run(() => (this.inTable = v))))
       .create();
 
     // If the post loaded before the editor was ready, apply now.
@@ -186,7 +197,32 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   quote(): void { this.run(wrapInBlockquoteCommand.key); }
   horizontalRule(): void { this.run(insertHrCommand.key); }
   lineBreak(): void { this.run(insertHardbreakCommand.key); }
-  insertTable(): void { this.run(insertTableCommand.key); }
+
+  insertTable(): void {
+    const ans = typeof window !== 'undefined' ? window.prompt('Table size (rows x columns)', '3x3') : null;
+    if (!ans) return;
+    const m = ans.match(/(\d+)\s*[x×*]\s*(\d+)/i);
+    const row = m ? Math.max(1, +m[1]) : 3;
+    const col = m ? Math.max(1, +m[2]) : 3;
+    this.run(insertTableCommand.key, { row, col });
+  }
+
+  // Table editing (shown when the cursor is inside a table)
+  addRowAbove(): void { this.run(addRowBeforeCommand.key); }
+  addRowBelow(): void { this.run(addRowAfterCommand.key); }
+  addColLeft(): void { this.run(addColBeforeCommand.key); }
+  addColRight(): void { this.run(addColAfterCommand.key); }
+  private tableCmd(cmd: (state: any, dispatch: any) => boolean): void {
+    this.editor?.action((ctx) => {
+      const view = ctx.get(editorViewCtx);
+      cmd(view.state, view.dispatch);
+      view.focus();
+    });
+  }
+  deleteRow(): void { this.tableCmd(deleteRow); }
+  deleteColumn(): void { this.tableCmd(deleteColumn); }
+  deleteTable(): void { this.tableCmd(deleteTable); }
+
   insertLink(): void {
     const href = typeof window !== 'undefined' ? window.prompt('Link URL') : '';
     if (href) this.run(toggleLinkCommand.key, { href });

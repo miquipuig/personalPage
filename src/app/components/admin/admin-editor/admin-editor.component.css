@@ -287,6 +287,32 @@ textarea.field-input {
   overflow-x: auto;
 }
 
+/* Tables: visible borders + editable cells */
+::ng-deep .milkdown-host .ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  table-layout: fixed;
+}
+
+::ng-deep .milkdown-host .ProseMirror th,
+::ng-deep .milkdown-host .ProseMirror td {
+  border: 1px solid #c9ced6;
+  padding: 6px 10px;
+  min-width: 48px;
+  vertical-align: top;
+  color: #1a1a1a;
+}
+
+::ng-deep .milkdown-host .ProseMirror th {
+  background: #f1f3f5;
+  font-weight: 600;
+}
+
+::ng-deep .milkdown-host .ProseMirror .selectedCell {
+  background: rgba(37, 99, 235, 0.15);
+}
+
 /* Code block node view with a language field */
 ::ng-deep .milkdown-host .cm-codeblock {
   border: 1px solid #2a3340;
