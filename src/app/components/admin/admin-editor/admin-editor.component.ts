@@ -10,6 +10,7 @@ import { listener, listenerCtx } from '@milkdown/plugin-listener';
 import { upload, uploadConfig, Uploader } from '@milkdown/plugin-upload';
 import { replaceAll, insert, getMarkdown } from '@milkdown/utils';
 import { nord } from '@milkdown/theme-nord';
+import { imageWidth } from './image-width.plugin';
 import { BlogService } from '../../../services/blog.service';
 import { MediaPickerComponent } from '../media-picker/media-picker.component';
 
@@ -105,6 +106,7 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
       .use(gfm)
       .use(listener)
       .use(upload)
+      .use(imageWidth)
       .create();
 
     // If the post loaded before the editor was ready, apply now.
