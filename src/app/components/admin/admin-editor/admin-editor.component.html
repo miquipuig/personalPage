@@ -56,6 +56,7 @@
 
       <div class="field">
         <span class="field-label">Content</span>
+        <div class="editor-shell" [class.fullscreen]="fullscreen">
         <div class="editor-toolbar">
           <div class="tb-group">
             <button type="button" class="tb-btn" title="Bold" aria-label="Bold" (click)="toggleBold()"><i class="bi bi-type-bold"></i></button>
@@ -98,15 +99,21 @@
             <button type="button" class="tb-btn" title="Insert image" aria-label="Insert image" (click)="mediaPicker.show('insert')"><i class="bi bi-image"></i></button>
             <button type="button" class="tb-btn" title="Insert code block" aria-label="Insert code block" (click)="insertCode()"><i class="bi bi-code-square"></i></button>
           </div>
+          <div class="tb-group tb-group-end">
+            <button type="button" class="tb-btn" [title]="fullscreen ? 'Exit fullscreen' : 'Fullscreen'" aria-label="Fullscreen" (click)="toggleFullscreen()">
+              <i class="bi" [ngClass]="fullscreen ? 'bi-fullscreen-exit' : 'bi-arrows-fullscreen'"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="milkdown-host" #editorEl></div>
+        <div class="milkdown-host" #editorEl (scroll)="onEditorScroll()"></div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Floating toolbar anchored to the selected element -->
-  <div class="float-tools" *ngIf="floatKind && !showLinkMenu" [style.top.px]="floatTop" [style.left.px]="floatLeft"
+  <div class="float-tools" *ngIf="floatKind && floatInView && !showLinkMenu" [style.top.px]="floatTop" [style.left.px]="floatLeft"
     (mousedown)="$event.preventDefault()">
 
     <ng-container *ngIf="floatKind === 'image'">

@@ -1420,3 +1420,11 @@ body.section-open #background-image {
   border-radius: 6px;
 }
 
+
+/* When the post editor is fullscreen, hide chrome that lives in higher stacking
+   contexts and would otherwise paint over the fullscreen overlay. */
+body.editor-fullscreen #header,
+body.editor-fullscreen .cc-window,
+body.editor-fullscreen .cc-banner {
+  display: none !important;
+}

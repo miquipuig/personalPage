@@ -208,6 +208,42 @@ textarea.field-input {
   border-right: none;
 }
 
+/* Push the fullscreen toggle to the right end of the toolbar. */
+.tb-group-end {
+  margin-left: auto;
+  border-right: none;
+  padding-right: 0;
+}
+
+/* Fullscreen: the toolbar + editor fill the viewport, but the content keeps the
+   same (centred) width so the writing column doesn't change. */
+.editor-shell.fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: #11151c;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.editor-shell.fullscreen .editor-toolbar {
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 0;
+  flex: 0 0 auto;
+}
+
+.editor-shell.fullscreen .milkdown-host {
+  width: 100%;
+  max-width: 900px;
+  max-height: none;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 .tb-btn {
   display: inline-flex;
   align-items: center;
@@ -265,7 +301,7 @@ textarea.field-input {
 /* Floating toolbar anchored to the selected element */
 .float-tools {
   position: fixed;
-  z-index: 1000;
+  z-index: 9100;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -318,12 +354,12 @@ textarea.field-input {
 .link-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 9100;
 }
 
 .link-pop {
   position: fixed;
-  z-index: 1001;
+  z-index: 9110;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -397,9 +433,10 @@ textarea.field-input {
 .milkdown-host {
   border: 1px solid #2a3340;
   border-radius: 8px;
-  /* visible (not hidden) so the image toolbar above an image near the top edge
-     isn't clipped. */
-  overflow: visible;
+  /* Cap the editor below the viewport and give it its own scrollbar. The
+     floating toolbar is a fixed overlay outside this box, so it isn't clipped. */
+  max-height: 70vh;
+  overflow-y: auto;
   background: #fff;
 }
 
@@ -410,8 +447,6 @@ textarea.field-input {
 
 ::ng-deep .milkdown-host .milkdown .ProseMirror {
   min-height: 420px;
-  /* No max-height/overflow: an inner scroll would clip the image toolbar that
-     sits just above the image. Let the editor grow and the page scroll. */
   padding: 18px 20px;
   outline: none;
 }

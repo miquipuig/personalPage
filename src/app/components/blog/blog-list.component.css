@@ -138,6 +138,11 @@
   border: 1px solid rgba(255, 38, 0, 0.25);
   border-radius: 999px;
   padding: 2px 8px;
+  cursor: pointer;
+}
+
+.blog-card-tag:hover {
+  background: rgba(255, 38, 0, 0.22);
 }
 
 .blog-filter {

@@ -5,6 +5,7 @@ import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { NgcCookieConsentService } from 'ngx-cookieconsent';
+import { BlogService } from './services/blog.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   // ccService is injected so the cookie-consent banner initialises on load.
   constructor(private script: ScriptService, private router: Router, private route: ActivatedRoute,
-    private ccService: NgcCookieConsentService, @Inject(PLATFORM_ID) platformId: object) {
+    private ccService: NgcCookieConsentService, private blog: BlogService, @Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
@@ -45,7 +46,41 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.applySectionBg();
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe(() => this.applySectionBg());
+      .subscribe(() => { this.applySectionBg(); this.trackPage(); });
+    this.trackPage();
+  }
+
+  // Map the current URL to a tracked page key, or null to skip.
+  private pageKey(): string | null {
+    const path = (this.router.url.split('?')[0].split('#')[0].replace(/\/+$/, '')) || '/';
+    if (path === '/' || path === '') return 'home';
+    if (path === '/about') return 'about';
+    if (path === '/resume') return 'resume';
+    if (path === '/contact') return 'contact';
+    if (path === '/blog') return 'blog';
+    const m = path.match(/^\/blog\/(.+)$/);
+    return m ? 'post:' + m[1] : null;
+  }
+
+  private lastTrackedUrl = '';
+
+  private trackPage(): void {
+    if (!this.isBrowser) return;
+    const url = this.router.url;
+    if (url === this.lastTrackedUrl) return; // avoid the bootstrap double-fire
+    this.lastTrackedUrl = url;
+    const page = this.pageKey();
+    if (!page) return;
+    // Send the real entry referrer once per session; mark later navigations
+    // internal so referrer stats reflect how visitors arrived.
+    let referrer = '__internal__';
+    try {
+      if (!sessionStorage.getItem('analytics_session')) {
+        sessionStorage.setItem('analytics_session', '1');
+        referrer = document.referrer || '';
+      }
+    } catch { referrer = document.referrer || ''; }
+    this.blog.track(page, referrer).subscribe({ next: () => {}, error: () => {} });
   }
   activeSection = '';
 
@@ -61,6 +96,17 @@ export class AppComponent implements AfterViewInit, OnInit {
     Promise.resolve().then(() => (this.pageLoaded = true));
   }
 
+
+  // Press "A" (outside any text field) to jump to the admin panel.
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(ev: KeyboardEvent): void {
+    if (!this.isBrowser) return;
+    if ((ev.key !== 'a' && ev.key !== 'A') || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    const t = ev.target as HTMLElement | null;
+    const tag = t?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || t?.isContentEditable) return;
+    this.router.navigate(['/admin']);
+  }
 
   scrollToSection(sectionId: string): void {
     const sectionElement = this.sections.find((el) => el.nativeElement.id === sectionId);

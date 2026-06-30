@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BlogService } from '../../services/blog.service';
 
 @Component({
@@ -16,7 +16,14 @@ export class BlogListComponent implements OnInit {
   page = 1;
   pageSize = 9;
 
-  constructor(private blogService: BlogService, private route: ActivatedRoute) {}
+  constructor(private blogService: BlogService, private route: ActivatedRoute, private router: Router) {}
+
+  // Filter by a tag without following the card's link to the post.
+  filterByTag(tag: string, ev: Event): void {
+    ev.preventDefault();
+    ev.stopPropagation();
+    this.router.navigate(['/blog'], { queryParams: { tag } });
+  }
 
   ngOnInit() {
     this.blogService.listPosts().subscribe({

@@ -46,6 +46,7 @@
     "dompurify": "^3.4.11",
     "express": "^4.18.2",
     "highlight.js": "^11.11.1",
+    "jsvectormap": "^1.7.0",
     "marked": "^4.3.0",
     "ngx-cookieconsent": "6.0.0",
     "ngx-image-cropper": "^9.1.6",

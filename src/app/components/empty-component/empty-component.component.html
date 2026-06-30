@@ -1,0 +1,21 @@
+<section id="home-blog" class="about" [ngClass]="{'section-show': isSectionActive}" *ngIf="posts.length > 0">
+  <div class="about-me container c_custom">
+    <div class="home-blog-head">
+      <h2 class="home-blog-title">Darreres publicacions</h2>
+      <a routerLink="/blog" class="home-blog-more">Veure'n més &rarr;</a>
+    </div>
+
+    <div class="home-blog-grid">
+      <a class="hb-card" *ngFor="let post of posts" [routerLink]="['/blog', post.slug]">
+        <div class="hb-cover" *ngIf="post.coverImage">
+          <img [src]="post.coverImage" [alt]="post.title" />
+        </div>
+        <div class="hb-body">
+          <h3 class="hb-title">{{ post.title }}</h3>
+          <span class="hb-date" *ngIf="post.publishedAt">{{ post.publishedAt | date:'mediumDate' }}</span>
+          <p class="hb-excerpt" *ngIf="post.excerpt">{{ post.excerpt }}</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>

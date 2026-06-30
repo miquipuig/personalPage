@@ -1,0 +1,50 @@
+<section class="admin-api section-show">
+  <div class="admin-api-inner">
+    <header class="admin-api-header">
+      <h2>API</h2>
+      <a class="btn btn-outline" routerLink="/admin"><i class="bi bi-arrow-left"></i> Back to posts</a>
+    </header>
+
+    <div class="admin-error" *ngIf="error">{{ error }}</div>
+
+    <div class="key-card">
+      <div class="key-label">API key (X-API-Key)</div>
+      <div class="key-row">
+        <div class="key-field">
+          <code class="key-value">{{ loading ? 'Loading…' : (revealed ? apiKey : maskedKey) }}</code>
+          <button type="button" class="field-icon tip" (click)="revealed = !revealed"
+            [disabled]="loading" [attr.data-tip]="revealed ? 'Hide key' : 'Reveal key'"
+            [attr.aria-label]="revealed ? 'Hide key' : 'Reveal key'">
+            <i class="bi" [ngClass]="revealed ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+          <button type="button" class="field-icon tip" (click)="copyKey()"
+            [disabled]="loading || !apiKey" data-tip="Copy key" aria-label="Copy key">
+            <i class="bi" [ngClass]="copiedKey ? 'bi-clipboard-check' : 'bi-clipboard'"></i>
+          </button>
+        </div>
+        <div class="key-actions">
+          <button type="button" class="btn btn-sm btn-outline btn-icon tip" (click)="copyHeader()"
+            [disabled]="loading || !apiKey" data-tip="Copy as X-API-Key header" aria-label="Copy as X-API-Key header">
+            <i class="bi" [ngClass]="copiedHeader ? 'bi-clipboard-check' : 'bi-clipboard-plus'"></i>
+          </button>
+          <button type="button" class="btn btn-sm btn-danger btn-icon tip" (click)="regenerate()"
+            [disabled]="loading" data-tip="Regenerate key (invalidates the old one)" aria-label="Regenerate key">
+            <i class="bi bi-arrow-repeat"></i>
+          </button>
+        </div>
+      </div>
+      <p class="key-hint">Reveal/copy with the icons inside the field. The <i class="bi bi-clipboard-plus"></i> button copies <code>X-API-Key: …</code> ready to paste. Keep it secret; regenerating invalidates the old key.</p>
+    </div>
+
+    <div class="doc-card">
+      <div class="doc-head">
+        <h3>Documentation</h3>
+        <button type="button" class="btn btn-sm btn-outline btn-icon tip tip-left" (click)="copyDoc()"
+          data-tip="Copy the docs as Markdown (for an agent)" aria-label="Copy docs as Markdown">
+          <i class="bi" [ngClass]="copiedDoc ? 'bi-clipboard-check' : 'bi-markdown'"></i>
+        </button>
+      </div>
+      <div class="post-body api-doc" [innerHTML]="docHtml"></div>
+    </div>
+  </div>
+</section>

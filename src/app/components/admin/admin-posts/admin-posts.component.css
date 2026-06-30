@@ -156,3 +156,13 @@
   color: #94a3b8;
   padding: 1rem 0;
 }
+
+.views-cell {
+  color: #9aa7b4;
+  white-space: nowrap;
+}
+
+.views-cell i {
+  margin-right: 4px;
+  opacity: 0.7;
+}

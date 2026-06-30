@@ -22,7 +22,7 @@
           <span class="blog-card-date" *ngIf="post.publishedAt">{{ post.publishedAt | date:'mediumDate' }}</span>
           <p class="blog-card-excerpt" *ngIf="post.excerpt">{{ post.excerpt }}</p>
           <div class="blog-card-tags" *ngIf="post.tags?.length">
-            <span class="blog-card-tag" *ngFor="let t of post.tags">#{{ t }}</span>
+            <span class="blog-card-tag" *ngFor="let t of post.tags" (click)="filterByTag(t, $event)">#{{ t }}</span>
           </div>
         </div>
       </a>

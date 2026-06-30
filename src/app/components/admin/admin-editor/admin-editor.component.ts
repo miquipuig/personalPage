@@ -77,6 +77,10 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   // Floating toolbar on the selected element (image / table / text)
   floatTop = 0;
   floatLeft = 0;
+  // Hidden when the selected element is scrolled out of the editor's viewport.
+  floatInView = true;
+  // Toolbar + editor expand to fill the screen (width unchanged).
+  fullscreen = false;
 
   // Link editor popover
   showLinkMenu = false;
@@ -271,6 +275,34 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.floatKind) this.positionFloat();
   }
 
+  // The editor has its own scrollbar, so reposition the toolbar on inner scroll.
+  onEditorScroll(): void {
+    if (this.floatKind) this.positionFloat();
+  }
+
+  toggleFullscreen(): void {
+    this.setFullscreen(!this.fullscreen);
+    // Layout changed — reposition the floating toolbar against the new geometry.
+    setTimeout(() => { if (this.floatKind) this.positionFloat(); }, 0);
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    // Exit fullscreen on Escape, unless a sub-popover is open (it handles Esc).
+    if (this.fullscreen && !this.showLinkMenu && !this.showTableGrid) {
+      this.setFullscreen(false);
+    }
+  }
+
+  // The fullscreen overlay is trapped in the page's stacking context, so the
+  // site header/cookie bar would paint over it. A body class hides them.
+  private setFullscreen(on: boolean): void {
+    this.fullscreen = on;
+    if (this.isBrowser) {
+      document.body.classList.toggle('editor-fullscreen', on);
+    }
+  }
+
   private positionFloat(): void {
     const kind = this.floatKind;
     if (!kind || !this.isBrowser) return;
@@ -298,6 +330,14 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
     if (!rect) return;
+    // Hide the toolbar when the selected element is scrolled out of the editor's
+    // own viewport (the editor now has a max-height and an inner scrollbar).
+    const host = this.editorEl?.nativeElement?.getBoundingClientRect?.();
+    if (host && (rect.bottom < host.top + 8 || rect.top > host.bottom - 8)) {
+      this.floatInView = false;
+      return;
+    }
+    this.floatInView = true;
     const H = 46;
     let top = rect.top - H - 8;
     if (top < 84) top = rect.bottom + 8;
@@ -426,6 +466,9 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.isBrowser) {
+      document.body.classList.remove('editor-fullscreen');
+    }
     if (this.editor) {
       this.editor.destroy();
       this.editor = null;

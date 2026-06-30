@@ -17,6 +17,15 @@ export class BlogService {
     return this.http.get(`api/blog/posts/${slug}`);
   }
 
+  track(page: string, referrer: string): Observable<any> {
+    return this.http.post('api/blog/track', { page, referrer });
+  }
+
+  getAnalytics(days = 30, country = ''): Observable<any> {
+    const c = country ? `&country=${encodeURIComponent(country)}` : '';
+    return this.http.get(`api/blog/admin/analytics?days=${days}${c}`);
+  }
+
   // --- Admin ---
   adminListPosts(): Observable<any> {
     return this.http.get('api/blog/admin/posts');
@@ -40,6 +49,14 @@ export class BlogService {
 
   checkAdmin(): Observable<any> {
     return this.http.get('api/blog/admin/me');
+  }
+
+  getApiKey(): Observable<any> {
+    return this.http.get('api/blog/admin/apikey');
+  }
+
+  regenerateApiKey(): Observable<any> {
+    return this.http.post('api/blog/admin/apikey', {});
   }
 
   // Exchange a Google id_token for an admin JWT (allowlist-gated server-side).

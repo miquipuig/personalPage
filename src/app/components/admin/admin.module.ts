@@ -9,6 +9,8 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminPostsComponent } from './admin-posts/admin-posts.component';
 import { AdminEditorComponent } from './admin-editor/admin-editor.component';
 import { MediaPickerComponent } from './media-picker/media-picker.component';
+import { AdminApiComponent } from './admin-api/admin-api.component';
+import { AdminAnalyticsComponent } from './admin-analytics/admin-analytics.component';
 import { PostViewModule } from '../../shared/post-view/post-view.module';
 
 @NgModule({
@@ -16,7 +18,9 @@ import { PostViewModule } from '../../shared/post-view/post-view.module';
     AdminLoginComponent,
     AdminPostsComponent,
     AdminEditorComponent,
-    MediaPickerComponent
+    MediaPickerComponent,
+    AdminApiComponent,
+    AdminAnalyticsComponent
   ],
   imports: [
     CommonModule,
