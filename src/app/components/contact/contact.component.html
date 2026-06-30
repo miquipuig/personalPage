@@ -47,6 +47,8 @@
       </div>
     </div>
     <form [formGroup]="form" (ngSubmit)="info()" class="php-email-form mt-4">
+      <!-- Honeypot: off-screen, tab-skipped, hidden from assistive tech. Only bots fill it. -->
+      <input type="text" formControlName="company" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="row">
         <div class="col-md-6 form-group">
           <input type="text" formControlName="name" class="form-control" id="name" placeholder="Your Name" required>

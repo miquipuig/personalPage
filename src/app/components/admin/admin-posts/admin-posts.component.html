@@ -29,9 +29,13 @@
         <tr *ngFor="let post of posts">
           <td class="title-cell">{{ post.title }}</td>
           <td>
-            <span class="badge" [class.published]="post.published" [class.draft]="!post.published">
-              {{ post.published ? 'Published' : 'Draft' }}
+            <span class="badge"
+              [class.published]="post.published && !isScheduled(post)"
+              [class.scheduled]="isScheduled(post)"
+              [class.draft]="!post.published">
+              {{ !post.published ? 'Draft' : (isScheduled(post) ? 'Scheduled' : 'Published') }}
             </span>
+            <div class="muted sched-when" *ngIf="isScheduled(post)">{{ post.publishedAt | date:'medium' }}</div>
           </td>
           <td class="views-cell"><i class="bi bi-eye"></i> {{ post.views || 0 }}</td>
           <td class="muted">{{ post.updatedAt | date:'medium' }}</td>

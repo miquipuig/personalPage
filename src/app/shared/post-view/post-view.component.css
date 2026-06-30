@@ -64,6 +64,28 @@
   background: rgba(255, 38, 0, 0.2);
 }
 
+.post-langs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #9a9a9a;
+}
+
+.post-lang {
+  color: #ff2600;
+  text-decoration: none;
+  border: 1px solid rgba(255, 38, 0, 0.35);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+.post-lang:hover {
+  background: rgba(255, 38, 0, 0.15);
+}
+
 /* Cinematic, "flattened" cover banner: wide ratio, cropped (not stretched). */
 .post-cover {
   width: 100%;

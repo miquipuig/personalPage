@@ -5,6 +5,10 @@
     <div class="blog-controls">
       <input type="search" class="blog-search" placeholder="Cercar posts…"
         [(ngModel)]="search" (ngModelChange)="onSearchChange()" />
+      <div class="lang-switch" *ngIf="availableLangs.length > 1">
+        <button type="button" class="lang-btn" *ngFor="let l of availableLangs"
+          [class.active]="activeLang === l" (click)="setLang(l)" [title]="langLabel(l)">{{ l | uppercase }}</button>
+      </div>
     </div>
 
     <div class="blog-filter" *ngIf="activeTag">

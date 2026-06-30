@@ -47,6 +47,7 @@
   grid-template-areas:
     "title   title"
     "tags    tags"
+    "lang    transl"
     "excerpt cover"
     "date    cover"
     "pub     cover";
@@ -56,6 +57,8 @@
 
 .meta-grid .ar-title { grid-area: title; }
 .meta-grid .ar-tags { grid-area: tags; }
+.meta-grid .ar-lang { grid-area: lang; }
+.meta-grid .ar-transl { grid-area: transl; }
 .meta-grid .ar-excerpt { grid-area: excerpt; }
 .meta-grid .ar-cover { grid-area: cover; }
 .meta-grid .ar-date { grid-area: date; }
@@ -67,6 +70,8 @@
     grid-template-areas:
       "title"
       "tags"
+      "lang"
+      "transl"
       "excerpt"
       "cover"
       "date"

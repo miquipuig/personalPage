@@ -12,7 +12,10 @@ export class ContactComponent implements OnInit{
     name: new FormControl(''),
     email: new FormControl('', [Validators.required, Validators.email]),
     subject: new FormControl(''),
-    message: new FormControl('')
+    message: new FormControl(''),
+    // Honeypot: hidden from users; bots that auto-fill it get silently dropped
+    // server-side. Must stay empty for a real submission.
+    company: new FormControl('')
   });
   emailLoading=false;
   emailSent=false;

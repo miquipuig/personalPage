@@ -21,8 +21,12 @@ export class PostViewComponent implements OnChanges, OnDestroy {
   @Input() bodyHtml: SafeHtml | string = '';
   @Input() relatedPosts: any[] = [];
   @Input() tags: string[] = [];
+  @Input() translations: any[] = [];
   // In preview mode the related cards and the back link don't navigate.
   @Input() preview = false;
+
+  readonly langLabels: Record<string, string> = { ca: 'Català', es: 'Español', en: 'English' };
+  langLabel(l: string): string { return this.langLabels[l] || (l || '').toUpperCase(); }
 
   tocItems: TocItem[] = [];
   activeId = '';

@@ -9,6 +9,12 @@
       <a class="post-tag" *ngFor="let t of tags"
         [routerLink]="preview ? null : ['/blog']" [queryParams]="preview ? null : { tag: t }">#{{ t }}</a>
     </div>
+
+    <div class="post-langs" *ngIf="translations?.length">
+      <span class="post-langs-label">Llegir-ho també en:</span>
+      <a class="post-lang" *ngFor="let tr of translations"
+        [routerLink]="preview ? null : ['/blog', tr.slug]">{{ langLabel(tr.language) }}</a>
+    </div>
     <div class="post-cover" *ngIf="coverImage">
       <img [src]="coverImage" [alt]="title" />
     </div>

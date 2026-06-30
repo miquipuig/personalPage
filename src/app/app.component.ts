@@ -97,11 +97,13 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
 
-  // Press "A" (outside any text field) to jump to the admin panel.
+  // Press "A" on the home page (outside any text field) to jump to admin.
   @HostListener('document:keydown', ['$event'])
   onKeydown(ev: KeyboardEvent): void {
     if (!this.isBrowser) return;
     if ((ev.key !== 'a' && ev.key !== 'A') || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    const path = this.router.url.split('?')[0].split('#')[0];
+    if (path !== '/' && path !== '') return; // home only
     const t = ev.target as HTMLElement | null;
     const tag = t?.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || t?.isContentEditable) return;

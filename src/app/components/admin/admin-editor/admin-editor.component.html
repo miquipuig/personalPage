@@ -25,6 +25,22 @@
           <input type="text" class="field-input" [(ngModel)]="tags" name="tags" placeholder="comma, separated, tags" />
         </label>
 
+        <label class="field ar-lang">
+          <span class="field-label">Language</span>
+          <select class="field-input" [(ngModel)]="language" name="language">
+            <option *ngFor="let l of languages" [value]="l.code">{{ l.label }}</option>
+          </select>
+        </label>
+
+        <label class="field ar-transl">
+          <span class="field-label">Translation of</span>
+          <select class="field-input" [(ngModel)]="translationOfId" name="translationOfId">
+            <option [ngValue]="''">— None (standalone) —</option>
+            <option *ngFor="let p of allPosts" [ngValue]="p.id">{{ p.title }} ({{ (p.language || 'ca') | uppercase }})</option>
+          </select>
+          <span class="muted">Link to another post as the same entry in a different language.</span>
+        </label>
+
         <label class="field ar-excerpt">
           <span class="field-label">Excerpt</span>
           <textarea class="field-input" [(ngModel)]="excerpt" name="excerpt" rows="3"

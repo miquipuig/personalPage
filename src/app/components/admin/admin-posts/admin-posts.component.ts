@@ -50,6 +50,12 @@ export class AdminPostsComponent implements OnInit {
     });
   }
 
+  // A published post with a future publishedAt is "scheduled": it stays hidden
+  // on the public site until that moment (see server visibleNow()).
+  isScheduled(post: any): boolean {
+    return !!post.published && !!post.publishedAt && new Date(post.publishedAt).getTime() > Date.now();
+  }
+
   preview(post: any): void {
     // Open the editor on this post and auto-open its (unpublished) preview.
     this.router.navigate(['/admin/edit', post.id], { queryParams: { preview: 1 } });

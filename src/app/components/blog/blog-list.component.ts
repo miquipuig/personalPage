@@ -15,6 +15,8 @@ export class BlogListComponent implements OnInit {
   search = '';
   page = 1;
   pageSize = 9;
+  activeLang = 'ca';
+  readonly langLabels: Record<string, string> = { ca: 'Català', es: 'Español', en: 'English' };
 
   constructor(private blogService: BlogService, private route: ActivatedRoute, private router: Router) {}
 
@@ -25,10 +27,32 @@ export class BlogListComponent implements OnInit {
     this.router.navigate(['/blog'], { queryParams: { tag } });
   }
 
+  setLang(l: string): void {
+    this.activeLang = l;
+    this.page = 1;
+  }
+
+  langLabel(l: string): string {
+    return this.langLabels[l] || (l || '').toUpperCase();
+  }
+
+  get availableLangs(): string[] {
+    const set = new Set<string>();
+    for (const p of this.posts) set.add(p.language || 'ca');
+    return [...set];
+  }
+
   ngOnInit() {
+    if (typeof navigator !== 'undefined') {
+      const n = (navigator.language || '').slice(0, 2).toLowerCase();
+      if (n) this.activeLang = n;
+    }
     this.blogService.listPosts().subscribe({
       next: (response: any) => {
         this.posts = response?.posts ?? [];
+        // If the browser language isn't among the posts, fall back to one present.
+        const langs = this.availableLangs;
+        if (langs.length && !langs.includes(this.activeLang)) this.activeLang = langs[0];
         this.loaded = true;
       },
       error: (error) => {
@@ -44,9 +68,21 @@ export class BlogListComponent implements OnInit {
     setTimeout(() => { this.isSectionActive = true; }, 50);
   }
 
-  // Tag + free-text filter (applied before pagination).
+  // One post per translation group, preferring the active language.
+  get collapsedPosts(): any[] {
+    const groups = new Map<string, any>();
+    for (const p of this.posts) {
+      const key = p.translationGroup || ('s:' + p.id);
+      const cur = groups.get(key);
+      if (!cur) { groups.set(key, p); continue; }
+      if (p.language === this.activeLang && cur.language !== this.activeLang) groups.set(key, p);
+    }
+    return [...groups.values()];
+  }
+
+  // Tag + free-text filter (applied before pagination), on the collapsed list.
   get filteredPosts(): any[] {
-    let list = this.posts;
+    let list = this.collapsedPosts;
     if (this.activeTag) {
       const t = this.activeTag.toLowerCase();
       list = list.filter((p) => (p.tags ?? []).some((tag: string) => tag.toLowerCase() === t));

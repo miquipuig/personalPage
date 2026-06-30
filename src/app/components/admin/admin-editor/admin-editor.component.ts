@@ -58,6 +58,10 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   published = false;
   publishDate = ''; // `YYYY-MM-DD` for the date input; '' means auto/none
   tags = ''; // comma-separated in the input; sent as-is (server normalizes)
+  language = 'ca';
+  translationOfId: number | '' = ''; // link this post as a translation of another
+  allPosts: any[] = []; // candidates for the "translation of" selector
+  readonly languages = [{ code: 'ca', label: 'Català' }, { code: 'es', label: 'Español' }, { code: 'en', label: 'English' }];
   content = '';
 
   saving = false;
@@ -125,6 +129,14 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
+    // Candidates for the "translation of" selector (other posts).
+    this.blogService.adminListPosts().subscribe({
+      next: (res: any) => {
+        this.allPosts = (res?.posts ?? []).filter((p: any) => String(p.id) !== String(this.id));
+        this.linkFromGroup();
+      },
+      error: () => { this.allPosts = []; },
+    });
     if (this.id) {
       this.blogService.getAdminPost(this.id).subscribe({
         next: (res: any) => {
@@ -135,8 +147,11 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
           this.published = !!post.published;
           this.publishDate = this.toDateInput(post.publishedAt);
           this.tags = Array.isArray(post.tags) ? post.tags.join(', ') : (post.tags ?? '');
+          this.language = post.language || 'ca';
+          this.translationGroup = post.translationGroup || '';
           this.content = post.content ?? '';
           this.applyMarkdown(this.content);
+          this.linkFromGroup();
           if (this.route.snapshot.queryParamMap.get('preview') === '1') {
             this.openPreview();
           }
@@ -146,6 +161,14 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     }
+  }
+
+  // Pre-select the "translation of" field from this post's translation group.
+  private translationGroup = '';
+  private linkFromGroup(): void {
+    if (!this.translationGroup || !this.allPosts.length) return;
+    const sibling = this.allPosts.find((p) => p.translationGroup === this.translationGroup);
+    if (sibling) this.translationOfId = sibling.id;
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -509,6 +532,8 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
       published: this.published,
       publishedAt: this.publishDate || '',
       tags: this.tags,
+      language: this.language,
+      translationOfId: this.translationOfId === '' ? '' : this.translationOfId,
       content
     };
 

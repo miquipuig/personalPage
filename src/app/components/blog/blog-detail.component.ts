@@ -20,6 +20,7 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
   notFound = false;
   loaded = false;
   relatedPosts: any[] = [];
+  translations: any[] = [];
   readingMinutes = 0;
   readingProgress = 0;
   private isBrowser: boolean;
@@ -69,6 +70,7 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
       this.meta.updateTag({ name: 'twitter:image', content: img });
     }
     this.setCanonical(url);
+    this.setHreflang(post);
     this.setJsonLd({
       '@context': 'https://schema.org',
       '@type': 'Article',
@@ -90,6 +92,29 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
       this.doc.head.appendChild(link);
     }
     link.setAttribute('href', url);
+  }
+
+  // hreflang alternates: list every language version (self + linked
+  // translations) so search engines serve the right one. Also set <html lang>.
+  private setHreflang(post: any): void {
+    for (const el of Array.from(this.doc.querySelectorAll('link[rel="alternate"][data-hreflang]'))) {
+      el.parentNode?.removeChild(el);
+    }
+    this.doc.documentElement.setAttribute('lang', post.language || 'ca');
+    const versions = [
+      { lang: post.language || 'ca', slug: post.slug },
+      ...(this.translations || []).map((t: any) => ({ lang: t.language || 'ca', slug: t.slug })),
+    ];
+    if (versions.length < 2) return;
+    const def = versions.find((v) => v.lang === 'ca') || versions[0];
+    for (const v of [...versions, { lang: 'x-default', slug: def.slug }]) {
+      const link = this.doc.createElement('link');
+      link.setAttribute('rel', 'alternate');
+      link.setAttribute('hreflang', v.lang);
+      link.setAttribute('href', `${SITE}/blog/${v.slug}`);
+      link.setAttribute('data-hreflang', '1');
+      this.doc.head.appendChild(link);
+    }
   }
 
   private setJsonLd(data: object): void {
@@ -136,6 +161,7 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
 
   private loadPost(slug: string) {
     this.relatedPosts = [];
+    this.translations = [];
     this.loaded = false;
     this.notFound = false;
     this.blogService.getPost(slug).subscribe({
@@ -146,6 +172,7 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
           this.post = null;
         } else {
           this.post = post;
+          this.translations = response?.translations ?? [];
           this.setSeo(post);
           const rendered = renderMarkdown(post.content ?? '');
           this.html = this.sanitizer.bypassSecurityTrustHtml(rendered);
