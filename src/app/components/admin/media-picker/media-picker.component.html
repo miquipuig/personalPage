@@ -15,14 +15,28 @@
       <image-cropper
         [imageFile]="cropFile"
         [maintainAspectRatio]="false"
-        [format]="forcePng ? 'png' : 'jpeg'"
+        [format]="outputFormat"
         [imageQuality]="quality"
+        [resizeToWidth]="resizeWidth"
+        [onlyScaleDown]="true"
         output="blob"
+        (cropperReady)="reCrop()"
         (imageCropped)="onCropped($event)"></image-cropper>
       <div class="crop-controls">
-        <label class="crop-opt"><input type="checkbox" [(ngModel)]="forcePng" /> Keep PNG (lossless)</label>
-        <label class="crop-opt" *ngIf="!forcePng">Quality {{ quality }}%
-          <input type="range" min="40" max="95" [(ngModel)]="quality" /></label>
+        <label class="crop-opt">Width
+          <select [(ngModel)]="widthMode" (ngModelChange)="reCrop()">
+            <option value="original">Original{{ sourceWidth ? ' (' + sourceWidth + 'px)' : '' }}</option>
+            <option value="max" *ngIf="canCap">Max ({{ maxWidth }}px)</option>
+          </select>
+        </label>
+        <label class="crop-opt">Format
+          <span class="fmt-tag">{{ outputFormat | uppercase }}</span>
+        </label>
+        <label class="crop-opt" *ngIf="sourceIsPng">
+          <input type="checkbox" [(ngModel)]="convertToJpeg" (ngModelChange)="reCrop()" /> Convert to JPEG
+        </label>
+        <label class="crop-opt" *ngIf="showQuality">Quality {{ quality }}%{{ quality === 100 ? ' (original)' : '' }}
+          <input type="range" min="40" max="100" [(ngModel)]="quality" (ngModelChange)="reCrop()" /></label>
         <span class="crop-spacer"></span>
         <button type="button" class="btn btn-outline" (click)="cancelCrop()">Cancel</button>
         <button type="button" class="btn btn-primary" (click)="confirmUpload()" [disabled]="uploading || !croppedBlob">

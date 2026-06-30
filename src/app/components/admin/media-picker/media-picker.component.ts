@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
-import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { BlogService } from '../../../services/blog.service';
 
 interface MediaFile {
@@ -27,6 +27,7 @@ export class MediaPickerComponent {
   @Output() closed = new EventEmitter<void>();
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @ViewChild(ImageCropperComponent) imageCropper?: ImageCropperComponent;
 
   open = false;
   loading = false;
@@ -52,8 +53,18 @@ export class MediaPickerComponent {
   // Crop + convert step before uploading
   cropFile: File | null = null;
   croppedBlob: Blob | null = null;
-  forcePng = false;
+  // Source format drives the options: a JPEG is always (re)compressed as JPEG;
+  // a PNG is kept lossless unless the user opts to convert it to JPEG.
+  sourceIsPng = false;
+  convertToJpeg = false;
   quality = 82;
+  // Cap the stored width to what the blog ever displays (a body image at 100%
+  // ~= viewport width on a laptop, covers span the column). Keeps uploads light.
+  maxWidth = 1600;
+  // 'max' caps the width at maxWidth; 'original' keeps the cropped resolution.
+  widthMode: 'original' | 'max' = 'original';
+  // Natural width of the imported file; drives whether the cap is worth offering.
+  sourceWidth = 0;
 
   constructor(private blogService: BlogService) {}
 
@@ -129,11 +140,61 @@ export class MediaPickerComponent {
     this.error = '';
     this.croppedBlob = null;
     this.cropFile = file;
+    this.sourceWidth = 0;
+    this.widthMode = 'original';
+    const type = (file.type || '').toLowerCase();
+    this.sourceIsPng = type === 'image/png' || (!type && /\.png$/i.test(file.name));
+    this.convertToJpeg = false;
+    this.measureWidth(file);
     input.value = '';
+  }
+
+  // PNG stays PNG only when the user hasn't asked to convert it; everything else
+  // (JPEG source, or a converted PNG) is encoded as JPEG.
+  get outputFormat(): 'png' | 'jpeg' {
+    return this.sourceIsPng && !this.convertToJpeg ? 'png' : 'jpeg';
+  }
+
+  get showQuality(): boolean {
+    return this.outputFormat === 'jpeg';
+  }
+
+  // Read the file's natural width so we only offer the "cap" option when the
+  // image is actually wider than the cap (otherwise it would mean upscaling).
+  private measureWidth(file: File): void {
+    if (typeof Image === 'undefined' || typeof URL === 'undefined') return;
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      this.sourceWidth = img.naturalWidth;
+      // Default to capping when it helps; otherwise keep the original.
+      this.widthMode = img.naturalWidth > this.maxWidth ? 'max' : 'original';
+      this.reCrop();
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = () => URL.revokeObjectURL(url);
+    img.src = url;
+  }
+
+  // True when the cap is meaningful (image wider than maxWidth).
+  get canCap(): boolean {
+    return this.sourceWidth > this.maxWidth;
+  }
+
+  // resizeToWidth value for the cropper: 0 disables resizing (keep original).
+  get resizeWidth(): number {
+    return this.canCap && this.widthMode === 'max' ? this.maxWidth : 0;
   }
 
   onCropped(e: ImageCroppedEvent): void {
     this.croppedBlob = e.blob ?? null;
+  }
+
+  // Changing width/quality/format updates the cropper's options but doesn't
+  // auto re-crop, so the blob would stay stale. Re-run the crop after Angular
+  // has flushed the new @Input values to the cropper.
+  reCrop(): void {
+    setTimeout(() => this.imageCropper?.crop('blob'));
   }
 
   cancelCrop(): void {
@@ -145,7 +206,7 @@ export class MediaPickerComponent {
     if (!this.croppedBlob) return;
     this.uploading = true;
     this.error = '';
-    const ext = this.forcePng ? 'png' : 'jpg';
+    const ext = this.outputFormat === 'png' ? 'png' : 'jpg';
     this.blogService.uploadImage(this.croppedBlob, undefined, `image.${ext}`).subscribe({
       next: () => {
         this.uploading = false;

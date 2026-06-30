@@ -1,0 +1,44 @@
+<div class="post-layout">
+  <article class="post">
+    <h1 class="post-title">{{ title || 'Untitled' }}</h1>
+    <div class="post-meta">
+      <span class="post-date" *ngIf="publishedAt">{{ publishedAt | date:'mediumDate' }}</span>
+      <span class="post-readtime" *ngIf="readingMinutes">· {{ readingMinutes }} min de lectura</span>
+    </div>
+    <div class="post-tags" *ngIf="tags?.length">
+      <a class="post-tag" *ngFor="let t of tags"
+        [routerLink]="preview ? null : ['/blog']" [queryParams]="preview ? null : { tag: t }">#{{ t }}</a>
+    </div>
+    <div class="post-cover" *ngIf="coverImage">
+      <img [src]="coverImage" [alt]="title" />
+    </div>
+    <div class="post-body" [innerHTML]="bodyHtml"></div>
+    <a *ngIf="!preview" routerLink="/blog" class="back-link">&larr; Tornar al blog</a>
+  </article>
+
+  <aside class="post-sidebar" *ngIf="tocItems.length > 0 || relatedPosts.length > 0">
+    <nav class="post-toc" *ngIf="tocItems.length > 0">
+      <h2 class="sidebar-title">En aquesta pàgina</h2>
+      <ul class="toc-list">
+        <li *ngFor="let item of tocItems" [class.toc-h3]="item.level === 3">
+          <a class="toc-link" [class.active]="activeId === item.id"
+            [href]="'#' + item.id" (click)="scrollTo(item.id, $event)">{{ item.text }}</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="post-related" *ngIf="relatedPosts.length > 0">
+      <h2 class="sidebar-title">Articles relacionats</h2>
+      <a class="related-card" *ngFor="let rp of relatedPosts"
+        [routerLink]="preview ? null : ['/blog', rp.slug]">
+        <div class="related-cover" *ngIf="rp.coverImage">
+          <img [src]="rp.coverImage" [alt]="rp.title" />
+        </div>
+        <div class="related-info">
+          <h3 class="related-title">{{ rp.title }}</h3>
+          <span class="related-date" *ngIf="rp.publishedAt">{{ rp.publishedAt | date:'mediumDate' }}</span>
+        </div>
+      </a>
+    </div>
+  </aside>
+</div>

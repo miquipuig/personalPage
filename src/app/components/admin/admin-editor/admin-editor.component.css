@@ -2,6 +2,9 @@
   min-height: 70vh;
   background: #11151c;
   padding: 2rem 1rem;
+  /* 100vw images bleed past the column; clip so the scrollbar gutter can't
+     trigger a horizontal scrollbar. */
+  overflow-x: clip;
 }
 
 .admin-editor-inner {
@@ -33,6 +36,42 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+
+/* Metadata fields laid out two columns wide on desktop to keep the form
+   compact: the (tall) cover sits on the right while the text/publication fields
+   stack on the left. Collapses to a single column on narrow screens. */
+.meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "title   title"
+    "tags    tags"
+    "excerpt cover"
+    "date    cover"
+    "pub     cover";
+  gap: 0.9rem 1.25rem;
+  align-items: start;
+}
+
+.meta-grid .ar-title { grid-area: title; }
+.meta-grid .ar-tags { grid-area: tags; }
+.meta-grid .ar-excerpt { grid-area: excerpt; }
+.meta-grid .ar-cover { grid-area: cover; }
+.meta-grid .ar-date { grid-area: date; }
+.meta-grid .ar-pub { grid-area: pub; }
+
+@media (max-width: 760px) {
+  .meta-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "tags"
+      "excerpt"
+      "cover"
+      "date"
+      "pub";
+  }
 }
 
 .field {
@@ -90,7 +129,7 @@ textarea.field-input {
 
 .cover-preview {
   margin-top: 0.6rem;
-  max-width: 280px;
+  max-width: 160px;
   border-radius: 8px;
   border: 1px solid #2a3340;
 }
@@ -514,7 +553,8 @@ textarea.field-input {
   border-radius: 0;
 }
 
-/* Draft preview — a full page styled like the public post (dark theme). */
+/* Draft preview — renders the shared <app-post-view>, so it matches the public
+   post exactly. Only the preview bar/flag chrome is specific to the editor. */
 .preview-bar {
   display: flex;
   align-items: center;
@@ -527,29 +567,4 @@ textarea.field-input {
 .preview-flag {
   color: #f59e0b;
   font-size: 0.85rem;
-}
-
-.admin-preview .post-title {
-  color: #fff;
-  margin-bottom: 1rem;
-}
-
-.admin-preview .post-cover img {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 1.25rem;
-}
-
-.admin-preview .post-body {
-  color: #e6e6e6;
-  line-height: 1.75;
-}
-
-.admin-preview .post-body img {
-  max-width: 100%;
-  border-radius: 6px;
-}
-
-.admin-preview .post-body a {
-  color: #ff2600;
 }

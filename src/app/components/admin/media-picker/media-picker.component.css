@@ -287,9 +287,17 @@
 
 .crop-view image-cropper {
   display: block;
-  max-height: 58vh;
+  /* A *definite* height (not max-height) so the source image's max-height:100%
+     engages; otherwise a tall image overflows and only its top shows. */
+  height: 58vh;
   background: #0d1117;
   border-radius: 8px;
+}
+
+/* The cropper's inner wrapper must fill that height so the image scales down to
+   fit the available space instead of overflowing. */
+::ng-deep .crop-view image-cropper > div {
+  height: 100%;
 }
 
 .crop-controls {
@@ -310,6 +318,17 @@
 
 .crop-opt input[type="range"] {
   vertical-align: middle;
+}
+
+.fmt-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  background: #1b212b;
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
 }
 
 .crop-spacer {

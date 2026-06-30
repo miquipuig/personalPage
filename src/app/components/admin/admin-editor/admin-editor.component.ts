@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, Inject, NgZone, OnD
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { renderMarkdown } from '../../../shared/markdown.util';
+import { renderMarkdown, estimateReadingMinutes } from '../../../shared/markdown.util';
 import { toJpeg } from '../../../shared/image.util';
 import { Editor, rootCtx, defaultValueCtx, editorViewCtx } from '@milkdown/core';
 import { commonmark } from '@milkdown/preset-commonmark';
@@ -56,6 +56,8 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   excerpt = '';
   coverImage = '';
   published = false;
+  publishDate = ''; // `YYYY-MM-DD` for the date input; '' means auto/none
+  tags = ''; // comma-separated in the input; sent as-is (server normalizes)
   content = '';
 
   saving = false;
@@ -63,6 +65,9 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   showPreview = false;
   previewHtml: SafeHtml = '';
+  previewReadingMinutes = 0;
+  previewDate: Date = new Date();
+  previewRelated: any[] = [];
 
   // Currently selected image (drives the controls panel below the editor).
   selImg: SelectedImage | null = null;
@@ -90,11 +95,13 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   gridArr = [1, 2, 3, 4, 5, 6, 7, 8];
   hoverR = 1;
   hoverC = 1;
+  // Widths are a percentage of the text column; capped at 100% so an image
+  // never overflows the column (in the editor or the published page).
   imgSizes = [
-    { label: 'Small', value: '25%' },
-    { label: 'Medium', value: '50%' },
-    { label: 'Large', value: '100%' },
-    { label: 'Original', value: '' },
+    { label: '25%', value: '25%' },
+    { label: '50%', value: '50%' },
+    { label: '75%', value: '75%' },
+    { label: '100%', value: '100%' },
   ];
 
   private editor: Editor | null = null;
@@ -122,6 +129,8 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
           this.excerpt = post.excerpt ?? '';
           this.coverImage = post.coverImage ?? '';
           this.published = !!post.published;
+          this.publishDate = this.toDateInput(post.publishedAt);
+          this.tags = Array.isArray(post.tags) ? post.tags.join(', ') : (post.tags ?? '');
           this.content = post.content ?? '';
           this.applyMarkdown(this.content);
           if (this.route.snapshot.queryParamMap.get('preview') === '1') {
@@ -398,7 +407,7 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setImgSize(width: string): void {
     this.editImage((attrs) => {
-      const base = String(attrs.src ?? '').replace(/#w=\d+%?$/, '');
+      const base = String(attrs.src ?? '').replace(/#w=[\d.]+(?:vw|px|%)?$/, '');
       attrs.src = width ? `${base}#w=${width}` : base;
       return attrs;
     });
@@ -435,6 +444,12 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.editor ? this.editor.action(getMarkdown()) : this.content;
   }
 
+  private toDateInput(value: any): string {
+    if (!value) return '';
+    const d = new Date(value);
+    return isNaN(d.getTime()) ? '' : d.toISOString().slice(0, 10);
+  }
+
   save(): void {
     const content = this.currentMarkdown();
     if (!this.title.trim() || !content.trim()) {
@@ -449,6 +464,8 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
       excerpt: this.excerpt,
       coverImage: this.coverImage,
       published: this.published,
+      publishedAt: this.publishDate || '',
+      tags: this.tags,
       content
     };
 
@@ -469,12 +486,28 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openPreview(): void {
-    this.previewHtml = this.sanitizer.bypassSecurityTrustHtml(renderMarkdown(this.currentMarkdown()));
+    const md = this.currentMarkdown();
+    this.previewHtml = this.sanitizer.bypassSecurityTrustHtml(renderMarkdown(md));
+    this.previewReadingMinutes = estimateReadingMinutes(md);
+    // Use the chosen publish date, or today as the published page would.
+    this.previewDate = this.publishDate ? new Date(this.publishDate) : new Date();
+    // Mirror the published page's "related" sidebar with other posts.
+    this.blogService.listPosts().subscribe({
+      next: (res: any) => {
+        const all: any[] = res?.posts ?? [];
+        this.previewRelated = all.filter((p) => String(p.id) !== String(this.id)).slice(0, 5);
+      },
+      error: () => { this.previewRelated = []; },
+    });
     this.showPreview = true;
   }
 
   closePreview(): void {
     this.showPreview = false;
+  }
+
+  get previewTags(): string[] {
+    return this.tags.split(',').map((t) => t.trim()).filter(Boolean);
   }
 
   cancel(): void {

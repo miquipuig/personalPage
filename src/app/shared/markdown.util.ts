@@ -14,14 +14,18 @@ const renderer = new marked.Renderer();
 renderer.image = (href: string | null, title: string | null, text: string): string => {
   let src = href || '';
   let width = '';
-  const m = src.match(/#w=(\d+%?)$/);
+  const m = src.match(/#w=([\d.]+(?:vw|px|%)?)$/);
   if (m) {
     width = m[1];
-    src = src.replace(/#w=\d+%?$/, '');
+    src = src.replace(/#w=[\d.]+(?:vw|px|%)?$/, '');
   }
   const titleAttr = title ? ` title="${title}"` : '';
-  const widthAttr = width ? ` width="${width}"` : '';
-  return `<img src="${src}" alt="${text || ''}"${titleAttr}${widthAttr} style="max-width:100%">`;
+  // Width is a percentage of the text column; max-width:100% guarantees the
+  // image never overflows the column. The width goes in the inline style.
+  const style = width
+    ? ` style="width:${width};max-width:100%"`
+    : ' style="max-width:100%"';
+  return `<img src="${src}" alt="${text || ''}"${titleAttr}${style} loading="lazy" decoding="async">`;
 };
 
 // Fenced code blocks → highlight.js. Falls back to auto-detection when the
@@ -41,12 +45,42 @@ renderer.code = (code: string, infostring: string | undefined): string => {
   return `<pre><code class="hljs${cls}">${body}</code></pre>`;
 };
 
+// Rough reading-time estimate: strip markdown punctuation, count words, assume
+// 200 wpm. Shared by the public detail page and the editor preview so both
+// show the same number.
+export function estimateReadingMinutes(md: string): number {
+  const text = (md || '').replace(/[#*_>`~\[\]()!\-]/g, ' ');
+  const words = text.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '') // strip accents
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+// Give h1–h3 stable, unique ids so the table of contents can link to them.
+function addHeadingIds(html: string): string {
+  const used: Record<string, number> = {};
+  return html.replace(/<(h[1-3])>([\s\S]*?)<\/\1>/g, (_m, tag, inner) => {
+    const text = inner.replace(/<[^>]+>/g, '');
+    let slug = slugify(text) || 'section';
+    if (used[slug]) { used[slug]++; slug = `${slug}-${used[slug]}`; } else { used[slug] = 1; }
+    return `<${tag} id="${slug}">${inner}</${tag}>`;
+  });
+}
+
 export function renderMarkdown(md: string): string {
-  const raw = marked.parse(md || '', { renderer }) as string;
+  const raw = addHeadingIds(marked.parse(md || '', { renderer }) as string);
   // DOMPurify needs a DOM; during SSR there's no window, so skip it (content is
   // admin-authored, and the browser re-sanitizes on hydration).
   if (typeof window === 'undefined' || !DOMPurify?.sanitize) {
     return raw;
   }
-  return DOMPurify.sanitize(raw, { ADD_ATTR: ['width'] });
+  return DOMPurify.sanitize(raw, { ADD_ATTR: ['width', 'loading', 'decoding'] });
 }

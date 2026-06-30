@@ -9,6 +9,7 @@ import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminPostsComponent } from './admin-posts/admin-posts.component';
 import { AdminEditorComponent } from './admin-editor/admin-editor.component';
 import { MediaPickerComponent } from './media-picker/media-picker.component';
+import { PostViewModule } from '../../shared/post-view/post-view.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { MediaPickerComponent } from './media-picker/media-picker.component';
     RouterModule,
     AdminRoutingModule,
     GoogleSigninButtonModule,
-    ImageCropperComponent
+    ImageCropperComponent,
+    PostViewModule
   ]
 })
 export class AdminModule {}

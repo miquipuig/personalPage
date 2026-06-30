@@ -14,32 +14,45 @@
     <div class="admin-error" *ngIf="error">{{ error }}</div>
 
     <div class="form-grid">
-      <label class="field">
-        <span class="field-label">Title</span>
-        <input type="text" class="field-input" [(ngModel)]="title" name="title" placeholder="Post title" />
-      </label>
+      <div class="meta-grid">
+        <label class="field ar-title">
+          <span class="field-label">Title</span>
+          <input type="text" class="field-input" [(ngModel)]="title" name="title" placeholder="Post title" />
+        </label>
 
-      <label class="field">
-        <span class="field-label">Excerpt</span>
-        <textarea class="field-input" [(ngModel)]="excerpt" name="excerpt" rows="3"
-          placeholder="Short summary shown in listings"></textarea>
-      </label>
+        <label class="field ar-tags">
+          <span class="field-label">Tags</span>
+          <input type="text" class="field-input" [(ngModel)]="tags" name="tags" placeholder="comma, separated, tags" />
+        </label>
 
-      <div class="field">
-        <span class="field-label">Cover image</span>
-        <input type="text" class="field-input" [(ngModel)]="coverImage" name="coverImage"
-          placeholder="/api/uploads/... or external URL" />
-        <div class="cover-upload">
-          <button type="button" class="btn btn-outline" (click)="mediaPicker.show('cover')">Choose from library</button>
-          <button type="button" class="btn btn-outline" *ngIf="coverImage" (click)="coverImage=''">Remove</button>
+        <label class="field ar-excerpt">
+          <span class="field-label">Excerpt</span>
+          <textarea class="field-input" [(ngModel)]="excerpt" name="excerpt" rows="3"
+            placeholder="Short summary shown in listings"></textarea>
+        </label>
+
+        <div class="field ar-cover">
+          <span class="field-label">Cover image</span>
+          <input type="text" class="field-input" [(ngModel)]="coverImage" name="coverImage"
+            placeholder="/api/uploads/... or external URL" />
+          <div class="cover-upload">
+            <button type="button" class="btn btn-outline" (click)="mediaPicker.show('cover')">Choose from library</button>
+            <button type="button" class="btn btn-outline" *ngIf="coverImage" (click)="coverImage=''">Remove</button>
+          </div>
+          <img class="cover-preview" *ngIf="coverImage" [src]="coverImage" alt="cover preview" />
         </div>
-        <img class="cover-preview" *ngIf="coverImage" [src]="coverImage" alt="cover preview" />
-      </div>
 
-      <label class="field checkbox-field">
-        <input type="checkbox" [(ngModel)]="published" name="published" />
-        <span class="field-label">Published</span>
-      </label>
+        <label class="field ar-date">
+          <span class="field-label">Publish date</span>
+          <input type="date" class="field-input" [(ngModel)]="publishDate" name="publishDate" />
+          <span class="muted">Leave empty to use today's date when publishing.</span>
+        </label>
+
+        <label class="field checkbox-field ar-pub">
+          <input type="checkbox" [(ngModel)]="published" name="published" />
+          <span class="field-label">Published</span>
+        </label>
+      </div>
 
       <div class="field">
         <span class="field-label">Content</span>
@@ -142,12 +155,15 @@
       <button type="button" class="btn btn-outline" (click)="closePreview()">&larr; Back to editor</button>
       <span class="preview-flag">Preview — not published</span>
     </div>
-    <article class="post">
-      <h1 class="post-title">{{ title || 'Untitled' }}</h1>
-      <div class="post-cover" *ngIf="coverImage">
-        <img [src]="coverImage" [alt]="title" />
-      </div>
-      <div class="post-body" [innerHTML]="previewHtml"></div>
-    </article>
+    <app-post-view
+      [preview]="true"
+      [title]="title"
+      [publishedAt]="previewDate"
+      [readingMinutes]="previewReadingMinutes"
+      [coverImage]="coverImage"
+      [bodyHtml]="previewHtml"
+      [tags]="previewTags"
+      [relatedPosts]="previewRelated">
+    </app-post-view>
   </div>
 </section>

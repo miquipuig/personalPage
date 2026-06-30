@@ -1300,9 +1300,35 @@ body.section-open #background-image {
 /* Rendered post code blocks (public detail + admin preview). highlight.js's
    theme colours the .hljs spans; these add the block chrome. */
 .post-body pre {
+  position: relative;
   overflow-x: auto;
   border-radius: 8px;
   margin: 1rem 0;
+}
+
+/* "Copy" button injected into rendered code blocks by <app-post-view>. */
+.code-copy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #cfcfcf;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.post-body pre:hover .code-copy {
+  opacity: 1;
+}
+
+.code-copy:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
 }
 
 .post-body pre code.hljs {
@@ -1338,5 +1364,59 @@ body.section-open #background-image {
 .post-body th {
   background: rgba(255, 255, 255, 0.07);
   font-weight: 600;
+}
+
+/* Rendered markdown body (public detail + admin preview). Global, because the
+   content is injected via [innerHTML] and component-scoped styles wouldn't
+   reach it — keeping it here guarantees preview and published look identical. */
+.post-body {
+  color: #eaeaea;
+  line-height: 1.7;
+}
+
+.post-body h1,
+.post-body h2,
+.post-body h3 {
+  color: #fff;
+}
+
+.post-body h1 { font-size: 26px; font-weight: 700; margin: 24px 0 14px; }
+.post-body h2 { font-size: 20px; font-weight: 600; margin: 24px 0 10px; }
+.post-body h3 { font-size: 17px; font-weight: 600; margin: 20px 0 8px; }
+
+.post-body ul,
+.post-body ol {
+  padding-left: 22px;
+  margin-bottom: 14px;
+}
+
+.post-body li {
+  margin-bottom: 6px;
+}
+
+.post-body a {
+  color: #ff2600;
+  text-decoration: none;
+}
+
+.post-body a:hover {
+  text-decoration: underline;
+}
+
+.post-body blockquote {
+  border-left: 3px solid #ff2600;
+  padding-left: 16px;
+  color: #cfcfcf;
+  margin: 16px 0;
+}
+
+/* Width (when set) is a percentage of the column; max-width:100% keeps every
+   image inside the text column — it never overflows. Centred. */
+.post-body img {
+  display: block;
+  margin: 12px auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
 }
 

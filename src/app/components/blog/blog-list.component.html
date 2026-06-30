@@ -2,8 +2,18 @@
   <div class="about-me container c_custom">
     <h1 class="blog-title">Blog</h1>
 
-    <div class="blog-grid" *ngIf="posts.length > 0">
-      <a class="blog-card" *ngFor="let post of posts" [routerLink]="['/blog', post.slug]">
+    <div class="blog-controls">
+      <input type="search" class="blog-search" placeholder="Cercar posts…"
+        [(ngModel)]="search" (ngModelChange)="onSearchChange()" />
+    </div>
+
+    <div class="blog-filter" *ngIf="activeTag">
+      <span>Filtrant per <strong>#{{ activeTag }}</strong></span>
+      <a class="blog-filter-clear" routerLink="/blog">Treure filtre ✕</a>
+    </div>
+
+    <div class="blog-grid" *ngIf="pagedPosts.length > 0">
+      <a class="blog-card" *ngFor="let post of pagedPosts" [routerLink]="['/blog', post.slug]">
         <div class="blog-card-cover" *ngIf="post.coverImage">
           <img [src]="post.coverImage" [alt]="post.title" />
         </div>
@@ -11,10 +21,22 @@
           <h2 class="blog-card-title">{{ post.title }}</h2>
           <span class="blog-card-date" *ngIf="post.publishedAt">{{ post.publishedAt | date:'mediumDate' }}</span>
           <p class="blog-card-excerpt" *ngIf="post.excerpt">{{ post.excerpt }}</p>
+          <div class="blog-card-tags" *ngIf="post.tags?.length">
+            <span class="blog-card-tag" *ngFor="let t of post.tags">#{{ t }}</span>
+          </div>
         </div>
       </a>
     </div>
 
+    <nav class="blog-pagination" *ngIf="totalPages > 1">
+      <button type="button" class="page-btn" [disabled]="page === 1" (click)="goToPage(page - 1)">‹ Anterior</button>
+      <span class="page-info">Pàgina {{ page }} de {{ totalPages }}</span>
+      <button type="button" class="page-btn" [disabled]="page === totalPages" (click)="goToPage(page + 1)">Següent ›</button>
+    </nav>
+
+    <p class="blog-empty" *ngIf="loaded && filteredPosts.length === 0 && posts.length > 0">
+      No hi ha posts que coincideixin amb la cerca.
+    </p>
     <p class="blog-empty" *ngIf="loaded && posts.length === 0">No posts yet. Check back soon.</p>
   </div>
 </section><!-- End Blog List Section -->

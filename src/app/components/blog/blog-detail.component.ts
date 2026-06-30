@@ -1,9 +1,9 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { DomSanitizer, SafeHtml, Title, Meta } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { renderMarkdown } from '../../shared/markdown.util';
+import { renderMarkdown, estimateReadingMinutes } from '../../shared/markdown.util';
 import { BlogService } from '../../services/blog.service';
 
 const SITE = 'https://miquelpuig.studio';
@@ -19,6 +19,10 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
   html: SafeHtml = '';
   notFound = false;
   loaded = false;
+  relatedPosts: any[] = [];
+  readingMinutes = 0;
+  readingProgress = 0;
+  private isBrowser: boolean;
   private paramsSub?: Subscription;
 
   constructor(
@@ -27,8 +31,19 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private titleService: Title,
     private meta: Meta,
-    @Inject(DOCUMENT) private doc: Document
-  ) {}
+    @Inject(DOCUMENT) private doc: Document,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    if (!this.isBrowser) return;
+    const scrolled = window.scrollY || this.doc.documentElement.scrollTop || 0;
+    const max = this.doc.documentElement.scrollHeight - window.innerHeight;
+    this.readingProgress = max > 0 ? Math.min(100, Math.max(0, (scrolled / max) * 100)) : 0;
+  }
 
   private absolutize(u?: string): string {
     if (!u) return '';
@@ -100,7 +115,27 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
     this.paramsSub?.unsubscribe();
   }
 
+  private loadRelated(current: any) {
+    this.blogService.listPosts().subscribe({
+      next: (res: any) => {
+        const all: any[] = (res?.posts ?? []).filter((p: any) => p.slug !== current.slug);
+        const myTags = new Set<string>((current.tags ?? []).map((t: string) => t.toLowerCase()));
+        // Rank by number of shared tags, then by recency.
+        const scored = all.map((p) => ({
+          p,
+          score: (p.tags ?? []).filter((t: string) => myTags.has(t.toLowerCase())).length,
+        }));
+        scored.sort((a, b) =>
+          b.score - a.score ||
+          (new Date(b.p.publishedAt).getTime() - new Date(a.p.publishedAt).getTime()));
+        this.relatedPosts = scored.map((s) => s.p).slice(0, 5);
+      },
+      error: () => { this.relatedPosts = []; },
+    });
+  }
+
   private loadPost(slug: string) {
+    this.relatedPosts = [];
     this.loaded = false;
     this.notFound = false;
     this.blogService.getPost(slug).subscribe({
@@ -114,6 +149,8 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
           this.setSeo(post);
           const rendered = renderMarkdown(post.content ?? '');
           this.html = this.sanitizer.bypassSecurityTrustHtml(rendered);
+          this.readingMinutes = estimateReadingMinutes(post.content ?? '');
+          this.loadRelated(post);
         }
         this.loaded = true;
       },

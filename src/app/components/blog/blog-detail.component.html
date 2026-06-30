@@ -1,13 +1,15 @@
+<div class="reading-progress" *ngIf="post" [style.width.%]="readingProgress"></div>
 <section id="blog" class="about" [ngClass]="{'section-show': isSectionActive}">
   <div class="about-me container c_custom">
-    <article class="post" *ngIf="post">
-      <h1 class="post-title">{{ post.title }}</h1>
-      <span class="post-date" *ngIf="post.publishedAt">{{ post.publishedAt | date:'mediumDate' }}</span>
-      <div class="post-cover" *ngIf="post.coverImage">
-        <img [src]="post.coverImage" [alt]="post.title" />
-      </div>
-      <div class="post-body" [innerHTML]="html"></div>
-    </article>
+    <app-post-view *ngIf="post"
+      [title]="post.title"
+      [publishedAt]="post.publishedAt"
+      [readingMinutes]="readingMinutes"
+      [coverImage]="post.coverImage"
+      [bodyHtml]="html"
+      [tags]="post.tags"
+      [relatedPosts]="relatedPosts">
+    </app-post-view>
 
     <div class="post-not-found" *ngIf="loaded && notFound">
       <h1>Post not found</h1>
