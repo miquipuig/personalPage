@@ -966,17 +966,18 @@ section .container.c_custom {
   color: #fff;
 }
 
-.contact .info-box-link:hover i.bx:not(.info-box-copy-icon) {
+.contact .info-box-link:hover i.bx:not(.info-box-corner-icon) {
   background: var(--main-color);
   color: #fff;
 }
 
-/* Copy affordance on the phone box: icon on the right, revealed on hover. */
-.contact .info-box-copy {
+/* Corner action icon (top-right): open-external on links, copy on the phone.
+   Hidden until the card is hovered. */
+.contact .info-box-link {
   position: relative;
 }
 
-.contact .info-box i.info-box-copy-icon {
+.contact .info-box i.info-box-corner-icon {
   position: absolute;
   top: 18px;
   right: 16px;
@@ -991,11 +992,11 @@ section .container.c_custom {
   transition: opacity 0.3s, color 0.3s;
 }
 
-.contact .info-box-copy:hover i.info-box-copy-icon {
+.contact .info-box-link:hover i.info-box-corner-icon {
   opacity: 1;
 }
 
-.contact .info-box-copy.copied i.info-box-copy-icon {
+.contact .info-box-copy.copied i.info-box-corner-icon {
   opacity: 1;
   color: var(--main-color);
 }
