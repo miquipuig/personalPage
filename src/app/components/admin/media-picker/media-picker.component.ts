@@ -23,7 +23,7 @@ type PickerMode = 'insert' | 'cover';
 export class MediaPickerComponent {
   // Insert into the post body (with chosen width + alt) or select a cover.
   @Output() insert = new EventEmitter<{ url: string; width: string; alt: string }>();
-  @Output() cover = new EventEmitter<{ url: string }>();
+  @Output() cover = new EventEmitter<{ url: string; caption: string }>();
   @Output() closed = new EventEmitter<void>();
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
@@ -120,7 +120,7 @@ export class MediaPickerComponent {
 
   pick(file: MediaFile): void {
     if (this.mode === 'cover') {
-      this.cover.emit({ url: file.url });
+      this.cover.emit({ url: file.url, caption: (file.description || '').trim() });
     } else {
       const alt = file.description?.trim() || file.originalName || file.name;
       this.insert.emit({ url: file.url, width: this.selectedWidth, alt });

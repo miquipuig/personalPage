@@ -88,18 +88,30 @@
 
 /* Cinematic, "flattened" cover banner: wide ratio, cropped (not stretched). */
 .post-cover {
+  margin: 0 0 24px;
+}
+
+.post-cover-frame {
   width: 100%;
   aspect-ratio: 21 / 9;
-  margin-bottom: 24px;
   border-radius: 8px;
   overflow: hidden;
 }
 
-.post-cover img {
+.post-cover-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.post-cover-caption {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #9a9a9a;
+  font-style: italic;
 }
 
 .back-link {

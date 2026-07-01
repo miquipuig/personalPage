@@ -19,14 +19,25 @@ renderer.image = (href: string | null, title: string | null, text: string): stri
     width = m[1];
     src = src.replace(/#w=[\d.]+(?:vw|px|%)?$/, '');
   }
-  const titleAttr = title ? ` title="${title}"` : '';
+  const titleAttr = title ? ` title="${escAttr(title)}"` : '';
+  const caption = (text || '').trim();
+  const img = `<img src="${escAttr(src)}" alt="${escAttr(caption)}"${titleAttr} style="width:100%;max-width:100%" loading="lazy" decoding="async">`;
   // Width is a percentage of the text column; max-width:100% guarantees the
-  // image never overflows the column. The width goes in the inline style.
-  const style = width
+  // figure never overflows the column. The alt text doubles as the caption
+  // ("pie de foto") so every image shows its stored description.
+  const figStyle = width
     ? ` style="width:${width};max-width:100%"`
     : ' style="max-width:100%"';
-  return `<img src="${src}" alt="${text || ''}"${titleAttr}${style} loading="lazy" decoding="async">`;
+  const cap = caption ? `<figcaption>${escHtml(caption)}</figcaption>` : '';
+  return `<figure class="post-figure"${figStyle}>${img}${cap}</figure>`;
 };
+
+function escAttr(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+}
+function escHtml(s: string): string {
+  return s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c] as string));
+}
 
 // Fenced code blocks → highlight.js. Falls back to auto-detection when the
 // language is unknown or unspecified.
@@ -76,7 +87,10 @@ function addHeadingIds(html: string): string {
 }
 
 export function renderMarkdown(md: string): string {
-  const raw = addHeadingIds(marked.parse(md || '', { renderer }) as string);
+  let raw = addHeadingIds(marked.parse(md || '', { renderer }) as string);
+  // marked wraps a lone image in <p>…</p>; a <figure> can't live inside a <p>,
+  // so lift figures out of their wrapping paragraph.
+  raw = raw.replace(/<p>(\s*<figure[\s\S]*?<\/figure>\s*)<\/p>/g, '$1');
   // DOMPurify needs a DOM; during SSR there's no window, so skip it (content is
   // admin-authored, and the browser re-sanitizes on hydration).
   if (typeof window === 'undefined' || !DOMPurify?.sanitize) {

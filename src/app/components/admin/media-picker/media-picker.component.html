@@ -88,14 +88,14 @@
 
           <div class="desc" *ngIf="editingName !== file.name">
             <span class="desc-text" [class.empty]="!file.description">
-              {{ file.description || 'No description' }}
+              {{ file.description || 'No caption' }}
             </span>
             <button type="button" class="link-btn" (click)="startEdit(file)">Edit</button>
           </div>
 
           <div class="desc-edit" *ngIf="editingName === file.name">
             <input type="text" class="desc-input" [(ngModel)]="editingDesc"
-              placeholder="Describe this image (used as alt text)" />
+              placeholder="Caption / pie de foto (also used as alt text)" />
             <div class="desc-edit-actions">
               <button type="button" class="btn btn-sm btn-primary" (click)="saveEdit(file)">Save</button>
               <button type="button" class="btn btn-sm btn-outline" (click)="cancelEdit()">Cancel</button>

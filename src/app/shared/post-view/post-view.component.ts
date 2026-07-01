@@ -18,6 +18,7 @@ export class PostViewComponent implements OnChanges, OnDestroy {
   @Input() publishedAt: any = null;
   @Input() readingMinutes = 0;
   @Input() coverImage = '';
+  @Input() coverCaption = '';
   @Input() bodyHtml: SafeHtml | string = '';
   @Input() relatedPosts: any[] = [];
   @Input() tags: string[] = [];

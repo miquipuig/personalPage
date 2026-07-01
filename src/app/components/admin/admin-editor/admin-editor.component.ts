@@ -55,6 +55,7 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   title = '';
   excerpt = '';
   coverImage = '';
+  coverCaption = '';
   published = false;
   publishDate = ''; // `YYYY-MM-DD` for the date input; '' means auto/none
   tags = ''; // comma-separated in the input; sent as-is (server normalizes)
@@ -144,6 +145,7 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
           this.title = post.title ?? '';
           this.excerpt = post.excerpt ?? '';
           this.coverImage = post.coverImage ?? '';
+          this.coverCaption = post.coverCaption ?? '';
           this.published = !!post.published;
           this.publishDate = this.toDateInput(post.publishedAt);
           this.tags = Array.isArray(post.tags) ? post.tags.join(', ') : (post.tags ?? '');
@@ -237,8 +239,9 @@ export class AdminEditorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.editor.action(insert(`![${label}](${src})`));
   }
 
-  onSelectCover(payload: { url: string }): void {
+  onSelectCover(payload: { url: string; caption?: string }): void {
     this.coverImage = payload.url;
+    this.coverCaption = payload.caption ?? '';
   }
 
   private run(key: any, payload?: any): void {

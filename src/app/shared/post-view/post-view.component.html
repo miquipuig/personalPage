@@ -15,9 +15,12 @@
       <a class="post-lang" *ngFor="let tr of translations"
         [routerLink]="preview ? null : ['/blog', tr.slug]">{{ langLabel(tr.language) }}</a>
     </div>
-    <div class="post-cover" *ngIf="coverImage">
-      <img [src]="coverImage" [alt]="title" />
-    </div>
+    <figure class="post-cover" *ngIf="coverImage">
+      <div class="post-cover-frame">
+        <img [src]="coverImage" [alt]="coverCaption || title" />
+      </div>
+      <figcaption class="post-cover-caption" *ngIf="coverCaption">{{ coverCaption }}</figcaption>
+    </figure>
     <div class="post-body" [innerHTML]="bodyHtml"></div>
     <a *ngIf="!preview" routerLink="/blog" class="back-link">&larr; Tornar al blog</a>
   </article>

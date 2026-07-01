@@ -1476,6 +1476,25 @@ body.section-open #background-image {
   border-radius: 6px;
 }
 
+/* Figure = image + caption ("pie de foto"). The figure carries the width; the
+   image fills it and the caption sits centered underneath. */
+.post-body figure.post-figure {
+  margin: 20px auto;
+}
+
+.post-body figure.post-figure img {
+  margin: 0 auto;
+}
+
+.post-body figure.post-figure figcaption {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #9a9a9a;
+  font-style: italic;
+}
+
 
 /* When the post editor is fullscreen, hide chrome that lives in higher stacking
    contexts and would otherwise paint over the fullscreen overlay. */
