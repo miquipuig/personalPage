@@ -10,7 +10,8 @@
       [bodyHtml]="html"
       [tags]="post.tags"
       [translations]="translations"
-      [relatedPosts]="relatedPosts">
+      [relatedPosts]="relatedPosts"
+      [showBackLink]="false">
     </app-post-view>
 
     <section class="comments" *ngIf="post && loaded">
@@ -50,6 +51,8 @@
       <div class="comment-pending" *ngIf="commentPending">
         Gràcies! El teu comentari s'ha enviat i es publicarà un cop revisat.
       </div>
+
+      <a routerLink="/blog" class="back-link">&larr; Tornar al blog</a>
     </section>
 
     <div class="post-not-found" *ngIf="loaded && notFound">

@@ -25,6 +25,9 @@ export class PostViewComponent implements OnChanges, OnDestroy {
   @Input() translations: any[] = [];
   // In preview mode the related cards and the back link don't navigate.
   @Input() preview = false;
+  // The detail page hides the built-in back link and renders its own after the
+  // comments, so the comment box sits directly under the article.
+  @Input() showBackLink = true;
 
   readonly langLabels: Record<string, string> = { ca: 'Català', es: 'Español', en: 'English' };
   langLabel(l: string): string { return this.langLabels[l] || (l || '').toUpperCase(); }

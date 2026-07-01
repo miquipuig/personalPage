@@ -22,7 +22,7 @@
       <figcaption class="post-cover-caption" *ngIf="coverCaption">{{ coverCaption }}</figcaption>
     </figure>
     <div class="post-body" [innerHTML]="bodyHtml"></div>
-    <a *ngIf="!preview" routerLink="/blog" class="back-link">&larr; Tornar al blog</a>
+    <a *ngIf="!preview && showBackLink" routerLink="/blog" class="back-link">&larr; Tornar al blog</a>
   </article>
 
   <aside class="post-sidebar" *ngIf="tocItems.length > 0 || relatedPosts.length > 0">
