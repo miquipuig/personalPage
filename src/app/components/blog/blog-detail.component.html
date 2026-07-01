@@ -14,7 +14,7 @@
       [showBackLink]="false">
     </app-post-view>
 
-    <section class="comments" *ngIf="post && loaded">
+    <div class="comments" *ngIf="post && loaded">
       <h2 class="comments-title">
         Comentaris <span class="comments-count" *ngIf="comments.length">({{ comments.length }})</span>
       </h2>
@@ -53,7 +53,7 @@
       </div>
 
       <a routerLink="/blog" class="back-link">&larr; Tornar al blog</a>
-    </section>
+    </div>
 
     <div class="post-not-found" *ngIf="loaded && notFound">
       <h1>Post not found</h1>
