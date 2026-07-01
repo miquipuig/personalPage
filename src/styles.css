@@ -950,12 +950,11 @@ section .container.c_custom {
   display: block;
   text-decoration: none;
   color: inherit;
-  transition: background 0.3s, transform 0.3s;
+  transition: background 0.3s;
 }
 
 .contact a.info-box-link:hover {
   background: rgba(255, 255, 255, 0.16);
-  transform: translateY(-3px);
 }
 
 .contact a.info-box-link:hover h3 {
