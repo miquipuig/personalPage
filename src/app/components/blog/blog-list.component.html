@@ -3,7 +3,7 @@
     <h1 class="blog-title">Blog</h1>
 
     <div class="blog-controls">
-      <input type="search" class="blog-search" placeholder="Cercar posts…"
+      <input type="search" class="blog-search" placeholder="Search posts…"
         [(ngModel)]="search" (ngModelChange)="onSearchChange()" />
       <div class="lang-switch" *ngIf="availableLangs.length > 1">
         <button type="button" class="lang-btn" *ngFor="let l of availableLangs"
@@ -12,8 +12,8 @@
     </div>
 
     <div class="blog-filter" *ngIf="activeTag">
-      <span>Filtrant per <strong>#{{ activeTag }}</strong></span>
-      <a class="blog-filter-clear" routerLink="/blog">Treure filtre ✕</a>
+      <span>Filtering by <strong>#{{ activeTag }}</strong></span>
+      <a class="blog-filter-clear" routerLink="/blog">Clear filter ✕</a>
     </div>
 
     <div class="blog-grid" *ngIf="pagedPosts.length > 0">
@@ -33,13 +33,13 @@
     </div>
 
     <nav class="blog-pagination" *ngIf="totalPages > 1">
-      <button type="button" class="page-btn" [disabled]="page === 1" (click)="goToPage(page - 1)">‹ Anterior</button>
-      <span class="page-info">Pàgina {{ page }} de {{ totalPages }}</span>
-      <button type="button" class="page-btn" [disabled]="page === totalPages" (click)="goToPage(page + 1)">Següent ›</button>
+      <button type="button" class="page-btn" [disabled]="page === 1" (click)="goToPage(page - 1)">‹ Previous</button>
+      <span class="page-info">Page {{ page }} of {{ totalPages }}</span>
+      <button type="button" class="page-btn" [disabled]="page === totalPages" (click)="goToPage(page + 1)">Next ›</button>
     </nav>
 
     <p class="blog-empty" *ngIf="loaded && filteredPosts.length === 0 && posts.length > 0">
-      No hi ha posts que coincideixin amb la cerca.
+      No posts match your search.
     </p>
     <p class="blog-empty" *ngIf="loaded && posts.length === 0">No posts yet. Check back soon.</p>
   </div>

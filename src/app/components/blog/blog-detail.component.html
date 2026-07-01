@@ -16,7 +16,7 @@
 
     <div class="comments" *ngIf="post && loaded">
       <h2 class="comments-title">
-        Comentaris <span class="comments-count" *ngIf="comments.length">({{ comments.length }})</span>
+        Comments <span class="comments-count" *ngIf="comments.length">({{ comments.length }})</span>
       </h2>
 
       <div class="comment-list" *ngIf="comments.length; else noComments">
@@ -29,39 +29,39 @@
         </div>
       </div>
       <ng-template #noComments>
-        <p class="comments-empty">Encara no hi ha comentaris. Sigues el primer a comentar!</p>
+        <p class="comments-empty">No comments yet. Be the first to comment!</p>
       </ng-template>
 
       <form class="comment-form" (ngSubmit)="submitComment(editor)" *ngIf="!commentPending">
-        <h3 class="comment-form-title">Deixa un comentari</h3>
+        <h3 class="comment-form-title">Leave a comment</h3>
         <!-- Honeypot: hidden from users; bots that fill it are dropped server-side. -->
         <input type="text" name="website" [(ngModel)]="commentForm.website" class="hp-field"
           tabindex="-1" autocomplete="off" aria-hidden="true">
         <div class="comment-row">
-          <input type="text" name="name" [(ngModel)]="commentForm.name" placeholder="El teu nom *" required>
-          <input type="email" name="email" [(ngModel)]="commentForm.email" placeholder="Email (opcional, no es publica)">
+          <input type="text" name="name" [(ngModel)]="commentForm.name" placeholder="Your name *" required>
+          <input type="email" name="email" [(ngModel)]="commentForm.email" placeholder="Email (optional, not published)">
         </div>
         <div class="comment-editor">
           <div class="comment-toolbar">
-            <button type="button" class="fmt-btn" (click)="exec('bold', editor)" title="Negreta"><strong>B</strong></button>
-            <button type="button" class="fmt-btn" (click)="exec('italic', editor)" title="Cursiva"><em>I</em></button>
-            <button type="button" class="fmt-btn emoji-btn" (click)="toggleEmoji()" aria-label="Insereix un emoji" title="Emoji"><i class="bx bx-smile"></i></button>
+            <button type="button" class="fmt-btn" (click)="exec('bold', editor)" title="Bold"><strong>B</strong></button>
+            <button type="button" class="fmt-btn" (click)="exec('italic', editor)" title="Italic"><em>I</em></button>
+            <button type="button" class="fmt-btn emoji-btn" (click)="toggleEmoji()" aria-label="Insert emoji" title="Emoji"><i class="bx bx-smile"></i></button>
           </div>
           <div #editor class="comment-input" contenteditable="true" role="textbox" aria-multiline="true"
-            data-placeholder="El teu comentari *" (paste)="onPaste($event, editor)"></div>
+            data-placeholder="Your comment *" (paste)="onPaste($event, editor)"></div>
           <emoji-picker *ngIf="showEmoji" class="emoji-popover" (emoji-click)="onEmojiClick($event, editor)"></emoji-picker>
         </div>
-        <div class="comment-error" *ngIf="commentError">Cal el nom i el comentari.</div>
+        <div class="comment-error" *ngIf="commentError">Name and comment are required.</div>
         <button type="submit" class="btn-comment" [disabled]="commentSubmitting">
-          {{ commentSubmitting ? 'Enviant…' : 'Publicar comentari' }}
+          {{ commentSubmitting ? 'Sending…' : 'Post comment' }}
         </button>
       </form>
 
       <div class="comment-pending" *ngIf="commentPending">
-        Gràcies! El teu comentari s'ha enviat i es publicarà un cop revisat.
+        Thanks! Your comment was submitted and will appear once it's reviewed.
       </div>
 
-      <a routerLink="/blog" class="back-link">&larr; Tornar al blog</a>
+      <a routerLink="/blog" class="back-link">&larr; Back to blog</a>
     </div>
 
     <div class="post-not-found" *ngIf="loaded && notFound">

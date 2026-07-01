@@ -16,7 +16,7 @@ export class BlogListComponent implements OnInit {
   page = 1;
   pageSize = 9;
   activeLang = 'ca';
-  readonly langLabels: Record<string, string> = { ca: 'Català', es: 'Español', en: 'English' };
+  readonly langLabels: Record<string, string> = { ca: 'Catalan', es: 'Spanish', en: 'English' };
 
   constructor(private blogService: BlogService, private route: ActivatedRoute, private router: Router) {}
 

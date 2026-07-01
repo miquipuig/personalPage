@@ -29,7 +29,7 @@ export class PostViewComponent implements OnChanges, OnDestroy {
   // comments, so the comment box sits directly under the article.
   @Input() showBackLink = true;
 
-  readonly langLabels: Record<string, string> = { ca: 'Català', es: 'Español', en: 'English' };
+  readonly langLabels: Record<string, string> = { ca: 'Catalan', es: 'Spanish', en: 'English' };
   langLabel(l: string): string { return this.langLabels[l] || (l || '').toUpperCase(); }
 
   tocItems: TocItem[] = [];
@@ -65,12 +65,12 @@ export class PostViewComponent implements OnChanges, OnDestroy {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'code-copy';
-      btn.textContent = 'Copiar';
+      btn.textContent = 'Copy';
       btn.addEventListener('click', () => {
-        const code = (pre.querySelector('code')?.textContent ?? pre.textContent ?? '').replace(/Copiar$/, '');
+        const code = (pre.querySelector('code')?.textContent ?? pre.textContent ?? '').replace(/Copy$/, '');
         navigator.clipboard?.writeText(code).then(() => {
-          btn.textContent = 'Copiat!';
-          setTimeout(() => { btn.textContent = 'Copiar'; }, 1500);
+          btn.textContent = 'Copied!';
+          setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
         }).catch(() => {});
       });
       pre.appendChild(btn);
