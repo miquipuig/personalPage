@@ -1503,3 +1503,20 @@ body.editor-fullscreen .cc-window,
 body.editor-fullscreen .cc-banner {
   display: none !important;
 }
+
+/* World-map hover tooltip (jsvectormap appends .jvm-tooltip to <body>, so it
+   must be styled globally). Make it clearly visible on the dark theme. */
+.jvm-tooltip {
+  position: absolute;
+  background: #1b212b !important;
+  color: #fff !important;
+  border: 1px solid #ff2600 !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55) !important;
+  z-index: 10000 !important;
+  pointer-events: none;
+}

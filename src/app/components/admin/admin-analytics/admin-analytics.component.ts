@@ -121,9 +121,13 @@ export class AdminAnalyticsComponent implements OnInit {
   private async renderMap(): Promise<void> {
     if (!this.isBrowser || !this.mapEl?.nativeElement) return;
     const values: Record<string, number> = {};
+    const stats: Record<string, { total: number; unique: number }> = {};
     for (const c of (this.data.countries ?? [])) {
       const cc = String(c.country || '').toUpperCase();
-      if (cc.length === 2) values[cc] = +c.total || 0;
+      if (cc.length === 2) {
+        values[cc] = +c.total || 0;
+        stats[cc] = { total: +c.total || 0, unique: +c.unique || 0 };
+      }
     }
     try {
       try { this.mapInstance?.destroy(); } catch { /* ignore */ }
@@ -139,10 +143,13 @@ export class AdminAnalyticsComponent implements OnInit {
         zoomButtons: true,
         regionStyle: { initial: { fill: '#2a3340', stroke: '#11151c', strokeWidth: 0.4 } },
         onRegionTooltipShow: (_event: any, tooltip: any, code: string) => {
-          const v = values[String(code).toUpperCase()] || 0;
+          const s = stats[String(code).toUpperCase()] || { total: 0, unique: 0 };
           const name = tooltip.text() || code;
-          // Show the country's total visits for the selected period.
-          tooltip.text(`${name}: ${v} ${v === 1 ? 'visit' : 'visits'}`, true);
+          // Country visits for the selected period: total + unique visitors.
+          tooltip.text(
+            `<strong>${name}</strong><br>Total: ${s.total} · Úniques: ${s.unique}`,
+            true,
+          );
         },
         onRegionClick: (_event: any, code: string) => {
           this.zone.run(() => this.selectCountry(code));

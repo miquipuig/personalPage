@@ -87,14 +87,15 @@
         <div class="panel">
           <h3>Countries <span class="hint">(click to filter)</span></h3>
           <table class="atable">
-            <thead><tr><th>Country</th><th class="num">Visits</th></tr></thead>
+            <thead><tr><th>Country</th><th class="num">Total</th><th class="num">Unique</th></tr></thead>
             <tbody>
               <tr *ngFor="let c of data.countries" class="clickable"
                 [class.active]="c.country === selectedCountry" (click)="selectCountry(c.country)">
                 <td>{{ flag(c.country) }} {{ c.country || '??' }}</td>
                 <td class="num">{{ c.total }}</td>
+                <td class="num">{{ c.unique }}</td>
               </tr>
-              <tr *ngIf="!data.countries?.length"><td colspan="2" class="muted">No data yet.</td></tr>
+              <tr *ngIf="!data.countries?.length"><td colspan="3" class="muted">No data yet.</td></tr>
             </tbody>
           </table>
         </div>
