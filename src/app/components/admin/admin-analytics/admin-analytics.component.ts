@@ -139,8 +139,10 @@ export class AdminAnalyticsComponent implements OnInit {
         zoomButtons: true,
         regionStyle: { initial: { fill: '#2a3340', stroke: '#11151c', strokeWidth: 0.4 } },
         onRegionTooltipShow: (_event: any, tooltip: any, code: string) => {
-          const v = values[code] || 0;
-          tooltip.text(`${tooltip.text()}: ${v}`, true);
+          const v = values[String(code).toUpperCase()] || 0;
+          const name = tooltip.text() || code;
+          // Show the country's total visits for the selected period.
+          tooltip.text(`${name}: ${v} ${v === 1 ? 'visit' : 'visits'}`, true);
         },
         onRegionClick: (_event: any, code: string) => {
           this.zone.run(() => this.selectCountry(code));
