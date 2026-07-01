@@ -945,14 +945,26 @@ section .container.c_custom {
   margin: 0 0 0 68px;
 }
 
-.contact .info-box p a {
-  color: #fff;
+/* Whole-box link (Email, WhatsApp): the entire card is clickable. */
+.contact a.info-box-link {
+  display: block;
   text-decoration: none;
-  transition: 0.3s;
+  color: inherit;
+  transition: background 0.3s, transform 0.3s;
 }
 
-.contact .info-box p a:hover {
-  color: var(--main-color);
+.contact a.info-box-link:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-3px);
+}
+
+.contact a.info-box-link:hover h3 {
+  color: #fff;
+}
+
+.contact a.info-box-link:hover i.bx {
+  background: var(--main-color);
+  color: #fff;
 }
 
 .contact .info-box .social-links {
