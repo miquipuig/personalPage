@@ -1,0 +1,9 @@
+.resume-contact a {
+  color: #ff2600;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.resume-contact a:hover {
+  text-decoration: underline;
+}
