@@ -50,36 +50,85 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
     this.showEmoji = false;
   }
 
-  onEmojiClick(ev: any, ta?: HTMLTextAreaElement): void {
+  onEmojiClick(ev: any, editor?: HTMLElement): void {
     const d = ev?.detail || {};
     const emoji = d.unicode || d.emoji?.unicode || d.emoji?.emoji;
-    if (emoji) this.insertAtCursor(ta, emoji);
+    if (emoji && editor) {
+      editor.focus();
+      document.execCommand('insertText', false, emoji);
+    }
     this.showEmoji = false;
   }
 
-  // Wrap the current selection with markdown markers (bold/italic).
-  format(before: string, after: string, ta?: HTMLTextAreaElement): void {
-    if (!ta) return;
-    const start = ta.selectionStart ?? 0;
-    const end = ta.selectionEnd ?? 0;
-    const val = this.commentForm.body || '';
-    const sel = val.slice(start, end) || 'text';
-    const next = val.slice(0, start) + before + sel + after + val.slice(end);
-    this.commentForm.body = next;
-    // Restore focus and select the wrapped text.
-    setTimeout(() => {
-      ta.focus();
-      ta.setSelectionRange(start + before.length, start + before.length + sel.length);
-    });
+  // WYSIWYG contenteditable: toggle bold/italic on the current selection.
+  // styleWithCSS=false makes the browser emit <b>/<i> tags (easy to convert).
+  exec(cmd: 'bold' | 'italic', editor: HTMLElement): void {
+    editor.focus();
+    try { document.execCommand('styleWithCSS', false, 'false'); } catch { /* ignore */ }
+    document.execCommand(cmd, false);
   }
 
-  private insertAtCursor(ta: HTMLTextAreaElement | undefined, text: string): void {
-    const val = this.commentForm.body || '';
-    if (!ta) { this.commentForm.body = val + text; return; }
-    const start = ta.selectionStart ?? val.length;
-    const end = ta.selectionEnd ?? val.length;
-    this.commentForm.body = val.slice(0, start) + text + val.slice(end);
-    setTimeout(() => { ta.focus(); const pos = start + text.length; ta.setSelectionRange(pos, pos); });
+  // Only bold/italic survive a paste — everything else becomes plain text.
+  onPaste(ev: ClipboardEvent, editor: HTMLElement): void {
+    ev.preventDefault();
+    const html = ev.clipboardData?.getData('text/html');
+    const safe = html ? this.sanitizeToBI(html) : this.escapeHtml(ev.clipboardData?.getData('text/plain') ?? '').replace(/\n/g, '<br>');
+    editor.focus();
+    document.execCommand('insertHTML', false, safe);
+  }
+
+  private escapeHtml(s: string): string {
+    return (s || '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c] as string));
+  }
+
+  // Reduce arbitrary HTML to text with only <strong>/<em> preserved.
+  private sanitizeToBI(html: string): string {
+    const root = document.createElement('div');
+    root.innerHTML = html;
+    const walk = (node: Node): string => {
+      let out = '';
+      node.childNodes.forEach((n) => {
+        if (n.nodeType === 3) { out += this.escapeHtml(n.textContent || ''); return; }
+        if (n.nodeType !== 1) return;
+        const el = n as HTMLElement;
+        const tag = el.tagName.toLowerCase();
+        const inner = walk(el);
+        const style = (el.getAttribute('style') || '').toLowerCase();
+        const bold = tag === 'b' || tag === 'strong' || /font-weight\s*:\s*(bold|[6-9]00)/.test(style);
+        const italic = tag === 'i' || tag === 'em' || /font-style\s*:\s*italic/.test(style);
+        if (tag === 'br') out += '<br>';
+        else if (bold) out += `<strong>${inner}</strong>`;
+        else if (italic) out += `<em>${inner}</em>`;
+        else if (tag === 'p' || tag === 'div') out += inner + '<br>';
+        else out += inner;
+      });
+      return out;
+    };
+    return walk(root);
+  }
+
+  // Convert the editor's HTML (only text + b/i) into markdown for storage.
+  private editorToMarkdown(editor: HTMLElement): string {
+    const walk = (node: Node): string => {
+      let out = '';
+      node.childNodes.forEach((n) => {
+        if (n.nodeType === 3) { out += n.textContent || ''; return; }
+        if (n.nodeType !== 1) return;
+        const el = n as HTMLElement;
+        const tag = el.tagName.toLowerCase();
+        const inner = walk(el);
+        const style = (el.getAttribute('style') || '').toLowerCase();
+        const bold = tag === 'b' || tag === 'strong' || /font-weight\s*:\s*(bold|[6-9]00)/.test(style);
+        const italic = tag === 'i' || tag === 'em' || /font-style\s*:\s*italic/.test(style);
+        if (tag === 'br') out += '\n';
+        else if (bold && inner.trim()) out += `**${inner}**`;
+        else if (italic && inner.trim()) out += `*${inner}*`;
+        else if (tag === 'p' || tag === 'div') out += (out && !out.endsWith('\n') ? '\n' : '') + inner;
+        else out += inner;
+      });
+      return out;
+    };
+    return walk(editor).replace(/\n{3,}/g, '\n\n').trim();
   }
 
   // Render a comment body with a tiny safe subset of markdown (bold + italic).
@@ -234,18 +283,20 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  submitComment(): void {
+  submitComment(editor?: HTMLElement): void {
     if (!this.post || this.commentSubmitting) return;
     const name = this.commentForm.name.trim();
-    const body = this.commentForm.body.trim();
+    const body = editor ? this.editorToMarkdown(editor) : (this.commentForm.body || '');
     this.commentError = false;
-    if (!name || !body) { this.commentError = true; return; }
+    if (!name || !body.trim()) { this.commentError = true; return; }
+    this.commentForm.body = body;
     this.commentSubmitting = true;
     this.blogService.addComment(this.post.slug, this.commentForm).subscribe({
       next: () => {
         this.commentSubmitting = false;
         this.commentPending = true;
         this.commentForm = { name: '', email: '', body: '', website: '' };
+        if (editor) editor.innerHTML = '';
       },
       error: () => { this.commentSubmitting = false; this.commentError = true; },
     });

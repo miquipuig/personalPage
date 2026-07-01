@@ -131,16 +131,40 @@
   font-family: inherit;
 }
 
-.comment-form textarea {
-  resize: vertical;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
 .comment-editor {
   position: relative;
   margin-bottom: 12px;
 }
+
+/* WYSIWYG contenteditable input (bold/italic shown inline). */
+.comment-input {
+  width: 100%;
+  min-height: 96px;
+  max-height: 260px;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 0;
+  border-radius: 0 0 6px 6px;
+  padding: 10px 12px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: #ff2600;
+}
+
+.comment-input:empty::before {
+  content: attr(data-placeholder);
+  color: #8a8a8a;
+  pointer-events: none;
+}
+
+.comment-input strong { font-weight: 700; }
+.comment-input em { font-style: italic; }
 
 .comment-toolbar {
   display: flex;
