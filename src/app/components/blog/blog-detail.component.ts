@@ -41,11 +41,55 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
     this.showEmoji = !this.showEmoji;
   }
 
-  onEmojiClick(ev: any): void {
+  // Close the emoji picker when clicking anywhere outside it or its button.
+  @HostListener('document:click', ['$event'])
+  onDocClick(ev: Event): void {
+    if (!this.showEmoji) return;
+    const t = ev.target as HTMLElement | null;
+    if (t?.closest?.('.emoji-btn') || t?.closest?.('emoji-picker')) return;
+    this.showEmoji = false;
+  }
+
+  onEmojiClick(ev: any, ta?: HTMLTextAreaElement): void {
     const d = ev?.detail || {};
     const emoji = d.unicode || d.emoji?.unicode || d.emoji?.emoji;
-    if (emoji) this.commentForm.body = (this.commentForm.body || '') + emoji;
+    if (emoji) this.insertAtCursor(ta, emoji);
     this.showEmoji = false;
+  }
+
+  // Wrap the current selection with markdown markers (bold/italic).
+  format(before: string, after: string, ta?: HTMLTextAreaElement): void {
+    if (!ta) return;
+    const start = ta.selectionStart ?? 0;
+    const end = ta.selectionEnd ?? 0;
+    const val = this.commentForm.body || '';
+    const sel = val.slice(start, end) || 'text';
+    const next = val.slice(0, start) + before + sel + after + val.slice(end);
+    this.commentForm.body = next;
+    // Restore focus and select the wrapped text.
+    setTimeout(() => {
+      ta.focus();
+      ta.setSelectionRange(start + before.length, start + before.length + sel.length);
+    });
+  }
+
+  private insertAtCursor(ta: HTMLTextAreaElement | undefined, text: string): void {
+    const val = this.commentForm.body || '';
+    if (!ta) { this.commentForm.body = val + text; return; }
+    const start = ta.selectionStart ?? val.length;
+    const end = ta.selectionEnd ?? val.length;
+    this.commentForm.body = val.slice(0, start) + text + val.slice(end);
+    setTimeout(() => { ta.focus(); const pos = start + text.length; ta.setSelectionRange(pos, pos); });
+  }
+
+  // Render a comment body with a tiny safe subset of markdown (bold + italic).
+  // The text is HTML-escaped first, so only our own <strong>/<em> tags survive.
+  renderCommentBody(body: string): SafeHtml {
+    const esc = (body || '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c] as string));
+    const html = esc
+      .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
   private isBrowser: boolean;
   private paramsSub?: Subscription;

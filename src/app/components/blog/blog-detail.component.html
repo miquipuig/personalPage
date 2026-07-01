@@ -25,7 +25,7 @@
             <span class="comment-author">{{ c.name }}</span>
             <span class="comment-date">{{ c.createdAt | date:'mediumDate' }}</span>
           </div>
-          <p class="comment-body">{{ c.body }}</p>
+          <p class="comment-body" [innerHTML]="renderCommentBody(c.body)"></p>
         </div>
       </div>
       <ng-template #noComments>
@@ -41,10 +41,14 @@
           <input type="text" name="name" [(ngModel)]="commentForm.name" placeholder="El teu nom *" required>
           <input type="email" name="email" [(ngModel)]="commentForm.email" placeholder="Email (opcional, no es publica)">
         </div>
-        <div class="comment-body-field">
-          <textarea name="body" [(ngModel)]="commentForm.body" rows="4" placeholder="El teu comentari *" required></textarea>
-          <button type="button" class="emoji-btn" (click)="toggleEmoji()" aria-label="Insereix un emoji">&#128522;</button>
-          <emoji-picker *ngIf="showEmoji" class="emoji-popover" (emoji-click)="onEmojiClick($event)"></emoji-picker>
+        <div class="comment-editor">
+          <div class="comment-toolbar">
+            <button type="button" class="fmt-btn" (click)="format('**', '**', bodyTa)" title="Negreta"><strong>B</strong></button>
+            <button type="button" class="fmt-btn" (click)="format('*', '*', bodyTa)" title="Cursiva"><em>I</em></button>
+            <button type="button" class="fmt-btn emoji-btn" (click)="toggleEmoji()" aria-label="Insereix un emoji" title="Emoji"><i class="bx bx-smile"></i></button>
+          </div>
+          <textarea #bodyTa name="body" [(ngModel)]="commentForm.body" rows="4" placeholder="El teu comentari *" required></textarea>
+          <emoji-picker *ngIf="showEmoji" class="emoji-popover" (emoji-click)="onEmojiClick($event, bodyTa)"></emoji-picker>
         </div>
         <div class="comment-error" *ngIf="commentError">Cal el nom i el comentari.</div>
         <button type="submit" class="btn-comment" [disabled]="commentSubmitting">
