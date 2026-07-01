@@ -23,6 +23,11 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
   translations: any[] = [];
   readingMinutes = 0;
   readingProgress = 0;
+  comments: any[] = [];
+  commentForm = { name: '', email: '', body: '', website: '' };
+  commentSubmitting = false;
+  commentPending = false;
+  commentError = false;
   private isBrowser: boolean;
   private paramsSub?: Subscription;
 
@@ -159,9 +164,37 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  private loadComments(slug: string): void {
+    this.blogService.listComments(slug).subscribe({
+      next: (res: any) => { this.comments = res?.comments ?? []; },
+      error: () => { this.comments = []; },
+    });
+  }
+
+  submitComment(): void {
+    if (!this.post || this.commentSubmitting) return;
+    const name = this.commentForm.name.trim();
+    const body = this.commentForm.body.trim();
+    this.commentError = false;
+    if (!name || !body) { this.commentError = true; return; }
+    this.commentSubmitting = true;
+    this.blogService.addComment(this.post.slug, this.commentForm).subscribe({
+      next: () => {
+        this.commentSubmitting = false;
+        this.commentPending = true;
+        this.commentForm = { name: '', email: '', body: '', website: '' };
+      },
+      error: () => { this.commentSubmitting = false; this.commentError = true; },
+    });
+  }
+
   private loadPost(slug: string) {
     this.relatedPosts = [];
     this.translations = [];
+    this.comments = [];
+    this.commentPending = false;
+    this.commentError = false;
+    this.commentForm = { name: '', email: '', body: '', website: '' };
     this.loaded = false;
     this.notFound = false;
     this.blogService.getPost(slug).subscribe({
@@ -178,6 +211,7 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
           this.html = this.sanitizer.bypassSecurityTrustHtml(rendered);
           this.readingMinutes = estimateReadingMinutes(post.content ?? '');
           this.loadRelated(post);
+          this.loadComments(post.slug);
         }
         this.loaded = true;
       },

@@ -11,6 +11,7 @@ import { AdminEditorComponent } from './admin-editor/admin-editor.component';
 import { MediaPickerComponent } from './media-picker/media-picker.component';
 import { AdminApiComponent } from './admin-api/admin-api.component';
 import { AdminAnalyticsComponent } from './admin-analytics/admin-analytics.component';
+import { AdminCommentsComponent } from './admin-comments/admin-comments.component';
 import { PostViewModule } from '../../shared/post-view/post-view.module';
 
 @NgModule({
@@ -20,7 +21,8 @@ import { PostViewModule } from '../../shared/post-view/post-view.module';
     AdminEditorComponent,
     MediaPickerComponent,
     AdminApiComponent,
-    AdminAnalyticsComponent
+    AdminAnalyticsComponent,
+    AdminCommentsComponent
   ],
   imports: [
     CommonModule,

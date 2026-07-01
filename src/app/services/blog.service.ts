@@ -91,4 +91,26 @@ export class BlogService {
     const qs = force ? '?force=1' : '';
     return this.http.delete(`api/blog/admin/uploads/${encodeURIComponent(name)}${qs}`);
   }
+
+  // Comments (public)
+  listComments(slug: string): Observable<any> {
+    return this.http.get(`api/blog/posts/${slug}/comments`);
+  }
+
+  addComment(slug: string, body: any): Observable<any> {
+    return this.http.post(`api/blog/posts/${slug}/comments`, body);
+  }
+
+  // Comments (admin moderation)
+  adminListComments(): Observable<any> {
+    return this.http.get('api/blog/admin/comments');
+  }
+
+  setCommentApproved(id: any, approved: boolean): Observable<any> {
+    return this.http.patch(`api/blog/admin/comments/${id}`, { approved });
+  }
+
+  deleteComment(id: any): Observable<any> {
+    return this.http.delete(`api/blog/admin/comments/${id}`);
+  }
 }

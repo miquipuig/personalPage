@@ -5,6 +5,7 @@ import { AdminPostsComponent } from './admin-posts/admin-posts.component';
 import { AdminEditorComponent } from './admin-editor/admin-editor.component';
 import { AdminApiComponent } from './admin-api/admin-api.component';
 import { AdminAnalyticsComponent } from './admin-analytics/admin-analytics.component';
+import { AdminCommentsComponent } from './admin-comments/admin-comments.component';
 import { AdminAuthGuard } from '../../guards/admin-auth.guard';
 
 const routes: Routes = [
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'new', component: AdminEditorComponent, canActivate: [AdminAuthGuard] },
   { path: 'edit/:id', component: AdminEditorComponent, canActivate: [AdminAuthGuard] },
   { path: 'api', component: AdminApiComponent, canActivate: [AdminAuthGuard] },
-  { path: 'analytics', component: AdminAnalyticsComponent, canActivate: [AdminAuthGuard] }
+  { path: 'analytics', component: AdminAnalyticsComponent, canActivate: [AdminAuthGuard] },
+  { path: 'comments', component: AdminCommentsComponent, canActivate: [AdminAuthGuard] }
 ];
 
 @NgModule({

@@ -1,0 +1,50 @@
+<div class="admin-comments">
+  <header class="admin-comments-header">
+    <div class="header-titles">
+      <a class="back" [routerLink]="'/admin'"><i class="bi bi-arrow-left"></i> Posts</a>
+      <h1>Comments <span class="pending-pill" *ngIf="pendingCount">{{ pendingCount }} pending</span></h1>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="btn btn-outline" (click)="load()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+      <button type="button" class="btn btn-outline" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Logout</button>
+    </div>
+  </header>
+
+  <div class="error" *ngIf="error">{{ error }}</div>
+  <div class="muted" *ngIf="loading">Loading…</div>
+
+  <p class="muted" *ngIf="!loading && !comments.length">No comments yet.</p>
+
+  <div class="comment-card" *ngFor="let c of comments" [class.pending]="!c.approved">
+    <div class="comment-top">
+      <div>
+        <span class="author">{{ c.name }}</span>
+        <span class="email" *ngIf="c.email">&lt;{{ c.email }}&gt;</span>
+        <span class="badge" [class.ok]="c.approved" [class.wait]="!c.approved">
+          {{ c.approved ? 'Approved' : 'Pending' }}
+        </span>
+      </div>
+      <span class="date">{{ c.createdAt | date:'medium' }}</span>
+    </div>
+
+    <p class="body">{{ c.body }}</p>
+
+    <div class="comment-foot">
+      <a class="on-post" *ngIf="c.postSlug" [routerLink]="['/blog', c.postSlug]" target="_blank">
+        <i class="bi bi-file-text"></i> {{ c.postTitle || c.postSlug }}
+      </a>
+      <span class="on-post muted" *ngIf="!c.postSlug"><i class="bi bi-file-text"></i> (post deleted)</span>
+      <div class="actions">
+        <button type="button" class="btn btn-sm btn-approve" *ngIf="!c.approved" (click)="setApproved(c, true)">
+          <i class="bi bi-check-lg"></i> Approve
+        </button>
+        <button type="button" class="btn btn-sm btn-outline" *ngIf="c.approved" (click)="setApproved(c, false)">
+          <i class="bi bi-eye-slash"></i> Unapprove
+        </button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="remove(c)">
+          <i class="bi bi-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
