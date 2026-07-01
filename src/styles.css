@@ -945,25 +945,59 @@ section .container.c_custom {
   margin: 0 0 0 68px;
 }
 
-/* Whole-box link (Email, WhatsApp): the entire card is clickable. */
-.contact a.info-box-link {
+/* Whole-box interactive card (Email, WhatsApp links + phone copy button). */
+.contact .info-box-link {
   display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
   text-decoration: none;
   color: inherit;
   transition: background 0.3s;
 }
 
-.contact a.info-box-link:hover {
+.contact .info-box-link:hover {
   background: rgba(255, 255, 255, 0.16);
 }
 
-.contact a.info-box-link:hover h3 {
+.contact .info-box-link:hover h3 {
   color: #fff;
 }
 
-.contact a.info-box-link:hover i.bx {
+.contact .info-box-link:hover i.bx:not(.info-box-copy-icon) {
   background: var(--main-color);
   color: #fff;
+}
+
+/* Copy affordance on the phone box: icon on the right, revealed on hover. */
+.contact .info-box-copy {
+  position: relative;
+}
+
+.contact .info-box i.info-box-copy-icon {
+  position: absolute;
+  top: 18px;
+  right: 16px;
+  float: none;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.55);
+  opacity: 0;
+  transition: opacity 0.3s, color 0.3s;
+}
+
+.contact .info-box-copy:hover i.info-box-copy-icon {
+  opacity: 1;
+}
+
+.contact .info-box-copy.copied i.info-box-copy-icon {
+  opacity: 1;
+  color: var(--main-color);
 }
 
 .contact .info-box .social-links {

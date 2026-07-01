@@ -22,6 +22,15 @@ export class ContactComponent implements OnInit{
   emailError=false;
   emailError2=false;
   isSectionActive=false;
+  phoneCopied=false;
+  readonly phoneNumber='+34 679 762 976';
+
+  copyPhone(): void {
+    navigator.clipboard?.writeText(this.phoneNumber).then(() => {
+      this.phoneCopied = true;
+      setTimeout(() => { this.phoneCopied = false; }, 1500);
+    }).catch(() => {});
+  }
   
   constructor(private http:HttpClient) {}
 
