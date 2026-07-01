@@ -945,6 +945,16 @@ section .container.c_custom {
   margin: 0 0 0 68px;
 }
 
+.contact .info-box p a {
+  color: #fff;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.contact .info-box p a:hover {
+  color: var(--main-color);
+}
+
 .contact .info-box .social-links {
   margin: 5px 0 0 68px;
   display: flex;
