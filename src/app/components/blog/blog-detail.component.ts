@@ -28,6 +28,25 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
   commentSubmitting = false;
   commentPending = false;
   commentError = false;
+  showEmoji = false;
+  private emojiLoaded = false;
+
+  async toggleEmoji(): Promise<void> {
+    if (!this.isBrowser) return;
+    // Lazy-load the <emoji-picker> custom element on first use (browser only).
+    if (!this.emojiLoaded) {
+      await import('emoji-picker-element');
+      this.emojiLoaded = true;
+    }
+    this.showEmoji = !this.showEmoji;
+  }
+
+  onEmojiClick(ev: any): void {
+    const d = ev?.detail || {};
+    const emoji = d.unicode || d.emoji?.unicode || d.emoji?.emoji;
+    if (emoji) this.commentForm.body = (this.commentForm.body || '') + emoji;
+    this.showEmoji = false;
+  }
   private isBrowser: boolean;
   private paramsSub?: Subscription;
 

@@ -133,7 +133,45 @@
 
 .comment-form textarea {
   resize: vertical;
+}
+
+.comment-body-field {
+  position: relative;
   margin-bottom: 12px;
+}
+
+.emoji-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: 0;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.emoji-btn:hover {
+  opacity: 1;
+}
+
+.emoji-popover {
+  position: absolute;
+  top: 46px;
+  right: 0;
+  z-index: 50;
+  height: 340px;
+  --background: #1b212b;
+  --border-color: rgba(255, 255, 255, 0.14);
+  --indicator-color: #ff2600;
+  --input-border-color: rgba(255, 255, 255, 0.2);
+  --input-font-color: #fff;
+  --input-placeholder-color: #9a9a9a;
+  --category-font-color: #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
 
 .comment-form input:focus,

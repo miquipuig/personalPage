@@ -103,7 +103,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     if (!this.isBrowser) return;
     if ((ev.key !== 'a' && ev.key !== 'A') || ev.ctrlKey || ev.metaKey || ev.altKey) return;
     const path = this.router.url.split('?')[0].split('#')[0];
-    if (path !== '/' && path !== '') return; // home only
+    if (path !== '/' && path !== '' && path !== '/blog') return; // home or blog only
     const t = ev.target as HTMLElement | null;
     const tag = t?.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || t?.isContentEditable) return;

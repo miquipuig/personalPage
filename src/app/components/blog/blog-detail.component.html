@@ -41,7 +41,11 @@
           <input type="text" name="name" [(ngModel)]="commentForm.name" placeholder="El teu nom *" required>
           <input type="email" name="email" [(ngModel)]="commentForm.email" placeholder="Email (opcional, no es publica)">
         </div>
-        <textarea name="body" [(ngModel)]="commentForm.body" rows="4" placeholder="El teu comentari *" required></textarea>
+        <div class="comment-body-field">
+          <textarea name="body" [(ngModel)]="commentForm.body" rows="4" placeholder="El teu comentari *" required></textarea>
+          <button type="button" class="emoji-btn" (click)="toggleEmoji()" aria-label="Insereix un emoji">&#128522;</button>
+          <emoji-picker *ngIf="showEmoji" class="emoji-popover" (emoji-click)="onEmojiClick($event)"></emoji-picker>
+        </div>
         <div class="comment-error" *ngIf="commentError">Cal el nom i el comentari.</div>
         <button type="submit" class="btn-comment" [disabled]="commentSubmitting">
           {{ commentSubmitting ? 'Enviant…' : 'Publicar comentari' }}
