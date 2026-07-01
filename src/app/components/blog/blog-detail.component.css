@@ -154,6 +154,12 @@
 
 .comment-input:focus {
   outline: none;
+}
+
+/* Focusing the editor turns the WHOLE frame (toolbar + input) red, not just
+   the input half. */
+.comment-editor:focus-within .comment-toolbar,
+.comment-editor:focus-within .comment-input {
   border-color: #ff2600;
 }
 

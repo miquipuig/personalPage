@@ -39,6 +39,24 @@ export class BlogDetailComponent implements OnInit, OnDestroy {
       this.emojiLoaded = true;
     }
     this.showEmoji = !this.showEmoji;
+    if (this.showEmoji) setTimeout(() => this.styleEmojiScrollbar());
+  }
+
+  // The picker's scrollbar lives in its shadow DOM (no CSS var for it), so
+  // inject a style there to theme it instead of the default gray one.
+  private styleEmojiScrollbar(): void {
+    const picker: any = document.querySelector('emoji-picker');
+    if (!picker?.shadowRoot || picker.__scrollStyled) return;
+    const style = document.createElement('style');
+    style.textContent = `
+      * { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.28) transparent; }
+      ::-webkit-scrollbar { width: 10px; height: 10px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.22); border-radius: 6px; }
+      ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+    `;
+    picker.shadowRoot.appendChild(style);
+    picker.__scrollStyled = true;
   }
 
   // Close the emoji picker when clicking anywhere outside it or its button.
