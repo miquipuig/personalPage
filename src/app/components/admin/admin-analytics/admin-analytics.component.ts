@@ -146,7 +146,7 @@ export class AdminAnalyticsComponent implements OnInit {
           // Highlight on hover WITHOUT changing the fill, so the country's
           // colour stays visible instead of resetting to the base grey.
           hover: { fillOpacity: 1, stroke: '#ffffff', strokeWidth: 0.9 },
-          selected: { stroke: '#ffffff', strokeWidth: 1.6 },
+          selected: { stroke: '#ffffff', strokeWidth: 2.5, fillOpacity: 1 },
         },
         onRegionTooltipShow: (_event: any, tooltip: any, code: string) => {
           const s = stats[String(code).toUpperCase()] || { total: 0, unique: 0 };
@@ -171,9 +171,13 @@ export class AdminAnalyticsComponent implements OnInit {
       for (const [cc, v] of Object.entries(values)) {
         regions[cc]?.element?.setStyle('fill', this.redShade(v / maxV));
       }
-      // Outline the active filter (also via the style model so it persists).
-      if (this.selectedCountry) {
-        regions[this.selectedCountry]?.element?.setStyle({ stroke: '#ffffff', strokeWidth: 1.6 });
+      // Highlight the active country (clicked in the table or on the map) using
+      // jsvectormap's own selected state, and lift it above its neighbours so
+      // the outline is fully visible.
+      if (this.selectedCountry && regions[this.selectedCountry]) {
+        try { this.mapInstance.setSelectedRegions([this.selectedCountry]); } catch { /* ignore */ }
+        const node = regions[this.selectedCountry].element?.shape?.node;
+        if (node?.parentNode) node.parentNode.appendChild(node);
       }
     } catch {
       // Map is optional — ignore failures silently.
