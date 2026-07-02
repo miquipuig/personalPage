@@ -141,7 +141,13 @@ export class AdminAnalyticsComponent implements OnInit {
         map: 'world',
         backgroundColor: 'transparent',
         zoomButtons: true,
-        regionStyle: { initial: { fill: '#2a3340', stroke: '#11151c', strokeWidth: 0.4 } },
+        regionStyle: {
+          initial: { fill: '#2a3340', stroke: '#11151c', strokeWidth: 0.4 },
+          // Highlight on hover WITHOUT changing the fill, so the country's
+          // colour stays visible instead of resetting to the base grey.
+          hover: { fillOpacity: 1, stroke: '#ffffff', strokeWidth: 0.9 },
+          selected: { stroke: '#ffffff', strokeWidth: 1.6 },
+        },
         onRegionTooltipShow: (_event: any, tooltip: any, code: string) => {
           const s = stats[String(code).toUpperCase()] || { total: 0, unique: 0 };
           const name = tooltip.text() || code;
@@ -155,18 +161,19 @@ export class AdminAnalyticsComponent implements OnInit {
           this.zone.run(() => this.selectCountry(code));
         },
       });
-      // Colour visited countries manually (jsvectormap's own scale breaks when a
-      // single country has data). More visits → more saturated red.
-      const root = this.mapEl.nativeElement;
+      // Colour visited countries through jsvectormap's own style model
+      // (element.setStyle → style.current), so the colour survives hover and
+      // mouse-out instead of being reset to the base grey. More visits → more
+      // saturated red. (Its numeric scale breaks with a single country, so we
+      // still compute the shade ourselves.)
+      const regions: Record<string, any> = this.mapInstance?.regions || {};
       const maxV = Math.max(1, ...Object.values(values));
       for (const [cc, v] of Object.entries(values)) {
-        const el = root.querySelector(`[data-code="${cc}"]`);
-        if (el) el.setAttribute('fill', this.redShade(v / maxV));
+        regions[cc]?.element?.setStyle('fill', this.redShade(v / maxV));
       }
-      // Outline the active filter so it stands out without changing its colour.
+      // Outline the active filter (also via the style model so it persists).
       if (this.selectedCountry) {
-        const sel = root.querySelector(`[data-code="${this.selectedCountry}"]`);
-        if (sel) { sel.setAttribute('stroke', '#fff'); sel.setAttribute('stroke-width', '1.4'); }
+        regions[this.selectedCountry]?.element?.setStyle({ stroke: '#ffffff', strokeWidth: 1.6 });
       }
     } catch {
       // Map is optional — ignore failures silently.
