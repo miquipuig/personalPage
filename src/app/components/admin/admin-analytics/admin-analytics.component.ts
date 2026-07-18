@@ -31,6 +31,7 @@ export class AdminAnalyticsComponent implements OnInit {
   @ViewChild('mapEl') mapEl?: ElementRef<HTMLElement>;
 
   loading = true;
+  hasLoaded = false;
   error = '';
   days = 30;
   periods = [7, 30, 90, 365];
@@ -57,6 +58,7 @@ export class AdminAnalyticsComponent implements OnInit {
       next: (r: any) => {
         this.data = r ?? this.data;
         this.loading = false;
+        this.hasLoaded = true;
         this.buildChart();
         setTimeout(() => this.renderMap());
       },

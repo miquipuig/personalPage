@@ -12,9 +12,10 @@
     </header>
 
     <div class="admin-error" *ngIf="error">{{ error }}</div>
-    <div class="muted" *ngIf="loading">Loading…</div>
+    <div class="muted first-load" *ngIf="loading && !hasLoaded">Loading…</div>
 
-    <ng-container *ngIf="!loading && !error">
+    <ng-container *ngIf="hasLoaded && !error">
+      <div class="content-area" [class.is-loading]="loading">
       <div class="stat-cards">
         <div class="stat-card">
           <div class="stat-num">{{ data.totals?.total || 0 }}</div>
@@ -127,6 +128,7 @@
       <div class="panel map-panel">
         <h3>Visitors by country <span class="hint">(click a country to filter)</span></h3>
         <div #mapEl class="world-map"></div>
+      </div>
       </div>
     </ng-container>
   </div>
