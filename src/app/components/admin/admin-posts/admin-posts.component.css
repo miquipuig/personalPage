@@ -1,7 +1,7 @@
 .admin-posts {
   min-height: 70vh;
-  background: #11151c;
-  padding: 2rem 1rem;
+  /* Background comes from the shared .container.c_custom card so the admin
+     area matches the rest of the site's section styling. */
 }
 
 .admin-posts-inner {

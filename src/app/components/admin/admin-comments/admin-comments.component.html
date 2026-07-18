@@ -1,12 +1,13 @@
-<div class="admin-comments">
-  <div class="comments-inner">
+<section class="admin-comments section-show">
+  <div class="container c_custom">
+    <div class="comments-inner">
   <header class="admin-comments-header">
     <div class="header-titles">
-      <a class="back" [routerLink]="'/admin'"><i class="bi bi-arrow-left"></i> Posts</a>
       <h1>Comments <span class="pending-pill" *ngIf="pendingCount">{{ pendingCount }} pending</span></h1>
     </div>
     <div class="header-actions">
       <button type="button" class="btn btn-outline" (click)="load()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+      <a class="btn btn-outline" routerLink="/admin"><i class="bi bi-arrow-left"></i> Back to posts</a>
       <button type="button" class="btn btn-outline" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Logout</button>
     </div>
   </header>
@@ -49,4 +50,5 @@
     </div>
   </div>
   </div>
-</div>
+  </div>
+</section>

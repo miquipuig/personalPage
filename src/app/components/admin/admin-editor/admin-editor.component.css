@@ -1,7 +1,6 @@
 .admin-editor {
   min-height: 70vh;
-  background: #11151c;
-  padding: 2rem 1rem;
+  /* Background comes from the shared .container.c_custom card. */
   /* 100vw images bleed past the column; clip so the scrollbar gutter can't
      trigger a horizontal scrollbar. */
   overflow-x: clip;

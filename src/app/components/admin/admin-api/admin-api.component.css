@@ -1,7 +1,6 @@
 .admin-api {
   min-height: 70vh;
-  background: #11151c;
-  padding: 2rem 1rem;
+  /* Background comes from the shared .container.c_custom card. */
 }
 
 .admin-api-inner {
