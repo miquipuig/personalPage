@@ -11,21 +11,6 @@
       </div>
     </header>
 
-    <div class="filter-bar" *ngIf="selectedCountry">
-      <span>Filtered by <strong>{{ flag(selectedCountry) }} {{ selectedCountry }}</strong> — totals, pages, referrers & chart</span>
-      <button type="button" class="chip-clear" (click)="clearCountry()">Clear ✕</button>
-    </div>
-
-    <div class="filter-bar" *ngIf="selectedPage">
-      <span>Filtered by page <strong>{{ pageLabel(selectedPage) }}</strong> — totals, referrers, countries & chart</span>
-      <button type="button" class="chip-clear" (click)="clearPage()">Clear ✕</button>
-    </div>
-
-    <div class="filter-bar" *ngIf="selectedReferrer">
-      <span>Filtered by referrer <strong>{{ selectedReferrer }}</strong> — totals, pages, countries & chart</span>
-      <button type="button" class="chip-clear" (click)="clearReferrer()">Clear ✕</button>
-    </div>
-
     <div class="admin-error" *ngIf="error">{{ error }}</div>
     <div class="muted" *ngIf="loading">Loading…</div>
 
@@ -53,11 +38,37 @@
             <span class="lg lg-unique">Unique</span>
           </div>
         </div>
-        <svg class="chart" [attr.viewBox]="'0 0 ' + chart.w + ' ' + chart.h" preserveAspectRatio="none">
-          <line class="axis" [attr.x1]="28" [attr.y1]="chart.h - 28" [attr.x2]="chart.w - 28" [attr.y2]="chart.h - 28"></line>
-          <polyline class="line-total" [attr.points]="chart.totalPts"></polyline>
-          <polyline class="line-unique" [attr.points]="chart.uniquePts"></polyline>
-        </svg>
+        <div class="chart-wrap" (mouseleave)="setHover(null)">
+          <svg class="chart" [attr.viewBox]="'0 0 ' + chart.w + ' ' + chart.h" preserveAspectRatio="none">
+            <line class="axis" [attr.x1]="chart.pad" [attr.y1]="chart.h - chart.pad"
+              [attr.x2]="chart.w - chart.pad" [attr.y2]="chart.h - chart.pad"></line>
+            <polyline class="line-total" [attr.points]="chart.totalPts"></polyline>
+            <polyline class="line-unique" [attr.points]="chart.uniquePts"></polyline>
+
+            <line *ngIf="hoverIndex !== null" class="hover-guide"
+              [attr.x1]="chart.points[hoverIndex].x" [attr.x2]="chart.points[hoverIndex].x"
+              [attr.y1]="0" [attr.y2]="chart.h - chart.pad"></line>
+            <ng-container *ngIf="hoverIndex !== null">
+              <circle class="hover-dot dot-total"
+                [attr.cx]="chart.points[hoverIndex].x" [attr.cy]="chart.points[hoverIndex].yTotal"></circle>
+              <circle class="hover-dot dot-unique"
+                [attr.cx]="chart.points[hoverIndex].x" [attr.cy]="chart.points[hoverIndex].yUnique"></circle>
+            </ng-container>
+
+            <rect *ngFor="let p of chart.points; let i = index"
+              class="hover-band"
+              [attr.x]="bandX(i)" [attr.y]="0"
+              [attr.width]="bandWidth(i)" [attr.height]="chart.h"
+              (mouseenter)="setHover(i)"></rect>
+          </svg>
+          <div class="chart-tooltip" *ngIf="hoverIndex !== null"
+            [class.on-right]="hoverOnRight()"
+            [style.left.%]="hoverLeftPct()">
+            <div class="tt-date">{{ chart.points[hoverIndex].date }}</div>
+            <div class="tt-row"><span class="tt-dot tt-total"></span>Total: <strong>{{ chart.points[hoverIndex].total }}</strong></div>
+            <div class="tt-row"><span class="tt-dot tt-unique"></span>Unique: <strong>{{ chart.points[hoverIndex].unique }}</strong></div>
+          </div>
+        </div>
         <div class="chart-x">
           <span *ngFor="let l of chart.xLabels">{{ l.label }}</span>
         </div>
@@ -118,5 +129,27 @@
         <div #mapEl class="world-map"></div>
       </div>
     </ng-container>
+  </div>
+
+  <div class="filter-dock" [class.has-filters]="selectedCountry || selectedPage || selectedReferrer">
+    <span class="filter-dock-label">Filters</span>
+    <span class="filter-chip" *ngIf="selectedCountry">
+      <span class="chip-key">Country</span>
+      <span class="chip-val">{{ flag(selectedCountry) }} {{ selectedCountry }}</span>
+      <button type="button" class="chip-x" (click)="clearCountry()" aria-label="Clear country">✕</button>
+    </span>
+    <span class="filter-chip" *ngIf="selectedPage">
+      <span class="chip-key">Page</span>
+      <span class="chip-val">{{ pageLabel(selectedPage) }}</span>
+      <button type="button" class="chip-x" (click)="clearPage()" aria-label="Clear page">✕</button>
+    </span>
+    <span class="filter-chip" *ngIf="selectedReferrer">
+      <span class="chip-key">Referrer</span>
+      <span class="chip-val">{{ selectedReferrer }}</span>
+      <button type="button" class="chip-x" (click)="clearReferrer()" aria-label="Clear referrer">✕</button>
+    </span>
+    <span class="filter-dock-empty" *ngIf="!(selectedCountry || selectedPage || selectedReferrer)">
+      No filters — click a row on Pages, Referrers or Countries.
+    </span>
   </div>
 </section>

@@ -2,6 +2,10 @@
   min-height: 70vh;
   background: #11151c;
   padding: 2rem 1rem;
+  /* Leave room for the fixed filter dock at the bottom so no content is
+     hidden underneath it. */
+  padding-bottom: 88px;
+  position: relative;
 }
 
 .analytics-inner {
@@ -91,35 +95,109 @@
   font-weight: 400;
 }
 
-.filter-bar {
+/* Fixed dock at the bottom of the analytics section — single line, always
+   visible, translucent so the content underneath stays visible. */
+.filter-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  background: rgba(255, 38, 0, 0.1);
-  border: 1px solid rgba(255, 38, 0, 0.3);
-  border-radius: 8px;
+  gap: 10px;
+  padding: 10px 18px;
+  min-height: 56px;
+  background: rgba(17, 21, 28, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   color: #e2e8f0;
   font-size: 0.88rem;
+  overflow-x: auto;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
-.chip-clear {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+.filter-dock.has-filters {
+  background: rgba(17, 21, 28, 0.82);
+  border-top-color: rgba(255, 38, 0, 0.35);
+}
+
+.filter-dock-label {
+  color: #94a3b8;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  padding-right: 4px;
+  flex-shrink: 0;
+}
+
+.filter-dock-empty {
+  color: #64748b;
+  font-size: 0.82rem;
+  font-style: italic;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 4px 4px 12px;
+  background: rgba(255, 38, 0, 0.14);
+  border: 1px solid rgba(255, 38, 0, 0.4);
+  border-radius: 999px;
+  color: #fff;
+  white-space: nowrap;
+  transform-origin: left center;
+  animation: chip-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1);
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-chip:hover {
+  background: rgba(255, 38, 0, 0.22);
+  box-shadow: 0 0 0 3px rgba(255, 38, 0, 0.12);
+}
+
+.chip-key {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.chip-val {
+  font-weight: 600;
+}
+
+.chip-x {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
   color: #cbd5e1;
   border-radius: 999px;
-  padding: 3px 12px;
-  font-size: 0.8rem;
+  width: 22px;
+  height: 22px;
+  line-height: 1;
+  font-size: 0.75rem;
   cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease;
 }
 
-.chip-clear:hover {
-  border-color: #ff2600;
+.chip-x:hover {
+  background: #ff2600;
   color: #fff;
+}
+
+@keyframes chip-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .atable tr.clickable {
   cursor: pointer;
+}
+
+.atable td {
+  transition: background-color 0.24s ease, color 0.24s ease;
 }
 
 .atable tr.clickable:hover td {
@@ -129,6 +207,7 @@
 .atable tr.active td {
   background: rgba(255, 38, 0, 0.14);
   color: #fff;
+  box-shadow: inset 3px 0 0 #ff2600;
 }
 
 .admin-error {
@@ -197,12 +276,87 @@
 .lg-total::before { background: #2563eb; }
 .lg-unique::before { background: #60a5fa; }
 
+.chart-wrap {
+  position: relative;
+  margin-top: 8px;
+}
+
 .chart {
   width: 100%;
   height: 170px;
   display: block;
-  margin-top: 8px;
 }
+
+.hover-band {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.hover-guide {
+  stroke: rgba(226, 232, 240, 0.35);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  pointer-events: none;
+}
+
+.hover-dot {
+  r: 4;
+  stroke: #11151c;
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.hover-dot.dot-total { fill: #2563eb; }
+.hover-dot.dot-unique { fill: #60a5fa; }
+
+.chart-tooltip {
+  position: absolute;
+  top: 8px;
+  transform: translateX(12px);
+  background: rgba(11, 15, 22, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  color: #e2e8f0;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
+  transition: left 0.12s ease-out, opacity 0.15s ease;
+  z-index: 5;
+}
+
+.chart-tooltip.on-right {
+  transform: translateX(calc(-100% - 12px));
+}
+
+.tt-date {
+  color: #94a3b8;
+  font-size: 0.72rem;
+  margin-bottom: 4px;
+}
+
+.tt-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.5;
+}
+
+.tt-row strong {
+  color: #fff;
+  margin-left: 2px;
+}
+
+.tt-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.tt-dot.tt-total { background: #2563eb; }
+.tt-dot.tt-unique { background: #60a5fa; }
 
 .chart polyline,
 .chart line {
@@ -219,6 +373,7 @@
   stroke: #2563eb;
   stroke-width: 2;
   stroke-linejoin: round;
+  transition: opacity 0.25s ease;
 }
 
 .line-unique {
@@ -227,6 +382,7 @@
   stroke-width: 2;
   stroke-dasharray: 4 3;
   stroke-linejoin: round;
+  transition: opacity 0.25s ease;
 }
 
 .chart-x {

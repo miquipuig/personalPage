@@ -2,12 +2,24 @@ import { Component, ElementRef, Inject, NgZone, OnInit, PLATFORM_ID, ViewChild }
 import { isPlatformBrowser } from '@angular/common';
 import { BlogService } from '../../../services/blog.service';
 
+interface ChartPoint {
+  date: string;
+  total: number;
+  unique: number;
+  x: number;      // SVG viewBox x for this point
+  yTotal: number; // SVG viewBox y for total
+  yUnique: number;
+}
+
 interface ChartModel {
   w: number; h: number;
+  pad: number;
   totalPts: string;
   uniquePts: string;
   maxY: number;
   xLabels: { x: number; label: string }[];
+  points: ChartPoint[];
+  bandW: number;  // width per hover column in SVG units
 }
 
 @Component({
@@ -26,7 +38,8 @@ export class AdminAnalyticsComponent implements OnInit {
   selectedPage = '';
   selectedReferrer = '';
   data: any = { totals: {}, pages: [], referrers: [], countries: [], series: [] };
-  chart: ChartModel = { w: 1000, h: 240, totalPts: '', uniquePts: '', maxY: 1, xLabels: [] };
+  chart: ChartModel = { w: 1000, h: 240, pad: 28, totalPts: '', uniquePts: '', maxY: 1, xLabels: [], points: [], bandW: 0 };
+  hoverIndex: number | null = null;
 
   private isBrowser: boolean;
   private mapInstance: any = null;
@@ -116,27 +129,70 @@ export class AdminAnalyticsComponent implements OnInit {
     for (const s of (this.data.series ?? [])) {
       byDate[String(s.date).slice(0, 10)] = { total: +s.total || 0, unique: +s.unique || 0 };
     }
-    const points: { date: string; total: number; unique: number }[] = [];
+    const raw: { date: string; total: number; unique: number }[] = [];
     const today = new Date();
     for (let i = this.days - 1; i >= 0; i--) {
       const d = new Date(today);
       d.setDate(today.getDate() - i);
       const key = d.toISOString().slice(0, 10);
       const rec = byDate[key] ?? { total: 0, unique: 0 };
-      points.push({ date: key, total: rec.total, unique: rec.unique });
+      raw.push({ date: key, total: rec.total, unique: rec.unique });
     }
     const W = 1000, H = 240, pad = 28;
-    const n = points.length;
-    const maxY = Math.max(1, ...points.map((p) => p.total));
+    const n = raw.length;
+    const maxY = Math.max(1, ...raw.map((p) => p.total));
     const x = (i: number) => pad + (n <= 1 ? 0 : (i / (n - 1)) * (W - 2 * pad));
     const y = (v: number) => H - pad - (v / maxY) * (H - 2 * pad);
     const idxs = n <= 1 ? [0] : [0, Math.floor(n / 2), n - 1];
+    const points: ChartPoint[] = raw.map((p, i) => ({
+      date: p.date, total: p.total, unique: p.unique,
+      x: x(i), yTotal: y(p.total), yUnique: y(p.unique),
+    }));
     this.chart = {
-      w: W, h: H, maxY,
-      totalPts: points.map((p, i) => `${x(i).toFixed(1)},${y(p.total).toFixed(1)}`).join(' '),
-      uniquePts: points.map((p, i) => `${x(i).toFixed(1)},${y(p.unique).toFixed(1)}`).join(' '),
+      w: W, h: H, pad, maxY,
+      totalPts: points.map((p) => `${p.x.toFixed(1)},${p.yTotal.toFixed(1)}`).join(' '),
+      uniquePts: points.map((p) => `${p.x.toFixed(1)},${p.yUnique.toFixed(1)}`).join(' '),
       xLabels: idxs.map((i) => ({ x: x(i), label: points[i].date.slice(5) })),
+      points,
+      bandW: n <= 1 ? W : (W - 2 * pad) / (n - 1),
     };
+    // Reset hover when data changes so a stale index can't point past the end.
+    this.hoverIndex = null;
+  }
+
+  setHover(i: number | null): void {
+    this.hoverIndex = i;
+  }
+
+  // Position for the SVG hover band centred on point i (clamped at edges so
+  // first/last band doesn't overflow past the axis).
+  bandX(i: number): number {
+    const half = this.chart.bandW / 2;
+    return Math.max(0, this.chart.points[i]?.x - half);
+  }
+
+  bandWidth(i: number): number {
+    const half = this.chart.bandW / 2;
+    const p = this.chart.points[i];
+    if (!p) return 0;
+    const left = p.x - half;
+    const right = p.x + half;
+    return Math.min(this.chart.w, right) - Math.max(0, left);
+  }
+
+  // Tooltip left position (0-100%). The chart SVG uses preserveAspectRatio
+  // "none", so an SVG x of W maps to the full rendered width — a plain
+  // proportion works.
+  hoverLeftPct(): number {
+    const i = this.hoverIndex;
+    if (i == null) return 0;
+    return (this.chart.points[i]?.x / this.chart.w) * 100;
+  }
+
+  // True when the tooltip should render on the left of the hovered point
+  // (right half of the chart) so it doesn't overflow past the container.
+  hoverOnRight(): boolean {
+    return this.hoverLeftPct() > 60;
   }
 
   // Interpolate from a light red (t=0) to vivid red (t=1).
