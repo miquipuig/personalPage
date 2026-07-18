@@ -50,15 +50,15 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.trackPage();
   }
 
-  // Map the current URL to a tracked page key, or null to skip.
-  private pageKey(): string | null {
-    const path = (this.router.url.split('?')[0].split('#')[0].replace(/\/+$/, '')) || '/';
-    if (path === '/' || path === '') return 'home';
-    if (path === '/about') return 'about';
-    if (path === '/resume') return 'resume';
-    if (path === '/contact') return 'contact';
-    if (path === '/blog') return 'blog';
-    const m = path.match(/^\/blog\/(.+)$/);
+  // Map a URL path to a tracked page key, or null to skip.
+  private pageKey(path: string): string | null {
+    const p = (path.split('?')[0].split('#')[0].replace(/\/+$/, '')) || '/';
+    if (p === '/' || p === '') return 'home';
+    if (p === '/about') return 'about';
+    if (p === '/resume') return 'resume';
+    if (p === '/contact') return 'contact';
+    if (p === '/blog') return 'blog';
+    const m = p.match(/^\/blog\/(.+)$/);
     return m ? 'post:' + m[1] : null;
   }
 
@@ -66,10 +66,15 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   private trackPage(): void {
     if (!this.isBrowser) return;
-    const url = this.router.url;
+    // Use window.location.pathname, not router.url. On hydration the router
+    // may not yet have reconstructed its state (router.url falls back to '/'),
+    // which caused deep-link entries (e.g. /blog/<slug> from LinkedIn) to be
+    // recorded as 'home' with the real referrer, and the later NavigationEnd
+    // fire recorded the real page but with an 'internal' referrer.
+    const url = window.location.pathname + window.location.search + window.location.hash;
     if (url === this.lastTrackedUrl) return; // avoid the bootstrap double-fire
     this.lastTrackedUrl = url;
-    const page = this.pageKey();
+    const page = this.pageKey(window.location.pathname);
     if (!page) return;
     // Send the real entry referrer once per session; mark later navigations
     // internal so referrer stats reflect how visitors arrived.
@@ -85,7 +90,8 @@ export class AppComponent implements AfterViewInit, OnInit {
   activeSection = '';
 
   private applySectionBg(): void {
-    const path = this.router.url.split('?')[0].split('#')[0];
+    // window.location is reliable during hydration; router.url may lag.
+    const path = window.location.pathname.split('?')[0].split('#')[0];
     const isHome = path === '/' || path === '';
     document.body.classList.toggle('section-open', !isHome);
   }

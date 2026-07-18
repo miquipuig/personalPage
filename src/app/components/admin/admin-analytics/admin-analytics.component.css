@@ -1,15 +1,14 @@
 .admin-analytics {
   min-height: 70vh;
-  background: #11151c;
-  padding: 2rem 1rem;
+  /* Background is provided by the shared .container.c_custom card (translucent
+     dark over the global page background image), so the section blends with
+     the other public sections instead of a hard solid block. */
+  position: relative;
   /* Leave room for the floating filter dock so no content is hidden under it. */
   padding-bottom: 140px;
-  position: relative;
 }
 
 .analytics-inner {
-  max-width: 1000px;
-  margin: 0 auto;
   /* Uniform vertical rhythm between every top-level block (header, cards,
      chart, tables grid, map) so spacing is consistent throughout. */
   display: flex;
@@ -116,7 +115,7 @@
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 96px;
+  bottom: 76px;
   z-index: 60;
   width: min(calc(100vw - 32px), 1000px);
   display: flex;
@@ -448,6 +447,32 @@
   margin: 0 0 10px;
 }
 
+/* Fixed-height scroll area so the three data panels always match in size and
+   each gets its own vertical scrollbar for long lists. */
+.atable-scroll {
+  height: 320px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.atable-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.atable-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.atable-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+
+.atable-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
 .atable {
   width: 100%;
   border-collapse: collapse;
@@ -460,6 +485,12 @@
   font-weight: 600;
   padding: 6px 8px;
   border-bottom: 1px solid #2a3340;
+  /* Keep column headers visible while scrolling the body. Panel background is
+     opaque, so a matching fill prevents rows bleeding through. */
+  position: sticky;
+  top: 0;
+  background: #1b212b;
+  z-index: 1;
 }
 
 .atable td {

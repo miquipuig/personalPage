@@ -117,6 +117,12 @@ export class AdminAnalyticsComponent implements OnInit {
     return p;
   }
 
+  // Cap chip labels so a long slug or URL doesn't blow up the filter dock.
+  truncate(s: string, n = 25): string {
+    const str = String(s ?? '');
+    return str.length <= n ? str : str.slice(0, n - 1) + '…';
+  }
+
   flag(cc: string): string {
     if (!cc || cc.length !== 2) return '';
     try {
