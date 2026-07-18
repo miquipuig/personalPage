@@ -16,6 +16,16 @@
       <button type="button" class="chip-clear" (click)="clearCountry()">Clear ✕</button>
     </div>
 
+    <div class="filter-bar" *ngIf="selectedPage">
+      <span>Filtered by page <strong>{{ pageLabel(selectedPage) }}</strong> — totals, referrers, countries & chart</span>
+      <button type="button" class="chip-clear" (click)="clearPage()">Clear ✕</button>
+    </div>
+
+    <div class="filter-bar" *ngIf="selectedReferrer">
+      <span>Filtered by referrer <strong>{{ selectedReferrer }}</strong> — totals, pages, countries & chart</span>
+      <button type="button" class="chip-clear" (click)="clearReferrer()">Clear ✕</button>
+    </div>
+
     <div class="admin-error" *ngIf="error">{{ error }}</div>
     <div class="muted" *ngIf="loading">Loading…</div>
 
@@ -56,11 +66,12 @@
 
       <div class="grid">
         <div class="panel">
-          <h3>Pages</h3>
+          <h3>Pages <span class="hint">(click to filter)</span></h3>
           <table class="atable">
             <thead><tr><th>Page</th><th class="num">Total</th><th class="num">Unique</th></tr></thead>
             <tbody>
-              <tr *ngFor="let p of data.pages">
+              <tr *ngFor="let p of data.pages" class="clickable"
+                [class.active]="p.page === selectedPage" (click)="selectPage(p.page)">
                 <td>{{ pageLabel(p.page) }}</td>
                 <td class="num">{{ p.total }}</td>
                 <td class="num">{{ p.unique }}</td>
@@ -71,11 +82,12 @@
         </div>
 
         <div class="panel">
-          <h3>Top referrers</h3>
+          <h3>Top referrers <span class="hint">(click to filter)</span></h3>
           <table class="atable">
             <thead><tr><th>Source</th><th class="num">Visits</th></tr></thead>
             <tbody>
-              <tr *ngFor="let r of data.referrers">
+              <tr *ngFor="let r of data.referrers" class="clickable"
+                [class.active]="r.referrer === selectedReferrer" (click)="selectReferrer(r.referrer)">
                 <td>{{ r.referrer }}</td>
                 <td class="num">{{ r.total }}</td>
               </tr>

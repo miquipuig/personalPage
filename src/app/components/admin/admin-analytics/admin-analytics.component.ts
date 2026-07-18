@@ -23,6 +23,8 @@ export class AdminAnalyticsComponent implements OnInit {
   days = 30;
   periods = [7, 30, 90, 365];
   selectedCountry = '';
+  selectedPage = '';
+  selectedReferrer = '';
   data: any = { totals: {}, pages: [], referrers: [], countries: [], series: [] };
   chart: ChartModel = { w: 1000, h: 240, totalPts: '', uniquePts: '', maxY: 1, xLabels: [] };
 
@@ -38,7 +40,7 @@ export class AdminAnalyticsComponent implements OnInit {
   load(): void {
     this.loading = true;
     this.error = '';
-    this.blog.getAnalytics(this.days, this.selectedCountry).subscribe({
+    this.blog.getAnalytics(this.days, this.selectedCountry, this.selectedPage, this.selectedReferrer).subscribe({
       next: (r: any) => {
         this.data = r ?? this.data;
         this.loading = false;
@@ -62,6 +64,34 @@ export class AdminAnalyticsComponent implements OnInit {
 
   clearCountry(): void {
     this.selectedCountry = '';
+    this.load();
+  }
+
+  // Toggle the page filter (totals/referrers/chart narrow to it; the pages
+  // list stays full so you can pick another).
+  selectPage(p: string): void {
+    const s = String(p || '').trim();
+    if (!s) return;
+    this.selectedPage = this.selectedPage === s ? '' : s;
+    this.load();
+  }
+
+  clearPage(): void {
+    this.selectedPage = '';
+    this.load();
+  }
+
+  // Toggle the referrer filter (totals/pages/countries/chart narrow to it;
+  // the referrers list stays full so you can pick another).
+  selectReferrer(r: string): void {
+    const s = String(r || '').trim();
+    if (!s) return;
+    this.selectedReferrer = this.selectedReferrer === s ? '' : s;
+    this.load();
+  }
+
+  clearReferrer(): void {
+    this.selectedReferrer = '';
     this.load();
   }
 

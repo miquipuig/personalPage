@@ -21,9 +21,11 @@ export class BlogService {
     return this.http.post('api/blog/track', { page, referrer });
   }
 
-  getAnalytics(days = 30, country = ''): Observable<any> {
+  getAnalytics(days = 30, country = '', page = '', referrer = ''): Observable<any> {
     const c = country ? `&country=${encodeURIComponent(country)}` : '';
-    return this.http.get(`api/blog/admin/analytics?days=${days}${c}`);
+    const p = page ? `&page=${encodeURIComponent(page)}` : '';
+    const r = referrer ? `&referrer=${encodeURIComponent(referrer)}` : '';
+    return this.http.get(`api/blog/admin/analytics?days=${days}${c}${p}${r}`);
   }
 
   // --- Admin ---
